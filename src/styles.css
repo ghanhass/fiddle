@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+body{
+    padding:10px;
+    margin:0px;
+}
+app-main{
+    display:flex;
+    width: calc(100vw - 20px);
+    height: calc(100vh - 20px);
+}
+
+app-main #code-parts{
+    display:flex;
+    flex-direction:column;
+    outline:1px solid red;
+    width:30%;
+    min-width:246px;
+}
+
+app-main #code-parts > *{
+    width:100%;
+    height:100%;
+    outline:1px solid blue;
+
+}
+
+app-main app-iframe-part{
+    display:flex;
+    flex-direction:column;
+    outline:1px solid green;
+    flex-grow:1;
+}
+
+@media screen and (max-width:767px){  
+    
+}
