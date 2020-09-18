@@ -9,28 +9,6 @@ app-main{
     height: calc(100vh - 20px);
 }
 
-app-main #code-parts{
-    display:flex;
-    flex-direction:column;
-    outline:1px solid red;
-    width:30%;
-    min-width:246px;
-}
-
-app-main #code-parts > *{
-    width:100%;
-    height:100%;
-    outline:1px solid blue;
-
-}
-
-app-main app-iframe-part{
-    display:flex;
-    flex-direction:column;
-    outline:1px solid green;
-    flex-grow:1;
-}
-
 @media screen and (max-width:767px){  
     
 }
