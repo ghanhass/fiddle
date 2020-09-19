@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +8,9 @@ import { HtmlPartComponent } from './html-part/html-part.component';
 import { CssPartComponent } from './css-part/css-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { IframePartComponent } from './iframe-part/iframe-part.component';
+import { FormsModule } from "@angular/forms";
+/*import { MonacoEditorModule } from "ngx-monaco-editor";*/
+import { CodeEditorModule } from "@ngstack/code-editor";
 
 @NgModule({
   declarations: [
@@ -20,9 +23,12 @@ import { IframePartComponent } from './iframe-part/iframe-part.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    CodeEditorModule.forRoot()
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class AppModule { }

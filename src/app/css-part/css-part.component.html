@@ -1,1 +1,7 @@
-<p>css-part works!</p>
+<div class="code-part-title">CSS</div>
+<ngs-code-editor 
+    [theme]="theme"
+    [codeModel]="codeModel"
+    [options]="options"
+    (valueChanged)="onCodeChanged($event)">
+</ngs-code-editor>

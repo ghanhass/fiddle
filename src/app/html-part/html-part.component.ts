@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { CodeModel } from '@ngstack/code-editor';
 
 @Component({
   selector: 'app-html-part',
@@ -6,9 +7,29 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./html-part.component.css']
 })
 export class HtmlPartComponent implements OnInit {
+  code: string = "";
+  theme = 'vs-light';
 
+  codeModel: any = {
+    language: 'html',
+    //uri: 'main.json',
+    value: '',
+  };
+
+  options = {
+    contextmenu: true,
+    minimap: {
+      enabled: false,
+    },
+    lineDecorationsWidth:"1px",
+    lineNumbersMinChars: 1
+  };
   constructor() { }
 
+
+  onCodeChanged(value) {
+    console.log('CODE', value);
+  }
   ngOnInit(): void {
   }
 

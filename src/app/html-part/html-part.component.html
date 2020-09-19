@@ -1,1 +1,7 @@
-<p>html-part works!</p>
+<div class="code-part-title">HTML</div>
+<ngs-code-editor 
+    [theme]="theme"
+    [codeModel]="codeModel"
+    [options]="options"
+    (valueChanged)="onCodeChanged($event)">
+</ngs-code-editor>
