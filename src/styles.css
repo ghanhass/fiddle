@@ -7,7 +7,7 @@ app-main{
     display:flex;
     width: calc(100vw - 10px);
     height: calc(100vh - 10px);
-    box-shadow: inset 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbbbbb;
 }
 
 .hide{
@@ -42,6 +42,8 @@ ngs-code-editor .monaco-editor .overflow-guard{
     }
 
     .hide-mobile{
-        display:none !important;
+        position: fixed;
+        top:99999px;
+        left:99999px;
     }
 }

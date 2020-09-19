@@ -22,7 +22,8 @@ export class HtmlPartComponent implements OnInit {
       enabled: false,
     },
     lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1
+    lineNumbersMinChars: 1,
+    automaticLayout: true
   };
   constructor() { }
 

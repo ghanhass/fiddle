@@ -4,7 +4,7 @@
     <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
     <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
 </div>
-<div id="code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
+<div id="code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}">
     <div class="code-component-container" [ngClass]="{'hide-mobile': !showHtml}">
         <app-html-part class="code-component"></app-html-part>
     </div>
@@ -18,4 +18,5 @@
     </div>
 </div>
 <div id="main-resizer" draggable="true"></div>
-<app-iframe-part [ngClass]="{'hide-mobile': !showResult}"></app-iframe-part>
+<app-iframe-part [ngClass]="{'hide-mobile': !showResult}" 
+[ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"></app-iframe-part>

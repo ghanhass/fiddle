@@ -1,11 +1,9 @@
 #code-parts{
     display: flex;
     flex-direction: column;
-    width: 30%;
-    min-width: 246px;
     height: 100%;
     overflow: hidden;
-    box-shadow: inset 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbbbbb;
 }
 
 #code-parts > .code-component-container{
@@ -55,7 +53,7 @@ app-iframe-part{
     display:flex;
     flex-direction:column;
     flex-grow:1;
-    box-shadow: inset 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbbbbb;
 }
 #code-parts-title-mobile{
     display:none;
@@ -67,7 +65,7 @@ app-iframe-part{
     border:1px solid #bbbbbb;
     border-radius:2px;
     padding:3px;
-    width:50px;
+    min-width:50px;
     text-align:center;
     cursor:pointer;
 }
@@ -101,8 +99,9 @@ app-iframe-part{
         display:none;
     }
 
-    #code-parts, app-iframe-part{
-        width:100%;
+    #code-parts, 
+    app-iframe-part{
+        width:100% !important;
         height:50%;
         max-height: 50%;
     }

@@ -7,10 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  showHtml: boolean = true;
-  showCss: boolean = false;
+  showHtml: boolean = false;
+  showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
+  codePartsWidth: string = "300px"
 
   constructor() { }
 
@@ -41,7 +42,7 @@ export class MainComponent implements OnInit {
       }
       break;
       case "result":
-      if(this.showJs || this.showHtml || !this.showCss ){
+      if(this.showJs || this.showHtml || this.showCss ){
         this.showResult = !this.showResult;
       }
       break;
