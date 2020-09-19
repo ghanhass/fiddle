@@ -1,15 +1,21 @@
-<div id="code-parts">
-    <div class="code-component-container">
+<div id="code-parts-title-mobile">
+    <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
+    <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
+    <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
+    <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
+</div>
+<div id="code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
+    <div class="code-component-container" [ngClass]="{'hide-mobile': !showHtml}">
         <app-html-part class="code-component"></app-html-part>
     </div>
-    <div class="code-component-container">
+    <div class="code-component-container" [ngClass]="{'hide-mobile': !showCss}">
         <div class="vertical-resizer"></div>
         <app-css-part class="code-component"></app-css-part>
     </div>
-    <div class="code-component-container">
+    <div class="code-component-container" [ngClass]="{'hide-mobile': !showJs}">
         <div class="vertical-resizer"></div>
         <app-js-part class="code-component"></app-js-part>
     </div>
 </div>
 <div id="main-resizer" draggable="true"></div>
-<app-iframe-part></app-iframe-part>
+<app-iframe-part [ngClass]="{'hide-mobile': !showResult}"></app-iframe-part>

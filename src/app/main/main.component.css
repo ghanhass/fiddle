@@ -5,6 +5,7 @@
     min-width: 246px;
     height: 100%;
     overflow: hidden;
+    box-shadow: inset 0 0 0 1px #bbbbbb;
 }
 
 #code-parts > .code-component-container{
@@ -53,7 +54,62 @@
 app-iframe-part{
     display:flex;
     flex-direction:column;
-    border:1px solid #bbbbbb;
     flex-grow:1;
+    box-shadow: inset 0 0 0 1px #bbbbbb;
+}
+#code-parts-title-mobile{
+    display:none;
+    /*border-bottom: 1px solid #bbbbbb;*/
+    height: 35px;
+}
+
+#code-parts-title-mobile a {
+    border:1px solid #bbbbbb;
+    border-radius:2px;
     padding:3px;
+    width:50px;
+    text-align:center;
+    cursor:pointer;
+}
+
+#code-parts-title-mobile a:hover {
+    background-color:#ededed;
+}
+
+#code-parts-title-mobile a.active {
+    background-color: #aaaaaa;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+#code-parts-title-mobile a:not(:first-child) {
+    margin-left:5px;
+}
+
+#code-parts-title-mobile a:not(:last-child) {
+    margin-right:5px;
+}
+
+@media screen and (max-width:767px){  
+    #code-parts-title-mobile{
+        display:flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #main-resizer{
+        display:none;
+    }
+
+    #code-parts, app-iframe-part{
+        width:100%;
+        height:50%;
+        max-height: 50%;
+    }
+
+
+    #code-parts > .code-component-container > .vertical-resizer {
+        display: none;
+    }
+
 }
