@@ -14,7 +14,7 @@ export class MainComponent implements OnInit {
   resizeMode: boolean = false;
   resizeModeDragImg: Element = (function(){
     let el = new Image();
-    el.src="data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
+    el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
     return el;
   })();
   codePartsWidth: string = "300px";
@@ -68,6 +68,11 @@ export class MainComponent implements OnInit {
     }
   }
 
+  mainResizerMouseupHandler(event){
+    this.resizeMode = false;
+    this.mainResizerFloor.nativeElement.classList.add("hide");
+  }
+
   mainResizerMousedownHandler(event){
     this.resizeMode = true;
     this.mainResizerFloor.nativeElement.classList.remove("hide");
@@ -80,8 +85,8 @@ export class MainComponent implements OnInit {
   }
 
   mainContainerDragoverHandler(event){
-    console.log("angular dragover event: ", event);
-    console.log("------------------------------------");
+    //console.log("angular dragover event: ", event);
+    //console.log("------------------------------------");
   }
   mainResizerDragendHandler(event){
     console.log("angular dragend event: ", event);

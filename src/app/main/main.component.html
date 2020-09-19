@@ -21,6 +21,7 @@
     <div #mainResizerFloor class="main-resizer-floor hide" ></div>
     <div draggable="true" #mainResizer id="main-resizer" 
     (mousedown)="mainResizerMousedownHandler($event)" 
+    (mouseup)="mainResizerMouseupHandler($event)" 
     (dragstart)="mainResizerDragstartHandler($event)" 
     (dragend)="mainResizerDragendHandler($event)"
     [ngStyle]="{'left':mainResizerLeft}"></div>
