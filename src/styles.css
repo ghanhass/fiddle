@@ -3,7 +3,7 @@ body{
     padding:5px;
     margin:0px;
 }
-app-main{
+.main-container{
     display:flex;
     width: calc(100vw - 10px);
     height: calc(100vh - 10px);
@@ -37,7 +37,7 @@ ngs-code-editor .monaco-editor .overflow-guard{
 }
 
 @media screen and (max-width:767px){  
-    app-main{
+    .main-container{
         flex-direction:column;
     }
 

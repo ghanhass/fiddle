@@ -1,22 +1,29 @@
-<div id="code-parts-title-mobile">
-    <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
-    <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
-    <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
-    <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
+<div class="main-container" (dragover)="mainContainerDragoverHandler($event)">
+    <div id="code-parts-title-mobile">
+        <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
+        <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
+        <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
+        <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
+    </div>
+    <div id="code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}">
+        <div class="code-component-container" [ngClass]="{'hide-mobile': !showHtml}">
+            <app-html-part class="code-component"></app-html-part>
+        </div>
+        <div class="code-component-container" [ngClass]="{'hide-mobile': !showCss}">
+            <div class="vertical-resizer"></div>
+            <app-css-part class="code-component"></app-css-part>
+        </div>
+        <div class="code-component-container" [ngClass]="{'hide-mobile': !showJs}">
+            <div class="vertical-resizer"></div>
+            <app-js-part class="code-component"></app-js-part>
+        </div>
+    </div>
+    <div #mainResizerFloor class="main-resizer-floor hide" ></div>
+    <div draggable="true" #mainResizer id="main-resizer" 
+    (mousedown)="mainResizerMousedownHandler($event)" 
+    (dragstart)="mainResizerDragstartHandler($event)" 
+    (dragend)="mainResizerDragendHandler($event)"
+    [ngStyle]="{'left':mainResizerLeft}"></div>
+    <app-iframe-part [ngClass]="{'hide-mobile': !showResult}" 
+    [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"></app-iframe-part>
 </div>
-<div id="code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}">
-    <div class="code-component-container" [ngClass]="{'hide-mobile': !showHtml}">
-        <app-html-part class="code-component"></app-html-part>
-    </div>
-    <div class="code-component-container" [ngClass]="{'hide-mobile': !showCss}">
-        <div class="vertical-resizer"></div>
-        <app-css-part class="code-component"></app-css-part>
-    </div>
-    <div class="code-component-container" [ngClass]="{'hide-mobile': !showJs}">
-        <div class="vertical-resizer"></div>
-        <app-js-part class="code-component"></app-js-part>
-    </div>
-</div>
-<div id="main-resizer" draggable="true"></div>
-<app-iframe-part [ngClass]="{'hide-mobile': !showResult}" 
-[ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"></app-iframe-part>
