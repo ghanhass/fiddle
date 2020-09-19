@@ -16,6 +16,12 @@
     overflow: hidden;
 }
 
+#code-parts > .code-component-container > .code-component{
+    height: calc(100% - 50px);
+    /*display: flex;
+    flex-direction: column;*/
+} 
+
 #code-parts > .code-component-container > .vertical-resizer {
     min-height: 5px;
     max-height: 5px;

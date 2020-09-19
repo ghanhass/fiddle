@@ -23,7 +23,7 @@ ngs-code-editor {
 
 ngs-code-editor 
 .monaco-scrollable-element.editor-scrollable.vs {
-    height:100% !important;
+    /*height:100% !important;*/
 }
 
 ngs-code-editor .monaco-editor, 
