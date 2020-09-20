@@ -81,7 +81,7 @@ export class MainComponent implements OnInit {
 
   mainResizerDragstartHandler(event: DragEvent){
     event.dataTransfer.setData('text/plain', 'dummy');
-    event.dataTransfer.setDragImage(this.resizeModeDragImg, 10, 10);
+    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
   }
 
   mainContainerDragoverHandler(event){
