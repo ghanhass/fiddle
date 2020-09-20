@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 
 @Component({
@@ -22,7 +22,8 @@ export class JsPartComponent implements OnInit {
       enabled: false,
     },
     lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1
+    lineNumbersMinChars: 1,
+    wordWrap:"on"
   };
   constructor() { }
 
@@ -32,4 +33,5 @@ export class JsPartComponent implements OnInit {
   }
   ngOnInit(): void {
   }
+  
 }

@@ -20,18 +20,15 @@ export class MainComponent implements OnInit {
   codePartsWidth: string = "300px";
   mainResizerLeft: string = "300px";
   @ViewChild("mainResizer") mainResizer:ElementRef;
+  @ViewChild("codeParts") codeParts:ElementRef;
   @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
+  resizeInterval: any;
 
   constructor() { 
   }
 
   ngOnInit(): void {
-    /*let mainContainerDragOver = function(event){
-      event.preventDefault();
-      console.log("dragover event: ", event);
-    }
-    window.removeEventListener("dragover", mainContainerDragOver);
-    window.addEventListener("dragover", mainContainerDragOver);*/
+    
   }
 
   toggleCodePart(codeType: string): void{
@@ -80,26 +77,32 @@ export class MainComponent implements OnInit {
   }
 
   mainResizerDragstartHandler(event: DragEvent){
+    console.log("angular dragstart event: ", event);
     event.dataTransfer.setData('text/plain', 'dummy');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
+    this.resizeInterval = window.setInterval(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 150)
   }
 
   mainContainerDragoverHandler(event){
-    //console.log("angular dragover event: ", event);
-    //console.log("------------------------------------");
+    console.log("angular dragover event: ", event);
+    let self = this;
+    let left = event.clientX - 5;
+    if(left >= 250){
+      this.mainResizer.nativeElement.style.left = left + "px";
+      this.codePartsWidth = left + "px";
+      this.codeParts.nativeElement.style.width = this.codePartsWidth;
+      //console.log("this.codePartsWidth = ", this.codePartsWidth);
+      //console.log("------------------------------------");
+    }
   }
   mainResizerDragendHandler(event){
     console.log("angular dragend event: ", event);
     this.resizeMode = false;
     this.mainResizerFloor.nativeElement.classList.add("hide");
+    window.clearInterval(this.resizeInterval);
   }
 
-  /*mainContainerMousemove(event){
-    //event.preventDefault();
-    //console.log("angular mousemove event: ", event.clientX +" x "+event.clientY);
-    if(this.resizeMode){
-      this.mainResizer.nativeElement.style.left = (event.clientX - 5) + 'px';
-    }
-  }*/
 
 }

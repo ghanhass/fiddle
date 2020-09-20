@@ -21,7 +21,8 @@ export class CssPartComponent implements OnInit {
       enabled: false,
     },
     lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1
+    lineNumbersMinChars: 1,
+    wordWrap:"on"
   };
   constructor() { }
 
