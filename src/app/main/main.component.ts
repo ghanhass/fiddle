@@ -93,6 +93,7 @@ export class MainComponent implements OnInit {
       this.mainResizer.nativeElement.style.left = left + "px";
       this.codePartsWidth = left + "px";
       this.codeParts.nativeElement.style.width = this.codePartsWidth;
+      this.codeParts.nativeElement.style.minWidth = this.codePartsWidth;
       //console.log("this.codePartsWidth = ", this.codePartsWidth);
       //console.log("------------------------------------");
     }

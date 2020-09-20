@@ -115,6 +115,7 @@ app-iframe-part{
     #code-parts, 
     app-iframe-part{
         width:100% !important;
+        min-width: 100% !important;
         height:50%;
         max-height: 50%;
     }
