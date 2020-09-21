@@ -8,11 +8,26 @@
 
 #code-parts > .code-component-container{
     width: 100%;
-    flex-grow: 1;
+    height: 100%;
     border: 1px solid #bbbbbb;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    position:relative;
+}
+
+#code-parts > .code-component-container{
+    width: 100%;
+    height: 100%;
+    border: 1px solid #bbbbbb;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position:relative;
+}
+
+#code-parts > .code-component-container.has-resizer{
+    padding-top:5px;
 }
 
 #code-parts > .code-component-container > .code-component{
@@ -22,17 +37,20 @@
 } 
 
 #code-parts > .code-component-container > .vertical-resizer {
+    position: absolute;
     min-height: 5px;
     max-height: 5px;
     background-color: #bbbbbb;
     cursor: row-resize;
     border:none;
     width: 100%;
+    z-index:101;
 }
 .main-container{
     position: relative;
 }
-.main-resizer-floor{
+.main-resizer-floor,
+.vertical-resizer-floor{
     position:absolute;
     width:100%;
     height:100%;

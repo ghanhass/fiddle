@@ -11,7 +11,6 @@ export class MainComponent implements OnInit {
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
-  resizeMode: boolean = false;
   resizeModeDragImg: Element = (function(){
     let el = new Image();
     el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
@@ -22,6 +21,9 @@ export class MainComponent implements OnInit {
   @ViewChild("mainResizer") mainResizer:ElementRef;
   @ViewChild("codeParts") codeParts:ElementRef;
   @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
+  @ViewChild("verticalResizerFloor") verticalResizerFloor:ElementRef;
+  @ViewChild("vertialResizerJs") vertialResizerJs:ElementRef;
+  @ViewChild("vertialResizerCss") vertialResizerCss:ElementRef;
   resizeInterval: any;
 
   constructor() { 
@@ -65,26 +67,7 @@ export class MainComponent implements OnInit {
     }
   }
 
-  mainResizerMouseupHandler(event){
-    this.resizeMode = false;
-    this.mainResizerFloor.nativeElement.classList.add("hide");
-  }
-
-  mainResizerMousedownHandler(event){
-    this.resizeMode = true;
-    this.mainResizerFloor.nativeElement.classList.remove("hide");
-    //console.log("angular mousedown event: ", event);
-  }
-
-  mainResizerDragstartHandler(event: DragEvent){
-    console.log("angular dragstart event: ", event);
-    event.dataTransfer.setData('text/plain', 'dummy');
-    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
-    this.resizeInterval = window.setInterval(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 150)
-  }
-
+  /*START dragover event handler(s)*/
   mainContainerDragoverHandler(event){
     console.log("angular dragover event: ", event);
     let self = this;
@@ -98,10 +81,82 @@ export class MainComponent implements OnInit {
       //console.log("------------------------------------");
     }
   }
+
+  codePartsDragoverHandler(event: DragEvent){
+    console.log("angular #code-parts dragover event: ", event);
+    event.stopPropagation();
+  }
+  /*END dragover event handler(s)*/
+  
+  mainResizerMouseupHandler(event){
+    this.mainResizerFloor.nativeElement.classList.add("hide");
+  }
+
+  mainResizerMousedownHandler(event){
+    this.mainResizerFloor.nativeElement.classList.remove("hide");
+    //console.log("angular mousedown event: ", event);
+  }
+
+  mainResizerDragstartHandler(event: DragEvent){
+    console.log("angular dragstart event: ", event);
+    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
+    this.resizeInterval = window.setInterval(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 150)
+  }
+
   mainResizerDragendHandler(event){
     console.log("angular dragend event: ", event);
-    this.resizeMode = false;
     this.mainResizerFloor.nativeElement.classList.add("hide");
+    window.clearInterval(this.resizeInterval);
+  }
+  ///////////////
+  verticalResizerCssMouseupHandler(event){
+    this.verticalResizerFloor.nativeElement.classList.add("hide");
+  }
+
+  verticalResizerCssMousedownHandler(event){
+    this.verticalResizerFloor.nativeElement.classList.remove("hide");
+    //console.log("angular mousedown event: ", event);
+  }
+
+  verticalResizerCssDragstartHandler(event: DragEvent){
+    console.log("angular dragstart event: ", event);
+    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
+    this.resizeInterval = window.setInterval(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 150)
+  }
+
+  verticalResizerCssDragendHandler(event){
+    console.log("angular dragend event: ", event);
+    this.verticalResizerFloor.nativeElement.classList.add("hide");
+    window.clearInterval(this.resizeInterval);
+  }
+  ///////////////
+  verticalResizerJsMouseupHandler(event){
+    this.verticalResizerFloor.nativeElement.classList.add("hide");
+  }
+
+  verticalResizerJsMousedownHandler(event){
+    this.verticalResizerFloor.nativeElement.classList.remove("hide");
+    //console.log("angular mousedown event: ", event);
+  }
+
+  verticalResizerJsDragstartHandler(event: DragEvent){
+    console.log("angular dragstart event: ", event);
+    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
+    this.resizeInterval = window.setInterval(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 150)
+  }
+
+  verticalResizerJsDragendHandler(event){
+    console.log("angular dragend event: ", event);
+    this.verticalResizerFloor.nativeElement.classList.add("hide");
     window.clearInterval(this.resizeInterval);
   }
 
