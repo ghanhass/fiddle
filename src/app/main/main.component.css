@@ -11,7 +11,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /*overflow: hidden;*/
     position: relative;
 }
 
@@ -35,6 +35,11 @@
     width: 100%;
     z-index:101;
 }
+
+#code-parts > .code-component-container > .vertical-resizer.resize-mode{
+    background-image: repeating-linear-gradient(90deg ,#BBBBBB, #BBBBBB 15px, #FFFFFF 15px, #FFFFFF 20px);    
+}
+
 .main-container{
     position: relative;
 }
@@ -111,7 +116,7 @@ app-iframe-part{
     margin-right:5px;
 }
 
-@media screen and (max-width:767px){  
+@media (max-width:767px), (max-height:580px) {  
     #code-parts-title-mobile{
         display:flex;
         justify-content: center;

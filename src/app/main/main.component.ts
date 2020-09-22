@@ -135,9 +135,22 @@ export class MainComponent implements OnInit {
       let cssCodeComponentContainerElement: any = this.verticalResizerCss.nativeElement.parentNode;
       let jsCodeComponentContainerElement: any = this.verticalResizerJs.nativeElement.parentNode;
       let htmlCodeComponentContainerElement: any = this.codeParts.nativeElement.querySelector(".code-component-container-html");
+      let jsCodePartTop = jsCodeComponentContainerElement.getBoundingClientRect().top - 45;
       
       if(cssCodeComponentContainerElement){
-        let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
+        let top = event.clientY - 45  ;
+        if(top >= 21 && (top < (jsCodePartTop - 20)) ){
+          console.log("valid zone !");
+          //let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
+          let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
+          this.verticalResizerCss.nativeElement.style.top = newTop + "px";
+          //this.verticalResizerCss.nativeElement.style.top = top+"px";
+        }
+        else{
+          console.log("invalid zone !");
+        }
+        console.log("top = ", top);
+        /*let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
         if(newHeight > 20 && (event.clientY - htmlCodeComponentContainerElement.getBoundingClientRect().top) > 25 ){
           let jsCodePartHeight = jsCodeComponentContainerElement.getBoundingClientRect().height;
           console.log("#newHeight = ", newHeight);
@@ -146,7 +159,7 @@ export class MainComponent implements OnInit {
           cssCodeComponentContainerElement.style.minHeight = newHeight + "px";
           jsCodeComponentContainerElement.style.maxHeight = this.jsPartInitHeight + "px";
           jsCodeComponentContainerElement.style.minHeight = this.jsPartInitHeight + "px";
-        }
+        }*/
       }
       break;
       case "js":
@@ -197,7 +210,7 @@ export class MainComponent implements OnInit {
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, 75);
     this.verticalResizeType = "css";
-    
+    this.verticalResizerCss.nativeElement.classList.add("resize-mode");
     
   }
 
@@ -206,6 +219,7 @@ export class MainComponent implements OnInit {
     this.verticalResizerFloor.nativeElement.classList.add("hide");
     window.clearInterval(this.resizeInterval);
     this.verticalResizeMode = false;
+    this.verticalResizerCss.nativeElement.classList.remove("resize-mode");
   }
   ///////////////
 

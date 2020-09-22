@@ -22,6 +22,7 @@ body{
 .code-part-title{
     width: 100%;
     border-bottom: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
     color: #8c8c8c;
     text-align: center;
 }
@@ -43,7 +44,7 @@ ngs-code-editor .monaco-editor .overflow-guard{
     width:100% !important;
 }
 
-@media screen and (max-width:767px){  
+@media (max-width:767px), (max-height:580px){  
     .main-container{
         flex-direction:column;
     }
