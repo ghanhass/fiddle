@@ -10,10 +10,10 @@
     [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
     (dragover)="codePartsDragoverHandler($event)">
         <div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>
-        <div class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml}" style="top:0px">
+        <div class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml}" style="height:33.33%;top:0px;z-index:1;">
             <app-html-part class="code-component"></app-html-part>
         </div>
-        <div class="code-component-container has-resizer code-component-container-css" [ngClass]="{'hide-mobile': !showCss}" style="top:33.33%">
+        <div class="code-component-container has-resizer code-component-container-css" [ngClass]="{'hide-mobile': !showCss}" style="height:33.33%;top:33.33%;z-index:2;">
             <div draggable="true" #verticalResizerCss class="vertical-resizer" 
             (mousedown)="verticalResizerCssMousedownHandler($event)"
             (dragstart)="verticalResizerCssDragstartHandler($event)"
@@ -21,7 +21,7 @@
             [ngStyle]="{'top':verticalResizerCssTop}"></div>
             <app-css-part class="code-component"></app-css-part>
         </div>
-        <div class="code-component-container has-resizer code-component-container-js" [ngClass]="{'hide-mobile': !showJs}" style="top:66.34%">
+        <div class="code-component-container has-resizer code-component-container-js" [ngClass]="{'hide-mobile': !showJs}" style="height:33.34%;top:66.33%;z-index:3;">
             <div draggable="true" #verticalResizerJs class="vertical-resizer"
             (mousedown)="verticalResizerJsMousedownHandler($event)"
             (dragstart)="verticalResizerJsDragstartHandler($event)"

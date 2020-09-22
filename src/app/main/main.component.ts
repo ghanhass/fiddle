@@ -33,7 +33,6 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerFloor") verticalResizerFloor:ElementRef;
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
-  resizeInterval: any;
 
   constructor() { 
   }
@@ -127,7 +126,7 @@ export class MainComponent implements OnInit {
 
   codePartsDragoverHandler(event: DragEvent){
     //console.log("angular #code-parts dragover event: ", event);
-    console.log("angular #code-parts dragover event: ", event.clientX+" X "+event.clientY)
+    //console.log("angular #code-parts dragover event: ", event.clientX+" X "+event.clientY)
     event.stopPropagation();
     switch(this.verticalResizeType){
       case "css":
@@ -139,17 +138,17 @@ export class MainComponent implements OnInit {
       
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
-        if(top >= 21 && (top < (jsCodePartTop - 20)) ){
-          console.log("valid zone !");
+        if(top >= 21 && (top < (jsCodePartTop - 26)) ){
+          //console.log("valid zone !");
           //let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
           //this.verticalResizerCss.nativeElement.style.top = top+"px";
         }
         else{
-          console.log("invalid zone !");
+          //console.log("invalid zone !");
         }
-        console.log("top = ", top);
+        //console.log("top = ", top);
         /*let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
         if(newHeight > 20 && (event.clientY - htmlCodeComponentContainerElement.getBoundingClientRect().top) > 25 ){
           let jsCodePartHeight = jsCodeComponentContainerElement.getBoundingClientRect().height;
@@ -165,7 +164,7 @@ export class MainComponent implements OnInit {
       case "js":
       break
     }
-    console.log("-------------------------")
+    console.log("-------------------------");
   }
   /*END dragover event handler(s)*/
 
@@ -185,7 +184,6 @@ export class MainComponent implements OnInit {
   mainResizerDragendHandler(event){
     this.mainResizeMode = false;
     console.log("angular mainResizerDragendHandler event: ", event);
-    window.clearInterval(this.resizeInterval);
     this.codePartsWidth = this.mainResizerLeft;
     this.codeParts.nativeElement.style.width = this.mainResizerLeft;
     this.codeParts.nativeElement.style.minWidth = this.mainResizerLeft; 
@@ -206,9 +204,6 @@ export class MainComponent implements OnInit {
     console.log("angular verticalResizerCssDragstartHandler event: ", event);
     event.dataTransfer.setData('text/plain', 'dummy');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
-    this.resizeInterval = window.setInterval(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 75);
     this.verticalResizeType = "css";
     this.verticalResizerCss.nativeElement.classList.add("resize-mode");
     
@@ -217,13 +212,26 @@ export class MainComponent implements OnInit {
   verticalResizerCssDragendHandler(event){
     console.log("angular verticalResizerCssDragendHandler: ", event);
     this.verticalResizerFloor.nativeElement.classList.add("hide");
-    window.clearInterval(this.resizeInterval);
     this.verticalResizeMode = false;
     this.verticalResizerCss.nativeElement.classList.remove("resize-mode");
-    let newHeight = this.verticalResizerCss.nativeElement.parentNode.getBoundingClientRect().bottom - event.clientY;
-    this.verticalResizerCss.nativeElement.parentNode.style.height = newHeight + "px";
+    let cssCodeComponentContainerElement = this.verticalResizerCss.nativeElement.parentNode;
+    let movingDistance = cssCodeComponentContainerElement.getBoundingClientRect().top - 
+    this.verticalResizerCss.nativeElement.getBoundingClientRect().top;
+    cssCodeComponentContainerElement.style.top = ((cssCodeComponentContainerElement.getBoundingClientRect().top - 67) - movingDistance + 20) + "px";
+    this.verticalResizerCss.nativeElement.style.top = "0px";
+    console.log("movingDistance = ", movingDistance);
+    let htmlCodeComponentContainer = document.querySelector(".code-component-container-html");
+    let jsCodeComponentContainer = document.querySelector(".code-component-container-js");
+    cssCodeComponentContainerElement.style.height = (jsCodeComponentContainer.getBoundingClientRect().top - cssCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";
+    /*
+    let newHeight = cssCodeComponentContainerElement.offsetHeight - parseInt(this.verticalResizerCss.nativeElement.style.top) + 1;
+    let heightDiff = newHeight - cssCodeComponentContainerElement.offsetHeight;
     console.log("newHeight = ", newHeight);
-    
+    console.log("heightDiff = ", heightDiff);
+    //cssCodeComponentContainerElement.style.height = newHeight + "px";
+    console.log("this.verticalResizerCss.nativeElement.style.top = ", this.verticalResizerCss.nativeElement.getBoundingClientRect().top);
+    //cssCodeComponentContainerElement.style.top = (event.screenY - 45) +  "px";
+    */
   }
   ///////////////
 
@@ -237,16 +245,12 @@ export class MainComponent implements OnInit {
     console.log("angular verticalResizerJsDragstartHandler event: ", event);
     event.dataTransfer.setData('text/plain', 'dummy');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
-    this.resizeInterval = window.setInterval(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 75);
     this.verticalResizeType = "js";
   }
 
   verticalResizerJsDragendHandler(event){
     console.log("angular verticalResizerJsDragendHandler event: ", event);
     this.verticalResizerFloor.nativeElement.classList.add("hide");
-    window.clearInterval(this.resizeInterval);
     this.verticalResizeMode = true;
   }
 
