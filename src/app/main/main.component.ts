@@ -220,6 +220,10 @@ export class MainComponent implements OnInit {
     window.clearInterval(this.resizeInterval);
     this.verticalResizeMode = false;
     this.verticalResizerCss.nativeElement.classList.remove("resize-mode");
+    let newHeight = this.verticalResizerCss.nativeElement.parentNode.getBoundingClientRect().bottom - event.clientY;
+    this.verticalResizerCss.nativeElement.parentNode.style.height = newHeight + "px";
+    console.log("newHeight = ", newHeight);
+    
   }
   ///////////////
 
