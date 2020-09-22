@@ -49,7 +49,7 @@ ngs-code-editor .monaco-editor .overflow-guard{
     }
 
     .hide-mobile{
-        position: fixed;
+        position: fixed !important;
         top:99999px;
         left:99999px;
     }

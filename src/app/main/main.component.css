@@ -9,21 +9,10 @@
 #code-parts > .code-component-container{
     width: 100%;
     height: 100%;
-    border: 1px solid #bbbbbb;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    position:relative;
-}
-
-#code-parts > .code-component-container{
-    width: 100%;
-    height: 100%;
-    border: 1px solid #bbbbbb;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    position:relative;
+    position: relative;
 }
 
 #code-parts > .code-component-container.has-resizer{
@@ -67,6 +56,9 @@
     border:none;
     height:100%;
     z-index:101;
+}
+#main-resizer.resize-mode{
+    background-image:repeating-linear-gradient(#BBBBBB, #BBBBBB 15px, #FFFFFF 15px, #FFFFFF 20px);
 }
 #main-resizer:hover {
     background-color: #9b9b9b;
@@ -141,6 +133,11 @@ app-iframe-part{
 
     #code-parts > .code-component-container > .vertical-resizer {
         display: none;
+    }
+
+    #code-parts > .code-component-container{
+        min-height:100%;
+        position: static;
     }
 
 }

@@ -23,7 +23,8 @@ export class JsPartComponent implements OnInit {
     },
     lineDecorationsWidth:"1px",
     lineNumbersMinChars: 1,
-    wordWrap:"on"
+    wordWrap:"on",
+    baseUrl: "/"
   };
   constructor() { }
 

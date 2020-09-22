@@ -22,7 +22,8 @@ export class CssPartComponent implements OnInit {
     },
     lineDecorationsWidth:"1px",
     lineNumbersMinChars: 1,
-    wordWrap:"on"
+    wordWrap:"on",
+    baseUrl: "/"
   };
   constructor() { }
 

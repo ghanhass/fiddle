@@ -10,35 +10,32 @@
     [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
     (dragover)="codePartsDragoverHandler($event)">
         <div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>
-        <div class="code-component-container" [ngClass]="{'hide-mobile': !showHtml}">
+        <div class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml}">
             <app-html-part class="code-component"></app-html-part>
         </div>
         <div class="code-component-container has-resizer" [ngClass]="{'hide-mobile': !showCss}">
             <div draggable="true" #verticalResizerCss class="vertical-resizer" 
             (mousedown)="verticalResizerCssMousedownHandler($event)"
-            (mouseup)="verticalResizerCssMouseupHandler($event)"
             (dragstart)="verticalResizerCssDragstartHandler($event)"
             (dragend)="verticalResizerCssDragendHandler($event)"
-            [ngStyle]="{'top':'0px'}"></div>
+            [ngStyle]="{'top':verticalResizerCssTop}"></div>
             <app-css-part class="code-component"></app-css-part>
         </div>
         <div class="code-component-container has-resizer" [ngClass]="{'hide-mobile': !showJs}">
             <div draggable="true" #verticalResizerJs class="vertical-resizer"
             (mousedown)="verticalResizerJsMousedownHandler($event)"
-            (mouseup)="verticalResizerJsMouseupHandler($event)"
             (dragstart)="verticalResizerJsDragstartHandler($event)"
             (dragend)="verticalResizerJsDragendHandler($event)"
-            [ngStyle]="{'top':'0px'}"></div>
+            [ngStyle]="{'top':verticalResizerJsTop}"></div>
             <app-js-part class="code-component"></app-js-part>
         </div>
     </div>
     <div #mainResizerFloor class="main-resizer-floor hide" ></div>
     <div draggable="true" #mainResizer id="main-resizer" 
     (mousedown)="mainResizerMousedownHandler($event)" 
-    (mouseup)="mainResizerMouseupHandler($event)" 
     (dragstart)="mainResizerDragstartHandler($event)" 
     (dragend)="mainResizerDragendHandler($event)"
-    [ngStyle]="{'left':mainResizerLeft}"></div>
+    [ngStyle]="{'left':mainResizerLeft}" [ngClass]="{'resize-mode':mainResizeMode}"></div>
     <app-iframe-part [ngClass]="{'hide-mobile': !showResult}" 
     [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"></app-iframe-part>
 </div>
