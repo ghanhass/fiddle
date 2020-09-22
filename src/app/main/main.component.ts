@@ -79,6 +79,37 @@ export class MainComponent implements OnInit {
       }
       break;
     }
+    let self = this;
+    let editorLayoutFixInterval = window.setInterval(()=>{
+      //console.log("inside custom interval");
+      if (!this.showCss){
+        if(this.codeParts.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }
+
+      if (!this.showHtml){
+        if(this.codeParts.nativeElement.querySelector(".code-component-container-html").classList.contains("hide-mobile")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }
+
+      if (!this.showJs){
+        if(this.codeParts.nativeElement.querySelector(".code-component-container-js").classList.contains("hide-mobile")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }
+
+      if (!this.showResult){
+        if(document.querySelector("app-iframe-part").classList.contains("hide-mobile")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }
+    }, 50);
   }
 
   /*START dragover event handler(s)*/
