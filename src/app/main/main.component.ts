@@ -125,40 +125,25 @@ export class MainComponent implements OnInit {
   }
 
   codePartsDragoverHandler(event: DragEvent){
-    //console.log("angular #code-parts dragover event: ", event);
     //console.log("angular #code-parts dragover event: ", event.clientX+" X "+event.clientY)
     event.stopPropagation();
     switch(this.verticalResizeType){
       case "css":
-      //this.verticalResizerCss.nativeElement.style.top = (event.clientY - 45) + "px"
       let cssCodeComponentContainerElement: any = this.verticalResizerCss.nativeElement.parentNode;
       let jsCodeComponentContainerElement: any = this.verticalResizerJs.nativeElement.parentNode;
-      let htmlCodeComponentContainerElement: any = this.codeParts.nativeElement.querySelector(".code-component-container-html");
       let jsCodePartTop = jsCodeComponentContainerElement.getBoundingClientRect().top - 45;
       
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
-        if(top >= 21 && (top < (jsCodePartTop - 26)) ){
+        if(top >= 26 && (top < (jsCodePartTop - 26)) ){
           //console.log("valid zone !");
-          //let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
-          //this.verticalResizerCss.nativeElement.style.top = top+"px";
         }
         else{
           //console.log("invalid zone !");
         }
-        //console.log("top = ", top);
-        /*let newHeight = jsCodeComponentContainerElement.getBoundingClientRect().top - event.clientY;
-        if(newHeight > 20 && (event.clientY - htmlCodeComponentContainerElement.getBoundingClientRect().top) > 25 ){
-          let jsCodePartHeight = jsCodeComponentContainerElement.getBoundingClientRect().height;
-          console.log("#newHeight = ", newHeight);
-          console.log("#code-parts height = ", this.codeParts.nativeElement.offsetHeight); 
-          cssCodeComponentContainerElement.style.height = newHeight + "px";
-          cssCodeComponentContainerElement.style.minHeight = newHeight + "px";
-          jsCodeComponentContainerElement.style.maxHeight = this.jsPartInitHeight + "px";
-          jsCodeComponentContainerElement.style.minHeight = this.jsPartInitHeight + "px";
-        }*/
+
       }
       break;
       case "js":
@@ -220,18 +205,8 @@ export class MainComponent implements OnInit {
     cssCodeComponentContainerElement.style.top = ((cssCodeComponentContainerElement.getBoundingClientRect().top - 67) - movingDistance + 20) + "px";
     this.verticalResizerCss.nativeElement.style.top = "0px";
     console.log("movingDistance = ", movingDistance);
-    let htmlCodeComponentContainer = document.querySelector(".code-component-container-html");
     let jsCodeComponentContainer = document.querySelector(".code-component-container-js");
     cssCodeComponentContainerElement.style.height = (jsCodeComponentContainer.getBoundingClientRect().top - cssCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";
-    /*
-    let newHeight = cssCodeComponentContainerElement.offsetHeight - parseInt(this.verticalResizerCss.nativeElement.style.top) + 1;
-    let heightDiff = newHeight - cssCodeComponentContainerElement.offsetHeight;
-    console.log("newHeight = ", newHeight);
-    console.log("heightDiff = ", heightDiff);
-    //cssCodeComponentContainerElement.style.height = newHeight + "px";
-    console.log("this.verticalResizerCss.nativeElement.style.top = ", this.verticalResizerCss.nativeElement.getBoundingClientRect().top);
-    //cssCodeComponentContainerElement.style.top = (event.screenY - 45) +  "px";
-    */
   }
   ///////////////
 
