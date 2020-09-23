@@ -147,4 +147,8 @@ app-iframe-part{
         position: static;
     }
 
+    #code-parts > .code-component-container.has-resizer{
+        padding-top:0px;
+    }
+
 }

@@ -25,7 +25,6 @@ export class MainComponent implements OnInit {
   mainResizeMode:boolean = false;
   verticalResizeType:string = "";
   cssPartInitHeight: number;
-  jsPartInitHeight: number;
   htmlPartInitHeight: number;
   @ViewChild("mainResizer") mainResizer:ElementRef;
   @ViewChild("codeParts") codeParts:ElementRef;
@@ -35,6 +34,7 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
 
   constructor() { 
+    window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
   ngOnInit(): void {
@@ -43,7 +43,25 @@ export class MainComponent implements OnInit {
 
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
-    //console.log("window resize event: ", event);
+    //console.log("/!\ window resize event: ", event);
+  }
+
+  @HostListener("window:click", ["$event"])
+  onWindowClick(event){
+    this.resetResizersAppearance();
+  }
+
+  @HostListener("window:mouseup", ["$event"])
+  onWindowMouseup(event){
+    this.resetResizersAppearance();
+  }
+
+  resetResizersAppearance(){
+    this.verticalResizerFloor.nativeElement.classList.add("hide");
+    this.verticalResizerFloor.nativeElement.classList.remove("resize-mode");
+
+    this.mainResizerFloor.nativeElement.classList.add("hide");
+    this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
   }
 
   toggleCodePart(codeType: string): void{
@@ -132,7 +150,6 @@ export class MainComponent implements OnInit {
       let cssCodeComponentContainerElement: any = this.verticalResizerCss.nativeElement.parentNode;
       let jsCodeComponentContainerElement: any = this.verticalResizerJs.nativeElement.parentNode;
       let jsCodePartTop = jsCodeComponentContainerElement.getBoundingClientRect().top - 45;
-      
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
         if(top >= 26 && (top < (jsCodePartTop - 26)) ){
@@ -143,13 +160,27 @@ export class MainComponent implements OnInit {
         else{
           //console.log("invalid zone !");
         }
-
       }
       break;
       case "js":
+      let cssCodeComponentContainerElement2: any = this.verticalResizerCss.nativeElement.parentNode;
+      let jsCodeComponentContainerElement2: any = this.verticalResizerJs.nativeElement.parentNode;
+      let jsCodePartBottom = jsCodeComponentContainerElement2.getBoundingClientRect().bottom - 45;
+      let cssCodePartTop = cssCodeComponentContainerElement2.getBoundingClientRect().top - 45;
+      if(jsCodeComponentContainerElement2){
+        let top = event.clientY - 45  ;
+        if(top > (cssCodePartTop + 26) && (top < (jsCodePartBottom - 26)) ){
+          //console.log("valid zone !");
+          let newTop = event.clientY - jsCodeComponentContainerElement2.getBoundingClientRect().top;
+          this.verticalResizerJs.nativeElement.style.top = newTop + "px";
+        }
+        else{
+          //console.log("invalid zone !");
+        }
+      }
       break
     }
-    console.log("-------------------------");
+    //console.log("-------------------------");
   }
   /*END dragover event handler(s)*/
 
@@ -160,7 +191,7 @@ export class MainComponent implements OnInit {
 
   mainResizerDragstartHandler(event: any){
     console.log("angular mainResizerDragstartHandler event: ", event);
-    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.mainResizeMode = true;
     this.mainResizerLeft = (event.target.getBoundingClientRect().left - 5) + "px";
@@ -181,13 +212,11 @@ export class MainComponent implements OnInit {
     this.verticalResizerFloor.nativeElement.classList.remove("hide");
     this.verticalResizeMode = true;
     //console.log("angular mousedown event: ", event);
-    this.jsPartInitHeight = this.verticalResizerJs.nativeElement.parentNode.offsetHeight - 6;
-    console.log("this.jsPartInitHeight = ", this.jsPartInitHeight);
   }
 
   verticalResizerCssDragstartHandler(event: DragEvent){
     console.log("angular verticalResizerCssDragstartHandler event: ", event);
-    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.verticalResizeType = "css";
     this.verticalResizerCss.nativeElement.classList.add("resize-mode");
@@ -206,7 +235,10 @@ export class MainComponent implements OnInit {
     this.verticalResizerCss.nativeElement.style.top = "0px";
     console.log("movingDistance = ", movingDistance);
     let jsCodeComponentContainer = document.querySelector(".code-component-container-js");
+    let htmlCodeComponentContainer: any = document.querySelector(".code-component-container-html");
+    htmlCodeComponentContainer.style.height = htmlCodeComponentContainer.getBoundingClientRect().height - movingDistance - 2 + "px";
     cssCodeComponentContainerElement.style.height = (jsCodeComponentContainer.getBoundingClientRect().top - cssCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";
+    window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }
   ///////////////
 
@@ -218,15 +250,30 @@ export class MainComponent implements OnInit {
 
   verticalResizerJsDragstartHandler(event: DragEvent){
     console.log("angular verticalResizerJsDragstartHandler event: ", event);
-    event.dataTransfer.setData('text/plain', 'dummy');
+    event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.verticalResizeType = "js";
+    this.verticalResizerJs.nativeElement.classList.add("resize-mode");
   }
 
   verticalResizerJsDragendHandler(event){
-    console.log("angular verticalResizerJsDragendHandler event: ", event);
+    console.log("angular verticalResizerJsDragendHandler: ", event);
     this.verticalResizerFloor.nativeElement.classList.add("hide");
-    this.verticalResizeMode = true;
+    this.verticalResizeMode = false;
+    this.verticalResizerJs.nativeElement.classList.remove("resize-mode");
+    let jsCodeComponentContainerElement = this.verticalResizerJs.nativeElement.parentNode;
+    let movingDistance = jsCodeComponentContainerElement.getBoundingClientRect().top - 
+    this.verticalResizerJs.nativeElement.getBoundingClientRect().top;
+    jsCodeComponentContainerElement.style.top = ((jsCodeComponentContainerElement.getBoundingClientRect().top - 65) - movingDistance + 20) + "px";
+    this.verticalResizerJs.nativeElement.style.top = "0px";
+    console.log("movingDistance = ", movingDistance);
+    
+    let cssCodeComponentContainer: any = document.querySelector(".code-component-container-css");
+    let htmlCodeComponentContainer: any = document.querySelector(".code-component-container-html");
+
+    cssCodeComponentContainer.style.height = cssCodeComponentContainer.getBoundingClientRect().height - movingDistance - 2 + "px";
+    jsCodeComponentContainerElement.style.height = (this.codeParts.nativeElement.getBoundingClientRect().bottom - jsCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";
+    window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }
 
 
