@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 
 @Component({
@@ -10,6 +10,7 @@ export class HtmlPartComponent implements OnInit {
   code: string = "";
   theme = 'vs-light';
 
+  @Output() codeChange = new EventEmitter();
   codeModel: any = {
     language: 'html',
     //uri: 'main.json',
@@ -30,8 +31,10 @@ export class HtmlPartComponent implements OnInit {
 
 
   onCodeChanged(value) {
-    console.log('CODE', value);
+    //console.log('CODE', value);
+    this.codeChange.emit(value);
   }
+
   ngOnInit(): void {
   }
 

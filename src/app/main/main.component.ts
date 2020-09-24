@@ -12,6 +12,11 @@ export class MainComponent implements OnInit {
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
+  
+  jsCode: string;
+  cssCode: string;
+  htmlCode: string;
+
   resizeModeDragImg: Element = (function(){
     let el = new Image();
     el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
@@ -54,6 +59,22 @@ export class MainComponent implements OnInit {
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
     this.resetResizersAppearance();
+  }
+  
+  htmlCodeChanged(code){
+    console.log("html code = ", code);
+  }
+
+  jsCodeChanged(code){
+    console.log("js code = ", code);
+  }
+
+  cssCodeChanged(code){
+    console.log("css code = ", code);
+  }
+
+  shareCode(){
+
   }
 
   resetResizersAppearance(){
@@ -150,12 +171,12 @@ export class MainComponent implements OnInit {
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
         if(top >= 26 && (top < (jsCodePartTop - 26)) ){
-          console.log("valid zone !");
+          //console.log("valid zone !");
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
         }
         else{
-          console.log("invalid zone !");
+          //console.log("invalid zone !");
         }
       }
       break;
@@ -262,7 +283,6 @@ export class MainComponent implements OnInit {
     console.log("movingDistance = ", movingDistance);
     
     let cssCodeComponentContainer: any = document.querySelector(".code-component-container-css");
-    let htmlCodeComponentContainer: any = document.querySelector(".code-component-container-html");
 
     cssCodeComponentContainer.style.height = cssCodeComponentContainer.getBoundingClientRect().height - movingDistance - 2 + "px";
     jsCodeComponentContainerElement.style.height = (this.codeParts.nativeElement.getBoundingClientRect().bottom - jsCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";

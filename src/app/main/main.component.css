@@ -118,6 +118,24 @@ app-iframe-part{
     margin-right:5px;
 }
 
+#share-code-btn{
+    height: calc(100% - 10px);
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+#share-code-btn span{
+    display:block;
+}
+
+.header-btns-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width:767px), (max-height:580px) {  
     #code-parts-title-mobile{
         display:flex;

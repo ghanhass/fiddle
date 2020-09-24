@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, SimpleChange, EventEmitter, Output } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
 
 @Component({
@@ -10,6 +10,7 @@ export class JsPartComponent implements OnInit {
 
   code: string = "";
   theme = 'vs-light';
+  @Output() codeChange = new EventEmitter();
 
   codeModel: any = {
     language: 'javascript',
@@ -28,10 +29,11 @@ export class JsPartComponent implements OnInit {
   };
   constructor() { }
 
-
   onCodeChanged(value) {
-    console.log('CODE', value);
+    //console.log('CODE', value);
+    this.codeChange.emit(value);
   }
+
   ngOnInit(): void {
   }
   

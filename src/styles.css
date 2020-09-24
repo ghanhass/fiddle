@@ -11,8 +11,11 @@ body{
 }
 #main-header{
     height: 40px;
-    width: calc(100%);
-    display: block;
+    width: calc(100% - 20px);
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+    padding-left: 10px;
     box-shadow: 0 0 0 1px #bbb;
 }
 
