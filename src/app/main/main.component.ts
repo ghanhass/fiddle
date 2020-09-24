@@ -34,7 +34,7 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
 
   constructor() { 
-    window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
+    //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
   ngOnInit(): void {
@@ -57,9 +57,6 @@ export class MainComponent implements OnInit {
   }
 
   resetResizersAppearance(){
-    this.verticalResizerFloor.nativeElement.classList.add("hide");
-    this.verticalResizerFloor.nativeElement.classList.remove("resize-mode");
-
     this.mainResizerFloor.nativeElement.classList.add("hide");
     this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
   }
@@ -153,12 +150,12 @@ export class MainComponent implements OnInit {
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
         if(top >= 26 && (top < (jsCodePartTop - 26)) ){
-          //console.log("valid zone !");
+          console.log("valid zone !");
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
         }
         else{
-          //console.log("invalid zone !");
+          console.log("invalid zone !");
         }
       }
       break;
@@ -209,7 +206,6 @@ export class MainComponent implements OnInit {
   ///////////////
 
   verticalResizerCssMousedownHandler(event){
-    this.verticalResizerFloor.nativeElement.classList.remove("hide");
     this.verticalResizeMode = true;
     //console.log("angular mousedown event: ", event);
   }
@@ -225,7 +221,6 @@ export class MainComponent implements OnInit {
 
   verticalResizerCssDragendHandler(event){
     console.log("angular verticalResizerCssDragendHandler: ", event);
-    this.verticalResizerFloor.nativeElement.classList.add("hide");
     this.verticalResizeMode = false;
     this.verticalResizerCss.nativeElement.classList.remove("resize-mode");
     let cssCodeComponentContainerElement = this.verticalResizerCss.nativeElement.parentNode;
@@ -243,7 +238,6 @@ export class MainComponent implements OnInit {
   ///////////////
 
   verticalResizerJsMousedownHandler(event){
-    this.verticalResizerFloor.nativeElement.classList.remove("hide");
     this.verticalResizeMode = true;
     //console.log("angular mousedown event: ", event);
   }
@@ -258,7 +252,6 @@ export class MainComponent implements OnInit {
 
   verticalResizerJsDragendHandler(event){
     console.log("angular verticalResizerJsDragendHandler: ", event);
-    this.verticalResizerFloor.nativeElement.classList.add("hide");
     this.verticalResizeMode = false;
     this.verticalResizerJs.nativeElement.classList.remove("resize-mode");
     let jsCodeComponentContainerElement = this.verticalResizerJs.nativeElement.parentNode;
