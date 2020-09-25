@@ -11,6 +11,7 @@ import { IframePartComponent } from './iframe-part/iframe-part.component';
 import { FormsModule } from "@angular/forms";
 /*import { MonacoEditorModule } from "ngx-monaco-editor";*/
 import { CodeEditorModule } from "@ngstack/code-editor";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import { CodeEditorModule } from "@ngstack/code-editor";
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    HttpClientModule,
     CodeEditorModule.forRoot()
   ],
   providers: [],

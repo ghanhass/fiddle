@@ -1,4 +1,4 @@
 import {Code} from "./code";
 export interface UserCode {
-    code: Code;
+    usercode: Code;
 }

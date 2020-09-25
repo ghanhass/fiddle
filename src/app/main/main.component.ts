@@ -1,5 +1,8 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NumberValueAccessor } from '@angular/forms';
+import { UserCode } from "../user-code";
+import { Code } from "../code";
+import { MainService } from "../main.service";
 
 @Component({
   selector: 'app-main',
@@ -38,7 +41,7 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
 
-  constructor() { 
+  constructor(private mainService: MainService) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
@@ -62,19 +65,33 @@ export class MainComponent implements OnInit {
   }
   
   htmlCodeChanged(code){
-    console.log("html code = ", code);
+    //console.log("html code = ", code);
+    this.htmlCode = code;
   }
 
   jsCodeChanged(code){
-    console.log("js code = ", code);
+    //console.log("js code = ", code);
+    this.jsCode = code;
   }
 
   cssCodeChanged(code){
-    console.log("css code = ", code);
+    //console.log("css code = ", code);
+    this.cssCode = code;
   }
 
   shareCode(){
-
+    let code: Code = {
+      js: this.jsCode,
+      html: this.htmlCode,
+      css: this.cssCode
+    } 
+    let userCode: UserCode = {
+      usercode: code
+    }
+    this.mainService.shareCode(userCode).subscribe((res)=>{
+      console.log("res = ", res);
+    })
+    console.log("userCode = ", userCode);
   }
 
   resetResizersAppearance(){
