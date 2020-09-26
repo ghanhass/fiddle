@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { UserCode } from "./user-code";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class MainService {
 
   constructor(private http: HttpClient) { }
 
-  shareCode(data: UserCode){
+  shareCode(data: UserCode): Observable<any>{
     return (this.http.post(this.url, JSON.stringify(data),this.httpOptions));
   }
 }

@@ -1,1 +1,6 @@
-<iframe #iframe (load)="onFormLoad()" src="http://localhost:80/iframe-renderer"></iframe>
+<form [action]="url" target="my-frame" method="post" #form>
+    <input name="js" type="hidden" id="js-input" [value]="jsCode">
+    <input name="css" type="hidden" id="css-input" [value]="cssCode">
+    <input name="html" type="hidden" id="html-input" [value]="htmlCode">
+</form>
+<iframe #iframe name="my-frame" (load)="onFormLoad()" [src]="url"></iframe>

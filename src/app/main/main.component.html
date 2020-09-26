@@ -1,7 +1,10 @@
 <header id="main-header">
     <div class="header-btns-container">
         <button id="share-code-btn" (click)="shareCode()">
-            <span>share</span>
+            <span>Share</span>
+        </button>
+        <button id="share-code-btn" (click)="runCode()">
+            <span>Run code</span>
         </button>
     </div>
 </header>
@@ -42,6 +45,7 @@
     (dragstart)="mainResizerDragstartHandler($event)" 
     (dragend)="mainResizerDragendHandler($event)"
     [ngStyle]="{'left':mainResizerLeft}" [ngClass]="{'resize-mode':mainResizeMode}"></div>
-    <app-iframe-part [ngClass]="{'hide-mobile': !showResult}" 
-    [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"></app-iframe-part>
+    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult}" 
+    [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}"
+    [jsCode]="jsCode" [htmlCode]="htmlCode" [cssCode]="cssCode"></app-iframe-part>
 </div>

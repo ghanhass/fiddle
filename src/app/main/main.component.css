@@ -136,6 +136,14 @@ app-iframe-part{
     justify-content: center;
 }
 
+.header-btns-container > button:not(:first-child) {
+    margin-left:5px;
+}
+  
+.header-btns-container > button:not(:last-child) {
+    margin-right:5px;
+}
+
 @media (max-width:767px), (max-height:580px) {  
     #code-parts-title-mobile{
         display:flex;

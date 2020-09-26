@@ -3,6 +3,7 @@ import { NumberValueAccessor } from '@angular/forms';
 import { UserCode } from "../user-code";
 import { Code } from "../code";
 import { MainService } from "../main.service";
+import { IframePartComponent } from "../iframe-part/iframe-part.component";
 
 @Component({
   selector: 'app-main',
@@ -16,9 +17,9 @@ export class MainComponent implements OnInit {
   showJs: boolean = false;
   showResult: boolean = true;
   
-  jsCode: string;
-  cssCode: string;
-  htmlCode: string;
+  jsCode: string = "";
+  cssCode: string = "";
+  htmlCode: string = "";
 
   resizeModeDragImg: Element = (function(){
     let el = new Image();
@@ -40,6 +41,7 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerFloor") verticalResizerFloor:ElementRef;
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
+  @ViewChild("iframePart") iframePart:IframePartComponent;
 
   constructor(private mainService: MainService) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
@@ -80,6 +82,8 @@ export class MainComponent implements OnInit {
   }
 
   shareCode(){
+    /*
+    this.iframePart.runCode();
     let code: Code = {
       js: this.jsCode,
       html: this.htmlCode,
@@ -91,7 +95,11 @@ export class MainComponent implements OnInit {
     this.mainService.shareCode(userCode).subscribe((res)=>{
       console.log("res = ", res);
     })
-    console.log("userCode = ", userCode);
+    console.log("userCode = ", userCode);*/
+  }
+
+  runCode(){
+    this.iframePart.runCode();
   }
 
   resetResizersAppearance(){

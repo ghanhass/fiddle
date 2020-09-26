@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { environment } from "src/environments/environment" 
 
 @Component({
   selector: 'app-iframe-part',
@@ -6,6 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./iframe-part.component.css']
 })
 export class IframePartComponent implements OnInit {
+
+  @Input()jsCode: string;
+  @Input()htmlCode: string;
+  @Input()cssCode: string;
+  @ViewChild("form")form: ElementRef;
+  url: string = environment.url;
+
+  runCode(){
+    this.form.nativeElement.submit();
+  }
 
   constructor() { }
 
