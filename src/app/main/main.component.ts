@@ -82,6 +82,7 @@ export class MainComponent implements OnInit {
   }
 
   shareCode(){
+    alert("not yet :D");
     /*
     this.iframePart.runCode();
     let code: Code = {

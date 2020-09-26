@@ -18,7 +18,7 @@ export class HtmlPartComponent implements OnInit {
   };
 
   options = {
-    contextmenu: true,
+    contextmenu: false,
     minimap: {
       enabled: false,
     },

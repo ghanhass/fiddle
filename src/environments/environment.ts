@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: "http://localhost/iframe-renderer/index.php"
+  url: "https://hassoon.grape.ircnow.org/fiddle/iframe-renderer/index.php"
 };
 
 /*

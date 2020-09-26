@@ -7,9 +7,9 @@ import { CodeModel } from '@ngstack/code-editor';
   styleUrls: ['./js-part.component.css']
 })
 export class JsPartComponent implements OnInit {
-
   code: string = "";
   theme = 'vs-light';
+  
   @Output() codeChange = new EventEmitter();
 
   codeModel: any = {
@@ -18,7 +18,7 @@ export class JsPartComponent implements OnInit {
   };
 
   options = {
-    contextmenu: true,
+    contextmenu: false,
     minimap: {
       enabled: false,
     },
