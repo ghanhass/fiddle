@@ -13,7 +13,6 @@ export class IframePartComponent implements OnInit {
   @Input()htmlCode: string;
   @Input()cssCode: string;
   @ViewChild("form")form: ElementRef;
-  //@ViewChild("saveCb")saveCb: ElementRef;
   url: string = environment.url;
   isSaveMode: boolean = false;
   canSave: EventEmitter<any> = new EventEmitter();
@@ -21,27 +20,34 @@ export class IframePartComponent implements OnInit {
   runCode(param?: any){
     if(param === "save"){
       this.isSaveMode = true;
+      this.saveCode();
     }
-    this.form.nativeElement.submit();
+    else{
+      this.form.nativeElement.submit();
+    }
   }
-  /*saveCode(){
-    this.saveCb.nativeElement.checked = true;
-    this.form.nativeElement.submit();
-    this.saveCb.nativeElement.checked = false;
-  }*/
 
   constructor(private mainService: MainService) { }
 
   ngOnInit(): void {
   }
 
+  saveCode(){
+    console.log("saving Code");
+    let data = {
+      save: "1",
+      js:this.jsCode,
+      html:this.htmlCode,
+      css:this.cssCode
+    }
+    this.mainService.saveCode(data).subscribe((res)=>{
+      console.log("save code res = ", res);
+    });
+  }
+
   onFormLoad(): void {
     if(this.isSaveMode){
-      console.log("isSaveMode == true && iframe angular load event");
-      console.log("saving Code");
-      this.mainService.saveCode().subscribe((res)=>{
-        console.log("save code res = ", res);
-      });
+      //this.saveCode();
       this.isSaveMode = false;
     }
     else{

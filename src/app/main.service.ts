@@ -16,8 +16,7 @@ export class MainService {
 
   constructor(private http: HttpClient) { }
 
-  saveCode(): Observable<any>{
-    let data = {"save": "1"};
+  saveCode(data: any): Observable<any>{
     return (this.http.post(this.url, data,this.httpOptions));
   }
 }
