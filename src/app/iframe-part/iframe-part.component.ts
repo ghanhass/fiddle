@@ -42,9 +42,11 @@ export class IframePartComponent implements OnInit {
       this.mainService.saveCode().subscribe((res)=>{
         console.log("save code res = ", res);
       });
+      this.isSaveMode = false;
     }
-    this.isSaveMode = false;
-    console.log("iframe angular load event");
+    else{
+      console.log("iframe angular load event");
+    }
   }
 
 }

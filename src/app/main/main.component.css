@@ -144,6 +144,18 @@ app-iframe-part{
     margin-right:5px;
 }
 
+
+:host ::ng-deep .monaco-editor .monaco-hover {
+    left: 0px !important;
+    z-index: 102 !important;
+    max-width: 100% !important;
+    overflow: auto;
+}
+
+:host ::ng-deep .monaco-scrollable-element{
+    min-width: min-content;
+}
+
 @media (max-width:767px), (max-height:580px) {  
     #code-parts-title-mobile{
         display:flex;
