@@ -81,26 +81,8 @@ export class MainComponent implements OnInit {
     this.cssCode = code;
   }
 
-  shareCode(){
-    alert("not yet :D");
-    /*
-    this.iframePart.runCode();
-    let code: Code = {
-      js: this.jsCode,
-      html: this.htmlCode,
-      css: this.cssCode
-    } 
-    let userCode: UserCode = {
-      usercode: code
-    }
-    this.mainService.shareCode(userCode).subscribe((res)=>{
-      console.log("res = ", res);
-    })
-    console.log("userCode = ", userCode);*/
-  }
-
-  runCode(){
-    this.iframePart.runCode();
+  runCode(param?){
+    this.iframePart.runCode(param);
   }
 
   resetResizersAppearance(){

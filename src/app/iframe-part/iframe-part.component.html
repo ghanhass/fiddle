@@ -2,5 +2,6 @@
     <input name="js" type="hidden" id="js-input" [value]="jsCode">
     <input name="css" type="hidden" id="css-input" [value]="cssCode">
     <input name="html" type="hidden" id="html-input" [value]="htmlCode">
+    <!--<input #saveCb name="save" type="checkbox" id="save-status" [value]="'1'" style="display:none !important;">-->
 </form>
 <iframe #iframe name="my-frame" (load)="onFormLoad()" [src]="url"></iframe>
