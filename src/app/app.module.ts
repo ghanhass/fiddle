@@ -12,6 +12,7 @@ import { FormsModule } from "@angular/forms";
 /*import { MonacoEditorModule } from "ngx-monaco-editor";*/
 import { CodeEditorModule } from "@ngstack/code-editor";
 import { HttpClientModule } from "@angular/common/http";
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HttpClientModule } from "@angular/common/http";
     HtmlPartComponent,
     CssPartComponent,
     JsPartComponent,
-    IframePartComponent
+    IframePartComponent,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

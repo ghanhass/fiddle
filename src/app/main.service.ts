@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { UserCode } from "./user-code";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs';
-import { environment} from "src/environments/environment";
+import { environment} from "../environments/environment";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MainService {
   httpOptions = {
-    headers: new HttpHeaders({"Content-Type":"text/plain"}),
+    headers: new HttpHeaders({"Content-Type":"application/json"}),
     responseType: 'text' as 'text'
   }
   url: string = environment.url;

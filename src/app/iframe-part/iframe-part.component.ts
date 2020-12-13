@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input, OnInit, ViewChild,AfterViewInit, EventEmitter } from '@angular/core';
-import { environment } from "src/environments/environment";
+import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
+import { LoaderComponent } from "../loader/loader.component";
 
 @Component({
   selector: 'app-iframe-part',
@@ -13,11 +14,14 @@ export class IframePartComponent implements OnInit {
   @Input()htmlCode: string;
   @Input()cssCode: string;
   @ViewChild("form")form: ElementRef;
+  @ViewChild("loader")loader: LoaderComponent;
+  
   url: string = environment.url;
   isSaveMode: boolean = false;
   canSubmit: boolean = true;
 
   runCode(param?: any){
+    this.loader.showLoader();
     if(param === "save"){
       this.isSaveMode = true;
     }
@@ -42,7 +46,12 @@ export class IframePartComponent implements OnInit {
     }
     this.mainService.saveCode(data).subscribe((res)=>{
       this.canSubmit = true;
-      console.log("save code res = ", res);
+      let obj = JSON.parse(res);
+      if(obj.success == "1"){
+        let fiddleId = obj.id;
+        console.log("saved fiddle id = ", fiddleId);
+      }
+      this.loader.hideLoader();
     });
   }
 
@@ -54,6 +63,7 @@ export class IframePartComponent implements OnInit {
     else{
       this.canSubmit = true;
       console.log("iframe angular load event");
+      this.loader.hideLoader();
     }
   }
 
