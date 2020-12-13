@@ -156,6 +156,11 @@ app-iframe-part{
     min-width: min-content;
 }
 
+:host ::ng-deep .monaco-editor .parameter-hints-widget{
+    z-index: 103 !important;
+    left: 0px !important;
+}
+
 @media (max-width:767px), (max-height:580px) {  
     #code-parts-title-mobile{
         display:flex;

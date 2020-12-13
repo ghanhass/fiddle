@@ -15,15 +15,15 @@ export class IframePartComponent implements OnInit {
   @ViewChild("form")form: ElementRef;
   url: string = environment.url;
   isSaveMode: boolean = false;
-  canSave: EventEmitter<any> = new EventEmitter();
+  canSubmit: boolean = true;
 
   runCode(param?: any){
     if(param === "save"){
       this.isSaveMode = true;
-      this.saveCode();
     }
-    else{
+    if(this.canSubmit){
       this.form.nativeElement.submit();
+      this.canSubmit = false;
     }
   }
 
@@ -41,16 +41,18 @@ export class IframePartComponent implements OnInit {
       css:this.cssCode
     }
     this.mainService.saveCode(data).subscribe((res)=>{
+      this.canSubmit = true;
       console.log("save code res = ", res);
     });
   }
 
   onFormLoad(): void {
     if(this.isSaveMode){
-      //this.saveCode();
+      this.saveCode();
       this.isSaveMode = false;
     }
     else{
+      this.canSubmit = true;
       console.log("iframe angular load event");
     }
   }

@@ -82,7 +82,9 @@ export class MainComponent implements OnInit {
   }
 
   runCode(param?){
-    this.iframePart.runCode(param);
+    if(this.iframePart.canSubmit){
+      this.iframePart.runCode(param);
+    }
   }
 
   resetResizersAppearance(){
