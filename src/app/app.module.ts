@@ -29,7 +29,9 @@ import { LoaderComponent } from './loader/loader.component';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CodeEditorModule.forRoot()
+    CodeEditorModule.forRoot({
+      baseUrl: 'assets/monaco-editor'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent],
