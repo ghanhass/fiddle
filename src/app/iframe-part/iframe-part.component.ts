@@ -50,6 +50,7 @@ export class IframePartComponent implements OnInit {
       if(obj.success == "1"){
         let fiddleId = obj.id;
         console.log("saved fiddle id = ", fiddleId);
+        console.log("url = ", window.location.href);
       }
       this.loader.hideLoader();
     });

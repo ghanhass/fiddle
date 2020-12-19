@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
     "@ngstack/code-editor": "^2.1.0",
+    "monaco-editor": "^0.21.2",
     "ngx-monaco-editor": "^10.0.0-beta.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
