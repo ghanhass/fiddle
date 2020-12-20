@@ -16,7 +16,10 @@ export class MainService {
 
   constructor(private http: HttpClient) { }
 
-  saveCode(data: any): Observable<any>{
+  saveFiddle(data: any): Observable<any>{
     return (this.http.post(this.url, data,this.httpOptions));
+  }
+  getFiddle(data: any): Observable<any>{
+    return (this.http.post(this.url, data, this.httpOptions));
   }
 }

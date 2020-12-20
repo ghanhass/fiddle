@@ -2,6 +2,7 @@ import { Component, ElementRef, Input, OnInit, ViewChild,AfterViewInit, EventEmi
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
+import {  Router, ActivatedRoute } from "@angular/router"
 
 @Component({
   selector: 'app-iframe-part',
@@ -31,26 +32,28 @@ export class IframePartComponent implements OnInit {
     }
   }
 
-  constructor(private mainService: MainService) { }
+  constructor(private mainService: MainService,private router:Router) { }
 
   ngOnInit(): void {
   }
 
   saveCode(){
     console.log("saving Code");
+    const self = this;
     let data = {
       save: "1",
       js:this.jsCode,
       html:this.htmlCode,
       css:this.cssCode
     }
-    this.mainService.saveCode(data).subscribe((res)=>{
+    this.mainService.saveFiddle(data).subscribe((res)=>{
       this.canSubmit = true;
       let obj = JSON.parse(res);
       if(obj.success == "1"){
         let fiddleId = obj.id;
         console.log("saved fiddle id = ", fiddleId);
         console.log("url = ", window.location.href);
+        self.router.navigate(["/"+fiddleId]);
       }
       this.loader.hideLoader();
     });

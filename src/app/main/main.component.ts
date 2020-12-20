@@ -4,6 +4,8 @@ import { UserCode } from "../user-code";
 import { Code } from "../code";
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { switchMap } from "rxjs/operators";
 
 @Component({
   selector: 'app-main',
@@ -43,12 +45,41 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
   @ViewChild("iframePart") iframePart:IframePartComponent;
 
-  constructor(private mainService: MainService) { 
+  constructor(private mainService: MainService,
+    private activatedRoute: ActivatedRoute) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
   ngOnInit(): void {
+    let self = this;
+    let currentFiddleId = undefined;
+    this.activatedRoute.params.subscribe((params)=>{
+      console.log("params = ", params);
+    })
+    /*
+    console.log("currentFiddleId = ", currentFiddleId);
+    if(currentFiddleId){
+      let data = {
+        get: "1",
+        fiddleId: currentFiddleId
+      }
+      self.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
+        console.log("getFiddle res = ", res);
+      });
+    }*/
     
+    /*this.activatedRoute.paramMap.subscribe((params)=>{
+      let currentFiddleId = +params.get("id");
+      if(currentFiddleId){
+        let data = {
+          get: "1",
+          fiddleId: currentFiddleId
+        }
+        self.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
+          console.log("getFiddle res = ", res);
+        });
+      }
+    });*/
   }
 
   @HostListener("window:resize", ["$event"])
