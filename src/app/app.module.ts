@@ -13,6 +13,8 @@ import { FormsModule } from "@angular/forms";
 import { CodeEditorModule } from "@ngstack/code-editor";
 import { HttpClientModule } from "@angular/common/http";
 import { LoaderComponent } from './loader/loader.component';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { LoaderComponent } from './loader/loader.component';
     HttpClientModule,
     CodeEditorModule.forRoot({
       baseUrl: 'assets/monaco-editor'
-    })
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent],

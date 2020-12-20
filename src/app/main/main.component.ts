@@ -53,9 +53,9 @@ export class MainComponent implements OnInit {
   ngOnInit(): void {
     let self = this;
     let currentFiddleId = undefined;
-    this.activatedRoute.params.subscribe((params)=>{
+    /*this.activatedRoute.params.subscribe((params)=>{
       console.log("params = ", params);
-    })
+    })*/
     /*
     console.log("currentFiddleId = ", currentFiddleId);
     if(currentFiddleId){
@@ -68,18 +68,18 @@ export class MainComponent implements OnInit {
       });
     }*/
     
-    /*this.activatedRoute.paramMap.subscribe((params)=>{
+    this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
         let data = {
           get: "1",
           fiddleId: currentFiddleId
         }
-        self.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
+        self.mainService.getFiddle(data).subscribe((res)=>{
           console.log("getFiddle res = ", res);
         });
       }
-    });*/
+    });
   }
 
   @HostListener("window:resize", ["$event"])

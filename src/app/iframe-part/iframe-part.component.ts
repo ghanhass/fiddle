@@ -2,7 +2,8 @@ import { Component, ElementRef, Input, OnInit, ViewChild,AfterViewInit, EventEmi
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
-import {  Router, ActivatedRoute } from "@angular/router"
+import { Router, ActivatedRoute } from "@angular/router";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-iframe-part',
@@ -32,7 +33,9 @@ export class IframePartComponent implements OnInit {
     }
   }
 
-  constructor(private mainService: MainService,private router:Router) { }
+  constructor(private mainService: MainService,
+    private router:Router,
+    private toastrService:ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -53,7 +56,9 @@ export class IframePartComponent implements OnInit {
         let fiddleId = obj.id;
         console.log("saved fiddle id = ", fiddleId);
         console.log("url = ", window.location.href);
+
         self.router.navigate(["/"+fiddleId]);
+        this.toastrService.success("Fiddle URL copied to clipboard.");
       }
       this.loader.hideLoader();
     });
