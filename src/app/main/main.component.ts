@@ -1,27 +1,28 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NumberValueAccessor } from '@angular/forms';
 import { UserCode } from "../user-code";
 import { Code } from "../code";
 import { MainService } from "../main.service";
+import { CommonService } from "../common.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { switchMap } from "rxjs/operators";
+import { HtmlPartComponent } from '../html-part/html-part.component';
+import { JsPartComponent } from '../js-part/js-part.component';
+import { CssPartComponent } from '../css-part/css-part.component';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements AfterViewInit {
 
   showHtml: boolean = false;
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
-  
-  jsCode: string = "";
-  cssCode: string = "";
-  htmlCode: string = "";
+
 
   resizeModeDragImg: Element = (function(){
     let el = new Image();
@@ -44,40 +45,48 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
   @ViewChild("iframePart") iframePart:IframePartComponent;
+  @ViewChild("htmlPart") htmlPart:HtmlPartComponent;
+  @ViewChild("jsPart") jsPart:JsPartComponent;
+  @ViewChild("cssPart") cssPart:CssPartComponent;
+  jsCode: string = "";
+  cssCode: string = "";
+  htmlCode: string = "";
 
   constructor(private mainService: MainService,
-    private activatedRoute: ActivatedRoute) { 
+    private activatedRoute: ActivatedRoute,
+    private commonService: CommonService) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     let self = this;
-    let currentFiddleId = undefined;
-    /*this.activatedRoute.params.subscribe((params)=>{
-      console.log("params = ", params);
-    })*/
-    /*
-    console.log("currentFiddleId = ", currentFiddleId);
-    if(currentFiddleId){
-      let data = {
-        get: "1",
-        fiddleId: currentFiddleId
-      }
-      self.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-        console.log("getFiddle res = ", res);
-      });
-    }*/
-    
+    let currentFiddleId = undefined;  
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
-        let data = {
-          get: "1",
-          fiddleId: currentFiddleId
+        if(this.commonService.redirectMode){
+          this.jsCode = this.commonService.jsCode;
+          this.cssCode = this.commonService.cssCode;
+          this.htmlCode = this.commonService.htmlCode;
+          this.runCode();
         }
-        self.mainService.getFiddle(data).subscribe((res)=>{
-          console.log("getFiddle res = ", res);
-        });
+        else{
+          let data = {
+            get: "1",
+            fiddleId: currentFiddleId
+          }
+          self.mainService.getFiddle(data).subscribe((res)=>{
+            let obj = JSON.parse(res);
+            console.log("getFiddle obj = ", obj);
+            this.commonService.jsCode = obj.js;
+            this.commonService.cssCode = obj.css;
+            this.commonService.htmlCode = obj.html;
+            this.jsCode = this.commonService.jsCode;
+            this.cssCode = this.commonService.cssCode;
+            this.htmlCode = this.commonService.htmlCode;
+            this.runCode();
+          });
+        }
       }
     });
   }
@@ -95,21 +104,6 @@ export class MainComponent implements OnInit {
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
     this.resetResizersAppearance();
-  }
-  
-  htmlCodeChanged(code){
-    //console.log("html code = ", code);
-    this.htmlCode = code;
-  }
-
-  jsCodeChanged(code){
-    //console.log("js code = ", code);
-    this.jsCode = code;
-  }
-
-  cssCodeChanged(code){
-    //console.log("css code = ", code);
-    this.cssCode = code;
   }
 
   runCode(param?){

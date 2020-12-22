@@ -7,7 +7,7 @@ import { CodeModel } from '@ngstack/code-editor';
   styleUrls: ['./js-part.component.css']
 })
 export class JsPartComponent implements OnInit {
-  code: string = "";
+  @Input()code: string = "";
   theme = 'vs-light';
   
   @Output() codeChange = new EventEmitter();
@@ -37,4 +37,11 @@ export class JsPartComponent implements OnInit {
   ngOnInit(): void {
   }
   
+  ngOnChanges(simpleChanges: SimpleChanges){
+    if(simpleChanges["code"] !== undefined && simpleChanges["code"]["currentValue"] !== undefined){
+      console.log("simpleChanges js code = ", this.code);
+      this.codeModel.value = this.code;
+    }
+  }
+
 }

@@ -1,5 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CodeModel } from '@ngstack/code-editor';
+import { CommonService } from "../common.service";
 
 @Component({
   selector: 'app-css-part',
@@ -7,9 +8,8 @@ import { CodeModel } from '@ngstack/code-editor';
   styleUrls: ['./css-part.component.css']
 })
 export class CssPartComponent implements OnInit {
-  code: string = "";
+  @Input()code: string = "";
   theme = 'vs-light';
-  @Output() codeChange = new EventEmitter();
 
   codeModel: any = {
     language: 'css',
@@ -26,16 +26,22 @@ export class CssPartComponent implements OnInit {
     wordWrap:"on",
     baseUrl: "/"
   };
-  constructor() { }
+  constructor(private commonService: CommonService) { }
 
 
   onCodeChanged(value) {
     //console.log('CODE', value);
-    this.codeChange.emit(value);
+    this.commonService.cssCode = value;
   }
 
   ngOnInit(): void {
   }
 
+  ngOnChanges(simpleChanges: SimpleChanges){
+    if(simpleChanges["code"] !== undefined && simpleChanges["code"]["currentValue"] !== undefined){
+      console.log("simpleChanges css code = ", this.code);
+      this.codeModel.value = this.code;
+    }
+  }
 
 }
