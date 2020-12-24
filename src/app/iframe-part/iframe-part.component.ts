@@ -27,13 +27,13 @@ export class IframePartComponent implements OnInit {
     this.htmlCode = this.mainService.htmlCode;
     this.cssCode = this.mainService.cssCode;
 
-    this.loader.showLoader();
     if(param === "save"){
       this.isSaveMode = true;
     }
     if(this.canSubmit){
       let self = this;
       window.setTimeout(()=>{
+        self.loader.showLoader();
         self.canSubmit = false;
         console.log("form's self.jsCode ", self.jsCode);
         console.log("form's self.cssCode ", self.cssCode);
@@ -70,7 +70,6 @@ export class IframePartComponent implements OnInit {
         self.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");
       }
-      this.loader.hideLoader();
     });
   }
 
