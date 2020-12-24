@@ -1,9 +1,9 @@
 <!--<input type='text' [(ngModel)]="canSubmit">-->
 <app-loader #loader></app-loader>
 <form [action]="url" target="my-frame" method="post" #form class="code-form">
-    <input name="js" type="hidden" id="js-input" [value]="jsCode">
-    <input name="css" type="hidden" id="css-input" [value]="cssCode">
-    <input name="html" type="hidden" id="html-input" [value]="htmlCode">
+    <input name="js" type="hidden" id="js-input" [(ngModel)]="jsCode">
+    <input name="css" type="hidden" id="css-input" [(ngModel)]="cssCode">
+    <input name="html" type="hidden" id="html-input" [(ngModel)]="htmlCode">
     <!--<input #saveCb name="save" type="checkbox" id="save-status" [value]="'1'" style="display:none !important;">-->
 </form>
-<iframe #iframe name="my-frame" (load)="onFormLoad()" [src]="url"></iframe>
+<iframe #iframe name="my-frame" (load)="onFormLoad()"></iframe>
