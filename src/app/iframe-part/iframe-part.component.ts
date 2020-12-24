@@ -32,11 +32,15 @@ export class IframePartComponent implements OnInit {
       this.isSaveMode = true;
     }
     if(this.canSubmit){
-      this.canSubmit = false;
-      console.log("form's this.jsCode ", this.jsCode);
-      console.log("form's this.cssCode ", this.cssCode);
-      console.log("form's this.htmlCode ", this.htmlCode);
-      this.form.nativeElement.submit();
+      let self = this;
+      window.setTimeout(()=>{
+        self.canSubmit = false;
+        console.log("form's self.jsCode ", self.jsCode);
+        console.log("form's self.cssCode ", self.cssCode);
+        console.log("form's self.htmlCode ", self.htmlCode);
+        self.form.nativeElement.submit();
+      },1)
+      
     }
   }
 
