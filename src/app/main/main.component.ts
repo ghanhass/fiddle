@@ -1,18 +1,15 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { NumberValueAccessor } from '@angular/forms';
-import { UserCode } from "../user-code";
-import { Code } from "../code";
+import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap } from "rxjs/operators";
+import { ActivatedRoute } from "@angular/router";
+import { indigo } from 'color-name';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements AfterViewInit {
 
   showHtml: boolean = false;
   showCss: boolean = true;
@@ -50,23 +47,9 @@ export class MainComponent implements OnInit {
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     let self = this;
     let currentFiddleId = undefined;
-    /*this.activatedRoute.params.subscribe((params)=>{
-      console.log("params = ", params);
-    })*/
-    /*
-    console.log("currentFiddleId = ", currentFiddleId);
-    if(currentFiddleId){
-      let data = {
-        get: "1",
-        fiddleId: currentFiddleId
-      }
-      self.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-        console.log("getFiddle res = ", res);
-      });
-    }*/
     
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
@@ -76,7 +59,18 @@ export class MainComponent implements OnInit {
           fiddleId: currentFiddleId
         }
         self.mainService.getFiddle(data).subscribe((res)=>{
-          console.log("getFiddle res = ", res);
+          //console.log("getFiddle res = ", res);
+          let obj = JSON.parse(res);
+          if(obj.success === "1"){
+            console.log("getFiddle obj = ", obj);
+            this.htmlCode = obj.html;
+            this.cssCode = obj.css;
+            this.jsCode = obj.js;
+            this.mainService.jsCode = obj.js;
+            this.mainService.htmlCode = obj.html;
+            this.mainService.cssCode = obj.css;
+            this.runCode();
+          }
         });
       }
     });
@@ -96,26 +90,9 @@ export class MainComponent implements OnInit {
   onWindowMouseup(event){
     this.resetResizersAppearance();
   }
-  
-  htmlCodeChanged(code){
-    //console.log("html code = ", code);
-    this.htmlCode = code;
-  }
-
-  jsCodeChanged(code){
-    //console.log("js code = ", code);
-    this.jsCode = code;
-  }
-
-  cssCodeChanged(code){
-    //console.log("css code = ", code);
-    this.cssCode = code;
-  }
 
   runCode(param?){
-    if(this.iframePart.canSubmit){
-      this.iframePart.runCode(param);
-    }
+    this.iframePart.runCode(param);
   }
 
   resetResizersAppearance(){

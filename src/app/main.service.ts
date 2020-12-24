@@ -13,6 +13,9 @@ export class MainService {
     responseType: 'text' as 'text'
   }
   url: string = environment.url;
+  jsCode:string;
+  cssCode:string;
+  htmlCode:string;
 
   constructor(private http: HttpClient) { }
 

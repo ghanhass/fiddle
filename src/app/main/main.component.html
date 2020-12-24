@@ -20,7 +20,7 @@
     (dragover)="codePartsDragoverHandler($event)">
         <div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>
         <div class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml}" style="height:33.33%;top:0px;z-index:1;">
-            <app-html-part class="code-component" (codeChange)="htmlCodeChanged($event)"></app-html-part>
+            <app-html-part class="code-component" [code]="htmlCode"></app-html-part>
         </div>
         <div class="code-component-container has-resizer code-component-container-css" [ngClass]="{'hide-mobile': !showCss}" style="height:33.33%;top:33.33%;z-index:2;">
             <div draggable="true" #verticalResizerCss class="vertical-resizer" 
@@ -28,7 +28,7 @@
             (dragstart)="verticalResizerCssDragstartHandler($event)"
             (dragend)="verticalResizerCssDragendHandler($event)"
             [ngStyle]="{'top':verticalResizerCssTop}"></div>
-            <app-css-part class="code-component" (codeChange)="cssCodeChanged($event)"></app-css-part>
+            <app-css-part class="code-component" [code]="cssCode"></app-css-part>
         </div>
         <div class="code-component-container has-resizer code-component-container-js" [ngClass]="{'hide-mobile': !showJs}" style="height:33.34%;top:66.33%;z-index:3;">
             <div draggable="true" #verticalResizerJs class="vertical-resizer"
@@ -36,7 +36,7 @@
             (dragstart)="verticalResizerJsDragstartHandler($event)"
             (dragend)="verticalResizerJsDragendHandler($event)"
             [ngStyle]="{'top':verticalResizerJsTop}"></div>
-            <app-js-part class="code-component" (codeChange)="jsCodeChanged($event)"></app-js-part>
+            <app-js-part class="code-component" [code]="jsCode"></app-js-part>
         </div>
     </div>
     <div #mainResizerFloor class="main-resizer-floor hide" ></div>

@@ -1,5 +1,5 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { CodeModel } from '@ngstack/code-editor';
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { MainService } from "../main.service";
 
 @Component({
   selector: 'app-html-part',
@@ -7,13 +7,11 @@ import { CodeModel } from '@ngstack/code-editor';
   styleUrls: ['./html-part.component.css']
 })
 export class HtmlPartComponent implements OnInit {
-  code: string = "";
+  @Input()code: string = "";
   theme = 'vs-light';
 
-  @Output() codeChange = new EventEmitter();
   codeModel: any = {
     language: 'html',
-    //uri: 'main.json',
     value: '',
   };
 
@@ -27,15 +25,25 @@ export class HtmlPartComponent implements OnInit {
     wordWrap:"on",
     baseUrl: "/"
   };
-  constructor() { }
+  constructor(private mainService:MainService) { }
 
+  ngOnInit(): void {
+  }
 
   onCodeChanged(value) {
     //console.log('CODE', value);
-    this.codeChange.emit(value);
+    this.mainService.htmlCode = value;
+    console.log("html value = ", value);
   }
 
-  ngOnInit(): void {
+  ngOnChanges(data: SimpleChanges){
+    //console.log("SimpleChanges data = ", data);
+    if(data.code !== undefined && data.code.currentValue !== undefined){
+      this.codeModel = {
+        language: 'html',
+        value: data.code.currentValue
+      };
+    }
   }
 
 }
