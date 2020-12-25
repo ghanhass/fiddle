@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input } from '@angular/core';
 import { MainService } from "../main.service";
 
 @Component({
@@ -42,13 +42,6 @@ export class JsPartComponent implements OnInit {
         language: 'javascript',
         value: data.code.currentValue
       };
-    }
-  }
-  
-  ngOnChanges(simpleChanges: SimpleChanges){
-    if(simpleChanges["code"] !== undefined && simpleChanges["code"]["currentValue"] !== undefined){
-      console.log("simpleChanges js code = ", this.code);
-      this.codeModel.value = this.code;
     }
   }
 

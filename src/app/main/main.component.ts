@@ -1,6 +1,5 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MainService } from "../main.service";
-import { CommonService } from "../common.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
 import { indigo } from 'color-name';
@@ -44,8 +43,7 @@ export class MainComponent implements AfterViewInit {
   htmlCode: string = "";
 
   constructor(private mainService: MainService,
-    private activatedRoute: ActivatedRoute,
-    private commonService: CommonService) { 
+    private activatedRoute: ActivatedRoute) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
@@ -56,28 +54,9 @@ export class MainComponent implements AfterViewInit {
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
-        if(this.commonService.redirectMode){
-          this.jsCode = this.commonService.jsCode;
-          this.cssCode = this.commonService.cssCode;
-          this.htmlCode = this.commonService.htmlCode;
-          this.runCode();
-        }
-        else{
-          let data = {
-            get: "1",
-            fiddleId: currentFiddleId
-          }
-          self.mainService.getFiddle(data).subscribe((res)=>{
-            let obj = JSON.parse(res);
-            console.log("getFiddle obj = ", obj);
-            this.commonService.jsCode = obj.js;
-            this.commonService.cssCode = obj.css;
-            this.commonService.htmlCode = obj.html;
-            this.jsCode = this.commonService.jsCode;
-            this.cssCode = this.commonService.cssCode;
-            this.htmlCode = this.commonService.htmlCode;
-            this.runCode();
-          });
+        let data = {
+          get: "1",
+          fiddleId: currentFiddleId
         }
         self.mainService.getFiddle(data).subscribe((res)=>{
           //console.log("getFiddle res = ", res);

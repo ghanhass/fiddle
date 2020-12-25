@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
-import { CommonService } from '../common.service';
 import { LoaderComponent } from "../loader/loader.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
@@ -13,9 +12,9 @@ import { ToastrService } from "ngx-toastr";
 })
 export class IframePartComponent implements OnInit {
 
-  jsCode: string = "";
-  htmlCode: string = "";
-  cssCode: string = "";
+  @Input()jsCode: string = "";
+  @Input()htmlCode: string = "";
+  @Input()cssCode: string = "";
   @ViewChild("form")form: ElementRef;
   @ViewChild("loader")loader: LoaderComponent;
   @ViewChild("copyInput")copyInput: ElementRef;
@@ -49,8 +48,7 @@ export class IframePartComponent implements OnInit {
 
   constructor(private mainService: MainService,
     private router:Router,
-    private toastrService:ToastrService,
-    private commonService:CommonService) { }
+    private toastrService:ToastrService) { }
 
   ngOnInit(): void {
   }
@@ -60,9 +58,9 @@ export class IframePartComponent implements OnInit {
     const self = this;
     let data = {
       save: "1",
-      js:this.commonService.jsCode,
-      html:this.commonService.htmlCode,
-      css:this.commonService.cssCode
+      js:this.mainService.jsCode,
+      html:this.mainService.htmlCode,
+      css:this.mainService.cssCode
     }
     this.mainService.saveFiddle(data).subscribe((res)=>{
       this.canSubmit = true;
@@ -71,7 +69,6 @@ export class IframePartComponent implements OnInit {
         let fiddleId = obj.id;
         console.log("saved fiddle id = ", fiddleId);
         console.log("url = ", window.location.href);
-        this.commonService.redirectMode = true;
         
         if(self.copyInput.nativeElement){
           let input = self.copyInput.nativeElement
