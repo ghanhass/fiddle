@@ -1,15 +1,9 @@
 import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { NumberValueAccessor } from '@angular/forms';
-import { UserCode } from "../user-code";
-import { Code } from "../code";
 import { MainService } from "../main.service";
 import { CommonService } from "../common.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
-import { ActivatedRoute, ParamMap } from "@angular/router";
-import { switchMap } from "rxjs/operators";
-import { HtmlPartComponent } from '../html-part/html-part.component';
-import { JsPartComponent } from '../js-part/js-part.component';
-import { CssPartComponent } from '../css-part/css-part.component';
+import { ActivatedRoute } from "@angular/router";
+import { indigo } from 'color-name';
 
 @Component({
   selector: 'app-main',
@@ -45,9 +39,6 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
   @ViewChild("iframePart") iframePart:IframePartComponent;
-  @ViewChild("htmlPart") htmlPart:HtmlPartComponent;
-  @ViewChild("jsPart") jsPart:JsPartComponent;
-  @ViewChild("cssPart") cssPart:CssPartComponent;
   jsCode: string = "";
   cssCode: string = "";
   htmlCode: string = "";
@@ -60,7 +51,8 @@ export class MainComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     let self = this;
-    let currentFiddleId = undefined;  
+    let currentFiddleId = undefined;
+    
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
@@ -87,6 +79,20 @@ export class MainComponent implements AfterViewInit {
             this.runCode();
           });
         }
+        self.mainService.getFiddle(data).subscribe((res)=>{
+          //console.log("getFiddle res = ", res);
+          let obj = JSON.parse(res);
+          if(obj.success === "1"){
+            console.log("getFiddle obj = ", obj);
+            this.htmlCode = obj.html;
+            this.cssCode = obj.css;
+            this.jsCode = obj.js;
+            this.mainService.jsCode = obj.js;
+            this.mainService.htmlCode = obj.html;
+            this.mainService.cssCode = obj.css;
+            this.runCode();
+          }
+        });
       }
     });
   }
@@ -107,9 +113,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   runCode(param?){
-    if(this.iframePart.canSubmit){
-      this.iframePart.runCode(param);
-    }
+    this.iframePart.runCode(param);
   }
 
   resetResizersAppearance(){

@@ -1,7 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
-import { CodeModel } from '@ngstack/code-editor';
-import { CodeEditorComponent } from "@ngstack/code-editor";
-import { CommonService } from "../common.service";
+import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { MainService } from "../main.service";
+
 @Component({
   selector: 'app-html-part',
   templateUrl: './html-part.component.html',
@@ -13,8 +12,7 @@ export class HtmlPartComponent implements OnInit {
 
   codeModel: any = {
     language: 'html',
-    //uri: 'main.json',
-    value: ""
+    value: '',
   };
 
   options = {
@@ -27,20 +25,24 @@ export class HtmlPartComponent implements OnInit {
     wordWrap:"on",
     baseUrl: "/"
   };
-  constructor(private commonService: CommonService) { }
-
-
-  onCodeChanged(value) {
-    //console.log('CODE', value);
-    this.commonService.htmlCode = value;
-  }
+  constructor(private mainService:MainService) { }
 
   ngOnInit(): void {
   }
-  ngOnChanges(simpleChanges: SimpleChanges){
-    if(simpleChanges["code"] !== undefined && simpleChanges["code"]["currentValue"] !== undefined){
-      console.log("simpleChanges html code = ", this.code);
-      this.codeModel.value = this.code;
+
+  onCodeChanged(value) {
+    //console.log('CODE', value);
+    this.mainService.htmlCode = value;
+    console.log("html value = ", value);
+  }
+
+  ngOnChanges(data: SimpleChanges){
+    //console.log("SimpleChanges data = ", data);
+    if(data.code !== undefined && data.code.currentValue !== undefined){
+      this.codeModel = {
+        language: 'html',
+        value: data.code.currentValue
+      };
     }
   }
 

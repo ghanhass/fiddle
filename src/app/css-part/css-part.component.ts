@@ -1,6 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges } from '@angular/core';
-import { CodeModel } from '@ngstack/code-editor';
-import { CommonService } from "../common.service";
+import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { MainService } from "../main.service";
 
 @Component({
   selector: 'app-css-part',
@@ -26,22 +25,26 @@ export class CssPartComponent implements OnInit {
     wordWrap:"on",
     baseUrl: "/"
   };
-  constructor(private commonService: CommonService) { }
+  constructor(private mainService: MainService) { }
 
 
   onCodeChanged(value) {
     //console.log('CODE', value);
-    this.commonService.cssCode = value;
+    this.mainService.cssCode = value;
   }
 
   ngOnInit(): void {
   }
 
-  ngOnChanges(simpleChanges: SimpleChanges){
-    if(simpleChanges["code"] !== undefined && simpleChanges["code"]["currentValue"] !== undefined){
-      console.log("simpleChanges css code = ", this.code);
-      this.codeModel.value = this.code;
+  ngOnChanges(data: SimpleChanges){
+    //console.log("SimpleChanges data = ", data);
+    if(data.code !== undefined && data.code.currentValue !== undefined){
+      this.codeModel = {
+        language: 'css',
+        value: data.code.currentValue
+      };
     }
   }
+
 
 }

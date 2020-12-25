@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild,AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { CommonService } from '../common.service';
@@ -26,17 +26,24 @@ export class IframePartComponent implements OnInit {
 
 
   runCode(param?: any){
-    this.jsCode = this.commonService.jsCode;
-    this.cssCode = this.commonService.cssCode;
-    this.htmlCode = this.commonService.htmlCode;
+    this.jsCode = this.mainService.jsCode;
+    this.htmlCode = this.mainService.htmlCode;
+    this.cssCode = this.mainService.cssCode;
 
-    this.loader.showLoader();
     if(param === "save"){
       this.isSaveMode = true;
     }
     if(this.canSubmit){
-      this.form.nativeElement.submit();
-      this.canSubmit = false;
+      let self = this;
+      window.setTimeout(()=>{
+        self.loader.showLoader();
+        self.canSubmit = false;
+        console.log("form's self.jsCode ", self.jsCode);
+        console.log("form's self.cssCode ", self.cssCode);
+        console.log("form's self.htmlCode ", self.htmlCode);
+        self.form.nativeElement.submit();
+      },1)
+      
     }
   }
 
@@ -80,14 +87,13 @@ export class IframePartComponent implements OnInit {
         self.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle saved.", "Fiddle URL copied to clipboard.");
       }
-      this.loader.hideLoader();
     });
   }
 
   onFormLoad(): void {
     if(this.isSaveMode){
-      this.saveCode();
       this.isSaveMode = false;
+      this.saveCode();
     }
     else{
       this.canSubmit = true;
