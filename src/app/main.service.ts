@@ -13,9 +13,10 @@ export class MainService {
     responseType: 'text' as 'text'
   }
   url: string = environment.url;
-  jsCode:string;
-  cssCode:string;
-  htmlCode:string;
+  jsCode:string = "";
+  cssCode:string = "";
+  htmlCode:string = "";
+  redirectMode: boolean = false;
 
   constructor(private http: HttpClient) { }
 

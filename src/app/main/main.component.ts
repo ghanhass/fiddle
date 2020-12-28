@@ -54,24 +54,33 @@ export class MainComponent implements AfterViewInit {
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
-        let data = {
-          get: "1",
-          fiddleId: currentFiddleId
+        if(self.mainService.redirectMode){
+          this.htmlCode = this.mainService.htmlCode;
+          this.cssCode = this.mainService.cssCode;
+          this.jsCode = this.mainService.jsCode;
+          self.mainService.redirectMode = false;
+          this.runCode();
         }
-        self.mainService.getFiddle(data).subscribe((res)=>{
-          //console.log("getFiddle res = ", res);
-          let obj = JSON.parse(res);
-          if(obj.success === "1"){
-            console.log("getFiddle obj = ", obj);
-            this.htmlCode = obj.html;
-            this.cssCode = obj.css;
-            this.jsCode = obj.js;
-            this.mainService.jsCode = obj.js;
-            this.mainService.htmlCode = obj.html;
-            this.mainService.cssCode = obj.css;
-            this.runCode();
+        else{
+          let data = {
+            get: "1",
+            fiddleId: currentFiddleId
           }
-        });
+          self.mainService.getFiddle(data).subscribe((res)=>{
+            //console.log("getFiddle res = ", res);
+            let obj = JSON.parse(res);
+            if(obj.success === "1"){
+              console.log("getFiddle obj = ", obj);
+              this.htmlCode = obj.html;
+              this.cssCode = obj.css;
+              this.jsCode = obj.js;
+              this.mainService.jsCode = obj.js;
+              this.mainService.htmlCode = obj.html;
+              this.mainService.cssCode = obj.css;
+              this.runCode();
+            }
+          });
+        }
       }
     });
   }
@@ -188,7 +197,7 @@ export class MainComponent implements AfterViewInit {
       let jsCodePartTop = jsCodeComponentContainerElement.getBoundingClientRect().top - 45;
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
-        if(top >= 26 && (top < (jsCodePartTop - 26)) ){
+        if(top >= 36 && (top < (jsCodePartTop - 36)) ){
           //console.log("valid zone !");
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
@@ -205,7 +214,7 @@ export class MainComponent implements AfterViewInit {
       let cssCodePartTop = cssCodeComponentContainerElement2.getBoundingClientRect().top - 45;
       if(jsCodeComponentContainerElement2){
         let top = event.clientY - 45  ;
-        if(top > (cssCodePartTop + 26) && (top < (jsCodePartBottom - 26)) ){
+        if(top > (cssCodePartTop + 36) && (top < (jsCodePartBottom - 36)) ){
           //console.log("valid zone !");
           let newTop = event.clientY - jsCodeComponentContainerElement2.getBoundingClientRect().top;
           this.verticalResizerJs.nativeElement.style.top = newTop + "px";
