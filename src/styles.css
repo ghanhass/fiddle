@@ -34,6 +34,23 @@ body{
     padding: 0 0 0 5px;
 }
 
+.code-part-title-btns-container{
+  flex-grow: 1;
+  margin-left: 20px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+.code-part-title-btn{
+  cursor: pointer;
+  padding: 3px 4px;
+  border: 1px solid #8c8c8c;
+  border-radius: 2px;
+}
+.code-part-title-btn:nth-last-child(n+2){
+  margin-right: 10px;
+}
+
 ngs-code-editor {
     width: 100%;
     height: 100%;
