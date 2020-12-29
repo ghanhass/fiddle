@@ -118,15 +118,19 @@ app-iframe-part{
     margin-right:5px;
 }
 
-#share-code-btn{
+.share-code-btn{
     height: calc(100% - 10px);
     font-size: 16px;
     cursor: pointer;
-    display: inline-flex;
-    align-items: center;
+    display: block;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(118, 118, 118);
+    user-select: none;
 }
 
-#share-code-btn span{
+.share-code-btn span{
     display:block;
 }
 
