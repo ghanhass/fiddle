@@ -3,12 +3,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainComponent } from './main/main.component';
 
 
-const routes: Routes = [{
-  path:":id", component: MainComponent
-},
-{
-  path:"**", component: MainComponent
-}
+const routes: Routes = [
+  {
+    path:":id", component: MainComponent
+  },
+  {
+    path:"**", component: MainComponent
+  }
 ];
 
 @NgModule({

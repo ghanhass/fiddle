@@ -1,7 +1,19 @@
-<div class="code-part-title">HTML</div>
+<div class="code-part-title">
+    <span>HTML</span>
+    <div class="code-part-title-btns-container">
+        <a class="html-expand-btn code-part-title-btn">
+            <i class="fa fa-arrows-v" aria-hidden="true"></i>
+        </a>
+
+        <a class="html-fullscreen-btn code-part-title-btn">
+            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        </a>
+    </div>
+</div>
 <ngs-code-editor 
     [theme]="theme"
-    [codeModel]="codeModel"
+    [(codeModel)]="codeModel"
     [options]="options"
-    (valueChanged)="onCodeChanged($event)">
+    (valueChanged)="onCodeChanged($event)"
+    [(value)]="code">
 </ngs-code-editor>

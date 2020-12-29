@@ -13,10 +13,17 @@ export class MainService {
     responseType: 'text' as 'text'
   }
   url: string = environment.url;
+  jsCode:string = "";
+  cssCode:string = "";
+  htmlCode:string = "";
+  redirectMode: boolean = false;
 
   constructor(private http: HttpClient) { }
 
-  saveCode(data: any): Observable<any>{
+  saveFiddle(data: any): Observable<any>{
     return (this.http.post(this.url, data,this.httpOptions));
+  }
+  getFiddle(data: any): Observable<any>{
+    return (this.http.post(this.url, data, this.httpOptions));
   }
 }

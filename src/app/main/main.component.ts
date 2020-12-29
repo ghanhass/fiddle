@@ -1,25 +1,21 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
-import { NumberValueAccessor } from '@angular/forms';
-import { UserCode } from "../user-code";
-import { Code } from "../code";
+import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
+import { ActivatedRoute } from "@angular/router";
+import { indigo } from 'color-name';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
 })
-export class MainComponent implements OnInit {
+export class MainComponent implements AfterViewInit {
 
   showHtml: boolean = false;
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
-  
-  jsCode: string = "";
-  cssCode: string = "";
-  htmlCode: string = "";
+
 
   resizeModeDragImg: Element = (function(){
     let el = new Image();
@@ -42,13 +38,51 @@ export class MainComponent implements OnInit {
   @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
   @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
   @ViewChild("iframePart") iframePart:IframePartComponent;
+  jsCode: string = "";
+  cssCode: string = "";
+  htmlCode: string = "";
 
-  constructor(private mainService: MainService) { 
+  constructor(private mainService: MainService,
+    private activatedRoute: ActivatedRoute) { 
     //window.addEventListener("resize", (ev)=>{console.log("ev = ", ev);});
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    let self = this;
+    let currentFiddleId = undefined;
     
+    this.activatedRoute.paramMap.subscribe((params)=>{
+      let currentFiddleId = +params.get("id");
+      if(currentFiddleId){
+        if(self.mainService.redirectMode){
+          this.htmlCode = this.mainService.htmlCode;
+          this.cssCode = this.mainService.cssCode;
+          this.jsCode = this.mainService.jsCode;
+          self.mainService.redirectMode = false;
+          this.runCode();
+        }
+        else{
+          let data = {
+            get: "1",
+            fiddleId: currentFiddleId
+          }
+          self.mainService.getFiddle(data).subscribe((res)=>{
+            //console.log("getFiddle res = ", res);
+            let obj = JSON.parse(res);
+            if(obj.success === "1"){
+              console.log("getFiddle obj = ", obj);
+              this.htmlCode = obj.html;
+              this.cssCode = obj.css;
+              this.jsCode = obj.js;
+              this.mainService.jsCode = obj.js;
+              this.mainService.htmlCode = obj.html;
+              this.mainService.cssCode = obj.css;
+              this.runCode();
+            }
+          });
+        }
+      }
+    });
   }
 
   @HostListener("window:resize", ["$event"])
@@ -65,26 +99,9 @@ export class MainComponent implements OnInit {
   onWindowMouseup(event){
     this.resetResizersAppearance();
   }
-  
-  htmlCodeChanged(code){
-    //console.log("html code = ", code);
-    this.htmlCode = code;
-  }
-
-  jsCodeChanged(code){
-    //console.log("js code = ", code);
-    this.jsCode = code;
-  }
-
-  cssCodeChanged(code){
-    //console.log("css code = ", code);
-    this.cssCode = code;
-  }
 
   runCode(param?){
-    if(this.iframePart.canSubmit){
-      this.iframePart.runCode(param);
-    }
+    this.iframePart.runCode(param);
   }
 
   resetResizersAppearance(){
@@ -180,7 +197,7 @@ export class MainComponent implements OnInit {
       let jsCodePartTop = jsCodeComponentContainerElement.getBoundingClientRect().top - 45;
       if(cssCodeComponentContainerElement){
         let top = event.clientY - 45  ;
-        if(top >= 26 && (top < (jsCodePartTop - 26)) ){
+        if(top >= 36 && (top < (jsCodePartTop - 36)) ){
           //console.log("valid zone !");
           let newTop = event.clientY - cssCodeComponentContainerElement.getBoundingClientRect().top;
           this.verticalResizerCss.nativeElement.style.top = newTop + "px";
@@ -197,7 +214,7 @@ export class MainComponent implements OnInit {
       let cssCodePartTop = cssCodeComponentContainerElement2.getBoundingClientRect().top - 45;
       if(jsCodeComponentContainerElement2){
         let top = event.clientY - 45  ;
-        if(top > (cssCodePartTop + 26) && (top < (jsCodePartBottom - 26)) ){
+        if(top > (cssCodePartTop + 36) && (top < (jsCodePartBottom - 36)) ){
           //console.log("valid zone !");
           let newTop = event.clientY - jsCodeComponentContainerElement2.getBoundingClientRect().top;
           this.verticalResizerJs.nativeElement.style.top = newTop + "px";
