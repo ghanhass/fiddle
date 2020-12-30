@@ -65,7 +65,7 @@
         </button>
     </div>
 </header>
-<div class="main-container" (dragover)="mainContainerDragoverHandler($event)" [ngClass]="'layout-type'+layout">
+<div class="main-container" (dragover)="mainContainerDragoverHandler($event)" [ngClass]="'layout-type-'+layout">
     <div id="code-parts-title-mobile">
         <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
         <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
