@@ -251,16 +251,18 @@ export class MainComponent implements AfterViewInit {
         let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
         if(this.layout == 1){
           if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
-            this.mainResizer.nativeElement.style.left = left + "px";
             this.mainResizerLeft = left + "px";
-            this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
+            this.mainResizerRight = "auto"; 
+            this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
+            this.mainResizer.nativeElement.style.right = this.mainResizerRight;
           }
         }
         else if(this.layout == 3){
           if(left < (window.innerWidth - 250) && left > mainContainerElement.getBoundingClientRect().left - 8){
-            this.mainResizer.nativeElement.style.left = left + "px";
-            this.mainResizerLeft = left + "px";
+            this.mainResizerLeft = "auto";
             this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
+            this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
+            this.mainResizer.nativeElement.style.right = this.mainResizerRight;
           }
         }
       }
