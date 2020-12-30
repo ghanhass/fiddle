@@ -91,6 +91,10 @@ export class MainComponent implements AfterViewInit {
     });
   }
 
+  changeLayout(newLayout: number){
+    this.layout = newLayout;
+  }
+
   toggleLayoutsList(resizeMode?: boolean){
     let layout1Element: HTMLElement = this.layout1.nativeElement;
     if(layout1Element){

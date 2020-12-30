@@ -4,7 +4,7 @@
             <span>Layouts <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
             </span>
             <div class="layouts-list" #layoutsList>
-                <div class="layout-1 layout" #layout1>
+                <div class="layout-1 layout" #layout1 (click)="changeLayout(1)" [ngClass]="{'active':(layout === 1)}">
                     <div>
                         <div>
                         </div>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="layout-2 layout" #layout2>
+                <div class="layout-2 layout" #layout2 (click)="changeLayout(2)" [ngClass]="{'active':(layout === 2)}">
                     <div>
                         <div>
                         </div>
@@ -30,7 +30,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="layout-3 layout" #layout3>
+                <div class="layout-3 layout" #layout3 (click)="changeLayout(3)" [ngClass]="{'active':(layout === 3)}">
                     <div>
                         <div>
                         </div>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="layout-4 layout" #layout4>
+                <div class="layout-4 layout" #layout4 (click)="changeLayout(4)" [ngClass]="{'active':(layout === 4)}">
                     <div>
                         <div>
                         </div>

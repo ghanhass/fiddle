@@ -8,7 +8,7 @@ body{
     display:flex;
     width: calc(100vw - 10px);
     height: calc(100vh - 50px);
-    box-shadow: 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbb;
     min-width: 346px;
 }
 #main-header{
@@ -30,7 +30,7 @@ body{
     width: 100%;
     border-bottom: 1px solid #dddddd;
     border-top: 1px solid #dddddd;
-    color: #8c8c8c;
+    color: #8b8b8b;
     text-align: center;
     height: 30px;
     display: flex;

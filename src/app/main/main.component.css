@@ -3,7 +3,7 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
-    box-shadow: 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbb;
     position:relative;
 }
 
@@ -31,7 +31,7 @@
     position: absolute;
     min-height: 5px;
     max-height: 5px;
-    background-color: #bbbbbb;
+    background-color: #bbb;
     cursor: row-resize;
     border:none;
     width: 100%;
@@ -39,7 +39,7 @@
 }
 
 #code-parts > .code-component-container > .vertical-resizer.resize-mode{
-    background-image: repeating-linear-gradient(90deg ,#BBBBBB, #BBBBBB 15px, #FFFFFF 15px, #FFFFFF 20px);    
+    background-image: repeating-linear-gradient(90deg ,#bbb, #bbb 15px, #FFFFFF 15px, #FFFFFF 20px);    
 }
 
 .main-container{
@@ -56,7 +56,7 @@
 }
 #main-resizer {
     position: absolute;
-    background-color: #bbbbbb;
+    background-color: #bbb;
     cursor: col-resize;
     min-width: 5px;
     max-width: 5px;
@@ -65,7 +65,7 @@
     z-index:101;
 }
 #main-resizer.resize-mode{
-    background-image:repeating-linear-gradient(#BBBBBB, #BBBBBB 15px, #FFFFFF 15px, #FFFFFF 20px);
+    background-image:repeating-linear-gradient(#bbb, #bbb 15px, #FFFFFF 15px, #FFFFFF 20px);
 }
 #main-resizer:hover {
     background-color: #9b9b9b;
@@ -83,7 +83,7 @@ app-iframe-part{
     display:flex;
     flex-direction:column;
     flex-grow:1;
-    box-shadow: 0 0 0 1px #bbbbbb;
+    box-shadow: 0 0 0 1px #bbb;
 }
 
 #code-parts-title-mobile{
@@ -92,7 +92,7 @@ app-iframe-part{
 }
 
 #code-parts-title-mobile a {
-    border:1px solid #bbbbbb;
+    border:1px solid #8b8b8b;
     border-radius:2px;
     padding:3px;
     min-width:50px;
@@ -186,9 +186,27 @@ app-iframe-part{
 .layout{
     cursor: pointer;
 }
+
+.layout:hover{
+    background-color: rgba(139,139,139,0.2);
+}
+
+.layout.active {
+    background-color:#8b8b8b;
+    border-color: #FFFFFF;
+    box-shadow: 0 0 0px 1px #8b8b8b;
+}
+
+.layout.active > div:first-child{
+    outline: 2px solid #FFFFFF;
+}
+
+.layout.active > div:first-child > div{
+    outline: 1px solid #FFFFFF;
+}
 /****/
 .layout-1 {
-    border: 2px solid #bbb;
+    border: 2px solid #8b8b8b;
     width: 65px;
     height: 41px;
     display: flex;
@@ -198,13 +216,13 @@ app-iframe-part{
 .layout-1 > div:first-child {
     width: 27%;
     height: 100%;
-    outline: 2px solid #bbb;
+    outline: 2px solid #8b8b8b;
 }
 
 .layout-1 > div:first-child > div {
     width: 100%;
     height: 33.33%;
-    outline: 1px solid #bbb;
+    outline: 1px solid #8b8b8b;
 }
 
 .layout-1 > div:last-child {
@@ -213,7 +231,7 @@ app-iframe-part{
 }
 /****/
 .layout-2 {
-    border: 2px solid #bbb;
+    border: 2px solid #8b8b8b;
     width: 65px;
     height: 41px;
     display: flex;
@@ -224,14 +242,14 @@ app-iframe-part{
 .layout-2 > div:first-child {
     height: 35%;
     width: 100%;
-    outline: 2px solid #bbb;
+    outline: 2px solid #8b8b8b;
     display: flex;
 }
 
 .layout-2 > div:first-child > div {
     height: 100%;
     width: 33.33%;
-    outline: 1px solid #bbb;
+    outline: 1px solid #8b8b8b;
 }
 
 .layout-2 > div:last-child {
@@ -239,7 +257,7 @@ app-iframe-part{
 }
 /****/
 .layout-3 {
-    border: 2px solid #bbb;
+    border: 2px solid #8b8b8b;
     width: 65px;
     height: 41px;
     display: flex;
@@ -250,13 +268,13 @@ app-iframe-part{
 .layout-3 > div:first-child {
     width: 27%;
     height: 100%;
-    outline: 2px solid #bbb;
+    outline: 2px solid #8b8b8b;
 }
 
 .layout-3 > div:first-child > div {
     width: 100%;
     height: 33.33%;
-    outline: 1px solid #bbb;
+    outline: 1px solid #8b8b8b;
 }
 
 .layout-3 > div:last-child {
@@ -265,7 +283,7 @@ app-iframe-part{
 }
 /****/
 .layout-4 {
-    border: 2px solid #bbb;
+    border: 2px solid #8b8b8b;
     width: 65px;
     height: 41px;
     display: flex;
@@ -275,14 +293,14 @@ app-iframe-part{
 .layout-4 > div:first-child {
     height: 35%;
     width: 100%;
-    outline: 2px solid #bbb;
+    outline: 2px solid #8b8b8b;
     display: flex;
 }
 
 .layout-4 > div:first-child > div {
     height: 100%;
     width: 33.33%;
-    outline: 1px solid #bbb;
+    outline: 1px solid #8b8b8b;
 }
 
 .layout-4 > div:last-child {
@@ -297,7 +315,7 @@ app-iframe-part{
     transition: all 0.5s;
     top: calc(100% + 8px);
     background-color: #FFFFFF;
-    box-shadow: 0px 0px 4px 2px #bbbbbb;
+    box-shadow: 0px 0px 4px 2px #8b8b8b;
     z-index: 3;
     opacity: 0;
     pointer-events: none;
