@@ -46,6 +46,7 @@ export class MainComponent implements AfterViewInit {
   cssCode: string = "";
   htmlCode: string = "";
   isLayoutsListShown: boolean = false;
+  layout: number = 1;
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute) { 

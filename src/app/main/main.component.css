@@ -384,5 +384,11 @@ app-iframe-part{
     #code-parts > .code-component-container.has-resizer{
         padding-top:0px;
     }
+    :host ::ng-deep .html-expand-btn, 
+    :host ::ng-deep .css-expand-btn, 
+    :host ::ng-deep .js-expand-btn,
+    :host ::ng-deep .code-part-title{
+        display: none;
+    }
 
 }
