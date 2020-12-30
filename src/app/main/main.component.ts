@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit }
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
+import { ToastrComponentlessModule } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main',
@@ -14,6 +15,9 @@ export class MainComponent implements AfterViewInit {
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
+  isHtmlFullScreen: boolean = false;
+  isCssFullScreen: boolean = false;
+  isJsFullScreen: boolean = false;
 
 
   resizeModeDragImg: Element = (function(){
@@ -175,6 +179,48 @@ export class MainComponent implements AfterViewInit {
   resetResizersAppearance(){
     this.mainResizerFloor.nativeElement.classList.add("hide");
     this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
+  }
+
+  onToggleHTMLFullScreen(data, codePart){
+    console.log("onToggleFullScreen data = ", data);
+    if(data === "1"){
+      switch(codePart){
+        case "html":
+        this.isHtmlFullScreen = true;
+        break;
+        case "css":
+        this.isCssFullScreen = true;
+        break;
+        case "js":
+        this.isJsFullScreen = true;
+        break;
+      }
+      let editorLayoutFixInterval = window.setInterval(()=>{
+        if(this.codeParts.nativeElement.querySelector(".code-component-container-"+codePart).classList.contains("fullscreen")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }, 50);
+    }
+    else if(data === "0"){
+      switch(codePart){
+        case "html":
+        this.isHtmlFullScreen = false;
+        break;
+        case "css":
+        this.isCssFullScreen = false;
+        break;
+        case "js":
+        this.isJsFullScreen = false;
+        break;
+      }
+      let editorLayoutFixInterval = window.setInterval(()=>{
+        if(!this.codeParts.nativeElement.querySelector(".code-component-container-"+codePart).classList.contains("fullscreen")){
+          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          clearInterval(editorLayoutFixInterval);
+        }
+      }, 50);
+    }
   }
 
   toggleCodePart(codeType: string): void{

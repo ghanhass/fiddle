@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output,EventEmitter } from '@angular/core';
 import { MainService } from "../main.service";
 
 @Component({
@@ -9,6 +9,8 @@ import { MainService } from "../main.service";
 export class HtmlPartComponent implements OnInit {
   @Input()code: string = "";
   theme = 'vs-light';
+  isFullScreenMode: boolean = false;
+  @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
 
   codeModel: any = {
     language: 'html',
@@ -28,6 +30,11 @@ export class HtmlPartComponent implements OnInit {
   constructor(private mainService:MainService) { }
 
   ngOnInit(): void {
+  }
+
+  toggleFullScreenMode(){
+    this.isFullScreenMode = !this.isFullScreenMode;
+    this.toggleFullScreen.emit(this.isFullScreenMode? "1" : "0");
   }
 
   onCodeChanged(value) {

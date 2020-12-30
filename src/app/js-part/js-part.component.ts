@@ -9,6 +9,8 @@ import { MainService } from "../main.service";
 export class JsPartComponent implements OnInit {
   @Input()code: string = "";
   theme = 'vs-light';
+  isFullScreenMode: boolean = false;
+  @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   
   codeModel: any = {
     language: 'javascript',
@@ -33,6 +35,11 @@ export class JsPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+  }
+
+  toggleFullScreenMode(){
+    this.isFullScreenMode = !this.isFullScreenMode;
+    this.toggleFullScreen.emit(this.isFullScreenMode? "1" : "0");
   }
 
   ngOnChanges(data: SimpleChanges){
