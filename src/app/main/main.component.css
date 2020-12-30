@@ -85,9 +85,9 @@ app-iframe-part{
     flex-grow:1;
     box-shadow: 0 0 0 1px #bbbbbb;
 }
+
 #code-parts-title-mobile{
     display:none;
-    /*border-bottom: 1px solid #bbbbbb;*/
     height: 35px;
 }
 
@@ -148,10 +148,45 @@ app-iframe-part{
     margin-right:5px;
 }
 
+.layouts-list-container {
+    height: calc(100% - 10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 5px;
+    background-color: rgb(239, 239, 239);
+    padding: 0px 6px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(118, 118, 118);
+    font-size: 16px;
+    box-sizing: border-box;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+}
+
+.layouts-list-container > span{
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-right: 14px;   
+}
+
+.layouts-list-container > span i.fa{
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+}
+
+.layouts-list-container.shown > span i.fa-sort-asc{
+    bottom: -2px;
+}
+
 .layout{
     cursor: pointer;
 }
-
+/****/
 .layout-1 {
     border: 2px solid #bbb;
     width: 65px;
@@ -176,7 +211,7 @@ app-iframe-part{
     flex-grow: 1;
     height: 100%;
 }
-
+/****/
 .layout-2 {
     border: 2px solid #bbb;
     width: 65px;
@@ -202,13 +237,14 @@ app-iframe-part{
 .layout-2 > div:last-child {
     flex-grow: 1;
 }
-
+/****/
 .layout-3 {
     border: 2px solid #bbb;
     width: 65px;
     height: 41px;
     display: flex;
-    flex-direction:row-reverse
+    flex-direction:row-reverse;
+    margin-right: 10px;
 }
 
 .layout-3 > div:first-child {
@@ -227,7 +263,32 @@ app-iframe-part{
     flex-grow: 1;
     height: 100%;
 }
+/****/
+.layout-4 {
+    border: 2px solid #bbb;
+    width: 65px;
+    height: 41px;
+    display: flex;
+    flex-direction:column-reverse;
+}
 
+.layout-4 > div:first-child {
+    height: 35%;
+    width: 100%;
+    outline: 2px solid #bbb;
+    display: flex;
+}
+
+.layout-4 > div:first-child > div {
+    height: 100%;
+    width: 33.33%;
+    outline: 1px solid #bbb;
+}
+
+.layout-4 > div:last-child {
+    flex-grow: 1;
+}
+/****/
 
 .layouts-list{
     position: absolute;
@@ -237,11 +298,28 @@ app-iframe-part{
     top: calc(100% + 8px);
     background-color: #FFFFFF;
     box-shadow: 0px 0px 4px 2px #bbbbbb;
-    z-index: 1;
+    z-index: 3;
     opacity: 0;
     pointer-events: none;
     cursor: default;
     display: flex;
+}
+
+@media screen and (max-width:550px){
+    .layouts-list {
+        display: grid;
+        grid-template-rows: auto auto;
+        grid-template-columns: auto auto;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .layouts-list[class] .layout{
+        margin:0px;
+    }
+    .layouts-list[class] .layout:nth-child(2n+1){
+        margin-right:10px;
+    }
 }
 
 .layouts-list-container.shown .layouts-list {

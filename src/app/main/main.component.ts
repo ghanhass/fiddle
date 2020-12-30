@@ -90,15 +90,22 @@ export class MainComponent implements AfterViewInit {
     });
   }
 
-  toggleLayoutsList(){
+  toggleLayoutsList(resizeMode?: boolean){
     let layout1Element: HTMLElement = this.layout1.nativeElement;
     if(layout1Element){
       let layout1Height = layout1Element.offsetHeight;
       let layoutsListElement: HTMLElement = this.layoutsList.nativeElement;
       if(layoutsListElement){
-        this.isLayoutsListShown = !this.isLayoutsListShown;
+        if(!resizeMode){
+          this.isLayoutsListShown = !this.isLayoutsListShown;
+        }
         if(this.isLayoutsListShown){
-          layoutsListElement.style.height = layout1Height + "px";
+          if(window.innerWidth > 550){
+            layoutsListElement.style.height = layout1Height + "px";
+          }
+          else{
+            layoutsListElement.style.height = (layout1Height * 2)+ 15 + "px";
+          }
         }
         else{
           layoutsListElement.style.height = "";
@@ -112,6 +119,7 @@ export class MainComponent implements AfterViewInit {
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
     //console.log("/!\ window resize event: ", event);
+    this.toggleLayoutsList(true);
   }
 
   @HostListener("window:click", ["$event"])
