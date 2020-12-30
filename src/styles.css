@@ -39,6 +39,7 @@ body{
     box-sizing: border-box;
     cursor: pointer;
     user-select: none;
+    position: relative;
 }
 
 .layouts-list-container span{
@@ -52,6 +53,10 @@ body{
     position: absolute;
     right: 0;
     bottom: 5px;
+}
+
+.layouts-list-container.shown span i.fa-sort-asc{
+    bottom: -2px;
 }
 
 .code-part-title{

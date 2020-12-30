@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Input, HostListener } from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
@@ -51,6 +51,10 @@ export class IframePartComponent implements OnInit {
     private toastrService:ToastrService) { }
 
   ngOnInit(): void {
+  }
+
+  onIframeClick(){
+    console.log("onIframeClick click !");
   }
 
   saveCode(){
