@@ -414,4 +414,9 @@ app-iframe-part{
         display: none;
     }
 
+    .layouts-list-container{
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
 }

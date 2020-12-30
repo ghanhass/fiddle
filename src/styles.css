@@ -76,7 +76,7 @@ ngs-code-editor .monaco-editor .overflow-guard{
 
 @media (max-width:767px), (max-height:580px){  
     .main-container{
-        flex-direction:column;
+        flex-direction:column !important;
     }
 
     .hide-mobile{

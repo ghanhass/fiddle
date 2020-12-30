@@ -124,28 +124,30 @@ export class MainComponent implements AfterViewInit {
   }
 
   toggleLayoutsList(resizeMode?: boolean){
-    let layout1Element: HTMLElement = this.layout1.nativeElement;
-    if(layout1Element){
-      let layout1Height = layout1Element.offsetHeight;
-      let layoutsListElement: HTMLElement = this.layoutsList.nativeElement;
-      if(layoutsListElement){
-        if(!resizeMode){
-          this.isLayoutsListShown = !this.isLayoutsListShown;
-        }
-        if(this.isLayoutsListShown){
-          if(window.innerWidth > 550){
-            layoutsListElement.style.height = layout1Height + "px";
+    if(window.innerWidth > 767 && window.innerHeight > 580){
+      let layout1Element: HTMLElement = this.layout1.nativeElement;
+      if(layout1Element){
+        let layout1Height = layout1Element.offsetHeight;
+        let layoutsListElement: HTMLElement = this.layoutsList.nativeElement;
+        if(layoutsListElement){
+          if(!resizeMode){
+            this.isLayoutsListShown = !this.isLayoutsListShown;
+          }
+          if(this.isLayoutsListShown){
+            if(window.innerWidth > 550){
+              layoutsListElement.style.height = layout1Height + "px";
+            }
+            else{
+              layoutsListElement.style.height = (layout1Height * 2)+ 15 + "px";
+            }
           }
           else{
-            layoutsListElement.style.height = (layout1Height * 2)+ 15 + "px";
+            layoutsListElement.style.height = "";
           }
         }
-        else{
-          layoutsListElement.style.height = "";
-        }
+
+        //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
       }
-      
-      //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
     }
   }
 
@@ -158,7 +160,7 @@ export class MainComponent implements AfterViewInit {
   @HostListener("window:click", ["$event"])
   onWindowClick(event){
     this.resetResizersAppearance();
-    console.log("click event.target = ", event.target);
+    //console.log("click event.target = ", event.target);
   }
 
   @HostListener("window:mouseup", ["$event"])
