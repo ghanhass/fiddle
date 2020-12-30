@@ -73,7 +73,7 @@
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
     <div id="code-parts" #codeParts [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" 
-    [ngStyle]="{'width':codePartsWidth, 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
+    [ngStyle]="{'width':'300px', 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
     (dragover)="codePartsDragoverHandler($event)">
         <div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>
         <div class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml}" style="height:33.33%;top:0px;z-index:1;">
@@ -101,7 +101,7 @@
     (mousedown)="mainResizerMousedownHandler($event)" 
     (dragstart)="mainResizerDragstartHandler($event)" 
     (dragend)="mainResizerDragendHandler($event)"
-    [ngStyle]="{'left':mainResizerLeft}" [ngClass]="{'resize-mode':mainResizeMode}"></div>
+    [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" [ngClass]="{'resize-mode':mainResizeMode}"></div>
     <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult}" 
     [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}" 
     #iframePart></app-iframe-part>

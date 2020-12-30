@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit }
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
-import { indigo } from 'color-name';
 
 @Component({
   selector: 'app-main',
@@ -22,8 +21,8 @@ export class MainComponent implements AfterViewInit {
     el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
     return el;
   })();
-  codePartsWidth: string = "300px";
   mainResizerLeft: string = "300px";
+  mainResizerRight: string = "auto";
   verticalResizerJsTop: string = "0px";
   verticalResizerCssTop: string = "0px";
   verticalResizeMode:boolean = false;
@@ -55,8 +54,7 @@ export class MainComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     let self = this;
-    let currentFiddleId = undefined;
-    
+     
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
@@ -92,7 +90,37 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeLayout(newLayout: number){
-    this.layout = newLayout;
+    if(newLayout != this.layout){
+      this.layout = newLayout;
+      let mainResizerEl: HTMLElement = this.mainResizer.nativeElement;
+      let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+      if(mainResizerEl){
+        switch(this.layout){
+          case 1:
+          mainResizerEl.style.left = "300px";
+          mainResizerEl.style.right = "auto";
+          codePartsEl.style.width = "300px";
+          codePartsEl.style.minWidth = "300px";
+          (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
+          (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
+          (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
+          break;
+          case 2:
+          break;
+          case 3:
+          mainResizerEl.style.left = "auto";
+          mainResizerEl.style.right = "300px";
+          codePartsEl.style.width = "300px";
+          codePartsEl.style.minWidth = "300px";
+          (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
+          (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
+          (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
+          break;
+          case 4:
+        }
+        window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+      }
+    }
   }
 
   toggleLayoutsList(resizeMode?: boolean){
@@ -216,11 +244,23 @@ export class MainComponent implements AfterViewInit {
   mainContainerDragoverHandler(event){
     if(!this.verticalResizeMode){
       //console.log("angular dragover event: ", event);
-      let left = event.clientX - 5;
-      let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
-      if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
-        this.mainResizer.nativeElement.style.left = left + "px";
-        this.mainResizerLeft = left + "px";
+      if(this.layout == 1 || this.layout == 3){
+        let left = event.clientX - 5;
+        let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
+        if(this.layout == 1){
+          if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
+            this.mainResizer.nativeElement.style.left = left + "px";
+            this.mainResizerLeft = left + "px";
+            this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
+          }
+        }
+        else if(this.layout == 3){
+          if(left < (window.innerWidth - 250) && left > mainContainerElement.getBoundingClientRect().left - 8){
+            this.mainResizer.nativeElement.style.left = left + "px";
+            this.mainResizerLeft = left + "px";
+            this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
+          }
+        }
       }
     }
   }
@@ -283,9 +323,14 @@ export class MainComponent implements AfterViewInit {
   mainResizerDragendHandler(event){
     this.mainResizeMode = false;
     console.log("angular mainResizerDragendHandler event: ", event);
-    this.codePartsWidth = this.mainResizerLeft;
-    this.codeParts.nativeElement.style.width = this.mainResizerLeft;
-    this.codeParts.nativeElement.style.minWidth = this.mainResizerLeft; 
+    if(this.layout == 1){
+      this.codeParts.nativeElement.style.width = this.mainResizerLeft;
+      this.codeParts.nativeElement.style.minWidth = this.mainResizerLeft; 
+    }
+    else if(this.layout == 3){
+      this.codeParts.nativeElement.style.width = this.mainResizerRight;
+      this.codeParts.nativeElement.style.minWidth = this.mainResizerRight; 
+    }
     this.mainResizerFloor.nativeElement.classList.add("hide");
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }

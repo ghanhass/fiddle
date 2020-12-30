@@ -45,6 +45,11 @@
 .main-container{
     position: relative;
 }
+
+.main-container.layout-type-3 {
+    flex-direction: row-reverse;
+}
+
 .main-resizer-floor,
 .vertical-resizer-floor{
     position:absolute;
@@ -316,7 +321,7 @@ app-iframe-part{
     top: calc(100% + 8px);
     background-color: #FFFFFF;
     box-shadow: 0px 0px 4px 2px #8b8b8b;
-    z-index: 3;
+    z-index: 102;
     opacity: 0;
     pointer-events: none;
     cursor: default;
