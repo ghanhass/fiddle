@@ -9,8 +9,9 @@ body{
     width: calc(100vw - 10px);
     height: calc(100vh - 50px);
     box-shadow: 0 0 0 1px #bbb;
-    min-width: 346px;
+    min-width: 320px;
 }
+
 #main-header{
     height: 40px;
     width: calc(100% - 20px);
@@ -19,7 +20,7 @@ body{
     padding-right: 10px;
     padding-left: 10px;
     box-shadow: 0 0 0 1px #bbb;
-    min-width: 330px;
+    min-width: 320px;
 }
 
 .hide{
@@ -75,13 +76,8 @@ ngs-code-editor .monaco-editor .overflow-guard{
 }
 
 @media (max-width:767px), (max-height:580px){  
-    .main-container{
-        flex-direction:column !important;
-    }
 
-    .hide-mobile{
-        position: fixed !important;
-        top:99999px;
-        left:99999px;
+    body{
+        padding:0px;
     }
 }
