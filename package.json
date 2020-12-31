@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "~10.0.0",
     "@angular/router": "~10.0.0",
     "@ngstack/code-editor": "^2.1.1",
+    "angular-cli-ghpages": "^1.0.0-rc.1",
     "font-awesome": "^4.7.0",
     "monaco-editor": "^0.21.2",
     "ngx-monaco-editor": "^10.0.0-beta.1",

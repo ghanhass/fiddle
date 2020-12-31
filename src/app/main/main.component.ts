@@ -78,7 +78,7 @@ export class MainComponent implements AfterViewInit {
             //console.log("getFiddle res = ", res);
             let obj = JSON.parse(res);
             if(obj.success === "1"){
-              console.log("getFiddle obj = ", obj);
+              //console.log("getFiddle obj = ", obj);
               this.htmlCode = obj.html;
               this.cssCode = obj.css;
               this.jsCode = obj.js;
@@ -182,7 +182,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   onToggleHTMLFullScreen(data, codePart){
-    console.log("onToggleFullScreen data = ", data);
+    //console.log("onToggleFullScreen data = ", data);
     if(data === "1"){
       switch(codePart){
         case "html":
@@ -363,7 +363,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   mainResizerDragstartHandler(event: any){
-    console.log("angular mainResizerDragstartHandler event: ", event);
+    //console.log("angular mainResizerDragstartHandler event: ", event);
     event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.mainResizeMode = true;
@@ -372,7 +372,7 @@ export class MainComponent implements AfterViewInit {
 
   mainResizerDragendHandler(event){
     this.mainResizeMode = false;
-    console.log("angular mainResizerDragendHandler event: ", event);
+    //console.log("angular mainResizerDragendHandler event: ", event);
     if(this.layout == 1){
       this.codeParts.nativeElement.style.width = this.mainResizerLeft;
       this.codeParts.nativeElement.style.minWidth = this.mainResizerLeft; 
@@ -392,7 +392,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   verticalResizerCssDragstartHandler(event: DragEvent){
-    console.log("angular verticalResizerCssDragstartHandler event: ", event);
+    //console.log("angular verticalResizerCssDragstartHandler event: ", event);
     event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.verticalResizeType = "css";
@@ -401,7 +401,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   verticalResizerCssDragendHandler(event){
-    console.log("angular verticalResizerCssDragendHandler: ", event);
+    //console.log("angular verticalResizerCssDragendHandler: ", event);
     this.verticalResizeMode = false;
     this.verticalResizerCss.nativeElement.classList.remove("resize-mode");
     let cssCodeComponentContainerElement = this.verticalResizerCss.nativeElement.parentNode;
@@ -409,7 +409,7 @@ export class MainComponent implements AfterViewInit {
     this.verticalResizerCss.nativeElement.getBoundingClientRect().top;
     cssCodeComponentContainerElement.style.top = ((cssCodeComponentContainerElement.getBoundingClientRect().top - 67) - movingDistance + 20) + "px";
     this.verticalResizerCss.nativeElement.style.top = "0px";
-    console.log("movingDistance = ", movingDistance);
+    //console.log("movingDistance = ", movingDistance);
     let jsCodeComponentContainer = document.querySelector(".code-component-container-js");
     let htmlCodeComponentContainer: any = document.querySelector(".code-component-container-html");
     htmlCodeComponentContainer.style.height = htmlCodeComponentContainer.getBoundingClientRect().height - movingDistance - 2 + "px";
@@ -424,7 +424,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   verticalResizerJsDragstartHandler(event: DragEvent){
-    console.log("angular verticalResizerJsDragstartHandler event: ", event);
+    //console.log("angular verticalResizerJsDragstartHandler event: ", event);
     event.dataTransfer.setData('text/plain', '');
     event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
     this.verticalResizeType = "js";
@@ -432,7 +432,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   verticalResizerJsDragendHandler(event){
-    console.log("angular verticalResizerJsDragendHandler: ", event);
+    //console.log("angular verticalResizerJsDragendHandler: ", event);
     this.verticalResizeMode = false;
     this.verticalResizerJs.nativeElement.classList.remove("resize-mode");
     let jsCodeComponentContainerElement = this.verticalResizerJs.nativeElement.parentNode;
@@ -440,7 +440,7 @@ export class MainComponent implements AfterViewInit {
     this.verticalResizerJs.nativeElement.getBoundingClientRect().top;
     jsCodeComponentContainerElement.style.top = ((jsCodeComponentContainerElement.getBoundingClientRect().top - 65) - movingDistance + 20) + "px";
     this.verticalResizerJs.nativeElement.style.top = "0px";
-    console.log("movingDistance = ", movingDistance);
+    //console.log("movingDistance = ", movingDistance);
     
     let cssCodeComponentContainer: any = document.querySelector(".code-component-container-css");
 

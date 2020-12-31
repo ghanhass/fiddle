@@ -37,9 +37,9 @@ export class IframePartComponent implements OnInit {
       window.setTimeout(()=>{
         self.loader.showLoader();
         self.canSubmit = false;
-        console.log("form's self.jsCode ", self.jsCode);
-        console.log("form's self.cssCode ", self.cssCode);
-        console.log("form's self.htmlCode ", self.htmlCode);
+        //console.log("form's self.jsCode ", self.jsCode);
+        //console.log("form's self.cssCode ", self.cssCode);
+        //console.log("form's self.htmlCode ", self.htmlCode);
         self.form.nativeElement.submit();
       },1)
       
@@ -53,12 +53,9 @@ export class IframePartComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onIframeClick(){
-    console.log("onIframeClick click !");
-  }
 
   saveCode(){
-    console.log("saving Code");
+    //console.log("saving Code");
     const self = this;
     let data = {
       save: "1",
@@ -71,8 +68,8 @@ export class IframePartComponent implements OnInit {
       let obj = JSON.parse(res);
       if(obj.success == "1"){
         let fiddleId = obj.id;
-        console.log("saved fiddle id = ", fiddleId);
-        console.log("url = ", window.location.href);
+        //console.log("saved fiddle id = ", fiddleId);
+        //console.log("url = ", window.location.href);
         
         if(self.copyInput.nativeElement){
           let input = self.copyInput.nativeElement
@@ -83,7 +80,7 @@ export class IframePartComponent implements OnInit {
           input.value = hrefValue + fiddleId
           input.select();
           input.setSelectionRange(0, 99999);
-          console.log("copy result = ", document.execCommand("copy"));
+          //console.log("copy result = ", document.execCommand("copy"));
         }
         self.mainService.redirectMode = true;
         self.router.navigate(["/"+fiddleId]);
@@ -99,7 +96,7 @@ export class IframePartComponent implements OnInit {
     }
     else{
       this.canSubmit = true;
-      console.log("iframe angular load event");
+      //console.log("iframe angular load event");
       this.loader.hideLoader();
     }
   }
