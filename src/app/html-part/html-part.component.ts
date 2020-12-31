@@ -40,7 +40,7 @@ export class HtmlPartComponent implements OnInit {
   onCodeChanged(value) {
     //console.log('CODE', value);
     this.mainService.htmlCode = value;
-    console.log("html value = ", value);
+    //console.log("html value = ", value);
   }
 
   ngOnChanges(data: SimpleChanges){
