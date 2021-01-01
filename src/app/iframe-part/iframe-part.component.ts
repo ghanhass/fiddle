@@ -80,7 +80,7 @@ export class IframePartComponent implements OnInit {
           input.value = hrefValue + fiddleId
           input.select();
           input.setSelectionRange(0, 99999);
-          //console.log("copy result = ", document.execCommand("copy"));
+          let copyCommand = document.execCommand("copy");
         }
         self.mainService.redirectMode = true;
         self.router.navigate(["/"+fiddleId]);
