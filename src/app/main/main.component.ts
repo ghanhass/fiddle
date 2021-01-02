@@ -2,7 +2,6 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit }
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
-import { ToastrComponentlessModule } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main',
@@ -15,6 +14,7 @@ export class MainComponent implements AfterViewInit {
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
+  
   isHtmlFullScreen: boolean = false;
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
@@ -25,26 +25,46 @@ export class MainComponent implements AfterViewInit {
     el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
     return el;
   })();
+  
   mainResizerLeft: string = "300px";
   mainResizerRight: string = "auto";
-  verticalResizerJsTop: string = "0px";
-  verticalResizerCssTop: string = "0px";
+  //verticalResizerJsTop: string = "0px";
+  //verticalResizerCssTop: string = "0px";
   verticalResizeMode:boolean = false;
+  
+  cssVerticalResizeMode:boolean = false;
+  jsVerticalResizeMode:boolean = false;
+
+  htmlPartHeight:number = 0;
+  cssPartHeight:number = 0;
+  jsPartHeight:number = 0;
+
+  cssInitTop:number = 0;
+  jsInitTop:number = 0;
+  
+  cssMousedownY: number = 0;
+  jsMousedownY: number = 0;
+
   mainResizeMode:boolean = false;
   verticalResizeType:string = "";
-  cssPartInitHeight: number;
-  htmlPartInitHeight: number;
+
   @ViewChild("mainResizer") mainResizer:ElementRef;
   @ViewChild("codeParts") codeParts:ElementRef;
+  
+  @ViewChild("htmlPart") htmlPart:ElementRef;
+  @ViewChild("cssPart") cssPart:ElementRef;
+  @ViewChild("jsPart") jsPart:ElementRef;
+
   @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
-  @ViewChild("verticalResizerFloor") verticalResizerFloor:ElementRef;
-  @ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
-  @ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
+  //@ViewChild("verticalResizerFloor") verticalResizerFloor:ElementRef;
+  //@ViewChild("verticalResizerJs") verticalResizerJs:ElementRef;
+  //@ViewChild("verticalResizerCss") verticalResizerCss:ElementRef;
   @ViewChild("iframePart") iframePart:IframePartComponent;
   @ViewChild("layout1") layout1: ElementRef;
   @ViewChild("layout2") layout2: ElementRef;
   @ViewChild("layout3") layout3: ElementRef;
   @ViewChild("layoutsList") layoutsList: ElementRef;
+
   jsCode: string = "";
   cssCode: string = "";
   htmlCode: string = "";
@@ -91,6 +111,25 @@ export class MainComponent implements AfterViewInit {
         }
       }
     });
+
+    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
+    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
+    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
+
+    if(htmlPartEl){
+      this.htmlPartHeight = htmlPartEl.offsetHeight;
+      console.log("htmlPartHeight = ", this.htmlPartHeight);
+    }
+    if(cssPartEl){
+      this.cssPartHeight = cssPartEl.offsetHeight;
+      this.cssInitTop = cssPartEl.getBoundingClientRect().top;
+      console.log("cssPartHeight = ", this.cssPartHeight);
+    }
+    if(jsPartEl){
+      this.jsPartHeight = jsPartEl.offsetHeight;
+      this.jsInitTop = jsPartEl.getBoundingClientRect().top;
+      console.log("jsPartHeight = ", this.jsPartHeight);
+    }
   }
 
   changeLayout(newLayout: number){
@@ -155,6 +194,27 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
+  toggleFullScreenMode(mode: string){
+    switch(mode){
+      case 'html':
+      this.isHtmlFullScreen = !this.isHtmlFullScreen;
+      break;
+
+      case 'css':
+      this.isCssFullScreen = !this.isCssFullScreen;
+      break;
+
+      case 'js':
+      this.isJsFullScreen = !this.isJsFullScreen;
+      break;
+    }
+
+    let editorLayoutFixInterval = window.setTimeout(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 1);
+  }
+
+
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
     //console.log("/!\ window resize event: ", event);
@@ -170,6 +230,20 @@ export class MainComponent implements AfterViewInit {
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
     this.resetResizersAppearance();
+    console.log("mouseup event: ", event);
+    
+    this.cssPartHeight = (<HTMLElement>this.cssPart.nativeElement).offsetHeight;
+    this.htmlPartHeight = (<HTMLElement>this.htmlPart.nativeElement).offsetHeight;
+    this.jsPartHeight = (<HTMLElement>this.jsPart.nativeElement).offsetHeight;
+
+    if(this.cssVerticalResizeMode){
+      this.cssVerticalResizeMode = false;
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }
+    if(this.jsVerticalResizeMode){
+      this.jsVerticalResizeMode = false;
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }
   }
 
   runCode(param?){
@@ -179,48 +253,6 @@ export class MainComponent implements AfterViewInit {
   resetResizersAppearance(){
     this.mainResizerFloor.nativeElement.classList.add("hide");
     this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
-  }
-
-  onToggleHTMLFullScreen(data, codePart){
-    //console.log("onToggleFullScreen data = ", data);
-    if(data === "1"){
-      switch(codePart){
-        case "html":
-        this.isHtmlFullScreen = true;
-        break;
-        case "css":
-        this.isCssFullScreen = true;
-        break;
-        case "js":
-        this.isJsFullScreen = true;
-        break;
-      }
-      let editorLayoutFixInterval = window.setInterval(()=>{
-        if(this.codeParts.nativeElement.querySelector(".code-component-container-"+codePart).classList.contains("fullscreen")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
-        }
-      }, 50);
-    }
-    else if(data === "0"){
-      switch(codePart){
-        case "html":
-        this.isHtmlFullScreen = false;
-        break;
-        case "css":
-        this.isCssFullScreen = false;
-        break;
-        case "js":
-        this.isJsFullScreen = false;
-        break;
-      }
-      let editorLayoutFixInterval = window.setInterval(()=>{
-        if(!this.codeParts.nativeElement.querySelector(".code-component-container-"+codePart).classList.contains("fullscreen")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
-        }
-      }, 50);
-    }
   }
 
   toggleCodePart(codeType: string): void{
@@ -315,7 +347,7 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  codePartsDragoverHandler(event: DragEvent){
+  /*codePartsDragoverHandler(event: DragEvent){
     //console.log("angular #code-parts dragover event: ", event.clientX+" X "+event.clientY)
     event.stopPropagation();
     switch(this.verticalResizeType){
@@ -354,7 +386,7 @@ export class MainComponent implements AfterViewInit {
       break
     }
     //console.log("-------------------------");
-  }
+  }*/
   /*END dragover event handler(s)*/
 
   mainResizerMousedownHandler(event){
@@ -386,6 +418,7 @@ export class MainComponent implements AfterViewInit {
   }
   ///////////////
 
+  /*
   verticalResizerCssMousedownHandler(event){
     this.verticalResizeMode = true;
     //console.log("angular mousedown event: ", event);
@@ -448,6 +481,44 @@ export class MainComponent implements AfterViewInit {
     jsCodeComponentContainerElement.style.height = (this.codeParts.nativeElement.getBoundingClientRect().bottom - jsCodeComponentContainerElement.getBoundingClientRect().top) - 6 + "px";
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }
+*/
+  codePartsTitleMousedown(event: MouseEvent, mode){
+    console.log("codePartsTitleMousedown event = ", event);
+    console.log("codePartsTitleMousedown mode = ", mode)
+    
+    switch(mode){
+      case "css":
+      this.cssMousedownY = event.clientY;
+      this.cssVerticalResizeMode = true;
+      break;
 
+      case "js":
+      this.jsMousedownY = event.clientY;
+      this.jsVerticalResizeMode = true;
+      break;
+    }
+  }
+
+  codePartsMousemove(event: MouseEvent){
+    if(this.cssVerticalResizeMode){
+      //console.log("codePartsMousemove clientY = ", event.clientY);
+      //console.log("cssMousedownY = ", this.cssMousedownY);
+      //console.log("cssPartHeight = ", this.cssPartHeight);
+      let newCssPartHeight = this.cssPartHeight - (event.clientY - this.cssMousedownY);
+      let newHtmlPartHeight = this.htmlPartHeight + (event.clientY - this.cssMousedownY);
+      //console.log("newCssPartHeight = ", newCssPartHeight);
+      //console.log("newHtmlPartHeight = ", newHtmlPartHeight);
+      this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+      this.htmlPart.nativeElement.style.height = newHtmlPartHeight + "px";
+      console.log("----------------------------");
+    }
+
+    else if(this.jsVerticalResizeMode){
+      //console.log("codePartsMousemove clientY = ", event.clientY);
+      //console.log("jsMousedownY = ", this.jsMousedownY);
+      //console.log("jsPartHeight = ", this.jsPartHeight);
+      //console.log("----------------------------");
+    }
+  }
 
 }

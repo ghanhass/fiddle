@@ -74,27 +74,63 @@
     </div>
     <div id="code-parts" #codeParts [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" 
     [ngStyle]="{'width':'300px', 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
-    (dragover)="codePartsDragoverHandler($event)">
-        <div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>
+    (dragover)="null" (mousemove)="codePartsMousemove($event)">
+        <!--<div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>-->
         <div class="code-component-container code-component-container-html" 
-        [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" style="height:33.33%;top:0px;z-index:1;">
-            <app-html-part class="code-component" [code]="htmlCode" (toggleFullScreen)="onToggleHTMLFullScreen($event, 'html')"></app-html-part>
+        [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" style="height:33.33%;/*top:0px;z-index:1;*/" #htmlPart>
+            <div class="code-part-title">
+                <span>HTML</span>
+                <div class="code-part-title-btns-container">
+                    <a class="html-expand-btn code-part-title-btn" [title]="'Expand HTML Vertically'">
+                        <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                    </a>
+                
+                    <a class="html-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('html')" [ngClass]="{'on':isHtmlFullScreen}" [title]="'Full screen HTML'">
+                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode"></app-html-part>
         </div>
-        <div class="code-component-container has-resizer code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}" style="height:33.33%;top:33.33%;z-index:2;">
-            <div draggable="true" #verticalResizerCss class="vertical-resizer" 
+        <div class="code-component-container code-component-container-css"
+         [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}" style="height:33.33%;/*top:33.33%;z-index:2;*/" #cssPart>
+            <!--<div draggable="true" #verticalResizerCss class="vertical-resizer" 
             (mousedown)="verticalResizerCssMousedownHandler($event)"
             (dragstart)="verticalResizerCssDragstartHandler($event)"
             (dragend)="verticalResizerCssDragendHandler($event)"
-            [ngStyle]="{'top':verticalResizerCssTop}"></div>
-            <app-css-part class="code-component" [code]="cssCode" (toggleFullScreen)="onToggleHTMLFullScreen($event, 'css')"></app-css-part>
+            [ngStyle]="{'top':verticalResizerCssTop}"></div>-->
+            <div class="code-part-title" (mousedown)="codePartsTitleMousedown($event,'css')">
+                <span>CSS</span>
+                <div class="code-part-title-btns-container">
+                    <a class="css-expand-btn code-part-title-btn" [title]="'Expand CSS vertically'">
+                        <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                    </a>
+                    <a class="css-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('css')" [ngClass]="{'on':isCssFullScreen}" [title]="'Full screen CSS'">
+                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <app-css-part #cssPartComponent class="code-component" [code]="cssCode"></app-css-part>
         </div>
-        <div class="code-component-container has-resizer code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}" style="height:33.34%;top:66.33%;z-index:3;">
-            <div draggable="true" #verticalResizerJs class="vertical-resizer"
+        <div class="code-component-container code-component-container-js" 
+        [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}" style="height:33.34%;/*top:66.33%;z-index:3;*/" #jsPart>
+            <!--<div draggable="true" #verticalResizerJs class="vertical-resizer"
             (mousedown)="verticalResizerJsMousedownHandler($event)"
             (dragstart)="verticalResizerJsDragstartHandler($event)"
             (dragend)="verticalResizerJsDragendHandler($event)"
-            [ngStyle]="{'top':verticalResizerJsTop}"></div>
-            <app-js-part class="code-component" [code]="jsCode" (toggleFullScreen)="onToggleHTMLFullScreen($event, 'js')"></app-js-part>
+            [ngStyle]="{'top':verticalResizerJsTop}"></div>-->
+            <div class="code-part-title" (mousedown)="codePartsTitleMousedown($event,'js')">
+                <span>JAVASCRIPT</span>
+                <div class="code-part-title-btns-container">
+                    <a class="js-expand-btn code-part-title-btn" [title]="'Expand JS vertically'">
+                        <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                    </a>
+                    <a class="js-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('js')" [ngClass]="{'on':isJsFullScreen}" [title]="'Full screen JS'">
+                        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
         </div>
     </div>
     <div #mainResizerFloor class="main-resizer-floor hide" ></div>

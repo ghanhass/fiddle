@@ -8,6 +8,9 @@ const routes: Routes = [
     path:":id", component: MainComponent
   },
   {
+    path:"custom/link", component: MainComponent
+  },
+  {
     path:"**", component: MainComponent
   }
 ];

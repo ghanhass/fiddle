@@ -1,3 +1,64 @@
+.main-container{
+    display:flex;
+    width: calc(100vw - 10px);
+    height: calc(100vh - 50px);
+    box-shadow: 0 0 0 1px #bbb;
+    min-width: 320px;
+}
+
+#main-header{
+    height: 40px;
+    width: calc(100% - 20px);
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 10px;
+    padding-left: 10px;
+    box-shadow: 0 0 0 1px #bbb;
+    min-width: 320px;
+}
+
+.code-part-title{
+    width: 100%;
+    border-bottom: 1px solid #dddddd;
+    border-top: 3px solid #dddddd;
+    color: #8b8b8b;
+    text-align: center;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    padding: 0 0 0 5px;
+}
+
+.code-component-container-css .code-part-title,
+.code-component-container-js .code-part-title{
+    cursor: row-resize;
+}
+
+.code-part-title > span {
+    color: #797979;
+    user-select:none;
+}
+
+.code-part-title-btns-container{
+  flex-grow: 1;
+  margin-left: 20px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+.code-part-title-btn{
+  cursor: pointer;
+  padding: 3px 4px;
+  border: 1px solid #8c8c8c;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.code-part-title-btn:nth-last-child(n+2){
+  margin-right: 10px;
+}
+
 #code-parts{
     display: flex;
     flex-direction: column;
@@ -13,7 +74,7 @@
     display: flex;
     flex-direction: column;
     /*overflow: hidden;*/
-    position: absolute;
+    /*position: absolute;*/
     background-color: #FFF;
 }
 
@@ -22,7 +83,7 @@
 }
 
 #code-parts > .code-component-container > .code-component{
-    height: calc(100% - 50px);
+    height: calc(100% - 30px);
     /*display: flex;
     flex-direction: column;*/
 } 
@@ -54,17 +115,6 @@
     display:flex;
     width: calc(100vw - 10px);
     height: calc(100vh - 50px);
-    box-shadow: 0 0 0 1px #bbb;
-    min-width: 320px;
-}
-
-#main-header{
-    height: 40px;
-    width: calc(100% - 20px);
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 10px;
-    padding-left: 10px;
     box-shadow: 0 0 0 1px #bbb;
     min-width: 320px;
 }
@@ -395,6 +445,11 @@ app-iframe-part{
     z-index: 125 !important;
 }
 
+.code-part-title-btn.on{
+    background-color: #8b8b8b;
+    color: #FFFFFF;
+}
+
 :host ::ng-deep .monaco-editor .monaco-hover {
     left: 0px !important;
     z-index: 102 !important;
@@ -426,6 +481,8 @@ app-iframe-part{
     #main-header{
         padding-right: 0px;
         padding-left: 0px;
+        width:100%;
+        justify-content: center;
     }
     
     #code-parts-title-mobile{
@@ -479,9 +536,9 @@ app-iframe-part{
         width:100%;
     }
 
-    #main-header{
-        width:100%;
-        justify-content: center;
+    .code-component-container-css .code-part-title,
+    .code-component-container-js .code-part-title{
+        cursor: default;
     }
 
 }
