@@ -533,7 +533,7 @@ export class MainComponent implements AfterViewInit {
       let jsCodePartTitleBottom = this.jsCodePartTitle.getBoundingClientRect().bottom;
       console.log("jsCodePartBottom = ", jsCodePartBottom);
       console.log("jsCodePartTitleBottom = ", jsCodePartTitleBottom);
-      if(true/*jsCodePartTitleBottom < jsCodePartBottom*/){
+      if(true/*jsCodePartTitleBottom < jsCodePartBottom - 5*/){
         //console.log("codePartsMousemove clientY = ", event.clientY);
         //console.log("jsMousedownY = ", this.jsMousedownY);
         //console.log("jsPartHeight = ", this.jsPartHeight);
@@ -542,7 +542,10 @@ export class MainComponent implements AfterViewInit {
         let newCssPartHeight = this.cssPartHeight + (event.clientY - this.jsMousedownY);
 
         this.jsPart.nativeElement.style.height = newJsPartHeight + "px";
-        this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+
+        if(jsCodePartTitleBottom < jsCodePartBottom - 10){
+          this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+        }
         
         //console.log("----------------------------");
       }
