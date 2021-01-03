@@ -70,12 +70,13 @@
 
 #code-parts > .code-component-container{
     width: 100%;
-    height: 100%;
+    height: 33.3%;
     display: flex;
     flex-direction: column;
     /*overflow: hidden;*/
     /*position: absolute;*/
     background-color: #FFF;
+    min-height: 32px;
 }
 
 #code-parts > .code-component-container.has-resizer{

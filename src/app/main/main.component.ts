@@ -65,6 +65,9 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("layout3") layout3: ElementRef;
   @ViewChild("layoutsList") layoutsList: ElementRef;
 
+  cssCodePartTitle: HTMLElement;
+  jsCodePartTitle: HTMLElement;
+
   jsCode: string = "";
   cssCode: string = "";
   htmlCode: string = "";
@@ -488,11 +491,13 @@ export class MainComponent implements AfterViewInit {
     
     switch(mode){
       case "css":
+      this.cssCodePartTitle = <HTMLElement>event.target;
       this.cssMousedownY = event.clientY;
       this.cssVerticalResizeMode = true;
       break;
 
       case "js":
+      this.jsCodePartTitle = <HTMLElement>event.target;
       this.jsMousedownY = event.clientY;
       this.jsVerticalResizeMode = true;
       break;
@@ -500,24 +505,47 @@ export class MainComponent implements AfterViewInit {
   }
 
   codePartsMousemove(event: MouseEvent){
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     if(this.cssVerticalResizeMode){
-      //console.log("codePartsMousemove clientY = ", event.clientY);
-      //console.log("cssMousedownY = ", this.cssMousedownY);
-      //console.log("cssPartHeight = ", this.cssPartHeight);
-      let newCssPartHeight = this.cssPartHeight - (event.clientY - this.cssMousedownY);
-      let newHtmlPartHeight = this.htmlPartHeight + (event.clientY - this.cssMousedownY);
-      //console.log("newCssPartHeight = ", newCssPartHeight);
-      //console.log("newHtmlPartHeight = ", newHtmlPartHeight);
-      this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
-      this.htmlPart.nativeElement.style.height = newHtmlPartHeight + "px";
-      console.log("----------------------------");
+
+      let cssCodePartBottom = codePartsEl.getBoundingClientRect().bottom;
+      let cssCodePartTitleBottom = this.cssCodePartTitle.getBoundingClientRect().bottom;
+      console.log("cssCodePartBottom = ", cssCodePartBottom);
+      console.log("cssCodePartTitleBottom = ", cssCodePartTitleBottom);
+      if(true /*cssCodePartTitleBottom < cssCodePartBottom*/){
+        //console.log("codePartsMousemove clientY = ", event.clientY);
+        //console.log("cssMousedownY = ", this.cssMousedownY);
+        //console.log("cssPartHeight = ", this.cssPartHeight);
+        
+        let newCssPartHeight = this.cssPartHeight - (event.clientY - this.cssMousedownY);
+        let newHtmlPartHeight = this.htmlPartHeight + (event.clientY - this.cssMousedownY);
+        //console.log("newCssPartHeight = ", newCssPartHeight);
+        //console.log("newHtmlPartHeight = ", newHtmlPartHeight);
+        this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+        this.htmlPart.nativeElement.style.height = newHtmlPartHeight + "px";
+      }
+      //console.log("----------------------------");
     }
 
     else if(this.jsVerticalResizeMode){
-      //console.log("codePartsMousemove clientY = ", event.clientY);
-      //console.log("jsMousedownY = ", this.jsMousedownY);
-      //console.log("jsPartHeight = ", this.jsPartHeight);
-      //console.log("----------------------------");
+
+      let jsCodePartBottom = codePartsEl.getBoundingClientRect().bottom;
+      let jsCodePartTitleBottom = this.jsCodePartTitle.getBoundingClientRect().bottom;
+      console.log("jsCodePartBottom = ", jsCodePartBottom);
+      console.log("jsCodePartTitleBottom = ", jsCodePartTitleBottom);
+      if(true/*jsCodePartTitleBottom < jsCodePartBottom*/){
+        //console.log("codePartsMousemove clientY = ", event.clientY);
+        //console.log("jsMousedownY = ", this.jsMousedownY);
+        //console.log("jsPartHeight = ", this.jsPartHeight);
+        
+        let newJsPartHeight = this.jsPartHeight - (event.clientY - this.jsMousedownY);
+        let newCssPartHeight = this.cssPartHeight + (event.clientY - this.jsMousedownY);
+
+        this.jsPart.nativeElement.style.height = newJsPartHeight + "px";
+        this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+        
+        //console.log("----------------------------");
+      }
     }
   }
 
