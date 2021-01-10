@@ -541,10 +541,13 @@ export class MainComponent implements AfterViewInit {
         let newJsPartHeight = this.jsPartHeight - (event.clientY - this.jsMousedownY);
         let newCssPartHeight = this.cssPartHeight + (event.clientY - this.jsMousedownY);
 
-        this.jsPart.nativeElement.style.height = newJsPartHeight + "px";
 
-        if(jsCodePartTitleBottom < jsCodePartBottom - 10){
+        if(newJsPartHeight >= 32){
           this.cssPart.nativeElement.style.height = newCssPartHeight + "px";
+          this.jsPart.nativeElement.style.height = newJsPartHeight + "px";
+        }
+        else{
+          this.jsPart.nativeElement.style.height = "32px";
         }
         
         //console.log("----------------------------");
