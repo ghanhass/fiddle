@@ -19,7 +19,7 @@ ngs-code-editor {
 
 ngs-code-editor 
 .monaco-scrollable-element.editor-scrollable.vs {
-    /*height:100% !important;*/
+    height:100% !important;
 }
 
 ngs-code-editor .monaco-editor, 
@@ -30,6 +30,10 @@ ngs-code-editor .monaco-editor .overflow-guard{
 
 ngs-code-editor .monaco-editor.editor{
     min-height: auto !important;
+}
+
+ngs-code-editor .margin-view-overlays .line-numbers {
+    user-select: none;
 }
 
 @media (max-width:767px), (max-height:580px){  

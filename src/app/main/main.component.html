@@ -77,7 +77,7 @@
     (dragover)="null" (mousemove)="codePartsMousemove($event)">
         <!--<div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>-->
         <div class="code-component-container code-component-container-html" 
-        [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" style="height:33.33%;/*top:0px;z-index:1;*/" #htmlPart>
+        [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" [ngStyle]="{'z-index':1}" #htmlPart>
             <div class="code-part-title">
                 <span>HTML</span>
                 <div class="code-part-title-btns-container">
@@ -93,12 +93,7 @@
             <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode"></app-html-part>
         </div>
         <div class="code-component-container code-component-container-css"
-         [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}" style="height:33.33%;/*top:33.33%;z-index:2;*/" #cssPart>
-            <!--<div draggable="true" #verticalResizerCss class="vertical-resizer" 
-            (mousedown)="verticalResizerCssMousedownHandler($event)"
-            (dragstart)="verticalResizerCssDragstartHandler($event)"
-            (dragend)="verticalResizerCssDragendHandler($event)"
-            [ngStyle]="{'top':verticalResizerCssTop}"></div>-->
+         [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}" [ngStyle]="{'z-index':2}" #cssPart>
             <div class="code-part-title" (mousedown)="codePartsTitleMousedown($event,'css')">
                 <span>CSS</span>
                 <div class="code-part-title-btns-container">
@@ -113,12 +108,7 @@
             <app-css-part #cssPartComponent class="code-component" [code]="cssCode"></app-css-part>
         </div>
         <div class="code-component-container code-component-container-js" 
-        [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}" style="height:33.34%;/*top:66.33%;z-index:3;*/" #jsPart>
-            <!--<div draggable="true" #verticalResizerJs class="vertical-resizer"
-            (mousedown)="verticalResizerJsMousedownHandler($event)"
-            (dragstart)="verticalResizerJsDragstartHandler($event)"
-            (dragend)="verticalResizerJsDragendHandler($event)"
-            [ngStyle]="{'top':verticalResizerJsTop}"></div>-->
+        [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}" [ngStyle]="{'z-index':3}" #jsPart>
             <div class="code-part-title" (mousedown)="codePartsTitleMousedown($event,'js')">
                 <span>JAVASCRIPT</span>
                 <div class="code-part-title-btns-container">
