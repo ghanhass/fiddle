@@ -489,7 +489,7 @@ export class MainComponent implements AfterViewInit {
       this.customInterval = setInterval(()=>{
         console.log("inside triggerResizeWithInterval");
         window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-      }, 250); 
+      }, 150); 
   }
 
   resizeCodeParts(){
