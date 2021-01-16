@@ -77,13 +77,13 @@ export class IframePartComponent implements OnInit {
           if(hrefValue[hrefValue.length - 1] != "/"){
             hrefValue = hrefValue + "/";
           }
-          input.value = hrefValue + fiddleId
+          input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
           input.select();
           input.setSelectionRange(0, 99999);
           let copyCommand = document.execCommand("copy");
         }
         self.mainService.redirectMode = true;
-        self.router.navigate(["/"+fiddleId]);
+        self.router.navigate([environment.appName+"/"+fiddleId]);
         this.toastrService.success("Fiddle saved.", "Fiddle URL copied to clipboard.");
       }
     });
