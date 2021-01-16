@@ -26,8 +26,9 @@ export class MainComponent implements AfterViewInit {
     return el;
   })();
   
-  mainResizerLeft: string = "300px";
+  mainResizerLeft: string = "425px";
   mainResizerRight: string = "auto";
+  codePartsWidth: string = "425px";
   //verticalResizerJsTop: string = "0px";
   //verticalResizerCssTop: string = "0px";
   verticalResizeMode:boolean = false;
@@ -57,7 +58,6 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("cssPart") cssPart:ElementRef;
   @ViewChild("jsPart") jsPart:ElementRef;
 
-  @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
 
   @ViewChild("iframePart") iframePart:IframePartComponent;
   @ViewChild("layout1") layout1: ElementRef;
@@ -157,10 +157,13 @@ export class MainComponent implements AfterViewInit {
       if(mainResizerEl && codePartsEl){
         switch(this.layout){
           case 1:
-          mainResizerEl.style.left = "300px";
-          mainResizerEl.style.right = "auto";
-          codePartsEl.style.width = "300px";
-          codePartsEl.style.minWidth = "300px";
+          //mainResizerEl.style.left = "425px";
+          this.mainResizerLeft = "425px";
+          //mainResizerEl.style.right = "auto";
+          this.mainResizerRight = "auto";
+          codePartsEl.style.width = "425px";
+          this.codePartsWidth = "425px";
+          codePartsEl.style.minWidth = "425px";
           (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
           (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
           (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
@@ -168,10 +171,13 @@ export class MainComponent implements AfterViewInit {
           case 2:
           break;
           case 3:
-          mainResizerEl.style.left = "auto";
-          mainResizerEl.style.right = "300px";
-          codePartsEl.style.width = "300px";
-          codePartsEl.style.minWidth = "300px";
+          //mainResizerEl.style.left = "auto";
+          this.mainResizerLeft = "auto";
+          //mainResizerEl.style.right = "425px";
+          this.mainResizerRight = "425px";
+          //codePartsEl.style.width = "425px";
+          this.codePartsWidth = "425px";
+          //codePartsEl.style.minWidth = "425px";
           (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
           (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
           (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
@@ -239,7 +245,6 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:click", ["$event"])
   onWindowClick(event){
-    this.resetResizersAppearance();
     //console.log("click event.target = ", event.target);
   }
 
@@ -247,10 +252,26 @@ export class MainComponent implements AfterViewInit {
     this.iframePart.runCode(param);
   }
 
-  resetResizersAppearance(){
-    this.mainResizerFloor.nativeElement.classList.add("hide");
-    this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
+  isMobileMode(){
+    return (window.innerWidth < 768 || window.innerHeight < 581);
   }
+
+  getCodePartsHeight(){
+    if(this.isMobileMode){
+      return !this.showResult ? '100%':'';
+    }
+    else{
+      if(this.layout == 1 || this.layout == 3){
+        return "";
+      }
+    }
+  }
+
+  getCodePartsWidth(){
+    if(this.layout == 1 || this.layout == 3){
+      return this.codePartsWidth;
+    }
+  } 
 
   toggleCodePart(codeType: string): void{
     switch(codeType){
@@ -345,7 +366,6 @@ export class MainComponent implements AfterViewInit {
   }
 
   mainResizerMousedownHandler(event){
-    this.mainResizerFloor.nativeElement.classList.remove("hide");
     //console.log("angular mousedown event: ", event);
   }
 
@@ -368,13 +388,11 @@ export class MainComponent implements AfterViewInit {
       this.codeParts.nativeElement.style.width = this.mainResizerRight;
       this.codeParts.nativeElement.style.minWidth = this.mainResizerRight; 
     }
-    this.mainResizerFloor.nativeElement.classList.add("hide");
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }
   
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
-    this.resetResizersAppearance();
     console.log("mouseup event: ", event);
     let cssPartEl : HTMLElement = this.cssPart.nativeElement;
     let htmlPartEl : HTMLElement = this.htmlPart.nativeElement;
@@ -486,6 +504,9 @@ export class MainComponent implements AfterViewInit {
   }
 
   triggerResizeWithInterval(){
+    if(this.customInterval){
+      clearInterval(this.customInterval);
+    }
       this.customInterval = setInterval(()=>{
         console.log("inside triggerResizeWithInterval");
         window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));

@@ -61,7 +61,7 @@
             <span>Run and share</span>
         </button>
         <button class="share-code-btn" (click)="runCode()">
-            <span>Run code</span>
+            <span>Run</span>
         </button>
     </div>
 </header>
@@ -73,9 +73,8 @@
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
     <div id="code-parts" #codeParts [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" 
-    [ngStyle]="{'width':'300px', 'height': !showResult ? '100%':'','max-height': !showResult ? '100%':''}"
+    [ngStyle]="{'width':getCodePartsWidth(), 'height': getCodePartsHeight(),'max-height': !showResult ? '100%':''}"
     (dragover)="null" (mousemove)="codePartsMousemove($event)">
-        <!--<div #verticalResizerFloor class="vertical-resizer-floor hide" ></div>-->
         <div class="code-component-container code-component-container-html" 
         [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" [ngStyle]="{'z-index':1}" #htmlPart>
             <div class="code-part-title">
@@ -123,13 +122,9 @@
             <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
         </div>
     </div>
-    <div #mainResizerFloor class="main-resizer-floor hide" ></div>
-    <div draggable="true" #mainResizer id="main-resizer" 
-    (mousedown)="mainResizerMousedownHandler($event)" 
-    (dragstart)="mainResizerDragstartHandler($event)" 
-    (dragend)="mainResizerDragendHandler($event)"
-    [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" [ngClass]="{'resize-mode':mainResizeMode}"></div>
-    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult}" 
+    <div #mainResizer id="main-resizer" (mousedown)="mainResizerMousedownHandler($event)" [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" 
+    [ngClass]="{'resize-mode':mainResizeMode, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}"></div>
+    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" 
     [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}" 
     #iframePart></app-iframe-part>
 </div>
