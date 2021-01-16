@@ -83,7 +83,7 @@ export class IframePartComponent implements OnInit {
           let copyCommand = document.execCommand("copy");
         }
         self.mainService.redirectMode = true;
-        self.router.navigate([environment.appName+"/"+fiddleId]);
+        self.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle saved.", "Fiddle URL copied to clipboard.");
       }
     });
