@@ -121,15 +121,17 @@
     border:none;
     z-index:101;
 }
-#main-resizer.layout-type-1,#main-resizer.layout-type-3{
+#main-resizer.layout-type-1,
+#main-resizer.layout-type-3{
     width: 12px;
     cursor: col-resize;
     height:100%;
 }
 
-#main-resizer.resize-mode{
+/*#main-resizer.resize-mode{
     background-image:repeating-linear-gradient(#bbb, #bbb 15px, #FFFFFF 15px, #FFFFFF 20px);
-}
+}*/
+
 #main-resizer:hover {
     background-color: #afafaf;
 }

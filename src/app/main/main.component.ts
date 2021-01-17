@@ -2,6 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit }
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
+import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 @Component({
   selector: 'app-main',
@@ -46,14 +47,18 @@ export class MainComponent implements AfterViewInit {
   
   cssMousedownY: number = 0;
   jsMousedownY: number = 0;
+  mainResizerMousedownX: number = 0;
+  mainResizerMousedownY: number = 0;
 
   mainResizeMode:boolean = false;
   verticalResizeType:string = "";
   customInterval: any;
 
   @ViewChild("mainResizer") mainResizer:ElementRef;
+  @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
+
+  @ViewChild("mainContainer") mainContainer:ElementRef;
   @ViewChild("codeParts") codeParts:ElementRef;
-  
   @ViewChild("htmlPart") htmlPart:ElementRef;
   @ViewChild("cssPart") cssPart:ElementRef;
   @ViewChild("jsPart") jsPart:ElementRef;
@@ -129,21 +134,21 @@ export class MainComponent implements AfterViewInit {
         htmlPartEl.style.height = this.htmlPartHeight + "px";
         this.htmlPartTop = 0;
         htmlPartEl.style.top = this.htmlPartTop + "px";
-        console.log("htmlPartHeight = ", this.htmlPartHeight);
+        //console.log("htmlPartHeight = ", this.htmlPartHeight);
       }
       if(cssPartEl){
         this.cssPartHeight = codePartsHeight / 3;
         cssPartEl.style.height = this.cssPartHeight + "px";
         this.cssPartTop = codePartsHeight / 3;
         cssPartEl.style.top = this.cssPartTop + "px";
-        console.log("cssPartHeight = ", this.cssPartHeight);
+        //console.log("cssPartHeight = ", this.cssPartHeight);
       }
       if(jsPartEl){
         this.jsPartHeight = codePartsHeight / 3;
         jsPartEl.style.height = this.jsPartHeight + "px";
         this.jsPartTop = codePartsHeight * 2 / 3;
         jsPartEl.style.top = this.jsPartTop + "px";
-        console.log("jsPartHeight = ", this.jsPartHeight);
+        //console.log("jsPartHeight = ", this.jsPartHeight);
       }
     }
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
@@ -161,9 +166,9 @@ export class MainComponent implements AfterViewInit {
           this.mainResizerLeft = "425px";
           //mainResizerEl.style.right = "auto";
           this.mainResizerRight = "auto";
-          codePartsEl.style.width = "425px";
+          //codePartsEl.style.width = "425px";
           this.codePartsWidth = "425px";
-          codePartsEl.style.minWidth = "425px";
+          //codePartsEl.style.minWidth = "425px";
           (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
           (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
           (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
@@ -234,6 +239,11 @@ export class MainComponent implements AfterViewInit {
     let editorLayoutFixInterval = window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, 1);
+  }
+
+  resetResizersAppearance(){
+    this.mainResizerFloor.nativeElement.classList.add("hide");
+    this.mainResizerFloor.nativeElement.classList.remove("resize-mode");
   }
 
 
@@ -365,8 +375,82 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  mainResizerMousedownHandler(event){
+  mainResizerMousedownHandler(event:MouseEvent){
     //console.log("angular mousedown event: ", event);
+    this.mainResizeMode = true;
+    this.mainResizerMousedownX = event.clientX;
+    this.triggerResizeWithInterval(50);
+  }
+  mainContainerMousemove(event){
+
+    if(this.mainResizeMode){//css resizing ?
+      let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+      let mainContainerWidth = mainContainerEl.offsetWidth;
+      let newXMouvement = (event.clientX - this.mainResizerMousedownX);
+      if(this.layout == 1){
+        
+        let newMainResizerLeft = parseInt(this.mainResizerLeft) + newXMouvement;
+        if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
+          (<HTMLElement>this.mainResizer.nativeElement).style.left = newMainResizerLeft + "px";
+          (<HTMLElement>this.codeParts.nativeElement).style.width = newMainResizerLeft + "px";
+          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = newMainResizerLeft + "px";
+        }
+      }
+      else if(this.layout == 3){
+        let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
+        if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
+          (<HTMLElement>this.mainResizer.nativeElement).style.left = "auto";
+          (<HTMLElement>this.mainResizer.nativeElement).style.right = mainContainerWidth - newMainResizerLeft + "px";
+          (<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
+          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
+        }
+      }
+
+      /*if(this.mainResizeMode){
+        if(this.layout == 1 || this.layout == 3){
+          let left = event.clientX - 5;
+          let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
+          if(this.layout == 1){
+            if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
+              this.mainResizerLeft = left + "px";
+              this.mainResizerRight = "auto"; 
+              this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
+              this.mainResizer.nativeElement.style.right = this.mainResizerRight;
+            }
+          }
+          else if(this.layout == 3){
+            if(left < (window.innerWidth - 250) && left > mainContainerElement.getBoundingClientRect().left - 8){
+              this.mainResizerLeft = "auto";
+              this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
+              this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
+              this.mainResizer.nativeElement.style.right = this.mainResizerRight;
+            }
+          }
+        }
+      }*/
+
+      /*if(newCssPartTop <= (codePartsHeight - 64) && newCssPartTop > 32){//within valid range ?
+        cssCodePart.style.top = newCssPartTop + "px";
+
+        if(this.jsPartTop - 32 <= newCssPartTop){//Css titleBar eached Js titleBar ?
+          this.jsPartTop = newCssPartTop + 32;
+          jsCodePart.style.top = this.jsPartTop + "px"
+        }
+      }
+      else if(newCssPartTop <= 32){//upper limit reached ?
+        cssCodePart.style.top = "32px";
+      }
+      else if (newCssPartTop >= codePartsHeight- 64){//lower limit reached ?
+        cssCodePart.style.top = codePartsHeight- 64 + "px";
+        this.jsPartTop = codePartsHeight - 32;
+        jsCodePart.style.top = this.jsPartTop + "px"
+      }
+      this.cssPartHeight = this.jsPartTop - newCssPartTop;
+      cssCodePart.style.height = (this.jsPartTop - newCssPartTop) + "px";
+      this.resizeCodeParts();*/
+
+    }
+    //console.log("main container mouse move!");
   }
 
   mainResizerDragstartHandler(event: any){
@@ -393,7 +477,7 @@ export class MainComponent implements AfterViewInit {
   
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
-    console.log("mouseup event: ", event);
+    //console.log("mouseup event: ", event);
     let cssPartEl : HTMLElement = this.cssPart.nativeElement;
     let htmlPartEl : HTMLElement = this.htmlPart.nativeElement;
     let jsPartEl : HTMLElement = this.jsPart.nativeElement;
@@ -402,13 +486,26 @@ export class MainComponent implements AfterViewInit {
     this.htmlPartHeight =  htmlPartEl.offsetHeight;
     this.jsPartHeight =  jsPartEl.offsetHeight;
 
-    if(this.cssVerticalResizeMode){
-      this.cssVerticalResizeMode = false;
-      this.cssPartTop = parseInt(cssPartEl.style.top);
-    }
-    if(this.jsVerticalResizeMode){
-      this.jsVerticalResizeMode = false;
-      this.jsPartTop = parseInt(jsPartEl.style.top);
+    if(this.layout == 1 || this.layout == 3){
+      if(this.cssVerticalResizeMode){
+        this.cssVerticalResizeMode = false;
+        this.cssPartTop = parseInt(cssPartEl.style.top);
+      }
+      if(this.jsVerticalResizeMode){
+        this.jsVerticalResizeMode = false;
+        this.jsPartTop = parseInt(jsPartEl.style.top);
+      }
+
+      if(this.mainResizeMode){
+        this.mainResizeMode = false;
+        this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
+        if(this.layout == 1){
+          this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
+        }
+        else if(this.layout == 3){
+          this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
+        }
+      }
     }
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     
@@ -419,22 +516,22 @@ export class MainComponent implements AfterViewInit {
   }
   
   codePartsTitleMousedown(event: MouseEvent, mode){
-    console.log("codePartsTitleMousedown event = ", event);
-    console.log("codePartsTitleMousedown mode = ", mode)
+    //console.log("codePartsTitleMousedown event = ", event);
+    //console.log("codePartsTitleMousedown mode = ", mode)
     if(this.layout == 1 || this.layout == 3){
       switch(mode){
         case "css":
         this.cssCodePartTitle = <HTMLElement>event.target;
         this.cssMousedownY = event.clientY;
         this.cssVerticalResizeMode = true;
-        this.triggerResizeWithInterval();
+        this.triggerResizeWithInterval(150);
         break;
   
         case "js":
         this.jsCodePartTitle = <HTMLElement>event.target;
         this.jsMousedownY = event.clientY;
         this.jsVerticalResizeMode = true;
-        this.triggerResizeWithInterval();
+        this.triggerResizeWithInterval(150);
         break;
       }
     }
@@ -503,14 +600,14 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  triggerResizeWithInterval(){
+  triggerResizeWithInterval(timeout){
     if(this.customInterval){
       clearInterval(this.customInterval);
     }
       this.customInterval = setInterval(()=>{
-        console.log("inside triggerResizeWithInterval");
+        //console.log("inside triggerResizeWithInterval");
         window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-      }, 150); 
+      }, timeout); 
   }
 
   resizeCodeParts(){
