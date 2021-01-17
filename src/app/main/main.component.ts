@@ -151,7 +151,9 @@ export class MainComponent implements AfterViewInit {
         //console.log("jsPartHeight = ", this.jsPartHeight);
       }
     }
-    window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    window.setTimeout(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 0);
   }
 
   changeLayout(newLayout: number){
@@ -172,6 +174,7 @@ export class MainComponent implements AfterViewInit {
           (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
           (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
           (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
+          this.initCodeParts(this.layout);
           break;
           case 2:
           break;
@@ -186,10 +189,10 @@ export class MainComponent implements AfterViewInit {
           (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
           (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
           (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
+          this.initCodeParts(this.layout);
           break;
           case 4:
         }
-        this.initCodeParts(this.layout);
       }
     }
   }
@@ -405,49 +408,6 @@ export class MainComponent implements AfterViewInit {
           (<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
         }
       }
-
-      /*if(this.mainResizeMode){
-        if(this.layout == 1 || this.layout == 3){
-          let left = event.clientX - 5;
-          let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
-          if(this.layout == 1){
-            if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
-              this.mainResizerLeft = left + "px";
-              this.mainResizerRight = "auto"; 
-              this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
-              this.mainResizer.nativeElement.style.right = this.mainResizerRight;
-            }
-          }
-          else if(this.layout == 3){
-            if(left < (window.innerWidth - 250) && left > mainContainerElement.getBoundingClientRect().left - 8){
-              this.mainResizerLeft = "auto";
-              this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
-              this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
-              this.mainResizer.nativeElement.style.right = this.mainResizerRight;
-            }
-          }
-        }
-      }*/
-
-      /*if(newCssPartTop <= (codePartsHeight - 64) && newCssPartTop > 32){//within valid range ?
-        cssCodePart.style.top = newCssPartTop + "px";
-
-        if(this.jsPartTop - 32 <= newCssPartTop){//Css titleBar eached Js titleBar ?
-          this.jsPartTop = newCssPartTop + 32;
-          jsCodePart.style.top = this.jsPartTop + "px"
-        }
-      }
-      else if(newCssPartTop <= 32){//upper limit reached ?
-        cssCodePart.style.top = "32px";
-      }
-      else if (newCssPartTop >= codePartsHeight- 64){//lower limit reached ?
-        cssCodePart.style.top = codePartsHeight- 64 + "px";
-        this.jsPartTop = codePartsHeight - 32;
-        jsCodePart.style.top = this.jsPartTop + "px"
-      }
-      this.cssPartHeight = this.jsPartTop - newCssPartTop;
-      cssCodePart.style.height = (this.jsPartTop - newCssPartTop) + "px";
-      this.resizeCodeParts();*/
 
     }
     //console.log("main container mouse move!");
