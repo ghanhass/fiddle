@@ -37,6 +37,7 @@
 .code-part-title > span {
     color: #797979;
     user-select:none;
+    pointer-events: none;
 }
 
 .code-part-title-btns-container{

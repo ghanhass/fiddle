@@ -19,13 +19,6 @@ export class MainComponent implements AfterViewInit {
   isHtmlFullScreen: boolean = false;
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
-
-
-  resizeModeDragImg: Element = (function(){
-    let el = new Image();
-    el.src="data:image/png;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=";
-    return el;
-  })();
   
   mainResizerLeft: string = "425px";
   mainResizerRight: string = "auto";
@@ -351,49 +344,35 @@ export class MainComponent implements AfterViewInit {
     }, 50);
   }
 
-  /*START dragover event handler(s)*/
-  mainContainerDragoverHandler(event){
-    if(!this.verticalResizeMode){
-      //console.log("angular dragover event: ", event);
-      if(this.layout == 1 || this.layout == 3){
-        let left = event.clientX - 5;
-        let mainContainerElement: Element = this.codeParts.nativeElement.parentNode;
-        if(this.layout == 1){
-          if(left >= 250 && left < mainContainerElement.getBoundingClientRect().right - 8){
-            this.mainResizerLeft = left + "px";
-            this.mainResizerRight = "auto"; 
-            this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
-            this.mainResizer.nativeElement.style.right = this.mainResizerRight;
-          }
-        }
-        else if(this.layout == 3){
-          if(left < (window.innerWidth - 250) && left > mainContainerElement.getBoundingClientRect().left - 8){
-            this.mainResizerLeft = "auto";
-            this.mainResizerRight = (window.innerWidth - event.clientX) - 10 + "px"; 
-            this.mainResizer.nativeElement.style.left = this.mainResizerLeft;
-            this.mainResizer.nativeElement.style.right = this.mainResizerRight;
-          }
-        }
-      }
-    }
-  }
-
   mainResizerMousedownHandler(event:MouseEvent){
-    //console.log("angular mousedown event: ", event);
+    console.log("angular mousedown event: ", event);
     this.mainResizeMode = true;
     this.mainResizerMousedownX = event.clientX;
     this.triggerResizeWithInterval(50);
   }
-  mainContainerMousemove(event){
 
-    if(this.mainResizeMode){//css resizing ?
+  mainResizerDragstartHandlder(event: DragEvent){
+    event.dataTransfer.setData("text/html", null);
+    //console.log("angular dragstart event: ", event);
+    let src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
+    let img = new Image();
+    img.src = src;
+    event.dataTransfer.setDragImage(img,0,0);
+    /*this.mainResizeMode = true;
+    this.mainResizerMousedownX = event.clientX;
+    this.triggerResizeWithInterval(50);*/
+  }
+
+  mainContainerDragover(event){
+    //console.log("mainContainerDragover");
+    if(this.mainResizeMode){//main resizer working ?
       let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
       let mainContainerWidth = mainContainerEl.offsetWidth;
       let newXMouvement = (event.clientX - this.mainResizerMousedownX);
       if(this.layout == 1){
-        
         let newMainResizerLeft = parseInt(this.mainResizerLeft) + newXMouvement;
         if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
+          //console.log("mainContainerDragover layout 1");
           (<HTMLElement>this.mainResizer.nativeElement).style.left = newMainResizerLeft + "px";
           (<HTMLElement>this.codeParts.nativeElement).style.width = newMainResizerLeft + "px";
           (<HTMLElement>this.codeParts.nativeElement).style.minWidth = newMainResizerLeft + "px";
@@ -402,6 +381,7 @@ export class MainComponent implements AfterViewInit {
       else if(this.layout == 3){
         let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
         if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
+          //console.log("mainContainerDragover layout 3");
           (<HTMLElement>this.mainResizer.nativeElement).style.left = "auto";
           (<HTMLElement>this.mainResizer.nativeElement).style.right = mainContainerWidth - newMainResizerLeft + "px";
           (<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
@@ -411,28 +391,6 @@ export class MainComponent implements AfterViewInit {
 
     }
     //console.log("main container mouse move!");
-  }
-
-  mainResizerDragstartHandler(event: any){
-    //console.log("angular mainResizerDragstartHandler event: ", event);
-    event.dataTransfer.setData('text/plain', '');
-    event.dataTransfer.setDragImage(this.resizeModeDragImg, 99999, 99999);
-    this.mainResizeMode = true;
-    this.mainResizerLeft = (event.target.getBoundingClientRect().left - 5) + "px";
-  }
-
-  mainResizerDragendHandler(event){
-    this.mainResizeMode = false;
-    //console.log("angular mainResizerDragendHandler event: ", event);
-    if(this.layout == 1){
-      this.codeParts.nativeElement.style.width = this.mainResizerLeft;
-      this.codeParts.nativeElement.style.minWidth = this.mainResizerLeft; 
-    }
-    else if(this.layout == 3){
-      this.codeParts.nativeElement.style.width = this.mainResizerRight;
-      this.codeParts.nativeElement.style.minWidth = this.mainResizerRight; 
-    }
-    window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
   }
   
   @HostListener("window:mouseup", ["$event"])
@@ -455,17 +413,6 @@ export class MainComponent implements AfterViewInit {
         this.jsVerticalResizeMode = false;
         this.jsPartTop = parseInt(jsPartEl.style.top);
       }
-
-      if(this.mainResizeMode){
-        this.mainResizeMode = false;
-        this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
-        if(this.layout == 1){
-          this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
-        }
-        else if(this.layout == 3){
-          this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
-        }
-      }
     }
     window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     
@@ -473,6 +420,36 @@ export class MainComponent implements AfterViewInit {
       clearInterval(this.customInterval);
     }
     
+  }
+
+  mainResizerDragend(event){
+    console.log("mainResizerDragend!");
+    if(this.mainResizeMode){
+      this.mainResizeMode = false;
+      this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
+      if(this.layout == 1){
+        this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
+      }
+      else if(this.layout == 3){
+        this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
+      }
+    }
+  }
+
+  mainContainerMouseup(event){
+    /*
+    console.log("mainContainerMouseup!");
+    if(this.mainResizeMode){
+      this.mainResizeMode = false;
+      this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
+      if(this.layout == 1){
+        this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
+      }
+      else if(this.layout == 3){
+        this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
+      }
+    }
+    */
   }
   
   codePartsTitleMousedown(event: MouseEvent, mode){
@@ -498,6 +475,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   codePartsMousemove(event: MouseEvent){
+    event.stopPropagation();
     let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     let cssCodePart:HTMLElement = this.cssPart.nativeElement;
     let jsCodePart:HTMLElement = this.jsPart.nativeElement;

@@ -65,7 +65,7 @@
         </button>
     </div>
 </header>
-<div class="main-container" (mousemove)="mainContainerMousemove($event)" [ngClass]="'layout-type-'+layout" #mainContainer>
+<div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer>
     <div id="code-parts-title-mobile">
         <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
         <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
@@ -73,8 +73,7 @@
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
     <div id="code-parts" #codeParts [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" 
-    [ngStyle]="{'width':getCodePartsWidth(), 'min-width': getCodePartsWidth(), 'height': getCodePartsHeight(),'max-height': !showResult ? '100%':''}"
-    (dragover)="null" (mousemove)="codePartsMousemove($event)">
+    [ngStyle]="{'width':getCodePartsWidth(), 'min-width': getCodePartsWidth(), 'height': getCodePartsHeight(),'max-height': !showResult ? '100%':''}" (mousemove)="codePartsMousemove($event)">
         <div class="code-component-container code-component-container-html" 
         [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" [ngStyle]="{'z-index':1}" #htmlPart>
             <div class="code-part-title">
@@ -122,9 +121,9 @@
             <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
         </div>
     </div>
-    <div #mainResizerFloor [ngClass]="{'main-resizer-floor': true, 'hide': !mainResizeMode}" ></div>
-    <div #mainResizer id="main-resizer" (mousedown)="mainResizerMousedownHandler($event)" [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" 
-    [ngClass]="{'resize-mode':mainResizeMode, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}"></div>
+    <div #mainResizerFloor [ngClass]="{'main-resizer-floor': true, 'hide': !mainResizeMode}" (mouseup)="mainContainerMouseup($event)" (dragover)="mainContainerDragover($event)"></div>
+    <div #mainResizer id="main-resizer" (dragstart)="mainResizerDragstartHandlder($event)" (mousedown)="mainResizerMousedownHandler($event)" [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" 
+    [ngClass]="{'resize-mode':mainResizeMode, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" draggable="true" (dragend)="mainResizerDragend($event)"></div>
     <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" 
     [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}" 
     #iframePart></app-iframe-part>
