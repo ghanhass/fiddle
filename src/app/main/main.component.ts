@@ -559,4 +559,82 @@ export class MainComponent implements AfterViewInit {
 
   }
 
+  expandHtml(){
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
+    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
+    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
+    
+    if(this.layout == 1 || this.layout == 3){
+      this.htmlPartHeight = codePartsEl.offsetHeight - 64;
+      htmlPartEl.style.height = this.htmlPartHeight + "px";
+
+      cssPartEl.style.height = "32px";
+      this.cssPartHeight = 32;
+      this.cssPartTop = codePartsEl.offsetHeight - 64;
+      cssPartEl.style.top = this.cssPartTop + "px";
+
+      jsPartEl.style.height = "32px";
+      this.jsPartHeight = 32;
+      this.jsPartTop = codePartsEl.offsetHeight - 32;
+      jsPartEl.style.top = this.jsPartTop + "px";
+    }
+    
+    window.setTimeout(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 0);
+  }
+
+  expandCss(){
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
+    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
+    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
+
+    if(this.layout == 1 || this.layout == 3){
+      this.htmlPartHeight = 32;
+      htmlPartEl.style.height = this.htmlPartHeight + "px";
+
+      this.cssPartHeight = codePartsEl.offsetHeight - 64;
+      cssPartEl.style.height = this.cssPartHeight + "px";
+      this.cssPartTop = 32;
+      cssPartEl.style.top = this.cssPartTop + "px";
+
+      jsPartEl.style.height = "32px";
+      this.jsPartHeight = 32;
+      this.jsPartTop = codePartsEl.offsetHeight - 32;
+      jsPartEl.style.top = this.jsPartTop + "px";
+    }
+
+    window.setTimeout(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 0);
+  }
+
+  expandJs(){
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
+    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
+    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
+
+    if(this.layout == 1 || this.layout == 3){
+      this.htmlPartHeight = 32;
+      htmlPartEl.style.height = this.htmlPartHeight + "px";
+
+      this.cssPartHeight = 32;
+      cssPartEl.style.height = this.cssPartHeight + "px";
+      this.cssPartTop = 32;
+      cssPartEl.style.top = this.cssPartTop + "px";
+
+      this.jsPartHeight = codePartsEl.offsetHeight - 64;
+      jsPartEl.style.height = this.jsPartHeight + "px";
+      this.jsPartTop = 64;
+      jsPartEl.style.top = this.jsPartTop + "px";
+    }
+
+    window.setTimeout(()=>{
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, 0);
+  }
+
 }
