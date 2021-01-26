@@ -129,9 +129,10 @@
     height:100%;
 }
 
-/*#main-resizer.resize-mode{
+#main-resizer.resize-mode.layout-type-1,
+#main-resizer.resize-mode.layout-type-3{
     background-image:repeating-linear-gradient(#bbb, #bbb 15px, #FFFFFF 15px, #FFFFFF 20px);
-}*/
+}
 
 #main-resizer:hover {
     background-color: #afafaf;

@@ -351,16 +351,6 @@ export class MainComponent implements AfterViewInit {
     let img = new Image();
     img.src = src;
     event.dataTransfer.setDragImage(img,0,0);
-    /*this.mainResizeMode = true;
-    this.mainResizerMousedownX = event.clientX;
-    this.triggerResizeWithInterval(50);*/
-  }
-
-  mainResizerMousedownHandler(event:MouseEvent){
-    console.log("angular mousedown event: ", event);
-    this.mainResizeMode = true;
-    this.mainResizerMousedownX = event.clientX;
-    this.triggerResizeWithInterval(50);
   }
 
   mainContainerDragover(event){
@@ -390,14 +380,17 @@ export class MainComponent implements AfterViewInit {
   }
 
   mainContainerMouseup(event){
-    
-    
-
     console.log("mainContainerMouseup!");
-    
-    
   }
   
+
+  mainResizerMousedownHandler(event:MouseEvent){
+    console.log("angular mousedown event: ", event);  
+    this.mainResizeMode = true;
+    this.mainResizerMousedownX = event.clientX;
+    this.triggerResizeWithInterval(50);
+  }
+
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
     console.log("mouseup event: ", event);
@@ -446,12 +439,10 @@ export class MainComponent implements AfterViewInit {
       }
       else if(this.layout == 3){
         this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
-        let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
-        if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
+        let newMainResizerRight = parseInt(this.mainResizerRight);
+        if(newMainResizerRight > 300 && newMainResizerRight < (mainContainerWidth - 11)){
           //console.log("mainContainerDragover layout 3");
-          this.codePartsWidth = mainContainerWidth - newMainResizerLeft + "px";
-          //(<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
-          //(<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
+          this.codePartsWidth = newMainResizerRight + "px";
         }
       }
     }
