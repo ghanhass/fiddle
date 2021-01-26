@@ -84,7 +84,7 @@ export class IframePartComponent implements OnInit {
         }
         self.mainService.redirectMode = true;
         self.router.navigate(["/"+fiddleId]);
-        this.toastrService.success("Fiddle saved.", "Fiddle URL copied to clipboard.");
+        this.toastrService.success("Fiddle URL copied to clipboard.");
       }
     });
   }
