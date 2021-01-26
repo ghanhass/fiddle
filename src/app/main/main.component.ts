@@ -344,13 +344,6 @@ export class MainComponent implements AfterViewInit {
     }, 50);
   }
 
-  mainResizerMousedownHandler(event:MouseEvent){
-    console.log("angular mousedown event: ", event);
-    this.mainResizeMode = true;
-    this.mainResizerMousedownX = event.clientX;
-    this.triggerResizeWithInterval(50);
-  }
-
   mainResizerDragstartHandlder(event: DragEvent){
     event.dataTransfer.setData("text/html", null);
     //console.log("angular dragstart event: ", event);
@@ -361,6 +354,13 @@ export class MainComponent implements AfterViewInit {
     /*this.mainResizeMode = true;
     this.mainResizerMousedownX = event.clientX;
     this.triggerResizeWithInterval(50);*/
+  }
+
+  mainResizerMousedownHandler(event:MouseEvent){
+    console.log("angular mousedown event: ", event);
+    this.mainResizeMode = true;
+    this.mainResizerMousedownX = event.clientX;
+    this.triggerResizeWithInterval(50);
   }
 
   mainContainerDragover(event){
@@ -374,8 +374,6 @@ export class MainComponent implements AfterViewInit {
         if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
           //console.log("mainContainerDragover layout 1");
           (<HTMLElement>this.mainResizer.nativeElement).style.left = newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.width = newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = newMainResizerLeft + "px";
         }
       }
       else if(this.layout == 3){
@@ -384,18 +382,25 @@ export class MainComponent implements AfterViewInit {
           //console.log("mainContainerDragover layout 3");
           (<HTMLElement>this.mainResizer.nativeElement).style.left = "auto";
           (<HTMLElement>this.mainResizer.nativeElement).style.right = mainContainerWidth - newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
         }
       }
 
     }
     //console.log("main container mouse move!");
   }
+
+  mainContainerMouseup(event){
+    
+    
+
+    console.log("mainContainerMouseup!");
+    
+    
+  }
   
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
-    //console.log("mouseup event: ", event);
+    console.log("mouseup event: ", event);
     let cssPartEl : HTMLElement = this.cssPart.nativeElement;
     let htmlPartEl : HTMLElement = this.htmlPart.nativeElement;
     let jsPartEl : HTMLElement = this.jsPart.nativeElement;
@@ -424,32 +429,32 @@ export class MainComponent implements AfterViewInit {
 
   mainResizerDragend(event){
     console.log("mainResizerDragend!");
-    if(this.mainResizeMode){
-      this.mainResizeMode = false;
-      this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
-      if(this.layout == 1){
-        this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
-      }
-      else if(this.layout == 3){
-        this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
-      }
-    }
-  }
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    let mainContainerWidth = mainContainerEl.offsetWidth;
+    let newXMouvement = (event.clientX - this.mainResizerMousedownX);
 
-  mainContainerMouseup(event){
-    /*
-    console.log("mainContainerMouseup!");
     if(this.mainResizeMode){
       this.mainResizeMode = false;
-      this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
+      //this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
       if(this.layout == 1){
         this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
+        let newMainResizerLeft = parseInt(this.mainResizerLeft);
+        if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
+          //console.log("mainContainerDragover layout 1");
+          this.codePartsWidth = newMainResizerLeft + "px";
+        }
       }
       else if(this.layout == 3){
         this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
+        let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
+        if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
+          //console.log("mainContainerDragover layout 3");
+          this.codePartsWidth = mainContainerWidth - newMainResizerLeft + "px";
+          //(<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
+          //(<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
+        }
       }
     }
-    */
   }
   
   codePartsTitleMousedown(event: MouseEvent, mode){
