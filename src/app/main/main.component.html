@@ -65,7 +65,7 @@
         </button>
     </div>
 </header>
-<div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer>
+<div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer (mousemove)="mainContainerMousemove($event)">
     <div id="code-parts-title-mobile">
         <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
         <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
@@ -121,7 +121,7 @@
             <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
         </div>
     </div>
-    <div #mainResizerFloor [ngClass]="{'main-resizer-floor': true, 'hide': !mainResizeMode}" (mousemove)="mainContainerMousemove($event)"></div>
+    <div #mainResizerFloor [ngClass]="{'main-resizer-floor': true, 'hide': !mainResizeMode}"></div>
     <div #mainResizer id="main-resizer" [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" 
     [ngClass]="{'resize-mode':mainResizeMode, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (mousedown)="mainResizerMousedownHandler($event)"></div>
     <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" 

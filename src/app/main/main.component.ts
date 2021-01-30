@@ -451,14 +451,14 @@ export class MainComponent implements AfterViewInit {
     //console.log("main container mouse move!");
   }*/
   mainResizerMousedownHandler(event:MouseEvent){
-    //console.log("angular mousedown event: ", event);
+    console.log("angular mousedown event: ", event);
     this.mainResizeMode = true;
     this.mainResizerMousedownX = event.clientX;
     this.triggerResizeWithInterval(50);
   }
 
   mainContainerMousemove(event){
-
+    //console.log("angular mousemove event: ", event);
     if(this.mainResizeMode){//main resizing ?
       let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
       let mainContainerWidth = mainContainerEl.offsetWidth;
@@ -488,7 +488,7 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:mouseup", ["$event"])
   onWindowMouseup(event){
-    //console.log("mouseup event: ", event);
+    console.log("mouseup event: ", event);
     let cssPartEl : HTMLElement = this.cssPart.nativeElement;
     let htmlPartEl : HTMLElement = this.htmlPart.nativeElement;
     let jsPartEl : HTMLElement = this.jsPart.nativeElement;
@@ -577,7 +577,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   codePartsMousemove(event: MouseEvent){
-    event.stopPropagation();
+    //event.stopPropagation();
     let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     let cssCodePart:HTMLElement = this.cssPart.nativeElement;
     let jsCodePart:HTMLElement = this.jsPart.nativeElement;
