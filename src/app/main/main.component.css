@@ -269,11 +269,11 @@ app-iframe-part{
 .layouts-list-container > span i.fa{
     position: absolute;
     right: 0;
-    bottom: 5px;
+    bottom: 7px;
 }
 
 .layouts-list-container.shown > span i.fa-sort-asc{
-    bottom: -2px;
+    bottom: 0px;
 }
 
 .layout{

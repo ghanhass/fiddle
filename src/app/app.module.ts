@@ -26,7 +26,7 @@ import { ModalComponent } from './modal/modal.component';
     JsPartComponent,
     IframePartComponent,
     LoaderComponent,
-    ModalComponent
+    ModalComponent,
   ],
   imports: [
     BrowserModule,

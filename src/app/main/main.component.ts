@@ -2,7 +2,7 @@ import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit }
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
-import { isGeneratedFile } from '@angular/compiler/src/aot/util';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'app-main',
@@ -62,6 +62,8 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("layout2") layout2: ElementRef;
   @ViewChild("layout3") layout3: ElementRef;
   @ViewChild("layoutsList") layoutsList: ElementRef;
+
+  @ViewChild("modal") modal: ModalComponent;
 
   cssCodePartTitle: HTMLElement;
   jsCodePartTitle: HTMLElement;
@@ -328,10 +330,6 @@ export class MainComponent implements AfterViewInit {
 
   runCode(param?){
     this.iframePart.runCode(param);
-  }
-
-  ressouresBtnClick(){
-    
   }
 
   isMobileMode(){
@@ -745,6 +743,14 @@ export class MainComponent implements AfterViewInit {
     window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, 0);
+  }
+
+  hideModal(){
+    this.modal.hide();
+  }
+
+  ressouresBtnClick(){
+    this.modal.show();
   }
 
 }

@@ -131,3 +131,8 @@
     [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}" 
     #iframePart></app-iframe-part>
 </div>
+<app-modal #modal>
+    <div class="modal-header"><button (click)="hideModal()">X</button></div>
+    <div class="modal-body"></div>
+    <div class="modal-footer"></div>
+</app-modal>

@@ -9,6 +9,20 @@ export class ModalComponent implements OnInit {
 
   constructor() { }
 
+  private isVisible: boolean = false;
+
+  show(){
+    this.isVisible = true;
+  }
+
+  hide(){
+    this.isVisible = false;
+  }
+
+  isShown(){
+    return this.isVisible;
+  }
+
   ngOnInit(): void {
   }
 
