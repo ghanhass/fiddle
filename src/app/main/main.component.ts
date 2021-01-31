@@ -330,6 +330,10 @@ export class MainComponent implements AfterViewInit {
     this.iframePart.runCode(param);
   }
 
+  ressouresBtnClick(){
+    
+  }
+
   isMobileMode(){
     return (window.innerWidth < 768 || window.innerHeight < 581);
   }

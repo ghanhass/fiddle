@@ -182,7 +182,8 @@ app-iframe-part{
     margin-right:5px;
 }
 
-.share-code-btn{
+.share-code-btn,
+.ressources-code-btn{
     height: calc(100% - 10px);
     font-size: 16px;
     cursor: pointer;
@@ -192,9 +193,24 @@ app-iframe-part{
     border-style: solid;
     border-color: rgb(118, 118, 118);
     user-select: none;
+    color:rgb(0,0,0);
+    outline: none;
+    padding-left: 6px;
+    padding-right: 6px;
 }
 
-.share-code-btn span{
+.share-code-btn:active,
+.ressources-code-btn:active{
+    color:rgb(0,0,0);
+    padding-top: 2px;
+}
+.share-code-btn:hover,
+.ressources-code-btn:hover{
+    background-color: #FFFFFF;
+}
+
+.share-code-btn span,
+.ressources-code-btn span{
     display:block;
 }
 
@@ -228,6 +244,19 @@ app-iframe-part{
     cursor: pointer;
     user-select: none;
     position: relative;
+    color:rgb(0,0,0);
+    outline: none;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.layouts-list-container:active{
+    color:rgb(0,0,0);
+    padding-top: 2px;
+}
+
+.layouts-list-container:hover{
+    background-color: #FFFFFF;
 }
 
 .layouts-list-container > span{

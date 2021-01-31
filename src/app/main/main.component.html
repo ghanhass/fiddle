@@ -1,6 +1,9 @@
 <header id="main-header">
     <div class="header-btns-container">
-        <div class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
+        <button class="ressources-code-btn" (click)="ressouresBtnClick()">
+            <span>Ressources</span>
+        </button>
+        <button class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
             <span>Layouts <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
             </span>
             <div class="layouts-list" #layoutsList>
@@ -56,7 +59,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </button>
         <button class="share-code-btn" (click)="runCode('save')">
             <span>Run and share</span>
         </button>
