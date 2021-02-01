@@ -1,0 +1,63 @@
+::ng-deep .modal-container .modal-header{
+  text-align: center;
+  position:relative;
+}
+
+::ng-deep .modal-container .modal-header h2{
+  margin: 4px 0px;
+}
+
+::ng-deep .modal-close-btn{
+  position: absolute;
+  top:50%;
+  transform: translateY(-50%);
+  right:3px;
+  font-size: 16px;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(118, 118, 118);
+  user-select: none;
+  color:rgb(0,0,0);
+  outline: none;
+  padding: 4px 12px;
+  height: 33px;
+}
+
+::ng-deep .modal-close-btn:active{
+    color:rgb(0,0,0);
+    padding: 6px 12px 4px 12px;
+}
+::ng-deep .modal-close-btn:hover{
+    background-color: #FFFFFF;
+}
+
+.modal-container{
+  bottom: 100%;
+  top: 0px;
+  pointer-events: none;
+  opacity: 0;
+  position: fixed;
+  z-index: -1;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  min-width: 750px;
+  background-color: #FFFFFF;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  transition: 0.5s all;
+  box-shadow: 0 0px 8px 1px gray;
+  border: 1px solid #80808080;
+}
+
+.modal-container.shown{
+  top: 100px;
+  bottom:auto;
+  pointer-events: all;
+  opacity: 1;
+  z-index:9999;
+}
