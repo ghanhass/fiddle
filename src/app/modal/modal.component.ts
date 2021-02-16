@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -10,6 +10,11 @@ export class ModalComponent implements OnInit {
   constructor() { }
 
   private isVisible: boolean = false;
+
+  @HostListener("window:keyup",["$event"])
+  onComponentKeyup(event){
+    console.log("keyup event = ", event);
+  }
 
   show(){
     this.isVisible = true;

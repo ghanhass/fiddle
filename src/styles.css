@@ -1,15 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-body{
-    padding:5px;
-    margin:0px;
-    font-family: sans-serif;
-    overflow: hidden;
-}
-
-.hide{
-    display:none !important;
-}
-
 ngs-code-editor {
     width: 100%;
     height: 100%;
@@ -42,3 +31,35 @@ ngs-code-editor .margin-view-overlays .line-numbers {
         padding:0px;
     }
 }
+
+
+/*START hassoon's css library*/
+.btn{
+    height: auto;
+    min-height:33px;
+    font-size: 16px;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(118, 118, 118);
+    -webkit-user-select: none;
+    user-select: none;
+    color: rgb(0,0,0);
+    outline: none;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+body{
+    padding:5px;
+    margin:0px;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+.hide{
+    display:none !important;
+}
+/*END hassoon's css library*/
