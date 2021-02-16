@@ -202,7 +202,7 @@ app-iframe-part{
 .share-code-btn:active,
 .ressources-code-btn:active{
     color:rgb(0,0,0);
-    padding-top: 2px;
+    padding-top: 4px;
 }
 .share-code-btn:hover,
 .ressources-code-btn:hover{
@@ -252,7 +252,7 @@ app-iframe-part{
 
 .layouts-list-container:active{
     color:rgb(0,0,0);
-    padding-top: 2px;
+    padding-top: 4px;
 }
 
 .layouts-list-container:hover{

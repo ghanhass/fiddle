@@ -52,6 +52,10 @@ ngs-code-editor .margin-view-overlays .line-numbers {
     padding-right: 6px;
 }
 
+.btn:active{
+    padding-top: 4px;
+}
+
 body{
     padding:5px;
     margin:0px;

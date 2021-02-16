@@ -16,6 +16,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule} from "ngx-toastr";
 import { ModalComponent } from './modal/modal.component';
+import { RessourcesComponent } from './ressources/ressources.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { ModalComponent } from './modal/modal.component';
     IframePartComponent,
     LoaderComponent,
     ModalComponent,
+    RessourcesComponent,
   ],
   imports: [
     BrowserModule,
