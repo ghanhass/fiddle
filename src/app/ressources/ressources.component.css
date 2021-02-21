@@ -1,0 +1,17 @@
+.ressources-container{
+  position: relative;
+}
+
+.ressources-query-container{
+  text-align: center;
+}
+
+.ressources-choices-container{
+  position: absolute;
+  top: 100%;
+  width: 400px;
+  height: 400px;
+  border: 1px solid red;
+  left: 50%;
+  transform: translateX(-50%);
+}

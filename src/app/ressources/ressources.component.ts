@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RessourcesComponent implements OnInit {
 
-  currentTab: string;
+  ressourcesQueryString: string;
 
   constructor() { }
 
