@@ -1,9 +1,4 @@
-interface CdnjsResult{
-    name?:string;
-    description?:string;
-    latest?: string;
-    version?: string;
-}
+import{CdnjsResult} from "./cdnjs-result"
 export interface Cdnjsdata {
     results: [CdnjsResult];
 }
