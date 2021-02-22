@@ -11,28 +11,43 @@ export class RessourcesService {
 
   isDataCached: boolean = false;
   cachedRessourcesData: Cdnjsdata;
+  cacheTimedOut: boolean = false;
 
-  constructor(private http:HttpClient) { }
+  constructor(private http:HttpClient) {
+
+    setInterval(()=>{//refresh cdn results every 6 hours within application usage duration without page reload
+      this.cacheTimedOut = true;
+    },3600000 * 6);
+  }
 
   getRessourcesBySearch(searchString:string):Observable<Cdnjsdata>{
     return this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?search="+searchString+"&fields=name,description,version&limit=20");
   }
 
   getRessources():Observable<Cdnjsdata>{
-    if(this.isDataCached){
-      return of(this.cachedRessourcesData);
-    }
-    else{
-
-    }
-    return this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?fields=name,description,version").pipe(tap((res)=>{
+    let newRessources : Observable<Cdnjsdata> = this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?fields=name,description,version").pipe(tap((res)=>{
       if (!this.isDataCached){
         this.isDataCached = true;
+        this.cacheTimedOut = false;
         this.cachedRessourcesData = res;
       }  
       return res;
-    })
-    );
+    }));
+    
+    if(this.cacheTimedOut){
+      return newRessources;
+    }
+    else{
+      if(this.isDataCached){
+        return of(this.cachedRessourcesData).pipe(tap((res)=>{
+          this.cacheTimedOut = false;
+          return res;
+        }));
+      }
+      else{
+        return newRessources;
+      }
+    }
   }
 
 }

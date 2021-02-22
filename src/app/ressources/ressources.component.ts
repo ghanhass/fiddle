@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
+import { Cdnjsdata } from '../cdnjsdata';
 
 @Component({
   selector: 'app-ressources',
@@ -12,10 +13,15 @@ export class RessourcesComponent implements OnInit {
 
   constructor(private ressoueceService: RessourcesService) { }
 
-  onRessourcesQueryStringChange(event){
-    console.log("onRessourcesQueryStringChange event = ",event);
+  filterRessources(dataSet: Cdnjsdata, searchString: string){
+    console.log("dataSet = ", dataSet);
+    console.log("searchString = ", searchString);
+  }
+
+  onRessourcesQueryStringChange(searchString: string){
     this.ressoueceService.getRessources().subscribe((res)=>{
-      console.log("res = ", res);
+      //console.log("res = ", res);
+      this.filterRessources(res, searchString);
     });
   }
 
