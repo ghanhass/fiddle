@@ -13,7 +13,10 @@ export class ModalComponent implements OnInit {
 
   @HostListener("window:keyup",["$event"])
   onComponentKeyup(event){
-    console.log("keyup event = ", event);
+    //console.log("keyup event = ", event);
+    if(event.key == "Escape"){
+      this.hide();
+    }
   }
 
   show(){

@@ -11,6 +11,10 @@ export class RessourcesComponent implements OnInit {
 
   constructor() { }
 
+  onRessourcesQueryStringChange(event){
+    console.log("onRessourcesQueryStringChange event = ",event);
+  }
+
   ngOnInit(): void {
   }
 

@@ -1,7 +1,7 @@
 <div class="ressources-container">
     <div class="ressources-query-container">
         <label for="ressources-query-input">Search for libraries: </label>
-        <input type="text" id="ressources-query-input" class="ressources-query-input" [(ngModel)]="ressourcesQueryString">
+        <input (ngModelChange)="onRessourcesQueryStringChange($event)" type="text" id="ressources-query-input" class="ressources-query-input" [(ngModel)]="ressourcesQueryString">
     </div>
     <div class="ressources-choices-container"></div>    
 </div>

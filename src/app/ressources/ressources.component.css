@@ -6,12 +6,26 @@
   text-align: center;
 }
 
+.ressources-query-container .ressources-query-input{
+  height: 30px;
+  font-size: 16px;
+  outline: none;
+  border: 1px solid #808080b3;
+  border-radius: 2px;
+}
+
+.ressources-query-container label{
+  font-size:16px;
+}
+
 .ressources-choices-container{
   position: absolute;
-  top: 100%;
-  width: 400px;
+  top: calc(100% + 2px);
+  width: 500px;
   height: 400px;
-  border: 1px solid red;
   left: 50%;
   transform: translateX(-50%);
+  background-color: #FFFFFF;
+  border-radius: 2px;
+  box-shadow: 0 0 4px 2px #bbb;
 }
