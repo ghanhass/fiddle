@@ -1,9 +1,12 @@
 .ressources-container{
-  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .ressources-query-container{
   text-align: center;
+  position: relative;
 }
 
 .ressources-query-container .ressources-query-input{
@@ -16,6 +19,11 @@
 
 .ressources-query-container label{
   font-size:16px;
+  position: absolute;
+  right: calc(100% + 10px);
+  white-space: nowrap;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .ressources-choices-container{
@@ -25,4 +33,23 @@
   background-color: #FFFFFF;
   border-radius: 2px;
   box-shadow: 0 0 1px 1px #bbb;
+  overflow:auto;
+}
+
+.ressources-choice {
+  padding: 12px 0 12px 5px;
+  user-select: none;
+  cursor:pointer;
+}
+
+.ressources-choice > .ressource-choice-name{
+  margin-bottom:8px;
+}
+
+.ressources-choice:first-child ~ .ressources-choice{
+  border-top:1px solid #bbb;
+}
+
+.ressources-choice:last-child{
+  border-bottom:1px solid #bbb;
 }

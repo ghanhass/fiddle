@@ -38,7 +38,7 @@ export class RessourcesComponent implements OnInit {
           return -1;
         } 
       }
-    });
+    })/*.slice(0,50)*/;
     this.availableRessources = filteredResults;
 
     console.log("filteredResults = ", filteredResults);

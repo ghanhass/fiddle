@@ -3,7 +3,15 @@
         <label for="ressources-query-input">Search for libraries: </label>
         <input (ngModelChange)="onRessourcesQueryStringChange($event)" type="text" id="ressources-query-input" class="ressources-query-input" [(ngModel)]="ressourcesQueryString">
     </div>
-    <div class="ressources-choices-container" *ngIf="availableRessources.length">
-        
+    <div class="ressources-choices-container">
+        <div class="ressources-choices-parent" *ngIf="availableRessources.length">
+            <div class="ressources-choice" *ngFor="let ressource of availableRessources">
+                <div class="ressource-choice-name">{{ressource.name}}</div>
+                <div class="ressource-choice-version">
+                    <span class="ressource-version-btn">Version:</span>
+                    <span class="ressource-version-number">{{ressource.version}}</span>
+                </div>
+            </div>
+        </div>  
     </div>    
 </div>
