@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, EventEmitter,Output } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
 import { Cdnjsdata } from '../cdnjsdata';
 import { CdnjsSearchResult } from '../cdnjs-result';
@@ -18,8 +18,9 @@ export class RessourcesComponent implements OnInit {
     latest:"",
     description:""
   };
+  @Output()hidemodal:EventEmitter<any> = new EventEmitter();
 
-  constructor(private ressoueceService: RessourcesService) {}
+  constructor(private ressourcesService: RessourcesService) {}
 
   filterRessources(dataSet: Cdnjsdata, searchString: string){
 
@@ -53,7 +54,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   onRessourcesQueryStringChange(searchString: string){
-    this.ressoueceService.getRessources().subscribe((res)=>{
+    this.ressourcesService.getRessources().subscribe((res)=>{
       //console.log("res = ", res);
       this.filterRessources(res, searchString.trim());
     });
@@ -61,6 +62,29 @@ export class RessourcesComponent implements OnInit {
 
   onRessourcesChoiceClick(ressource:CdnjsSearchResult){
     this.currentRessourceChoice = ressource;
+    this.ressourcesService.getRessourceVersions(ressource.name).subscribe((res)=>{
+      console.log("getRessourceVersions res = ", res);
+    });
+  }
+
+  @HostListener("window:keyup",["$event"])
+  onComponentKeyup(event){
+    //console.log("keyup event = ", event);
+    if(event.key == "Escape"){
+      this.hidemodal.emit();
+      this.resetCurrentRessourceChoice();
+    }
+  }
+
+  resetCurrentRessourceChoice(){
+    this.currentRessourceChoice = {
+      name:"",
+      version:"",
+      latest:"",
+      description:""
+    }
+    this.ressourcesQueryString = "";
+    this.availableRessources = [];
   }
 
   ngOnInit(): void {

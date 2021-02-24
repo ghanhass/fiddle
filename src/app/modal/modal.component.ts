@@ -11,13 +11,6 @@ export class ModalComponent implements OnInit {
 
   private isVisible: boolean = false;
 
-  @HostListener("window:keyup",["$event"])
-  onComponentKeyup(event){
-    //console.log("keyup event = ", event);
-    if(event.key == "Escape"){
-      this.hide();
-    }
-  }
 
   show(){
     this.isVisible = true;

@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Cdnjsdata } from './cdnjsdata';
+import { CachedCdnjsVersionsData } from './cached-cdnjs-versions-data';
 import { tap } from 'rxjs/operators';
+import { CdnjsVersionsData } from './cdnjs-versions-data';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class RessourcesService {
   isDataCached: boolean = false;
   cachedRessourcesData: Cdnjsdata;
   cacheTimedOut: boolean = false;
-  versionsCache: Array<string>=[];
+  cachedVersionsData: Array<CachedCdnjsVersionsData>=[];
 
   constructor(private http:HttpClient) {
 
@@ -51,29 +53,38 @@ export class RessourcesService {
     }
   }
 
-  getRessourceVersions(ressourceName):Observable<Cdnjsdata>{
-    let newRessources : Observable<Cdnjsdata> = this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=versions").pipe(tap((res)=>{
-      if (!this.isDataCached){
-        this.isDataCached = true;
-        this.cacheTimedOut = false;
-        this.cachedRessourcesData = res;
-      }  
+  getRessourceVersions(ressourceName):Observable<CdnjsVersionsData>{
+    let newRessources : Observable<CdnjsVersionsData> = this.http.get<CdnjsVersionsData>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=versions").pipe(tap((res)=>{
+      this.cacheTimedOut = false;
+      this.cachedVersionsData.push({
+        name: ressourceName,
+        cachedVersions: {
+          versions: res.versions
+        }
+      }) 
       return res;
     }));
     
     if(this.cacheTimedOut){
+      this.cachedVersionsData = [];
       return newRessources;
     }
     else{
-      if(this.isDataCached){
-        return of(this.cachedRessourcesData).pipe(tap((res)=>{
+      let cachedRessourceVersion: CachedCdnjsVersionsData[] = this.cachedVersionsData.filter((ressourceVersionData:CachedCdnjsVersionsData)=>{
+        return ressourceVersionData.name == ressourceName;
+      });
+      if(cachedRessourceVersion.length){
+
+        return of(cachedRessourceVersion[0].cachedVersions).pipe(tap((res)=>{
           this.cacheTimedOut = false;
           return res;
         }));
+
       }
       else{
         return newRessources;
       }
+
     }
   }
 

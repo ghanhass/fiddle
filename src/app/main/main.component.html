@@ -137,7 +137,7 @@
         <button class="modal-close-btn" (click)="hideModal()"><span>X</span></button>
     </div>
     <div class="modal-body">
-        <app-ressources></app-ressources>
+        <app-ressources (hidemodal)="hideModal()"></app-ressources>
     </div>
     <div class="modal-footer">
         <button class="btn"><span>Save and close</span></button>
