@@ -1,4 +1,4 @@
-import{CdnjsResult} from "./cdnjs-result"
+import{CdnjsSearchResult} from "./cdnjs-result"
 export interface Cdnjsdata {
-    results: [CdnjsResult];
+    results: [CdnjsSearchResult];
 }

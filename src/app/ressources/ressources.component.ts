@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
 import { Cdnjsdata } from '../cdnjsdata';
-import { CdnjsResult } from '../cdnjs-result';
+import { CdnjsSearchResult } from '../cdnjs-result';
 
 @Component({
   selector: 'app-ressources',
@@ -11,9 +11,15 @@ import { CdnjsResult } from '../cdnjs-result';
 export class RessourcesComponent implements OnInit {
 
   ressourcesQueryString: string;
-  availableRessources: Array<CdnjsResult> = [];
+  availableRessources: Array<CdnjsSearchResult> = [];
+  currentRessourceChoice: CdnjsSearchResult = {
+    name:"",
+    version:"",
+    latest:"",
+    description:""
+  };
 
-  constructor(private ressoueceService: RessourcesService) { }
+  constructor(private ressoueceService: RessourcesService) {}
 
   filterRessources(dataSet: Cdnjsdata, searchString: string){
 
@@ -38,7 +44,7 @@ export class RessourcesComponent implements OnInit {
           return -1;
         } 
       }
-    })/*.slice(0,50)*/;
+    }).slice(0,150);
     this.availableRessources = filteredResults;
 
     console.log("filteredResults = ", filteredResults);
@@ -51,6 +57,10 @@ export class RessourcesComponent implements OnInit {
       //console.log("res = ", res);
       this.filterRessources(res, searchString.trim());
     });
+  }
+
+  onRessourcesChoiceClick(ressource:CdnjsSearchResult){
+    this.currentRessourceChoice = ressource;
   }
 
   ngOnInit(): void {

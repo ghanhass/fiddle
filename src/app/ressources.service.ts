@@ -12,6 +12,7 @@ export class RessourcesService {
   isDataCached: boolean = false;
   cachedRessourcesData: Cdnjsdata;
   cacheTimedOut: boolean = false;
+  versionsCache: Array<string>=[];
 
   constructor(private http:HttpClient) {
 
@@ -26,6 +27,32 @@ export class RessourcesService {
 
   getRessources():Observable<Cdnjsdata>{
     let newRessources : Observable<Cdnjsdata> = this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?fields=name,description,version").pipe(tap((res)=>{
+      if (!this.isDataCached){
+        this.isDataCached = true;
+        this.cacheTimedOut = false;
+        this.cachedRessourcesData = res;
+      }  
+      return res;
+    }));
+    
+    if(this.cacheTimedOut){
+      return newRessources;
+    }
+    else{
+      if(this.isDataCached){
+        return of(this.cachedRessourcesData).pipe(tap((res)=>{
+          this.cacheTimedOut = false;
+          return res;
+        }));
+      }
+      else{
+        return newRessources;
+      }
+    }
+  }
+
+  getRessourceVersions(ressourceName):Observable<Cdnjsdata>{
+    let newRessources : Observable<Cdnjsdata> = this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=versions").pipe(tap((res)=>{
       if (!this.isDataCached){
         this.isDataCached = true;
         this.cacheTimedOut = false;
