@@ -34,6 +34,8 @@ export class MainComponent implements AfterViewInit {
   cssPartHeight:number = 0;
   jsPartHeight:number = 0;
 
+  codePartsOffsetHeight: number = 0;
+
   htmlPartTop: number = 0;
   cssPartTop:number = 0;
   jsPartTop:number = 0;
@@ -119,11 +121,14 @@ export class MainComponent implements AfterViewInit {
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
     this.initCodeParts(this.layout); 
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+    this.codePartsOffsetHeight = codePartsEl.offsetHeight;
+    //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
   }
 
   initCodeParts(layout:number, resize?: boolean): void{
     let codePartsEl: HTMLElement = this.codeParts.nativeElement
-    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
+    /*let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
     let cssPartEl: HTMLElement = this.cssPart.nativeElement;
     let jsPartEl: HTMLElement = this.jsPart.nativeElement;
     let codePartsHeight = codePartsEl.offsetHeight;
@@ -219,7 +224,11 @@ export class MainComponent implements AfterViewInit {
     }
     window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 0);
+    }, 0);*/
+    if(codePartsEl){
+      this.codePartsOffsetHeight = codePartsEl.offsetHeight;
+      //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
+    }
   }
 
   changeLayout(newLayout: number){

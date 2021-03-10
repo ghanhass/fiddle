@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule} from "ngx-toastr";
 import { ModalComponent } from './modal/modal.component';
 import { RessourcesComponent } from './ressources/ressources.component';
+import { AngularSplitModule } from "angular-split";
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { RessourcesComponent } from './ressources/ressources.component';
       baseUrl: 'assets/monaco-editor'
     }),
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AngularSplitModule
   ],
   providers: [],
   bootstrap: [AppComponent],
