@@ -1,6 +1,6 @@
 <header id="main-header">
     <div class="header-btns-container">
-        <button class="ressources-code-btn" (click)="ressouresBtnClick()">
+        <button class="ressources-code-btn" [title]="'Coming soon'" disabled style="opacity:0.5;cursor:not-allowed">
             <span>Ressources</span>
         </button>
         <button class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
