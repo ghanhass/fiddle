@@ -83,7 +83,6 @@
     height: 33.3%;
     display: flex;
     flex-direction: column;
-    /*overflow: hidden;*/
     position: absolute;
     background-color: #FFF;
     min-height: 32px;
@@ -461,25 +460,57 @@ app-iframe-part{
     color: #FFFFFF;
 }
 
-:host ::ng-deep .as-split-gutter:first-of-type{
+:host ::ng-deep .as-split-gutter:first-of-type:not(:last-of-type){
     display: none !important;
 }
+
+:host ::ng-deep as-split[class] > .as-split-gutter[class]{
+    background-color: #ddd;
+}
+
+.iframe-hack{
+    background: rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+[hidden]{
+    display:none;
+}
+
+as-split-area >  app-iframe-part,
+as-split-area >  app-html-part,
+as-split-area >  app-css-part,
+as-split-area >  app-js-part{
+    width: 100%;
+    height: 100%;
+}
+
+.main-container.layout-type-1 #code-parts {
+    border-right: 1px solid #bbb;
+}
+
+as-split-area.code-component-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/*as-split-area.code-component-container > app-css-part,
+as-split-area.code-component-container > app-js-part,
+as-split-area.code-component-container > app-html-part{
+    
+}*/
 
 @media screen and (min-width:768px) and (min-height:581px){
     :host ::ng-deep app-iframe-part.layout-type-1{
         align-items: flex-end;
     }
     
-    :host ::ng-deep app-iframe-part.layout-type-1 iframe{
-        width:calc(100% - 12px);
-      }
-
     :host ::ng-deep app-iframe-part.layout-type-3{
         align-items: flex-start;
-      }
-
-    :host ::ng-deep app-iframe-part.layout-type-3 iframe{
-        width:calc(100% - 12px);
     }
 }
 
@@ -521,9 +552,11 @@ app-iframe-part{
     }
 
     .hide-mobile{
-        position: fixed !important;
-        top:99999px;
-        left:99999px;
+        display: none !important;
+    }
+
+    :host ::ng-deep as-split[class] > .as-split-gutter[class]{
+        display:none;
     }
 
     #main-header{
@@ -543,22 +576,6 @@ app-iframe-part{
         display:none;
     }
 
-    #code-parts, 
-    app-iframe-part{
-        width:100% !important;
-        min-width: 100% !important;
-        height:50% !important;
-        max-height: 50%;
-    }
-
-    #code-parts > .code-component-container{
-        min-height:100%;
-        position: static;
-    }
-
-    #code-parts > .code-component-container.has-resizer{
-        padding-top:0px;
-    }
     .code-part-title-btn{
         display: none;
     }
@@ -578,6 +595,45 @@ app-iframe-part{
 
     .code-part-title{
         cursor: default;
+    }
+
+    .as-split-outer{
+        display:flex;
+        flex-direction: column !important;
+    }
+
+    .as-split-gutter {
+        display: none !important;
+    }
+
+    as-split-area.as-split-area-code-parts {
+        width:100% !important;
+        height:50% !important;
+        border-bottom: 1px solid #ddd;
+        flex:none !important;
+    }
+
+    as-split-area.as-split-area-iframe {
+        width:100% !important;
+        height:50% !important;
+        border-top: 1px solid #dddddd;
+        flex:none !important;
+    }
+
+    .as-split-outer.no-result-mobile > .as-split-area-code-parts,
+    .as-split-outer.no-result-mobile > .as-split-area-iframe{
+        height:100% !important;
+    }
+
+    .as-split-outer.no-code-mobile > .as-split-area-code-parts,
+    .as-split-outer.no-code-mobile > .as-split-area-iframe{
+        height:100% !important;
+    }
+
+    as-split-area.code-component-container{
+        width:100%;
+        height:100%;
+        flex: none !important;
     }
 
 }

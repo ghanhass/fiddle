@@ -3,6 +3,7 @@ import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
+import { SplitComponent } from "angular-split";
 
 @Component({
   selector: 'app-main',
@@ -15,6 +16,7 @@ export class MainComponent implements AfterViewInit {
   showCss: boolean = true;
   showJs: boolean = false;
   showResult: boolean = true;
+  showIframeHider: boolean = false;
   
   isHtmlFullScreen: boolean = false;
   isCssFullScreen: boolean = false;
@@ -23,8 +25,6 @@ export class MainComponent implements AfterViewInit {
   mainResizerLeft: string = "425px";
   mainResizerRight: string = "auto";
   codePartsWidth: string = "425px";
-  //verticalResizerJsTop: string = "0px";
-  //verticalResizerCssTop: string = "0px";
   verticalResizeMode:boolean = false;
   
   cssVerticalResizeMode:boolean = false;
@@ -48,6 +48,8 @@ export class MainComponent implements AfterViewInit {
   mainResizeMode:boolean = false;
   verticalResizeType:string = "";
   customInterval: any;
+
+  @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
   @ViewChild("mainResizer") mainResizer:ElementRef;
   @ViewChild("mainResizerFloor") mainResizerFloor:ElementRef;
@@ -120,116 +122,17 @@ export class MainComponent implements AfterViewInit {
     });
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
-    this.initCodeParts(this.layout); 
     let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     this.codePartsOffsetHeight = codePartsEl.offsetHeight;
+    this.splitComponentInner.dragProgress$.subscribe((res)=>{
+      console.log("dragProgress$ res = ", res);
+    })
     //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
-  }
-
-  initCodeParts(layout:number, resize?: boolean): void{
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement
-    /*let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
-    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
-    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
-    let codePartsHeight = codePartsEl.offsetHeight;
-    let windowWidth = window.innerWidth;
-    let windowHeight = window.innerHeight;
-
-    if( layout == 1 || layout == 3){
-      if(resize){
-        this.windowWidth = windowWidth;
-        if(windowHeight != this.windowHeight){
-          this.windowHeight = windowHeight;
-          let prevCodePartHeight = this.htmlPartHeight + this.cssPartHeight + this.jsPartHeight;
-          let htmlHeightCoef = prevCodePartHeight / this.htmlPartHeight;
-          let cssHeightCoef = prevCodePartHeight / this.cssPartHeight;
-          let jsHeightCoef = prevCodePartHeight / this.jsPartHeight;
-
-          let cssTopCoef = prevCodePartHeight / this.cssPartTop;
-          let jsTopCoef = prevCodePartHeight / this.jsPartTop;
-          let newCssPartTop = codePartsHeight / cssTopCoef;
-          let newJsPartTop = codePartsHeight / jsTopCoef;
-
-          let newHtmlPartHeight = codePartsHeight / htmlHeightCoef;
-          let newCssPartHeight = codePartsHeight / cssHeightCoef;
-          let newJsPartHeight = codePartsHeight / jsHeightCoef;
-          
-          if(cssPartEl){
-            if(newCssPartTop > 32 && newCssPartTop < (newJsPartTop - 32)){
-              //this.cssPartHeight = newCssPartHeight;
-              //cssPartEl.style.height = this.cssPartHeight + "px";
-              this.cssPartTop = newCssPartTop;
-              cssPartEl.style.top = this.cssPartTop + "px";
-              //console.log("cssPartHeight = ", this.cssPartHeight);
-            }
-            if(newCssPartTop < 32){
-              //this.cssPartHeight = 32;
-              //cssPartEl.style.height = this.cssPartHeight + "px";
-              this.cssPartTop = 32;
-              cssPartEl.style.top = this.cssPartTop + "px";
-            }
-            if(newCssPartTop > (codePartsHeight - 32)){
-              //this.cssPartHeight = 32;
-              //cssPartEl.style.height = this.cssPartHeight + "px";
-              this.cssPartTop = codePartsHeight - 32;
-              cssPartEl.style.top = this.cssPartTop + "px";
-            }
-          }
-          if(jsPartEl){
-            if(newJsPartTop > 64 && newJsPartTop < (codePartsHeight - 32)){
-              //this.jsPartHeight = newJsPartHeight;
-              //jsPartEl.style.height = this.jsPartHeight + "px";
-              this.jsPartTop = newJsPartTop;
-              jsPartEl.style.top = this.jsPartTop + "px";
-              //console.log("jsPartHeight = ", this.jsPartHeight);
-            }
-            if(newJsPartTop < this.cssPartTop + 32){
-              //this.cssPartHeight = this.cssPartTop + 32;
-              //cssPartEl.style.height = this.cssPartHeight + "px";
-              this.jsPartTop = this.cssPartTop + 32;
-              jsPartEl.style.top = this.jsPartTop + "px";
-            }
-            if(newJsPartTop > codePartsHeight - 32){
-              //this.cssPartHeight = this.cssPartTop + 32;
-              //cssPartEl.style.height = this.cssPartHeight + "px";
-              this.jsPartTop = codePartsHeight - 32;
-              jsPartEl.style.top = this.jsPartTop + "px";
-            }
-          }
-        }
-      }
-      else{
-        if(htmlPartEl){
-          this.htmlPartHeight = codePartsHeight / 3;
-          htmlPartEl.style.height = this.htmlPartHeight + "px";
-          this.htmlPartTop = 0;
-          htmlPartEl.style.top = this.htmlPartTop + "px";
-          //console.log("htmlPartHeight = ", this.htmlPartHeight);
-        }
-        if(cssPartEl){
-          this.cssPartHeight = codePartsHeight / 3;
-          cssPartEl.style.height = this.cssPartHeight + "px";
-          this.cssPartTop = codePartsHeight / 3;
-          cssPartEl.style.top = this.cssPartTop + "px";
-          //console.log("cssPartHeight = ", this.cssPartHeight);
-        }
-        if(jsPartEl){
-          this.jsPartHeight = codePartsHeight / 3;
-          jsPartEl.style.height = this.jsPartHeight + "px";
-          this.jsPartTop = codePartsHeight * 2 / 3;
-          jsPartEl.style.top = this.jsPartTop + "px";
-          //console.log("jsPartHeight = ", this.jsPartHeight);
-        }
-      }
-    }
     window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 0);*/
-    if(codePartsEl){
-      this.codePartsOffsetHeight = codePartsEl.offsetHeight;
-      //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
-    }
+    }, 1);
   }
+
 
   changeLayout(newLayout: number){
     if(newLayout != this.layout){
@@ -239,36 +142,148 @@ export class MainComponent implements AfterViewInit {
       if(mainResizerEl && codePartsEl){
         switch(this.layout){
           case 1:
-          //mainResizerEl.style.left = "425px";
-          this.mainResizerLeft = "425px";
-          //mainResizerEl.style.right = "auto";
-          this.mainResizerRight = "auto";
-          //codePartsEl.style.width = "425px";
-          this.codePartsWidth = "425px";
-          //codePartsEl.style.minWidth = "425px";
-          (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
-          (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
-          (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
-          this.initCodeParts(this.layout);
           break;
           case 2:
           break;
           case 3:
-          //mainResizerEl.style.left = "auto";
-          this.mainResizerLeft = "auto";
-          //mainResizerEl.style.right = "425px";
-          this.mainResizerRight = "425px";
-          //codePartsEl.style.width = "425px";
-          this.codePartsWidth = "425px";
-          //codePartsEl.style.minWidth = "425px";
-          (codePartsEl.querySelector(".code-component-container-html") as HTMLElement).style.cssText = "height: 33.33%;top: 0px;";
-          (codePartsEl.querySelector(".code-component-container-css") as HTMLElement).style.cssText = "height: 33.33%;top: 33.33%;";
-          (codePartsEl.querySelector(".code-component-container-js") as HTMLElement).style.cssText = "height: 33.34%;top: 66.33%;";
-          this.initCodeParts(this.layout);
           break;
           case 4:
         }
       }
+      window.setTimeout(()=>{
+        window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+      }, 1);
+    }
+  }
+
+  getLayoutInfos(name){
+    switch(this.layout){
+      case 1:
+      switch(name){
+        case "outerAsSplitDirection":
+        return "horizontal";
+        
+        case "outerAsSplitUnit":
+        return "pixel";
+
+        case "codePartsAsSplitAreaOrder":
+        return 1;
+
+        case "codePartsAsSplitAreaMinSize":
+        return 350;
+
+        case "codePartsAsSplitAreaSize":
+        return 350;
+
+        case "innerAsSplitDirection":
+        return 'vertical';
+
+        case "innerAsSplitUnit":
+        return 'pixel';
+
+        case "emptyAsSplitAreaMinSize":
+        return 10;
+
+        case "emptyAsSplitAreaSize":
+        return 10;
+
+        case "emptyAsSplitAreaMaxSize":
+        return 10;
+
+        case "htmlAsSplitAreaMinSize":
+        return 25;
+
+        case "htmlAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "cssAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "cssAsSplitAreaMinSize":
+        return 25;
+
+        case "jsAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "jsAsSplitAreaMinSize":
+        return 25;
+
+        case "iframeAsSplitAreaOrder":
+        return 2;
+
+        case "iframeAsSplitAreaMinSize":
+        return 350;
+
+        case "iframeAsSplitAreaSize":
+        return "*";
+      }
+      break;
+
+      case 2:
+      break;
+
+      case 3:
+      switch(name){
+        case "outerAsSplitDirection":
+        return "horizontal";
+        
+        case "outerAsSplitUnit":
+        return "pixel";
+
+        case "codePartsAsSplitAreaOrder":
+        return 2;
+
+        case "codePartsAsSplitAreaMinSize":
+        return 350;
+
+        case "codePartsAsSplitAreaSize":
+        return 350;
+
+        case "innerAsSplitDirection":
+        return 'vertical';
+
+        case "innerAsSplitUnit":
+        return 'pixel';
+
+        case "emptyAsSplitAreaMinSize":
+        return 10;
+
+        case "emptyAsSplitAreaSize":
+        return 10;
+
+        case "emptyAsSplitAreaMaxSize":
+        return 10;
+
+        case "htmlAsSplitAreaMinSize":
+        return 25;
+
+        case "htmlAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "cssAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "cssAsSplitAreaMinSize":
+        return 25;
+
+        case "jsAsSplitAreaSize":
+        return (this.codePartsOffsetHeight - 20) / 3;
+
+        case "jsAsSplitAreaMinSize":
+        return 25;
+
+        case "iframeAsSplitAreaOrder":
+        return 1;
+
+        case "iframeAsSplitAreaMinSize":
+        return 350;
+
+        case "iframeAsSplitAreaSize":
+        return "*";
+      }
+      break;
+
+      case 4:
     }
   }
 
@@ -329,7 +344,11 @@ export class MainComponent implements AfterViewInit {
   onWindowResize(event){
     //console.log("/!\ window resize event: ", event);
     this.toggleLayoutsList(true);
-    this.initCodeParts(this.layout, true); 
+    
+    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
+    if(codePartsEl){
+      this.codePartsOffsetHeight = codePartsEl.offsetHeight;
+    }
   }
 
   @HostListener("window:click", ["$event"])
@@ -426,144 +445,6 @@ export class MainComponent implements AfterViewInit {
       }
     }, 50);
   }
-
-  /*mainResizerDragstartHandlder(event: DragEvent){
-    event.dataTransfer.setData("text/html", null);
-    //console.log("angular dragstart event: ", event);
-    let src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-    let img = new Image();
-    img.src = src;
-    event.dataTransfer.setDragImage(img,0,0);
-  }*/
-
-  /*mainContainerDragover(event){
-    //console.log("mainContainerDragover");
-    if(this.mainResizeMode){//main resizer working ?
-      let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-      let mainContainerWidth = mainContainerEl.offsetWidth;
-      let newXMouvement = (event.clientX - this.mainResizerMousedownX);
-      if(this.layout == 1){
-        let newMainResizerLeft = parseInt(this.mainResizerLeft) + newXMouvement;
-        if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
-          //console.log("mainContainerDragover layout 1");
-          (<HTMLElement>this.mainResizer.nativeElement).style.left = newMainResizerLeft + "px";
-        }
-      }
-      else if(this.layout == 3){
-        let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
-        if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
-          //console.log("mainContainerDragover layout 3");
-          (<HTMLElement>this.mainResizer.nativeElement).style.left = "auto";
-          (<HTMLElement>this.mainResizer.nativeElement).style.right = mainContainerWidth - newMainResizerLeft + "px";
-        }
-      }
-
-    }
-    //console.log("main container mouse move!");
-  }*/
-  mainResizerMousedownHandler(event:MouseEvent){
-    //console.log("angular mousedown event: ", event);
-    this.mainResizeMode = true;
-    this.mainResizerMousedownX = event.clientX;
-    this.triggerResizeWithInterval(50);
-  }
-
-  mainContainerMousemove(event){
-    //console.log("angular mousemove event: ", event);
-    if(this.mainResizeMode){//main resizing ?
-      let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-      let mainContainerWidth = mainContainerEl.offsetWidth;
-      let newXMouvement = (event.clientX - this.mainResizerMousedownX);
-      if(this.layout == 1){
-        
-        let newMainResizerLeft = parseInt(this.mainResizerLeft) + newXMouvement;
-        if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
-          (<HTMLElement>this.mainResizer.nativeElement).style.left = newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.width = newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = newMainResizerLeft + "px";
-        }
-      }
-      else if(this.layout == 3){
-        let newMainResizerLeft = (mainContainerWidth - parseInt(this.mainResizerRight)) + newXMouvement;
-        if(newMainResizerLeft < (mainContainerWidth - 300) && newMainResizerLeft > 11){
-          (<HTMLElement>this.mainResizer.nativeElement).style.left = "auto";
-          (<HTMLElement>this.mainResizer.nativeElement).style.right = mainContainerWidth - newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.width = mainContainerWidth - newMainResizerLeft + "px";
-          (<HTMLElement>this.codeParts.nativeElement).style.minWidth = mainContainerWidth - newMainResizerLeft + "px";
-        }
-      }
-
-    }
-    //console.log("main container mouse move!");
-  }
-
-  @HostListener("window:mouseup", ["$event"])
-  onWindowMouseup(event){
-    //console.log("mouseup event: ", event);
-    let cssPartEl : HTMLElement = this.cssPart.nativeElement;
-    let htmlPartEl : HTMLElement = this.htmlPart.nativeElement;
-    let jsPartEl : HTMLElement = this.jsPart.nativeElement;
-
-    this.cssPartHeight = cssPartEl.offsetHeight;
-    this.htmlPartHeight =  htmlPartEl.offsetHeight;
-    this.jsPartHeight =  jsPartEl.offsetHeight;
-
-    if(this.layout == 1 || this.layout == 3){
-      if(this.cssVerticalResizeMode){
-        this.cssVerticalResizeMode = false;
-        this.cssPartTop = parseInt(cssPartEl.style.top);
-      }
-      if(this.jsVerticalResizeMode){
-        this.jsVerticalResizeMode = false;
-        this.jsPartTop = parseInt(jsPartEl.style.top);
-      }
-
-      if(this.mainResizeMode){
-        this.mainResizeMode = false;
-        this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
-        if(this.layout == 1){
-          this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
-        }
-        else if(this.layout == 3){
-          this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
-        }
-      }
-    }
-    window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    
-    if(this.customInterval){
-      clearInterval(this.customInterval);
-    }
-    
-  }
-
-  /*mainResizerDragend(event){
-    console.log("mainResizerDragend!");
-    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-    let mainContainerWidth = mainContainerEl.offsetWidth;
-    let newXMouvement = (event.clientX - this.mainResizerMousedownX);
-
-    if(this.mainResizeMode){
-      this.mainResizeMode = false;
-      //this.codePartsWidth = (<HTMLElement>this.codeParts.nativeElement).offsetWidth + "px";
-      if(this.layout == 1){
-        this.mainResizerLeft = (<HTMLElement>this.mainResizer.nativeElement).style.left;
-        let newMainResizerLeft = parseInt(this.mainResizerLeft);
-        if(newMainResizerLeft > 300 && newMainResizerLeft < (mainContainerWidth - 11)){
-          //console.log("mainContainerDragover layout 1");
-          this.codePartsWidth = newMainResizerLeft + "px";
-        }
-      }
-      else if(this.layout == 3){
-        this.mainResizerRight = (<HTMLElement>this.mainResizer.nativeElement).style.right;
-        let newMainResizerRight = parseInt(this.mainResizerRight);
-        if(newMainResizerRight > 300 && newMainResizerRight < (mainContainerWidth - 11)){
-          //console.log("mainContainerDragover layout 3");
-          this.codePartsWidth = newMainResizerRight + "px";
-        }
-      }
-    }
-  }*/
   
   codePartsTitleMousedown(event: MouseEvent, mode){
     //console.log("codePartsTitleMousedown event = ", event);
@@ -760,6 +641,28 @@ export class MainComponent implements AfterViewInit {
 
   ressouresBtnClick(){
     this.modal.show();
+  }
+
+  splitComponentInnerDragEnd(event){
+    console.log("splitComponentInnerDragEnd event = ", event);
+    clearInterval(this.customInterval);
+  }
+
+  splitComponentInnerDragStart(event){
+    console.log("splitComponentInnerDragStart event = ", event);
+    this.triggerResizeWithInterval(50);
+  }
+
+  splitComponentOuterDragEnd(event){
+    console.log("splitComponentOuterDragEnd event = ", event);
+    clearInterval(this.customInterval);
+    this.showIframeHider = false;
+  }
+
+  splitComponentOuterDragStart(event){
+    console.log("splitComponentOuterDragStart event = ", event);
+    this.triggerResizeWithInterval(50);
+    this.showIframeHider = true;
   }
 
 }

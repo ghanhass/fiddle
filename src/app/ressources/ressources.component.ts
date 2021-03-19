@@ -18,6 +18,8 @@ export class RessourcesComponent implements OnInit {
     latest:"",
     description:""
   };
+  currentRessourceVersions: [string];
+
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
 
   constructor(private ressourcesService: RessourcesService) {}

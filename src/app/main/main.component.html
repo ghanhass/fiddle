@@ -75,76 +75,68 @@
         <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
-    <div id="code-parts" #codeParts [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}" 
-    [ngStyle]="{'width':getCodePartsWidth(), 'min-width': getCodePartsWidth(), 'height': getCodePartsHeight(),'max-height': !showResult ? '100%':''}">
-        <as-split direction="vertical" [unit]="'pixel'">
-            <as-split-area [minSize]="10" [size]="10" [maxSize]="10" style="display: none"></as-split-area>
-            <as-split-area [minSize]="25" [size]="(codePartsOffsetHeight - 20) / 3" class="code-component-container code-component-container-html" 
-            [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}">
-            <div class="code-part-title">
-                    <span>HTML</span>
-                    <div class="code-part-title-btns-container">
-                        <a class="html-expand-btn code-part-title-btn" [title]="'Expand HTML Vertically'" (click)='expandHtml()'>
-                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
-                        </a>
-                    
-                        <a class="html-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('html')" [ngClass]="{'on':isHtmlFullScreen}" [title]="'Full screen HTML'">
-                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                        </a>
+    
+    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs}">
+            <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
+                    <div id="code-parts" #codeParts>
+                        <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)">
+                            <as-split-area [minSize]="getLayoutInfos('emptyAsSplitAreaMinSize')" [size]="getLayoutInfos('emptyAsSplitAreaSize')" [maxSize]="getLayoutInfos('emptyAsSplitAreaMaxSize')" style="display: none"></as-split-area>
+                            <as-split-area [minSize]="getLayoutInfos('htmlAsSplitAreaMinSize')" [size]="getLayoutInfos('htmlAsSplitAreaSize')" class="code-component-container code-component-container-html" 
+                            [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}">
+                                <div class="code-part-title">
+                                    <span>HTML</span>
+                                    <div class="code-part-title-btns-container">
+                                        <a class="html-expand-btn code-part-title-btn" [title]="'Expand HTML Vertically'" (click)='expandHtml()'>
+                                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                                        </a>
+                                    
+                                        <a class="html-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('html')" [ngClass]="{'on':isHtmlFullScreen}" [title]="'Full screen HTML'">
+                                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode"></app-html-part>
+                            </as-split-area>
+                            <as-split-area [minSize]="getLayoutInfos('cssAsSplitAreaMinSize')" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css"
+                            [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}">
+                                <div class="code-part-title">
+                                    <span>CSS</span>
+                                    <div class="code-part-title-btns-container">
+                                        <a class="css-expand-btn code-part-title-btn" [title]="'Expand CSS vertically'" (click)="expandCss()">
+                                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="css-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('css')" [ngClass]="{'on':isCssFullScreen}" [title]="'Full screen CSS'">
+                                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <app-css-part #cssPartComponent class="code-component" [code]="cssCode"></app-css-part>
+                            </as-split-area>
+                            <as-split-area [minSize]="getLayoutInfos('jsAsSplitAreaMinSize')" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" 
+                            [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}">
+                            <div class="code-part-title" >
+                                    <span>JAVASCRIPT</span>
+                                    <div class="code-part-title-btns-container">
+                                        <a class="js-expand-btn code-part-title-btn" [title]="'Expand JS vertically'" (click)="expandJs()">
+                                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="js-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('js')" [ngClass]="{'on':isJsFullScreen}" [title]="'Full screen JS'">
+                                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
+                            </as-split-area>
+                        </as-split>
                     </div>
-                </div>
-                <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode"></app-html-part>
+            
             </as-split-area>
-            <as-split-area [minSize]="25" [size]="(codePartsOffsetHeight - 20) / 3" class="code-component-container code-component-container-css"
-            [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}">
-                <div class="code-part-title">
-                    <span>CSS</span>
-                    <div class="code-part-title-btns-container">
-                        <a class="css-expand-btn code-part-title-btn" [title]="'Expand CSS vertically'" (click)="expandCss()">
-                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
-                        </a>
-                        <a class="css-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('css')" [ngClass]="{'on':isCssFullScreen}" [title]="'Full screen CSS'">
-                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-                <app-css-part #cssPartComponent class="code-component" [code]="cssCode"></app-css-part>
+            <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult}">
+                    <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }"></div>
+                    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart></app-iframe-part>
             </as-split-area>
-            <as-split-area [minSize]="25" [size]="(codePartsOffsetHeight - 20) / 3" class="code-component-container code-component-container-js" 
-            [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}">
-            <div class="code-part-title" >
-                    <span>JAVASCRIPT</span>
-                    <div class="code-part-title-btns-container">
-                        <a class="js-expand-btn code-part-title-btn" [title]="'Expand JS vertically'" (click)="expandJs()">
-                            <i class="fa fa-arrows-v" aria-hidden="true"></i>
-                        </a>
-                        <a class="js-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('js')" [ngClass]="{'on':isJsFullScreen}" [title]="'Full screen JS'">
-                            <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                </div>
-                <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
-            </as-split-area>
-        </as-split>
-
-        <div class="code-component-container code-component-container-html" 
-        [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen}" [ngStyle]="{'display':'none'}" #htmlPart>
-        </div>
-        <div class="code-component-container code-component-container-css"
-         [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}" [ngStyle]="{'display':'none'}" #cssPart>
-        </div>
-        <div class="code-component-container code-component-container-js" 
-        [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}" [ngStyle]="{'display':'none'}" #jsPart>
-        </div>
-
-
-    </div>
-    <div #mainResizerFloor [ngClass]="{'main-resizer-floor': true, 'hide': !mainResizeMode}"></div>
-    <div #mainResizer id="main-resizer" [ngStyle]="{'left':mainResizerLeft, 'right':mainResizerRight}" 
-    [ngClass]="{'resize-mode':mainResizeMode, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}"></div>
-    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" 
-    [ngStyle]="{'height': (!showHtml && !showCss && !showJs) ? '100%':'','max-height': (!showHtml && !showCss && !showJs) ? '100%':''}" 
-    #iframePart></app-iframe-part>
+    </as-split>
+    
 </div>
 <app-modal #modal>
     <div class="modal-header">
