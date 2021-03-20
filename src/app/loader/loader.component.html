@@ -1,15 +1,15 @@
-<div class="lds-ring-parent" *ngIf="isLoaderShow()">
-    <div class="lds-ring">
-        <div>
+<div class="wrapper" *ngIf="isLoaderShow()" [ngClass]="{'global':global}" >
+    <div class="container">
+        <div [ngStyle]="{'border-width':thickness ? (thickness+'px') : ''}">
 
         </div>
         <div>
 
         </div>
-        <div>
+        <div [ngStyle]="{'border-width':thickness ? (thickness+'px') : ''}">
 
         </div>
-        <div>
+        <div [ngStyle]="{'border-width':thickness ? (thickness+'px') : ''}">
             
         </div>
     </div>

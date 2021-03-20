@@ -1,7 +1,8 @@
-import { Component, OnInit, HostListener, EventEmitter,Output } from '@angular/core';
+import { Component, OnInit, HostListener, EventEmitter,Output, ViewChild } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
 import { Cdnjsdata } from '../cdnjsdata';
 import { CdnjsSearchResult } from '../cdnjs-result';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-ressources',
@@ -21,6 +22,7 @@ export class RessourcesComponent implements OnInit {
   currentRessourceVersions: [string];
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
+  @ViewChild("loader")loader:LoaderComponent;
 
   constructor(private ressourcesService: RessourcesService) {}
 
@@ -56,16 +58,22 @@ export class RessourcesComponent implements OnInit {
   }
 
   onRessourcesQueryStringChange(searchString: string){
+    this.loader.showLoader();
     this.ressourcesService.getRessources().subscribe((res)=>{
       //console.log("res = ", res);
       this.filterRessources(res, searchString.trim());
+      this.loader.hideLoader();
     });
   }
 
   onRessourcesChoiceClick(ressource:CdnjsSearchResult){
     this.currentRessourceChoice = ressource;
+    this.loader.showLoader();
     this.ressourcesService.getRessourceVersions(ressource.name).subscribe((res)=>{
       console.log("getRessourceVersions res = ", res);
+      console.log("currentRessourceChoice = ", this.currentRessourceChoice);
+      this.currentRessourceVersions = res.versions;
+      this.loader.hideLoader();
     });
   }
 

@@ -1,48 +1,92 @@
-.lds-ring-parent {
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: #FFFFFF;
-    width: 100%;
-    height: 100%;
-    z-index: 99999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.wrapper{
+  position:relative;
+  height:30px;
+  width:30px;
 }
 
-.lds-ring {
-    display: inline-block;
-    position: relative;
-    width: 100px;
-    height: 100px;
+.wrapper .container{
+    position:absolute;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    height:30px;
+    width:30px;
+}
+
+.wrapper.global{
+  height: 100%;
+  width: 100%;
+  background: #FFFFFF;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+}
+
+.wrapper.global .container{
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translate(-50%,-50%);
+  width: 100px;
+  height: 100px;
+}
+
+
+.container > div:nth-child(1){
+    border-top:3px solid #62ad4a;
+    border-left:3px solid #62ad4a;
+    border-top-left-radius: 100%;
+}
+
+.container > div:nth-child(3){
+    border-bottom:3px solid #62ad4a;
+    border-left:3px solid #62ad4a;
+    border-bottom-left-radius: 100%;
+}
+
+.container > div:nth-child(4){
+    border-bottom:3px solid #62ad4a;
+    border-right:3px solid #62ad4a;
+    border-bottom-right-radius: 100%;
+}
+
+.wrapper .container{
+    animation-name:rotate-loader;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 0.5s;
+}
+
+.wrapper.wrapper.global .container{
+  animation-name:rotate-loader-global;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-duration: 1.2s;
+}
+
+@keyframes rotate-loader{
+  0%{
+      transform:rotate(0deg)
   }
-  .lds-ring div {
-    box-sizing: border-box;
-    display: block;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    margin: 0px;
-    border: 8px solid #62ad4a;
-    border-radius: 50%;
-    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-    border-color: #62ad4a transparent transparent transparent;
+  50%{
+      transform:rotate(180deg)
   }
-  .lds-ring div:nth-child(1) {
-    animation-delay: -0.45s;
+
+  100%{
+      transform:rotate(360deg)
   }
-  .lds-ring div:nth-child(2) {
-    animation-delay: -0.3s;
+}
+
+@keyframes rotate-loader-global{
+  0%{
+      transform:translate(-50%,-50%) rotate(0deg)
   }
-  .lds-ring div:nth-child(3) {
-    animation-delay: -0.15s;
+  50%{
+      transform:translate(-50%,-50%) rotate(180deg)
   }
-  @keyframes lds-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
+
+  100%{
+      transform:translate(-50%,-50%) rotate(360deg)
   }
+}

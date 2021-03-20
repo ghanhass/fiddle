@@ -1,14 +1,16 @@
 <div class="ressources-container">
     <div class="ressources-query-container">
-        <div class="ressources-query-parent" [ngStyle]="{'margin-right':currentRessourceChoice.name ? '15px': ''}">
+        <div class="ressources-query-parent" [ngStyle]="{'margin-right':'15px'}">
             <label for="ressources-query-input">Search for libraries: </label>
             <input (ngModelChange)="onRessourcesQueryStringChange($event)" type="text" id="ressources-query-input" class="ressources-query-input" [(ngModel)]="ressourcesQueryString">
         </div>
-        <div class="ressources-query-version-parent" *ngIf="currentRessourceChoice.name">
+        <div class="ressources-query-version-parent" *ngIf="currentRessourceChoice.name" style="margin-right:15px">
             <label for="ressources-query-input">Choose version: </label>
-            <select>
+            <select [ngModel]="currentRessourceChoice.version">
+                <option *ngFor="let version of currentRessourceVersions" [value]="version">{{version}}</option>
             </select>
         </div>
+        <app-loader #loader></app-loader>
     </div>
     <div class="ressources-choices-container">
         <div class="ressources-choices-parent" *ngIf="availableRessources.length">
