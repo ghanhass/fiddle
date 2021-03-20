@@ -6,7 +6,7 @@
         </div>
         <div class="ressources-query-version-parent" *ngIf="currentRessourceChoice.name" style="margin-right:15px">
             <label for="ressources-query-input">Choose version: </label>
-            <select [ngModel]="currentRessourceChoice.version">
+            <select [ngModel]="currentRessourceChoice.version" (change)="onCurrentRessourceChoiceVersionChange($event)">
                 <option *ngFor="let version of currentRessourceVersions" [value]="version">{{version}}</option>
             </select>
         </div>
@@ -24,4 +24,7 @@
             </div>
         </div>  
     </div>    
+    <div class="ressources-final-choice" *ngIf="currentRessourceChoice.name">
+        <h3 ></h3>
+    </div>
 </div>

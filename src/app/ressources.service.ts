@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Cdnjsdata } from './cdnjsdata';
-import { CachedCdnjsVersionsData } from './cached-cdnjs-versions-data';
+import { CachedCdnjsMetaData } from './cached-cdnjs-meta-data';
 import { tap } from 'rxjs/operators';
-import { CdnjsVersionsData } from './cdnjs-versions-data';
+import { CdnjsMetaData } from './cdnjs-meta-data';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class RessourcesService {
   isDataCached: boolean = false;
   cachedRessourcesData: Cdnjsdata;
   cacheTimedOut: boolean = false;
-  cachedVersionsData: Array<CachedCdnjsVersionsData>=[];
+  cachedCdnjsMetaData: Array<CachedCdnjsMetaData>=[];
 
   constructor(private http:HttpClient) {
 
@@ -53,12 +53,12 @@ export class RessourcesService {
     }
   }
 
-  getRessourceVersions(ressourceName):Observable<CdnjsVersionsData>{
-    let newRessources : Observable<CdnjsVersionsData> = this.http.get<CdnjsVersionsData>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=versions").pipe(tap((res)=>{
+  getRessourceVersions(ressourceName):Observable<CdnjsMetaData>{
+    let newRessources : Observable<CdnjsMetaData> = this.http.get<CdnjsMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
       this.cacheTimedOut = false;
-      this.cachedVersionsData.push({
+      this.cachedCdnjsMetaData.push({
         name: ressourceName,
-        cachedVersions: {
+        cachedMetaData: {
           versions: res.versions
         }
       }) 
@@ -66,16 +66,16 @@ export class RessourcesService {
     }));
     
     if(this.cacheTimedOut){
-      this.cachedVersionsData = [];
+      this.cachedCdnjsMetaData = [];
       return newRessources;
     }
     else{
-      let cachedRessourceVersion: CachedCdnjsVersionsData[] = this.cachedVersionsData.filter((ressourceVersionData:CachedCdnjsVersionsData)=>{
+      let cachedRessourceVersion: CachedCdnjsMetaData[] = this.cachedCdnjsMetaData.filter((ressourceVersionData:CachedCdnjsMetaData)=>{
         return ressourceVersionData.name == ressourceName;
       });
       if(cachedRessourceVersion.length){
 
-        return of(cachedRessourceVersion[0].cachedVersions).pipe(tap((res)=>{
+        return of(cachedRessourceVersion[0].cachedMetaData).pipe(tap((res)=>{
           this.cacheTimedOut = false;
           return res;
         }));

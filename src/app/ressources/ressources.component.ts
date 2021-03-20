@@ -77,6 +77,10 @@ export class RessourcesComponent implements OnInit {
     });
   }
 
+  onCurrentRessourceChoiceVersionChange(event){
+    
+  }
+
   @HostListener("window:keyup",["$event"])
   onComponentKeyup(event){
     //console.log("keyup event = ", event);
