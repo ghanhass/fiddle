@@ -84,12 +84,15 @@ export class RessourcesComponent implements OnInit {
   }
 
   onRessourcesQueryStringChange(searchString: string){
-    this.loader.showLoader();
-    this.ressourcesService.getRessources().subscribe((res)=>{
-      //console.log("res = ", res);
-      this.filterRessources(res, searchString.trim());
-      this.loader.hideLoader();
-    });
+    if(searchString.trim().toUpperCase() != this.currentRessourceChoice.name.trim().toUpperCase()){
+      this.resetCurrentRessourceChoice();
+      this.loader.showLoader();
+      this.ressourcesService.getRessources().subscribe((res)=>{
+        //console.log("res = ", res);
+        this.filterRessources(res, searchString.trim());
+        this.loader.hideLoader();
+      });
+    }
   }
 
   onRessourcesChoiceClick(ressource:CdnjsSearchResult){
@@ -97,6 +100,7 @@ export class RessourcesComponent implements OnInit {
     this.loader.showLoader();
     this.currentRessourceAssetsByVersion = [];
     this.ressourcesChoiceFilesSearchString = "";
+    this.currentRessourceVersion = "";
     this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
       console.log("getRessourceMetaData res = ", res);
       console.log("currentRessourceChoice = ", this.currentRessourceChoice);
