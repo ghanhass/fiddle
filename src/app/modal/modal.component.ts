@@ -1,4 +1,4 @@
-import { Component, OnInit,HostListener } from '@angular/core';
+import { Component, OnInit,HostListener,EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-modal',
@@ -10,7 +10,7 @@ export class ModalComponent implements OnInit {
   constructor() { }
 
   private isVisible: boolean = false;
-
+  @Output()onHide: EventEmitter<any> = new EventEmitter();
 
   show(){
     this.isVisible = true;
@@ -18,6 +18,7 @@ export class ModalComponent implements OnInit {
 
   hide(){
     this.isVisible = false;
+    this.onHide.emit();
   }
 
   isShown(){

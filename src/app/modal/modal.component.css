@@ -15,6 +15,8 @@
 
 ::ng-deep .modal-body{
   padding: 4px;
+  overflow: auto;
+  flex-grow: 1;
 }
 
 ::ng-deep .modal-close-btn{
@@ -56,7 +58,7 @@
   transition: 0.5s all;
 }
 .modal{
-  top: 50px;
+  top: 10px;
   transform:translateY(0px) translateX(-50%);
   position: absolute;
   left: 50%;
@@ -69,6 +71,8 @@
   box-shadow: 0 0px 8px 1px gray;
   border: 1px solid #80808080;
   transition: 0.5s all;
+  height: calc(100% - 20px);
+  overflow: auto;
 }
 
 .modal-container.shown{

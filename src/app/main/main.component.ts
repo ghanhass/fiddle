@@ -4,6 +4,7 @@ import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
 import { SplitComponent } from "angular-split";
+import { RessourcesComponent } from '../ressources/ressources.component';
 
 @Component({
   selector: 'app-main',
@@ -68,6 +69,7 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("layoutsList") layoutsList: ElementRef;
 
   @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("ressources") ressourcesComponent: RessourcesComponent;
 
   cssCodePartTitle: HTMLElement;
   jsCodePartTitle: HTMLElement;
@@ -663,6 +665,10 @@ export class MainComponent implements AfterViewInit {
     console.log("splitComponentOuterDragStart event = ", event);
     this.triggerResizeWithInterval(50);
     this.showIframeHider = true;
+  }
+
+  emptyRessourcesData(){
+    this.ressourcesComponent.resetCurrentRessourceChoice();
   }
 
 }

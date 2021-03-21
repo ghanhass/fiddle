@@ -138,13 +138,13 @@
     </as-split>
     
 </div>
-<app-modal #modal>
+<app-modal #modal (onHide)="emptyRessourcesData()">
     <div class="modal-header">
         <h2>Fiddle ressources</h2>
         <button class="modal-close-btn" (click)="hideModal()"><span>X</span></button>
     </div>
     <div class="modal-body">
-        <app-ressources (hidemodal)="hideModal()"></app-ressources>
+        <app-ressources #ressources (hidemodal)="hideModal()"></app-ressources>
     </div>
     <div class="modal-footer" style="padding:0px;">
     </div>

@@ -66,4 +66,13 @@ body{
 .hide{
     display:none !important;
 }
+
+.form-control{
+    height: 24px;
+    font-size: 16px;
+    outline: none;
+    border: 1px solid #808080b3;
+    border-radius: 2px;
+    background: #FFFFFF;
+}
 /*END hassoon's css library*/

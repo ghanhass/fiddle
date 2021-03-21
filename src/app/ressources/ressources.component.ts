@@ -3,6 +3,7 @@ import { RessourcesService } from '../ressources.service';
 import { Cdnjsdata } from '../cdnjsdata';
 import { CdnjsSearchResult } from '../cdnjs-result';
 import { LoaderComponent } from '../loader/loader.component';
+import { CdnjsMetaData } from '../cdnjs-meta-data';
 
 @Component({
   selector: 'app-ressources',
@@ -12,6 +13,7 @@ import { LoaderComponent } from '../loader/loader.component';
 export class RessourcesComponent implements OnInit {
 
   ressourcesQueryString: string;
+  ressourcesChoiceFilesSearchString: string;
   availableRessources: Array<CdnjsSearchResult> = [];
   currentRessourceChoice: CdnjsSearchResult = {
     name:"",
@@ -20,20 +22,44 @@ export class RessourcesComponent implements OnInit {
     description:""
   };
   currentRessourceVersions: [string];
+  currentRessourceVersion: string;
+  currentRessourceAssetsByVersion: Array<string> = [];
+  currentRessourceMetaData: CdnjsMetaData;
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
   @ViewChild("loader")loader:LoaderComponent;
 
   constructor(private ressourcesService: RessourcesService) {}
 
+  searForString(srcStr, searchStr){
+    if(srcStr.toUpperCase() == searchStr.toUpperCase()){
+      return true;
+    }
+    if(srcStr.toUpperCase().includes(searchStr.toUpperCase())){
+      return true;
+    }
+    else{
+      let strsArr = searchStr.split(" ");
+      let counter = 0;
+      for(var ind=0; ind < strsArr.length; ind++){
+        let str = strsArr[ind];
+        if(srcStr.toUpperCase().includes(str.toUpperCase())){
+          counter++;
+        }
+      }
+      if(counter == strsArr.length){
+        return true;
+      }
+    }
+    return false;
+  }
+
   filterRessources(dataSet: Cdnjsdata, searchString: string){
 
     let results = dataSet.results;
+
     let filteredResults = results.filter((result)=>{
-      if(result.name.toUpperCase().includes(searchString.toUpperCase())){
-        return true;
-      }
-      return false;
+      return this.searForString(result.name, searchString);
     }).sort((a, b)=>{
       if(a.name.length > b.name.length){
         return 1;
@@ -69,16 +95,28 @@ export class RessourcesComponent implements OnInit {
   onRessourcesChoiceClick(ressource:CdnjsSearchResult){
     this.currentRessourceChoice = ressource;
     this.loader.showLoader();
-    this.ressourcesService.getRessourceVersions(ressource.name).subscribe((res)=>{
-      console.log("getRessourceVersions res = ", res);
+    this.currentRessourceAssetsByVersion = [];
+    this.ressourcesChoiceFilesSearchString = "";
+    this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
+      console.log("getRessourceMetaData res = ", res);
       console.log("currentRessourceChoice = ", this.currentRessourceChoice);
+      this.currentRessourceMetaData = res;
       this.currentRessourceVersions = res.versions;
+      this.currentRessourceVersion = ressource.version;
+      this.setCurrentRessourceAssetsByVersion(ressource.version);
       this.loader.hideLoader();
     });
   }
 
-  onCurrentRessourceChoiceVersionChange(event){
-    
+  setCurrentRessourceAssetsByVersion(ressourceVersion){
+    this.currentRessourceAssetsByVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
+      return ressourceMetaData.version == ressourceVersion;      
+    })[0].files;
+  }
+
+  onCurrentRessourceChoiceVersionChange(ressourceVersion){
+    console.log("onCurrentRessourceChoiceVersionChange ressourceVersion = ", ressourceVersion);
+    this.setCurrentRessourceAssetsByVersion(ressourceVersion);
   }
 
   @HostListener("window:keyup",["$event"])
@@ -99,6 +137,18 @@ export class RessourcesComponent implements OnInit {
     }
     this.ressourcesQueryString = "";
     this.availableRessources = [];
+    this.currentRessourceAssetsByVersion = [];
+  }
+
+  onRessourcesChoiceFilesSearchStringChange(str){
+    console.log("ressourcesChoiceFilesSearchString = ", this.ressourcesChoiceFilesSearchString);
+    console.log("str = ", str);
+  }
+
+  getFilteredcurrentRessourceAssetsByVersion(datasetArr, searchStr){
+    return datasetArr.filter((srcStr)=>{
+      return this.searForString(srcStr, searchStr);
+    });
   }
 
   ngOnInit(): void {
