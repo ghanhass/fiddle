@@ -6,6 +6,12 @@ import { LoaderComponent } from '../loader/loader.component';
 import { CdnjsMetaData } from '../cdnjs-meta-data';
 import { stripComments } from 'tslint/lib/utils';
 
+interface selectedRessourceAsset{
+  ressourceName: string;
+  asset:string;
+  version:string;
+}
+
 @Component({
   selector: 'app-ressources',
   templateUrl: './ressources.component.html',
@@ -26,10 +32,12 @@ export class RessourcesComponent implements OnInit {
   currentRessourceVersion: string;
   currentRessourceAssetsByVersion: Array<string> = [];
   currentRessourceMetaData: CdnjsMetaData;
-  selectedRessourceAssets: Array<string> = [];
+  
+  selectedRessourceAssets: Array<selectedRessourceAsset> = [];
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
   @ViewChild("loader")loader:LoaderComponent;
+  assetIndexDragstart: number;
 
   constructor(private ressourcesService: RessourcesService) {}
 
@@ -103,6 +111,7 @@ export class RessourcesComponent implements OnInit {
     this.currentRessourceAssetsByVersion = [];
     this.ressourcesChoiceFilesSearchString = "";
     this.currentRessourceVersion = "";
+    //this.selectedRessourceAssets = [];
     this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
       console.log("getRessourceMetaData res = ", res);
       console.log("currentRessourceChoice = ", this.currentRessourceChoice);
@@ -118,6 +127,7 @@ export class RessourcesComponent implements OnInit {
     this.currentRessourceAssetsByVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
       return ressourceMetaData.version == ressourceVersion;      
     })[0].files;
+    //this.selectedRessourceAssets = [];
   }
 
   onCurrentRessourceChoiceVersionChange(ressourceVersion){
@@ -144,6 +154,7 @@ export class RessourcesComponent implements OnInit {
     this.ressourcesQueryString = "";
     this.availableRessources = [];
     this.currentRessourceAssetsByVersion = [];
+    this.selectedRessourceAssets = [];
   }
 
   onRessourcesChoiceFilesSearchStringChange(str){
@@ -162,6 +173,53 @@ export class RessourcesComponent implements OnInit {
     }).filter((srcStr)=>{
       return this.searForString(srcStr, searchStr);
     });
+  }
+
+  onSelectRessourceAsset(asset, ressource:CdnjsSearchResult){
+    console.log("onSelectRessourceAsset data = ", asset);
+
+    let assetIndex = undefined; 
+    for(let ind = 0; ind < this.selectedRessourceAssets.length; ind++){
+      let assetData =  this.selectedRessourceAssets[ind];
+      if(assetData.asset == asset && assetData.ressourceName == ressource.name && assetData.version == this.currentRessourceVersion ){
+        assetIndex = ind;
+        break;
+      }
+    }
+    if(assetIndex === undefined){
+      this.selectedRessourceAssets.push({ressourceName: ressource.name, asset: asset, version:this.currentRessourceVersion});
+    }
+    else{
+      this.selectedRessourceAssets.splice(assetIndex, 1);
+    }
+
+  }
+
+  isRessourceAssetSelected(asset, ressource:CdnjsSearchResult){
+    return this.selectedRessourceAssets.filter((el)=>{return el.asset == asset && el.ressourceName == ressource.name && el.version == this.currentRessourceVersion}).length > 0;
+  }
+
+  choiceFilesParentDrop(event){
+    console.log("choiceFilesParentDrop event.target = ", event.target);
+    let evTarget: HTMLElement = event.target as HTMLElement;
+    if(evTarget.classList.contains("ressources-choice-files")){
+      //evTarget.style.backgroundColor = "red";
+      let assetIndex = parseInt(evTarget.dataset.index);
+      //console.log("assetIndex = ", assetIndex);
+      let temp = this.currentRessourceAssetsByVersion[this.assetIndexDragstart];
+      this.currentRessourceAssetsByVersion[this.assetIndexDragstart] = this.currentRessourceAssetsByVersion[assetIndex]
+      this.currentRessourceAssetsByVersion[assetIndex] = temp;
+    }
+  }
+
+  choiceFilesParentDragover(event:DragEvent){
+    event.preventDefault();
+  }
+
+  onRessourceAssetDragstart(event:DragEvent){
+    console.log("onRessourceAssetDragstart event = ", event.target);
+    let evTarget: HTMLElement = event.target as HTMLElement;
+    this.assetIndexDragstart = parseInt(evTarget.dataset.index);
   }
 
   ngOnInit(): void {

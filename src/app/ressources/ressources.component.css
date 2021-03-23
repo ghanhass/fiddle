@@ -33,6 +33,11 @@
   border: 1px solid #bbb;
 }
 
+.ressources-choices-container.is-reduced{
+  height: 32%;
+  min-height: 32%;
+}
+
 .ressources-choice {
   padding: 4px 0 4px 5px;
   user-select: none;
@@ -65,11 +70,11 @@
 }
 
 .ressources-choice:hover {
-  background-color: #afafaf3b;
+  background-color: #afafaf69;
 }
 
 .ressources-choice.current-choice {
-  background-color: #62ad4a3b;
+  background-color: #62ad4a63;
 }
 
 .ressource-choice-name {
@@ -81,7 +86,8 @@
   width:100%;
   border: 1px solid #bbb;
   margin: auto;
-  flex-grow: 1;
+  min-height: 22%;
+  height: 22%;
 }
 
 .ressources-choice-files {
@@ -89,8 +95,29 @@
   user-select: none;
   cursor:pointer;
 }
+
+.ressources-choice-files-container.is-stretched{
+  min-height: auto;
+  flex-grow: 1;
+  height: auto;
+}
+
+.ressources-choice-selected-files-container.is-stretched{
+  flex-grow: 1;
+  overflow: auto;
+  width: 100%;
+}
+
+.ressources-choice-files span{
+  pointer-events: none;
+}
+
 .ressources-choice-files:hover {
-  background-color: #afafaf3b;
+  background-color: #afafaf69;
+}
+
+.ressources-choice-files.selected {
+  background: #62ad4a63;
 }
 
 .ressources-choice-files:first-child ~ .ressources-choice-files{

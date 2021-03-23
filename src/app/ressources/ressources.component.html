@@ -12,7 +12,7 @@
         </div>
         <app-loader #loader></app-loader>
     </div>
-    <div class="ressources-choices-container">
+    <div class="ressources-choices-container" [ngClass]="{'is-reduced': (selectedRessourceAssets.length > 0)}">
         <div class="ressources-choices-parent" *ngIf="availableRessources.length">
             <div class="ressources-choice" *ngFor="let ressource of availableRessources" (click)="onRessourcesChoiceClick(ressource)" [ngClass]="{'current-choice':currentRessourceChoice.name == ressource.name}">
                 <div class="ressource-choice-name">{{ressource.name}}</div>
@@ -27,18 +27,22 @@
     <hr>
     <div class="ressources-choice-files-search" *ngIf="currentRessourceAssetsByVersion.length">
         <h3 style="text-align: center;margin:1px 0px;">{{currentRessourceChoice.name}} {{currentRessourceVersion}}</h3>
-        <label for="ressources-choice-files-search-input">Search for files: </label>
-        <input (ngModelChange)="onRessourcesChoiceFilesSearchStringChange($event)" type="text" id="ressources-choice-files-search-input" class="form-control ressources-choice-files-search" [(ngModel)]="ressourcesChoiceFilesSearchString">
+        <div>
+            <label for="ressources-choice-files-search-input">Search for files: </label>
+            <input (ngModelChange)="onRessourcesChoiceFilesSearchStringChange($event)" type="text" id="ressources-choice-files-search-input" class="form-control ressources-choice-files-search" [(ngModel)]="ressourcesChoiceFilesSearchString">
+        </div>
     </div>
-    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion">
-        <div class="ressources-choice-files-parent" *ngIf="currentRessourceAssetsByVersion.length">
-            <div class="ressources-choice-files" *ngFor="let file of getFilteredcurrentRessourceAssetsByVersion(currentRessourceAssetsByVersion, ressourcesChoiceFilesSearchString)">
+    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion" [ngClass]="{'is-stretched': (selectedRessourceAssets.length == 0)}">
+        <div class="ressources-choice-files-parent" *ngIf="currentRessourceAssetsByVersion.length" (drop)="choiceFilesParentDrop($event)" (dragover)="choiceFilesParentDragover($event)">
+            <div draggable="true" [ngClass]="{'selected': isRessourceAssetSelected(file, currentRessourceChoice)}" class="ressources-choice-files" *ngFor="let file of getFilteredcurrentRessourceAssetsByVersion(currentRessourceAssetsByVersion, ressourcesChoiceFilesSearchString); let ind = index" (click)="onSelectRessourceAsset(file, currentRessourceChoice)" [attr.data-index]="ind" (dragstart)="onRessourceAssetDragstart($event)">
                 <span class="ressource-choice-file">{{file}}</span>
             </div>
         </div> 
     </div>
-    <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length">
-        <div class="ressources-choice-selected-file">
-        </div> 
-    </div>
+    <hr *ngIf="selectedRessourceAssets.length">
+    <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length > 0)}">
+            <div class="ressources-choice-selected-file" *ngFor="let selectedFile of selectedRessourceAssets">
+                {{selectedFile.asset}}
+            </div> 
+        </div>
 </div>
