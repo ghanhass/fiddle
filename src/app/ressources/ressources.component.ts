@@ -4,6 +4,7 @@ import { Cdnjsdata } from '../cdnjsdata';
 import { CdnjsSearchResult } from '../cdnjs-result';
 import { LoaderComponent } from '../loader/loader.component';
 import { CdnjsMetaData } from '../cdnjs-meta-data';
+import { stripComments } from 'tslint/lib/utils';
 
 @Component({
   selector: 'app-ressources',
@@ -25,6 +26,7 @@ export class RessourcesComponent implements OnInit {
   currentRessourceVersion: string;
   currentRessourceAssetsByVersion: Array<string> = [];
   currentRessourceMetaData: CdnjsMetaData;
+  selectedRessourceAssets: Array<string> = [];
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
   @ViewChild("loader")loader:LoaderComponent;
@@ -150,7 +152,14 @@ export class RessourcesComponent implements OnInit {
   }
 
   getFilteredcurrentRessourceAssetsByVersion(datasetArr, searchStr){
-    return datasetArr.filter((srcStr)=>{
+    return datasetArr.filter((srcStr: string)=>{
+      if(srcStr.length >= 4){
+        if(srcStr.substr(srcStr.length - 4) == ".css" || srcStr.substr(srcStr.length - 3) == ".js"){
+          return true;
+        }
+      }
+      return false;
+    }).filter((srcStr)=>{
       return this.searForString(srcStr, searchStr);
     });
   }
