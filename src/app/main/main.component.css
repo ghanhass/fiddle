@@ -637,3 +637,19 @@ as-split-area.code-component-container > app-html-part{
     }
 
 }
+
+app-modal .modal-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+app-modal .modal-header .modal-close-btn{
+    position: static;
+    transform:none;
+}
+
+app-modal .modal-header .modal-validate-btn{
+    color: #FFFFFF;
+    background-color: #62ad4a;
+    padding: 4px 10px;
+}

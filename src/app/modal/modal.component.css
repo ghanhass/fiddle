@@ -1,6 +1,7 @@
 ::ng-deep .modal-container .modal-header{
   text-align: center;
-  position:relative;padding:4px;
+  position:relative;
+  padding:4px;
 }
 
 ::ng-deep .modal-container .modal-header h2{
@@ -58,7 +59,7 @@
   transition: 0.5s all;
 }
 .modal{
-  top: 10px;
+  top: 1px;
   transform:translateY(0px) translateX(-50%);
   position: absolute;
   left: 50%;
@@ -71,7 +72,7 @@
   box-shadow: 0 0px 8px 1px gray;
   border: 1px solid #80808080;
   transition: 0.5s all;
-  height: calc(100% - 20px);
+  height: calc(100% - 2px);
   overflow: auto;
 }
 

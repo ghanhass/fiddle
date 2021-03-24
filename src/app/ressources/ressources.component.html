@@ -26,23 +26,24 @@
     </div>    
     <hr>
     <div class="ressources-choice-files-search" *ngIf="currentRessourceAssetsByVersion.length">
-        <h3 style="text-align: center;margin:1px 0px;">{{currentRessourceChoice.name}} {{currentRessourceVersion}}</h3>
+        <h3 style="text-align: center;margin:1px 0px;">{{currentRessourceChoice.name}} {{currentRessourceVersion}} ressources (click to toggle)</h3>
         <div>
             <label for="ressources-choice-files-search-input">Search for files: </label>
             <input (ngModelChange)="onRessourcesChoiceFilesSearchStringChange($event)" type="text" id="ressources-choice-files-search-input" class="form-control ressources-choice-files-search" [(ngModel)]="ressourcesChoiceFilesSearchString">
         </div>
     </div>
-    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion" [ngClass]="{'is-stretched': (selectedRessourceAssets.length == 0)}">
-        <div class="ressources-choice-files-parent" *ngIf="currentRessourceAssetsByVersion.length" (drop)="choiceFilesParentDrop($event)" (dragover)="choiceFilesParentDragover($event)">
-            <div draggable="true" [ngClass]="{'selected': isRessourceAssetSelected(file, currentRessourceChoice)}" class="ressources-choice-files" *ngFor="let file of getFilteredcurrentRessourceAssetsByVersion(currentRessourceAssetsByVersion, ressourcesChoiceFilesSearchString); let ind = index" (click)="onSelectRessourceAsset(file, currentRessourceChoice)" [attr.data-index]="ind" (dragstart)="onRessourceAssetDragstart($event)">
+    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion && currentRessourceAssetsByVersion.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length == 0)}">
+        <div class="ressources-choice-files-parent">
+            <div [ngClass]="{'selected': isRessourceAssetSelected(file, currentRessourceChoice)}" class="ressources-choice-files" *ngFor="let file of getFilteredcurrentRessourceAssetsByVersion(currentRessourceAssetsByVersion, ressourcesChoiceFilesSearchString)" (click)="onSelectRessourceAsset(file, currentRessourceChoice)" [title]="'(click to toggle)'">
                 <span class="ressource-choice-file">{{file}}</span>
             </div>
         </div> 
     </div>
     <hr *ngIf="selectedRessourceAssets.length">
+    <h3 style="text-align: center;margin:1px 0px;" *ngIf="selectedRessourceAssets.length">Seleted ressources (grab to reorder)</h3>
     <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length > 0)}">
-            <div class="ressources-choice-selected-file" *ngFor="let selectedFile of selectedRessourceAssets">
-                {{selectedFile.asset}}
+            <div draggable="true" class="ressources-choice-selected-file" *ngFor="let selectedFile of selectedRessourceAssets; let ind = index" [title]="'Grab to reorder'" (drop)="ressourceChoiceSelectedAssetDrop($event)" (dragover)="ressourceChoiceSelectedAssetDragover($event)" (dragstart)="ressourceChoiceSelectedAssetDragstart($event)" (dragenter)="ressourceChoiceSelectedAssetDragenter($event)" (dragleave)="ressourceChoiceSelectedAssetDragleave($event)" [attr.data-index]="ind" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
+                <span>{{getFullAssetUrl(selectedFile)}}</span>
             </div> 
         </div>
 </div>

@@ -102,6 +102,12 @@
   height: auto;
 }
 
+
+.ressources-choice-selected-files-container{
+  border: 1px solid #bbb;
+  margin: auto;
+}
+
 .ressources-choice-selected-files-container.is-stretched{
   flex-grow: 1;
   overflow: auto;
@@ -130,4 +136,24 @@
 
 .ressources-choice-files-search{
   margin: 1px auto 1px auto;
+}
+
+.ressources-choice-selected-file {
+  padding: 5px;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #bbb;
+}
+
+.ressources-choice-selected-file span{
+  pointer-events: none;
+}
+
+.ressources-choice-selected-file.placeholder {
+  background-color: #ffff0094;
+  border: 2px dashed gray;
+  border-top: 2px dashed gray;
+  border-bottom: 2px dashed gray;
 }

@@ -669,6 +669,12 @@ export class MainComponent implements AfterViewInit {
 
   emptyRessourcesData(){
     this.ressourcesComponent.resetCurrentRessourceChoice();
+    this.ressourcesComponent.emptySelectedRessourceAssets();
+  }
+
+  validateRessources(){
+    this.ressourcesComponent.validateRessources();
+    this.hideModal();
   }
 
 }

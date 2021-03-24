@@ -6,10 +6,13 @@ import { LoaderComponent } from '../loader/loader.component';
 import { CdnjsMetaData } from '../cdnjs-meta-data';
 import { stripComments } from 'tslint/lib/utils';
 
-interface selectedRessourceAsset{
+interface SelectedRessourceAsset{
   ressourceName: string;
   asset:string;
   version:string;
+  latest:string;
+  latestVersion:string;
+  placeholderMode:boolean;
 }
 
 @Component({
@@ -33,7 +36,7 @@ export class RessourcesComponent implements OnInit {
   currentRessourceAssetsByVersion: Array<string> = [];
   currentRessourceMetaData: CdnjsMetaData;
   
-  selectedRessourceAssets: Array<selectedRessourceAsset> = [];
+  selectedRessourceAssets: Array<SelectedRessourceAsset> = [];
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
   @ViewChild("loader")loader:LoaderComponent;
@@ -111,7 +114,6 @@ export class RessourcesComponent implements OnInit {
     this.currentRessourceAssetsByVersion = [];
     this.ressourcesChoiceFilesSearchString = "";
     this.currentRessourceVersion = "";
-    //this.selectedRessourceAssets = [];
     this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
       console.log("getRessourceMetaData res = ", res);
       console.log("currentRessourceChoice = ", this.currentRessourceChoice);
@@ -127,7 +129,6 @@ export class RessourcesComponent implements OnInit {
     this.currentRessourceAssetsByVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
       return ressourceMetaData.version == ressourceVersion;      
     })[0].files;
-    //this.selectedRessourceAssets = [];
   }
 
   onCurrentRessourceChoiceVersionChange(ressourceVersion){
@@ -141,6 +142,7 @@ export class RessourcesComponent implements OnInit {
     if(event.key == "Escape"){
       this.hidemodal.emit();
       this.resetCurrentRessourceChoice();
+      this.emptySelectedRessourceAssets();
     }
   }
 
@@ -154,7 +156,10 @@ export class RessourcesComponent implements OnInit {
     this.ressourcesQueryString = "";
     this.availableRessources = [];
     this.currentRessourceAssetsByVersion = [];
-    this.selectedRessourceAssets = [];
+  }
+
+  emptySelectedRessourceAssets(){
+    this.selectedRessourceAssets = []; 
   }
 
   onRessourcesChoiceFilesSearchStringChange(str){
@@ -179,47 +184,92 @@ export class RessourcesComponent implements OnInit {
     console.log("onSelectRessourceAsset data = ", asset);
 
     let assetIndex = undefined; 
-    for(let ind = 0; ind < this.selectedRessourceAssets.length; ind++){
+    for(let ind = 0; ind < this.selectedRessourceAssets.length; ind++){ //see if selected-asset's index is already selected
       let assetData =  this.selectedRessourceAssets[ind];
       if(assetData.asset == asset && assetData.ressourceName == ressource.name && assetData.version == this.currentRessourceVersion ){
         assetIndex = ind;
         break;
       }
     }
-    if(assetIndex === undefined){
-      this.selectedRessourceAssets.push({ressourceName: ressource.name, asset: asset, version:this.currentRessourceVersion});
+    if(assetIndex === undefined){ //selected asset doesn't exist in selected assets array? push it
+      this.selectedRessourceAssets.push({
+        ressourceName: ressource.name, 
+        asset: asset, 
+        version:this.currentRessourceVersion, 
+        latest:ressource.latest, 
+        latestVersion: ressource.version,
+        placeholderMode: false
+      });
     }
-    else{
+    else{ //remove it otherwise
       this.selectedRessourceAssets.splice(assetIndex, 1);
     }
 
   }
 
   isRessourceAssetSelected(asset, ressource:CdnjsSearchResult){
-    return this.selectedRessourceAssets.filter((el)=>{return el.asset == asset && el.ressourceName == ressource.name && el.version == this.currentRessourceVersion}).length > 0;
+    return this.selectedRessourceAssets.filter((el)=>{
+      return el.asset == asset && el.ressourceName == ressource.name && el.version == this.currentRessourceVersion
+    }).length > 0;
   }
 
-  choiceFilesParentDrop(event){
-    console.log("choiceFilesParentDrop event.target = ", event.target);
+  ressourceChoiceSelectedAssetDrop(event){
+    console.log("ressourceChoiceSelectedAssetDrop event.target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
-    if(evTarget.classList.contains("ressources-choice-files")){
-      //evTarget.style.backgroundColor = "red";
-      let assetIndex = parseInt(evTarget.dataset.index);
-      //console.log("assetIndex = ", assetIndex);
-      let temp = this.currentRessourceAssetsByVersion[this.assetIndexDragstart];
-      this.currentRessourceAssetsByVersion[this.assetIndexDragstart] = this.currentRessourceAssetsByVersion[assetIndex]
-      this.currentRessourceAssetsByVersion[assetIndex] = temp;
-    }
+    //evTarget.style.backgroundColor = "red";
+    let assetIndex = parseInt(evTarget.dataset.index);
+    //console.log("assetIndex = ", assetIndex);
+    let temp = this.selectedRessourceAssets[this.assetIndexDragstart];
+    this.selectedRessourceAssets[this.assetIndexDragstart] = this.selectedRessourceAssets[assetIndex]
+    this.selectedRessourceAssets[assetIndex] = temp;
+    this.selectedRessourceAssets.filter((el)=>{
+      return el.placeholderMode;
+    }).forEach((el)=>{
+      el.placeholderMode = false;
+    })
   }
 
-  choiceFilesParentDragover(event:DragEvent){
+  ressourceChoiceSelectedAssetDragover(event:DragEvent){
     event.preventDefault();
   }
 
-  onRessourceAssetDragstart(event:DragEvent){
-    console.log("onRessourceAssetDragstart event = ", event.target);
+  ressourceChoiceSelectedAssetDragstart(event:DragEvent){
+    console.log("ressourceChoiceSelectedAssetDragstart event = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     this.assetIndexDragstart = parseInt(evTarget.dataset.index);
+  }
+
+  ressourceChoiceSelectedAssetDragenter(event:DragEvent){
+    console.log("ressourceChoiceSelectedAssetDragenter target = ", event.target);
+    let evTarget: HTMLElement = event.target as HTMLElement;
+    //evTarget.classList.add("placeholder");
+    let index = parseInt(evTarget.dataset.index);
+    this.selectedRessourceAssets[index].placeholderMode = true;
+  }
+
+  ressourceChoiceSelectedAssetDragleave(event:DragEvent){
+    console.log("ressourceChoiceSelectedAssetDragleave target = ", event.target);
+    let evTarget: HTMLElement = event.target as HTMLElement;
+    //evTarget.classList.remove("placeholder");
+    let index = parseInt(evTarget.dataset.index);
+    this.selectedRessourceAssets[index].placeholderMode = false;
+  }
+
+  getFullAssetUrl(selectedRessourceAsset: SelectedRessourceAsset){
+    let latest = selectedRessourceAsset.latest;
+    let version = selectedRessourceAsset.version;
+    let asset = selectedRessourceAsset.asset;
+    let arr = latest.split(selectedRessourceAsset.latestVersion);
+    let url = "";
+    if(arr.length){
+      url = arr[0];
+      url += version + "/" + asset;
+    }
+    return url;
+  }
+
+  validateRessources(){
+    //validate ressources here
   }
 
   ngOnInit(): void {
