@@ -154,6 +154,7 @@ export class RessourcesComponent implements OnInit {
       description:""
     }
     this.ressourcesQueryString = "";
+    this.ressourcesChoiceFilesSearchString = "";
     this.availableRessources = [];
     this.currentRessourceAssetsByVersion = [];
   }
@@ -266,6 +267,17 @@ export class RessourcesComponent implements OnInit {
       url += version + "/" + asset;
     }
     return url;
+  }
+
+  removeSelectedRessourceAsset(selectedRessourceAsset: SelectedRessourceAsset){
+    let assetIndex = this.selectedRessourceAssets.findIndex((el)=>{
+      return el.ressourceName == selectedRessourceAsset.ressourceName &&
+      el.version == selectedRessourceAsset.version && 
+      el.asset == selectedRessourceAsset.asset
+    })
+    if(assetIndex !== -1){
+      this.selectedRessourceAssets.splice(assetIndex, 1);
+    }
   }
 
   validateRessources(){
