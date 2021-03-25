@@ -237,23 +237,30 @@ export class RessourcesComponent implements OnInit {
   ressourceChoiceSelectedAssetDragstart(event:DragEvent){
     console.log("ressourceChoiceSelectedAssetDragstart event = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
-    this.assetIndexDragstart = parseInt(evTarget.dataset.index);
+    if(evTarget.classList.contains('ressources-choice-selected-file')){
+      this.assetIndexDragstart = parseInt(evTarget.dataset.index);
+    }
   }
 
   ressourceChoiceSelectedAssetDragenter(event:DragEvent){
     console.log("ressourceChoiceSelectedAssetDragenter target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     //evTarget.classList.add("placeholder");
-    let index = parseInt(evTarget.dataset.index);
-    this.selectedRessourceAssets[index].placeholderMode = true;
+    if(evTarget.classList.contains('ressources-choice-selected-file')){
+      this.assetIndexDragstart = parseInt(evTarget.dataset.index);
+      let index = parseInt(evTarget.dataset.index);
+      this.selectedRessourceAssets[index].placeholderMode = true;
+    }
   }
 
   ressourceChoiceSelectedAssetDragleave(event:DragEvent){
     console.log("ressourceChoiceSelectedAssetDragleave target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     //evTarget.classList.remove("placeholder");
-    let index = parseInt(evTarget.dataset.index);
-    this.selectedRessourceAssets[index].placeholderMode = false;
+    if(evTarget.classList.contains('ressources-choice-selected-file')){
+      let index = parseInt(evTarget.dataset.index);
+      this.selectedRessourceAssets[index].placeholderMode = false;
+    }
   }
 
   getFullAssetUrl(selectedRessourceAsset: SelectedRessourceAsset){

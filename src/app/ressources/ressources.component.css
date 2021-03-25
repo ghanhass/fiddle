@@ -136,6 +136,7 @@
 
 .ressources-choice-files-search{
   margin: 1px auto 1px auto;
+  text-align: center;
 }
 
 .ressources-choice-selected-file {
@@ -159,4 +160,8 @@
   border: 2px dashed gray;
   border-top: 2px dashed gray;
   border-bottom: 2px dashed gray;
+}
+
+input[type]{
+  text-align:left;
 }
