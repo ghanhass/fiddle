@@ -667,11 +667,6 @@ export class MainComponent implements AfterViewInit {
     this.showIframeHider = true;
   }
 
-  emptyRessourcesData(){
-    this.ressourcesComponent.resetCurrentRessourceChoice();
-    this.ressourcesComponent.emptySelectedRessourceAssets();
-  }
-
   validateRessources(){
     this.ressourcesComponent.validateRessources();
     this.hideModal();

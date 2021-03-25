@@ -116,6 +116,7 @@
 
 .ressources-choice-files span{
   pointer-events: none;
+  word-break: break-word;
 }
 
 .ressources-choice-files:hover {
@@ -154,6 +155,7 @@
 
 .ressources-choice-selected-file span{
   pointer-events: none;
+  word-break: break-word;
 }
 
 .ressources-choice-selected-file.placeholder {
@@ -180,4 +182,6 @@ input[type]{
 
 .btn-remove-selected-ressource-wrapper{
   padding: 4px 0;
+  display: flex;
+  align-items: center;
 }
