@@ -44,7 +44,6 @@
     <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length > 0)}">
             <div draggable="true" class="ressources-choice-selected-file" *ngFor="let selectedFile of selectedRessourceAssets; let ind = index" [title]="'Grab to reorder'" (drop)="ressourceChoiceSelectedAssetDrop($event)" (dragover)="ressourceChoiceSelectedAssetDragover($event)" (dragstart)="ressourceChoiceSelectedAssetDragstart($event)" (dragenter)="ressourceChoiceSelectedAssetDragenter($event)" (dragleave)="ressourceChoiceSelectedAssetDragleave($event)" [attr.data-index]="ind" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
                 <span>{{getFullAssetUrl(selectedFile)}}</span>
-                <button class="btn" (click)="removeSelectedRessourceAsset(selectedFile)"><span>X</span></button>
             </div> 
         </div>
 </div>
