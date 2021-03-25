@@ -42,8 +42,13 @@
     <hr *ngIf="selectedRessourceAssets.length">
     <h3 style="text-align: center;margin:1px 0px;" *ngIf="selectedRessourceAssets.length">Seleted ressources (grab to reorder)</h3>
     <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length > 0)}">
-            <div draggable="true" class="ressources-choice-selected-file" *ngFor="let selectedFile of selectedRessourceAssets; let ind = index" [title]="'Grab to reorder'" (drop)="ressourceChoiceSelectedAssetDrop($event)" (dragover)="ressourceChoiceSelectedAssetDragover($event)" (dragstart)="ressourceChoiceSelectedAssetDragstart($event)" (dragenter)="ressourceChoiceSelectedAssetDragenter($event)" (dragleave)="ressourceChoiceSelectedAssetDragleave($event)" [attr.data-index]="ind" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
-                <span>{{getFullAssetUrl(selectedFile)}}</span>
+            <div class="ressources-choice-selected-file-wrapper" *ngFor="let selectedFile of selectedRessourceAssets; let ind = index" [title]="'Grab to reorder'" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
+                <div draggable="true" class="ressources-choice-selected-file" (drop)="ressourceChoiceSelectedAssetDrop($event)" (dragover)="ressourceChoiceSelectedAssetDragover($event)" (dragstart)="ressourceChoiceSelectedAssetDragstart($event)" (dragenter)="ressourceChoiceSelectedAssetDragenter($event)" (dragleave)="ressourceChoiceSelectedAssetDragleave($event)" [attr.data-index]="ind" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
+                    <span>{{getFullAssetUrl(selectedFile)}}</span>
+                </div>
+                <div class="btn-remove-selected-ressource-wrapper">
+                    <button class="btn btn-remove-selected-ressource" (click)="removeSelectedRessourceAsset(selectedFile)"><span>X</span></button>
+                </div>
             </div> 
         </div>
 </div>

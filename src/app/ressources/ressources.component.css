@@ -145,10 +145,11 @@
   user-select: none;
   cursor: grab;
   background-color: #FFFFFF;
-  border-bottom: 1px solid #bbb;
+  /*border-bottom: 1px solid #bbb;*/
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-grow: 1;
 }
 
 .ressources-choice-selected-file span{
@@ -157,6 +158,10 @@
 
 .ressources-choice-selected-file.placeholder {
   background-color: #ffff0094;
+}
+
+.ressources-choice-selected-file-wrapper.placeholder {
+  background-color: #ffff0094;
   border: 2px dashed gray;
   border-top: 2px dashed gray;
   border-bottom: 2px dashed gray;
@@ -164,4 +169,15 @@
 
 input[type]{
   text-align:left;
+}
+
+.ressources-choice-selected-file-wrapper {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+  border-bottom: 1px solid #bbb;
+}
+
+.btn-remove-selected-ressource-wrapper{
+  padding: 4px 0;
 }
