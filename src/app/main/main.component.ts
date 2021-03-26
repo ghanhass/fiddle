@@ -675,6 +675,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   onRessourcesValidate(dataEvent: Array<string>){
+    this.htmlCode = this.mainService.htmlCode;
     dataEvent.forEach((el)=>{
       this.htmlCode += el;
     });
@@ -684,17 +685,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   onCodeUpdate(type, code){
-    switch(type){
-      case 'html':
-      this.htmlCode = code;
-      break;
-      case 'js':
-      this.jsCode = code;
-      break;
-      case 'css':
-      this.cssCode = code;
-      break;
-    }
+
   }
 
 }

@@ -288,18 +288,23 @@ export class RessourcesComponent implements OnInit {
 
   validateRessources(){
     //validate ressources here
+    let maxLength = 0;
     let selectedRessourceAssets = this.selectedRessourceAssets.map((el:SelectedRessourceAsset)=>{
       let srcStr = el.asset;
+      let result = "";
       if(srcStr.substr(srcStr.length - 4) == ".css"){
-        return "<link rel='stylesheet' href='"+this.getFullAssetUrl(el)+"'>"+"\n";
+        result = "<link rel='stylesheet' href='"+this.getFullAssetUrl(el)+"'>"+"\n";
       }
       else if(srcStr.substr(srcStr.length - 3) == ".js"){
-        return "<script src='"+this.getFullAssetUrl(el)+"'></script>"+"\n";
+        result =  "<script src='"+this.getFullAssetUrl(el)+"'></script>"+"\n";
       }
-      return "";
+      return result;
     }).filter((el)=>{
       return el != "";
     });
+    if(selectedRessourceAssets.length){
+      selectedRessourceAssets.push("\n");
+    }
     this.validate.emit(selectedRessourceAssets);
   }
 
