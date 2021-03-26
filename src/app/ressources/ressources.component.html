@@ -1,4 +1,8 @@
 <div class="ressources-container">
+    <div class="resources-tabs-mobile">
+        <label for="ressources-mobile-tab-browse"> <input [(ngModel)]="ressoucesMobileTab" type="radio" name="ressources-mobile-tab" value="browse" id="ressources-mobile-tab-browse"></label>
+        <label for="ressources-mobile-tab-select"> <input [(ngModel)]="ressoucesMobileTab" type="radio" name="ressources-mobile-tab" value="select" id="ressources-mobile-tab-select"></label>
+    </div>
     <div class="ressources-query-container">
         <div class="ressources-query-parent" [ngStyle]="{'margin-right':'15px'}">
             <label for="ressources-query-input">Search for libraries: </label>

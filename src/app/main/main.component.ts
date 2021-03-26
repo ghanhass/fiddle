@@ -678,6 +678,8 @@ export class MainComponent implements AfterViewInit {
     dataEvent.forEach((el)=>{
       this.htmlCode += el;
     });
+    this.ressourcesComponent.resetCurrentRessourceChoice();
+    this.ressourcesComponent.emptySelectedRessourceAssets();
     this.toastrService.success("Ressources prepended to HTML code.");
   }
 
