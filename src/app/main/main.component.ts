@@ -5,6 +5,7 @@ import { ActivatedRoute } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
 import { SplitComponent } from "angular-split";
 import { RessourcesComponent } from '../ressources/ressources.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-main',
@@ -84,7 +85,8 @@ export class MainComponent implements AfterViewInit {
   windowHeight: number;
 
   constructor(private mainService: MainService,
-    private activatedRoute: ActivatedRoute) { 
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService) { 
   }
 
   ngAfterViewInit(): void {
@@ -670,6 +672,13 @@ export class MainComponent implements AfterViewInit {
   validateRessources(){
     this.ressourcesComponent.validateRessources();
     this.hideModal();
+  }
+
+  onRessourcesValidate(dataEvent: Array<string>){
+    dataEvent.forEach((el)=>{
+      this.htmlCode += el;
+    });
+    this.toastrService.success("Ressources prepended to HTML code.");
   }
 
 }

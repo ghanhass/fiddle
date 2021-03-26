@@ -39,6 +39,9 @@ export class RessourcesComponent implements OnInit {
   selectedRessourceAssets: Array<SelectedRessourceAsset> = [];
 
   @Output()hidemodal:EventEmitter<any> = new EventEmitter();
+
+  @Output()validate:EventEmitter<Array<string>> = new EventEmitter();
+
   @ViewChild("loader")loader:LoaderComponent;
   assetIndexDragstart: number;
 
@@ -282,6 +285,19 @@ export class RessourcesComponent implements OnInit {
 
   validateRessources(){
     //validate ressources here
+    let selectedRessourceAssets = this.selectedRessourceAssets.map((el:SelectedRessourceAsset)=>{
+      let srcStr = el.asset;
+      if(srcStr.substr(srcStr.length - 4) == ".css"){
+        return "<link rel='stylesheet' href='"+this.getFullAssetUrl(el)+"'>"+"\n";
+      }
+      else if(srcStr.substr(srcStr.length - 3) == ".js"){
+        return "<script src='"+this.getFullAssetUrl(el)+"'></script>"+"\n";
+      }
+      return "";
+    }).filter((el)=>{
+      return el != "";
+    });
+    this.validate.emit(selectedRessourceAssets);
   }
 
   ngOnInit(): void {

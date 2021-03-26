@@ -145,7 +145,7 @@
         <button class="modal-close-btn" (click)="hideModal()"><span>X</span></button>
     </div>
     <div class="modal-body">
-        <app-ressources #ressources (hidemodal)="hideModal()"></app-ressources>
+        <app-ressources #ressources (hidemodal)="hideModal()" (validate)="onRessourcesValidate($event)"></app-ressources>
     </div>
     <div class="modal-footer" style="padding:0px;">
     </div>
