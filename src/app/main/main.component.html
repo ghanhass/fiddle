@@ -95,7 +95,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode"></app-html-part>
+                                <app-html-part #htmlPartComponent class="code-component" [code]="htmlCode" (codeupdate)="onCodeUpdate('html', $event)"></app-html-part>
                             </as-split-area>
                             <as-split-area [minSize]="getLayoutInfos('cssAsSplitAreaMinSize')" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css"
                             [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen}">
@@ -110,7 +110,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-css-part #cssPartComponent class="code-component" [code]="cssCode"></app-css-part>
+                                <app-css-part #cssPartComponent class="code-component" [code]="cssCode" (codeupdate)="onCodeUpdate('css', $event)"></app-css-part>
                             </as-split-area>
                             <as-split-area [minSize]="getLayoutInfos('jsAsSplitAreaMinSize')" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" 
                             [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen}">
@@ -125,7 +125,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-js-part #jsPartComponent class="code-component" [code]="jsCode"></app-js-part>
+                                <app-js-part #jsPartComponent class="code-component" [code]="jsCode" (codeupdate)="onCodeUpdate('js', $event)"></app-js-part>
                             </as-split-area>
                         </as-split>
                     </div>

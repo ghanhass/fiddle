@@ -683,4 +683,18 @@ export class MainComponent implements AfterViewInit {
     this.toastrService.success("Ressources prepended to HTML code.");
   }
 
+  onCodeUpdate(type, code){
+    switch(type){
+      case 'html':
+      this.htmlCode = code;
+      break;
+      case 'js':
+      this.jsCode = code;
+      break;
+      case 'css':
+      this.cssCode = code;
+      break;
+    }
+  }
+
 }
