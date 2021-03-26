@@ -43,7 +43,10 @@ export class RessourcesComponent implements OnInit {
   @Output()validate:EventEmitter<Array<string>> = new EventEmitter();
 
   @ViewChild("loader")loader:LoaderComponent;
+  
   assetIndexDragstart: number;
+
+  ressoucesMobileTab: string = "browse";
 
   constructor(private ressourcesService: RessourcesService) {}
 
