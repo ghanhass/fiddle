@@ -257,13 +257,13 @@ input[type]{
   border-bottom: 1px solid #bbb;
 }
 
-@media (min-height:701px){
+@media (min-height:701px) and (min-width:768px){
   .resources-tabs-mobile{
       display:none;
   }
 }
 
-@media (max-height:700px){
+@media (max-height:700px),(max-width:767px){
   .resources-tabs-mobile ~ hr{
       display:none;
   }

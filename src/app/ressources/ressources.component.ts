@@ -132,9 +132,16 @@ export class RessourcesComponent implements OnInit {
   }
 
   setCurrentRessourceAssetsByVersion(ressourceVersion){
-    this.currentRessourceAssetsByVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
+    let assetsPerVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
       return ressourceMetaData.version == ressourceVersion;      
-    })[0].files;
+    });
+    if(assetsPerVersion.length){
+      this.currentRessourceAssetsByVersion = assetsPerVersion[0].files;
+    }
+    else{
+      this.currentRessourceAssetsByVersion =  this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].files;
+      this.currentRessourceVersion = this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].version;
+    }
   }
 
   onCurrentRessourceChoiceVersionChange(ressourceVersion){
