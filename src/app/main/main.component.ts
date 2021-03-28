@@ -343,6 +343,64 @@ export class MainComponent implements AfterViewInit {
       break;
 
       case 4:
+      switch(name){
+        case "outerAsSplitDirection":
+        return "vertical";
+        
+        case "outerAsSplitUnit":
+        return "pixel";
+
+        case "codePartsAsSplitAreaOrder":
+        return 2;
+
+        case "codePartsAsSplitAreaMinSize":
+        return 290;
+
+        case "codePartsAsSplitAreaSize":
+        return 290;
+
+        case "innerAsSplitDirection":
+        return 'horizontal';
+
+        case "innerAsSplitUnit":
+        return 'pixel';
+
+        case "emptyAsSplitAreaMinSize":
+        return 10;
+
+        case "emptyAsSplitAreaSize":
+        return 10;
+
+        case "emptyAsSplitAreaMaxSize":
+        return 10;
+
+        case "htmlAsSplitAreaMinSize":
+        return 1;
+
+        case "htmlAsSplitAreaSize":
+        return (this.codePartsOffsetWidth - 20) / 3;
+
+        case "cssAsSplitAreaSize":
+        return (this.codePartsOffsetWidth - 20) / 3;
+
+        case "cssAsSplitAreaMinSize":
+        return 1;
+
+        case "jsAsSplitAreaSize":
+        return (this.codePartsOffsetWidth - 20) / 3;
+
+        case "jsAsSplitAreaMinSize":
+        return 1;
+
+        case "iframeAsSplitAreaOrder":
+        return 1;
+
+        case "iframeAsSplitAreaMinSize":
+        return 290;
+
+        case "iframeAsSplitAreaSize":
+        return "*";
+      }
       break;
     }
   }

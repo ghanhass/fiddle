@@ -46,7 +46,7 @@
                     </div>
                 </div>
                 <!---->
-                <div class="layout-4 layout" #layout4  [ngClass]="{'active':(layout === 4)}" style="cursor:not-allowed;opacity: 0.5;">
+                <div class="layout-4 layout" #layout4  (click)="changeLayout(4)" [ngClass]="{'active':(layout === 4)}">
                     <div>
                         <div>
                         </div>
