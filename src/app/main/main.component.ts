@@ -641,8 +641,8 @@ export class MainComponent implements AfterViewInit {
 
   onRessourcesValidate(dataEvent: Array<string>){
     this.htmlCode = this.mainService.htmlCode;
-    dataEvent.forEach((el)=>{
-      this.htmlCode += el;
+    dataEvent.forEach((el, index, arr)=>{
+      this.htmlCode = arr[arr.length - 1 - index] + this.htmlCode;
     });
     this.ressourcesComponent.resetCurrentRessourceChoice();
     this.ressourcesComponent.emptySelectedRessourceAssets();
