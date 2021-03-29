@@ -24,9 +24,6 @@ export class MainComponent implements AfterViewInit {
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
   
-
-  codePartsWidth: string = "425px";
-
   htmlPartHeight:number = 0;
   cssPartHeight:number = 0;
   jsPartHeight:number = 0;
@@ -37,14 +34,7 @@ export class MainComponent implements AfterViewInit {
   htmlPartTop: number = 0;
   cssPartTop:number = 0;
   jsPartTop:number = 0;
-  
-  cssMousedownY: number = 0;
-  jsMousedownY: number = 0;
-  mainResizerMousedownX: number = 0;
-  mainResizerMousedownY: number = 0;
 
-  mainResizeMode:boolean = false;
-  verticalResizeType:string = "";
   customInterval: any;
 
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
@@ -74,6 +64,12 @@ export class MainComponent implements AfterViewInit {
   htmlCode: string = "";
   isLayoutsListShown: boolean = false;
   layout: number = 1;
+
+  htmlCodePartSize: number = 0;
+  cssCodePartSize: number = 0;
+  jsCodePartSize: number = 0;
+
+
 
   windowWidth: number;
   windowHeight: number;
@@ -130,6 +126,9 @@ export class MainComponent implements AfterViewInit {
     window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, 1);
+    this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
   }
 
 
@@ -138,26 +137,49 @@ export class MainComponent implements AfterViewInit {
       this.layout = newLayout;
       let codePartsEl: HTMLElement = this.codeParts.nativeElement;
       if(codePartsEl){
-        switch(this.layout){
-          case 1:
-          break;
-          case 2:
-          break;
-          case 3:
-          break;
-          case 4:
-        }
         window.setTimeout(()=>{
           window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          this.codePartsOffsetHeight = codePartsEl.offsetHeight;
+          this.codePartsOffsetWidth = codePartsEl.offsetWidth;
+
+          switch(this.layout){
+            case 1:
+            this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            break;
+            case 2:
+            this.cssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.htmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.jsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            break;
+            case 3:
+            this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            break;
+            case 4:
+            this.cssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.htmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.jsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            break;
+          }
         }, 1);
       }
-      window.setTimeout(()=>{
-        window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-      }, 1);
     }
   }
 
   getLayoutInfos(name){
+    switch(name){
+      case "htmlAsSplitAreaSize":
+      return this.htmlCodePartSize;
+
+      case "cssAsSplitAreaSize":
+      return this.cssCodePartSize
+
+      case "jsAsSplitAreaSize":
+      return this.jsCodePartSize;
+    }
     switch(this.layout){
       case 1:
       switch(name){
@@ -194,17 +216,8 @@ export class MainComponent implements AfterViewInit {
         case "htmlAsSplitAreaMinSize":
         return 25;
 
-        case "htmlAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
-
-        case "cssAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
-
         case "cssAsSplitAreaMinSize":
         return 25;
-
-        case "jsAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
 
         case "jsAsSplitAreaMinSize":
         return 25;
@@ -255,17 +268,8 @@ export class MainComponent implements AfterViewInit {
         case "htmlAsSplitAreaMinSize":
         return 1;
 
-        case "htmlAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
-
-        case "cssAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
-
         case "cssAsSplitAreaMinSize":
         return 1;
-
-        case "jsAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
 
         case "jsAsSplitAreaMinSize":
         return 1;
@@ -316,17 +320,8 @@ export class MainComponent implements AfterViewInit {
         case "htmlAsSplitAreaMinSize":
         return 25;
 
-        case "htmlAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
-
-        case "cssAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
-
         case "cssAsSplitAreaMinSize":
         return 25;
-
-        case "jsAsSplitAreaSize":
-        return (this.codePartsOffsetHeight - 20) / 3;
 
         case "jsAsSplitAreaMinSize":
         return 25;
@@ -377,17 +372,8 @@ export class MainComponent implements AfterViewInit {
         case "htmlAsSplitAreaMinSize":
         return 1;
 
-        case "htmlAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
-
-        case "cssAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
-
         case "cssAsSplitAreaMinSize":
         return 1;
-
-        case "jsAsSplitAreaSize":
-        return (this.codePartsOffsetWidth - 20) / 3;
 
         case "jsAsSplitAreaMinSize":
         return 1;
@@ -476,23 +462,6 @@ export class MainComponent implements AfterViewInit {
   isMobileMode(){
     return (window.innerWidth < 768 || window.innerHeight < 581);
   }
-
-  getCodePartsHeight(){
-    if(this.isMobileMode){
-      return !this.showResult ? '100%':'';
-    }
-    else{
-      if(this.layout == 1 || this.layout == 3){
-        return "";
-      }
-    }
-  }
-
-  getCodePartsWidth(){
-    if(this.layout == 1 || this.layout == 3){
-      return this.codePartsWidth;
-    }
-  } 
 
   toggleCodePart(codeType: string): void{
     switch(codeType){
@@ -707,7 +676,7 @@ export class MainComponent implements AfterViewInit {
     this.toastrService.success("Ressources prepended to HTML code.");
   }
 
-  onCodeUpdate(type, code){
+  getVerticalModeState(codePartType: string){
 
   }
 

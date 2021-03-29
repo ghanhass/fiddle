@@ -11,7 +11,6 @@ export class HtmlPartComponent implements OnInit {
   theme = 'vs-light';
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
-  @Output()codeupdate: EventEmitter<string> = new EventEmitter();
 
   codeModel: any = {
     language: 'html',
@@ -41,7 +40,6 @@ export class HtmlPartComponent implements OnInit {
   onCodeChanged(value) {
     //console.log('CODE', value);
     this.mainService.htmlCode = value;
-    this.codeupdate.emit(value)
     //console.log("html value = ", value);
   }
 
