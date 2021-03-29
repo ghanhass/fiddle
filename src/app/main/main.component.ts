@@ -23,10 +23,6 @@ export class MainComponent implements AfterViewInit {
   isHtmlFullScreen: boolean = false;
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
-  
-  htmlPartHeight:number = 0;
-  cssPartHeight:number = 0;
-  jsPartHeight:number = 0;
 
   codePartsOffsetHeight: number = 0;
   codePartsOffsetWidth: number = 0;
@@ -65,9 +61,14 @@ export class MainComponent implements AfterViewInit {
   isLayoutsListShown: boolean = false;
   layout: number = 1;
 
-  htmlCodePartSize: number = 0;
-  cssCodePartSize: number = 0;
-  jsCodePartSize: number = 0;
+  initialHtmlCodePartSize: number = 0;
+  initialCssCodePartSize: number = 0;
+  initialJsCodePartSize: number = 0;
+
+  newHtmlCodePartSize: number = 0;
+  newCssCodePartSize: number = 0;
+  newJsCodePartSize: number = 0;
+  
 
 
 
@@ -120,17 +121,63 @@ export class MainComponent implements AfterViewInit {
     this.codePartsOffsetHeight = codePartsEl.offsetHeight;
     this.codePartsOffsetWidth = codePartsEl.offsetWidth;
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
-      console.log("dragProgress$ res = ", res);
+      //console.log("dragProgress$ res = ", res);
+      let sizes = this.splitComponentInner.getVisibleAreaSizes();
+      this.newHtmlCodePartSize = sizes[1] as number;
+      this.newCssCodePartSize = sizes[2] as number;
+      this.newJsCodePartSize = sizes[3] as number;
+      //console.log("sizes = ", sizes);
     })
     //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
-    window.setTimeout(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 1);
-    this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-    this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-    this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+
+
+    this.fixCodePartsDimensions();
   }
 
+  /**
+   * Sets dimensions of each .code-component whenever needed using optimized setInterval for each one
+   * @returns void.
+   */
+  fixCodePartsDimensions(): void{
+    let self = this;
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+
+    if(mainContainerEl){
+      let codePartsArray: Array<HTMLElement> = Array.from(mainContainerEl.querySelectorAll(".code-component"));
+      for(let ind = 0; ind < codePartsArray.length; ind++){
+        let codePart = codePartsArray[ind];
+        //console.log("A");
+        if(codePart){
+          //console.log("B");
+          let overflowGuardElement: HTMLElement = codePart.querySelector(".overflow-guard");
+          if(overflowGuardElement){
+            //console.log("C");
+            let marginElement: HTMLElement = overflowGuardElement.querySelector(".margin");
+            let scrollableElement: HTMLElement = overflowGuardElement.querySelector(".monaco-scrollable-element.editor-scrollable.vs");
+            if(marginElement && scrollableElement){
+              //console.log("D");
+              let customInterval = setInterval(()=>{
+                let check: boolean = (marginElement.offsetWidth + scrollableElement.offsetWidth) == overflowGuardElement.offsetWidth;
+                check = check && marginElement.offsetHeight == scrollableElement.offsetHeight && 
+                marginElement.offsetHeight == overflowGuardElement.offsetHeight;
+                if(check){
+                  clearInterval(customInterval);
+                  //console.log("E1");
+                }
+                else{
+                  window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+                  //console.log("E2");
+                }
+              }, 10);
+            }
+          }
+        }
+      }
+    }
+  }
 
   changeLayout(newLayout: number){
     if(newLayout != this.layout){
@@ -138,32 +185,37 @@ export class MainComponent implements AfterViewInit {
       let codePartsEl: HTMLElement = this.codeParts.nativeElement;
       if(codePartsEl){
         window.setTimeout(()=>{
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
           this.codePartsOffsetHeight = codePartsEl.offsetHeight;
           this.codePartsOffsetWidth = codePartsEl.offsetWidth;
-
           switch(this.layout){
             case 1:
-            this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.fixCodePartsDimensions();
             break;
             case 2:
-            this.cssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.htmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.jsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialCssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialHtmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialJsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.fixCodePartsDimensions();
             break;
             case 3:
-            this.cssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.htmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.jsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+            this.fixCodePartsDimensions();
             break;
             case 4:
-            this.cssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.htmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.jsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialCssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialHtmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.initialJsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
+            this.fixCodePartsDimensions();
             break;
           }
+          this.newCssCodePartSize = this.initialCssCodePartSize;
+          this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
+          this.newJsCodePartSize = this.initialJsCodePartSize;
         }, 1);
       }
     }
@@ -172,13 +224,13 @@ export class MainComponent implements AfterViewInit {
   getLayoutInfos(name){
     switch(name){
       case "htmlAsSplitAreaSize":
-      return this.htmlCodePartSize;
+      return this.initialHtmlCodePartSize;
 
       case "cssAsSplitAreaSize":
-      return this.cssCodePartSize
+      return this.initialCssCodePartSize
 
       case "jsAsSplitAreaSize":
-      return this.jsCodePartSize;
+      return this.initialJsCodePartSize;
     }
     switch(this.layout){
       case 1:
@@ -266,13 +318,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "cssAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "jsAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "iframeAsSplitAreaOrder":
         return 2;
@@ -370,13 +422,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "cssAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "jsAsSplitAreaMinSize":
-        return 1;
+        return 25;
 
         case "iframeAsSplitAreaOrder":
         return 1;
@@ -442,17 +494,6 @@ export class MainComponent implements AfterViewInit {
   onWindowResize(event){
     //console.log("/!\ window resize event: ", event);
     this.toggleLayoutsList(true);
-    
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    if(codePartsEl){
-      this.codePartsOffsetHeight = codePartsEl.offsetHeight;
-      this.codePartsOffsetWidth = codePartsEl.offsetWidth;
-    }
-  }
-
-  @HostListener("window:click", ["$event"])
-  onWindowClick(event){
-    //console.log("click event.target = ", event.target);
   }
 
   runCode(param?){
@@ -553,84 +594,6 @@ export class MainComponent implements AfterViewInit {
 
   }
 
-  expandHtml(){
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
-    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
-    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
-    
-    if(this.layout == 1 || this.layout == 3){
-      this.htmlPartHeight = codePartsEl.offsetHeight - 64;
-      htmlPartEl.style.height = this.htmlPartHeight + "px";
-
-      cssPartEl.style.height = "32px";
-      this.cssPartHeight = 32;
-      this.cssPartTop = codePartsEl.offsetHeight - 64;
-      cssPartEl.style.top = this.cssPartTop + "px";
-
-      jsPartEl.style.height = "32px";
-      this.jsPartHeight = 32;
-      this.jsPartTop = codePartsEl.offsetHeight - 32;
-      jsPartEl.style.top = this.jsPartTop + "px";
-    }
-
-    window.setTimeout(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 0);
-  }
-
-  expandCss(){
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
-    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
-    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
-
-    if(this.layout == 1 || this.layout == 3){
-      this.htmlPartHeight = 32;
-      htmlPartEl.style.height = this.htmlPartHeight + "px";
-
-      this.cssPartHeight = codePartsEl.offsetHeight - 64;
-      cssPartEl.style.height = this.cssPartHeight + "px";
-      this.cssPartTop = 32;
-      cssPartEl.style.top = this.cssPartTop + "px";
-
-      jsPartEl.style.height = "32px";
-      this.jsPartHeight = 32;
-      this.jsPartTop = codePartsEl.offsetHeight - 32;
-      jsPartEl.style.top = this.jsPartTop + "px";
-    }
-
-    window.setTimeout(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 0);
-  }
-
-  expandJs(){
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    let htmlPartEl: HTMLElement = this.htmlPart.nativeElement;
-    let cssPartEl: HTMLElement = this.cssPart.nativeElement;
-    let jsPartEl: HTMLElement = this.jsPart.nativeElement;
-
-    if(this.layout == 1 || this.layout == 3){
-      this.htmlPartHeight = 32;
-      htmlPartEl.style.height = this.htmlPartHeight + "px";
-
-      this.cssPartHeight = 32;
-      cssPartEl.style.height = this.cssPartHeight + "px";
-      this.cssPartTop = 32;
-      cssPartEl.style.top = this.cssPartTop + "px";
-
-      this.jsPartHeight = codePartsEl.offsetHeight - 64;
-      jsPartEl.style.height = this.jsPartHeight + "px";
-      this.jsPartTop = 64;
-      jsPartEl.style.top = this.jsPartTop + "px";
-    }
-
-    window.setTimeout(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 0);
-  }
-
   hideModal(){
     this.modal.hide();
   }
@@ -640,23 +603,23 @@ export class MainComponent implements AfterViewInit {
   }
 
   splitComponentInnerDragEnd(event){
-    console.log("splitComponentInnerDragEnd event = ", event);
+    //console.log("splitComponentInnerDragEnd event = ", event);
     clearInterval(this.customInterval);
   }
 
   splitComponentInnerDragStart(event){
-    console.log("splitComponentInnerDragStart event = ", event);
+    //console.log("splitComponentInnerDragStart event = ", event);
     this.triggerResizeWithInterval(50);
   }
 
   splitComponentOuterDragEnd(event){
-    console.log("splitComponentOuterDragEnd event = ", event);
+    //console.log("splitComponentOuterDragEnd event = ", event);
     clearInterval(this.customInterval);
     this.showIframeHider = false;
   }
 
   splitComponentOuterDragStart(event){
-    console.log("splitComponentOuterDragStart event = ", event);
+    //console.log("splitComponentOuterDragStart event = ", event);
     this.triggerResizeWithInterval(50);
     this.showIframeHider = true;
   }
@@ -677,7 +640,36 @@ export class MainComponent implements AfterViewInit {
   }
 
   getVerticalModeState(codePartType: string){
-
+    if(this.layout == 2 || this.layout == 4){
+      switch(codePartType){
+        case("html"):
+        if(this.newHtmlCodePartSize < 150){
+          return true
+        }
+        else{
+          return false;
+        }
+  
+        case("js"):
+        if(this.newJsCodePartSize < 200){
+          return true
+        }
+        else{
+          return false;
+        }
+  
+        case("css"):
+        if(this.newCssCodePartSize < 150){
+          return true
+        }
+        else{
+          return false;
+        }
+      }
+    }
+    else{
+      return false;
+    }
   }
 
 }
