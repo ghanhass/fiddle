@@ -248,6 +248,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   ressourceChoiceSelectedAssetDragstart(event:DragEvent){
+    event.dataTransfer.setData('text',"");
     console.log("ressourceChoiceSelectedAssetDragstart event = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     this.assetIndexDragstart = parseInt(evTarget.dataset.index);
