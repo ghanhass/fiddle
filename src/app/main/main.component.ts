@@ -494,17 +494,17 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
-    console.log("/!\ window resize event: ", event);
+    //console.log("/!\ window resize event: ", event);
     this.toggleLayoutsList(true);
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     if(mainContainerEl && this.canChangeSplitSizes){
       let newMainContainerWidth = mainContainerEl.offsetWidth;
       let newMainContainerHeight = mainContainerEl.offsetHeight;
-      console.log("newMainContainerHeight: ", newMainContainerHeight);
-      console.log("this.mainContainerHeight: ", this.mainContainerHeight);
+      //console.log("newMainContainerHeight: ", newMainContainerHeight);
+      //console.log("this.mainContainerHeight: ", this.mainContainerHeight);
 
-      console.log("newMainContainerWidth: ", newMainContainerWidth);
-      console.log("this.mainContainerWidth: ", this.mainContainerWidth);
+      //console.log("newMainContainerWidth: ", newMainContainerWidth);
+      //console.log("this.mainContainerWidth: ", this.mainContainerWidth);
       let bool:boolean;
       let mainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight;
