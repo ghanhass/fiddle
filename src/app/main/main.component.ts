@@ -32,6 +32,7 @@ export class MainComponent implements AfterViewInit {
   jsPartTop:number = 0;
 
   customInterval: any;
+  canChangeSplitSizes: boolean = true;
 
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
@@ -65,16 +66,13 @@ export class MainComponent implements AfterViewInit {
   initialCssCodePartSize: number = 0;
   initialJsCodePartSize: number = 0;
 
+  mainContainerWidth: number = 0;
+  mainContainerHeight: number = 0;
+
   newHtmlCodePartSize: number = 0;
   newCssCodePartSize: number = 0;
   newJsCodePartSize: number = 0;
   
-
-
-
-  windowWidth: number;
-  windowHeight: number;
-
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) { 
@@ -115,11 +113,15 @@ export class MainComponent implements AfterViewInit {
         }
       }
     });
-    this.windowWidth = window.innerWidth;
-    this.windowHeight = window.innerHeight;
+
     let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     this.codePartsOffsetHeight = codePartsEl.offsetHeight;
     this.codePartsOffsetWidth = codePartsEl.offsetWidth;
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    if(mainContainerEl){
+      this.mainContainerWidth = mainContainerEl.offsetWidth;
+      this.mainContainerHeight = mainContainerEl.offsetHeight;
+    }
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
       //console.log("dragProgress$ res = ", res);
       let sizes = this.splitComponentInner.getVisibleAreaSizes();
@@ -492,8 +494,94 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
-    //console.log("/!\ window resize event: ", event);
+    console.log("/!\ window resize event: ", event);
     this.toggleLayoutsList(true);
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    if(mainContainerEl && this.canChangeSplitSizes){
+      let newMainContainerWidth = mainContainerEl.offsetWidth;
+      let newMainContainerHeight = mainContainerEl.offsetHeight;
+      console.log("newMainContainerHeight: ", newMainContainerHeight);
+      console.log("this.mainContainerHeight: ", this.mainContainerHeight);
+
+      console.log("newMainContainerWidth: ", newMainContainerWidth);
+      console.log("this.mainContainerWidth: ", this.mainContainerWidth);
+      let bool:boolean;
+      let mainContainerWidthOrHeight;
+      let newMainContainerWidthOrHeight;
+      if(this.layout == 1 || this.layout == 3){
+        mainContainerWidthOrHeight = this.mainContainerHeight;
+        newMainContainerWidthOrHeight = newMainContainerHeight;
+      }
+      else{
+        mainContainerWidthOrHeight = this.mainContainerWidth;
+        newMainContainerWidthOrHeight = newMainContainerWidth;
+      }
+      let sizes: Array<any> = this.splitComponentInner.getVisibleAreaSizes();
+      if(newMainContainerWidthOrHeight > mainContainerWidthOrHeight){
+        let coef = newMainContainerWidthOrHeight / mainContainerWidthOrHeight;
+        
+        sizes[1] = sizes[1] * coef;
+        sizes[2] = sizes[2] * coef;
+        sizes[3] = sizes[3] * coef;
+      }
+      else{
+        let coef = mainContainerWidthOrHeight / newMainContainerWidthOrHeight;
+        sizes[1] = (sizes[1] / coef) > 25 ? (sizes[1] / coef) : 25;
+        sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
+        sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
+      }
+
+      this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 22);
+
+      this.mainContainerHeight = newMainContainerHeight;
+      this.mainContainerWidth = newMainContainerWidth;
+    }
+  }
+  
+  /**
+   * Recalculates the width/height of each code part area when there is a window resize.
+   * @param sizes Split Component areas sizes array
+   * @param newMainContainerWidthOrHeight new offsetWidth or offsetHeight of .main-container
+   */
+  reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number){
+    let total = sizes[1] + sizes[2] + sizes[3];
+    let keeping = true;
+    if(total > newMainContainerWidthOrHeight){
+      do
+      {
+        for(let ind = 1;ind <=3; ind++){
+          if((sizes[1]+sizes[2]+sizes[3]) > newMainContainerWidthOrHeight){
+            if(sizes[ind]>25){
+              sizes[ind]--;
+            }
+          }
+          else{
+            keeping = false;
+            break;
+          }
+        }
+      }
+      while(keeping);
+    }
+    else if(total < newMainContainerWidthOrHeight){
+      do
+      {
+        for(let ind = 1;ind <=3; ind++){
+          if((sizes[1]+sizes[2]+sizes[3]) < newMainContainerWidthOrHeight){
+            sizes[ind]++;
+          }
+          else{
+            keeping = false;
+            break;
+          }
+        }
+      }
+      while(keeping);
+    }
+    this.splitComponentInner.setVisibleAreaSizes(sizes);
+    this.newHtmlCodePartSize = sizes[1] as number;
+    this.newCssCodePartSize = sizes[2] as number;
+    this.newJsCodePartSize = sizes[3] as number;
   }
 
   runCode(param?){
@@ -605,11 +693,13 @@ export class MainComponent implements AfterViewInit {
   splitComponentInnerDragEnd(event){
     //console.log("splitComponentInnerDragEnd event = ", event);
     clearInterval(this.customInterval);
+    this.canChangeSplitSizes = true;
   }
 
   splitComponentInnerDragStart(event){
     //console.log("splitComponentInnerDragStart event = ", event);
     this.triggerResizeWithInterval(50);
+    this.canChangeSplitSizes = false;
   }
 
   splitComponentOuterDragEnd(event){
