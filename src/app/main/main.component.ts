@@ -33,6 +33,8 @@ export class MainComponent implements AfterViewInit {
 
   customInterval: any;
   canChangeSplitSizes: boolean = true;
+  windowHeight: number = window.innerHeight;
+  windowWidth: number = window.innerWidth;
 
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
@@ -494,10 +496,18 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
-    //console.log("/!\ window resize event: ", event);
     this.toggleLayoutsList(true);
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-    if(mainContainerEl && this.canChangeSplitSizes){
+    
+    let newWindowWidth = window.innerWidth;
+    let newWindowHeight = window.innerHeight;
+
+    if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
+      console.log("/!\ window resize event: ", event);
+
+      this.windowWidth = newWindowWidth;
+      this.windowHeight = newWindowHeight;
+      
       let newMainContainerWidth = mainContainerEl.offsetWidth;
       let newMainContainerHeight = mainContainerEl.offsetHeight;
       //console.log("newMainContainerHeight: ", newMainContainerHeight);
