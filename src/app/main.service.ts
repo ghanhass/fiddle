@@ -22,7 +22,7 @@ export class MainService {
   constructor(private http: HttpClient) { }
 
   saveFiddle(data: any): Observable<any>{
-    console.log("saveFiddle data = ", data);
+    //console.log("saveFiddle data = ", data);
     return (this.http.post(this.url, data,this.httpOptions));
   }
   getFiddle(data: any): Observable<any>{
