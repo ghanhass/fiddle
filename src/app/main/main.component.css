@@ -327,7 +327,7 @@ app-iframe-part{
 
 .layout-1 > div:first-child > div {
     width: 100%;
-    height: 33.33%;
+    height: 33.5%;
     outline: 1px solid #8b8b8b;
 }
 
@@ -354,7 +354,7 @@ app-iframe-part{
 
 .layout-2 > div:first-child > div {
     height: 100%;
-    width: 33.33%;
+    width: 33.5%;
     outline: 1px solid #8b8b8b;
 }
 
@@ -379,7 +379,7 @@ app-iframe-part{
 
 .layout-3 > div:first-child > div {
     width: 100%;
-    height: 33.33%;
+    height: 33.5%;
     outline: 1px solid #8b8b8b;
 }
 
@@ -405,7 +405,7 @@ app-iframe-part{
 
 .layout-4 > div:first-child > div {
     height: 100%;
-    width: 33.33%;
+    width: 33.5%;
     outline: 1px solid #8b8b8b;
 }
 
