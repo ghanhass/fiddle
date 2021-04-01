@@ -1,4 +1,8 @@
 <header id="main-header">
+    <div class="fiddle-title">
+        <span>Title: </span>
+        <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)"/>
+    </div>
     <div class="header-btns-container">
         <button class="ressources-code-btn" (click)="ressouresBtnClick()">
             <span>Ressources</span>

@@ -16,11 +16,13 @@ export class MainService {
   jsCode:string = "";
   cssCode:string = "";
   htmlCode:string = "";
+  fiddleTitle:string = "";
   redirectMode: boolean = false;
 
   constructor(private http: HttpClient) { }
 
   saveFiddle(data: any): Observable<any>{
+    console.log("saveFiddle data = ", data);
     return (this.http.post(this.url, data,this.httpOptions));
   }
   getFiddle(data: any): Observable<any>{

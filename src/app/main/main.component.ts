@@ -63,6 +63,7 @@ export class MainComponent implements AfterViewInit {
   htmlCode: string = "";
   isLayoutsListShown: boolean = false;
   layout: number = 1;
+  fiddleTitle: string = "";
 
   initialHtmlCodePartSize: number = 0;
   initialCssCodePartSize: number = 0;
@@ -90,6 +91,7 @@ export class MainComponent implements AfterViewInit {
           this.htmlCode = this.mainService.htmlCode;
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
+          this.fiddleTitle = this.mainService.fiddleTitle;
           self.mainService.redirectMode = false;
           this.runCode();
         }
@@ -106,9 +108,11 @@ export class MainComponent implements AfterViewInit {
               this.htmlCode = obj.html;
               this.cssCode = obj.css;
               this.jsCode = obj.js;
+              this.fiddleTitle = obj.title;
               this.mainService.jsCode = obj.js;
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
+              this.mainService.fiddleTitle = obj.title;
               this.runCode();
             }
           });
@@ -770,6 +774,20 @@ export class MainComponent implements AfterViewInit {
     else{
       return false;
     }
+  }
+
+  getFiddleInputWidth(){
+    let width = 0;
+    for(let ind = 0; ind < this.fiddleTitle.length; ind++){
+      width += 10;
+    }
+    console.log("width = ", width);
+    return width == 0 ? "" : width+"px";
+  }
+
+  onFiddeTitleChange(data){
+    this.mainService.fiddleTitle = data;
+    console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
   }
 
 }

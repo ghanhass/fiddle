@@ -15,6 +15,8 @@
     padding-left: 10px;
     box-shadow: 0 0 0 1px #bbb;
     min-width: 320px;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .code-part-title{
@@ -193,7 +195,6 @@ app-iframe-part{
 
 .share-code-btn,
 .ressources-code-btn{
-    height: calc(100% - 10px);
     font-size: 16px;
     cursor: pointer;
     display: block;
@@ -204,8 +205,7 @@ app-iframe-part{
     user-select: none;
     color:rgb(0,0,0);
     outline: none;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding: 1px 6px;
 }
 
 .share-code-btn:active,
@@ -237,8 +237,13 @@ app-iframe-part{
     margin-right:5px;
 }
 
+.header-btns-container  > .ressources-code-btn,
+.header-btns-container  > .layouts-list-container,
+.header-btns-container  > .share-code-btn{
+    height:35px;
+}
+
 .layouts-list-container {
-    height: calc(100% - 10px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -255,8 +260,7 @@ app-iframe-part{
     position: relative;
     color:rgb(0,0,0);
     outline: none;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding:1px 6px;
 }
 
 .layouts-list-container:active{
@@ -456,6 +460,10 @@ app-iframe-part{
     flex-grow: 1;
     text-align: left;
     padding-top: 10px;
+}
+
+.fiddle-title .fiddle-input{
+    min-width: 200px;
 }
 
 @media screen and (max-width:550px){
@@ -670,6 +678,25 @@ as-split-area.code-component-container > app-html-part{
         flex: none !important;
     }
 
+    @media screen and (max-width:767px){
+        #main-header{
+            flex-direction:column;
+            height: 70px;
+            justify-content: space-between;
+            padding: 3px 0 8px 0;
+        }
+    }
+
+}
+
+@media screen and (max-width:400px){
+    .header-btns-container  > .ressources-code-btn,
+        .header-btns-container  > .layouts-list-container,
+        .header-btns-container  > .share-code-btn{
+            margin-right:2px;
+            margin-left:2px;
+            padding: 1px 2px;
+        }
 }
 
 app-modal .modal-header{
