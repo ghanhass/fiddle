@@ -507,7 +507,7 @@ export class MainComponent implements AfterViewInit {
     let newWindowHeight = window.innerHeight;
 
     if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
-      console.log("/!\ window resize event: ", event);
+      //console.log("/!\ window resize event: ", event);
 
       this.windowWidth = newWindowWidth;
       this.windowHeight = newWindowHeight;
@@ -781,13 +781,13 @@ export class MainComponent implements AfterViewInit {
     for(let ind = 0; ind < this.fiddleTitle.length; ind++){
       width += 10;
     }
-    console.log("width = ", width);
+    //console.log("width = ", width);
     return width == 0 ? "" : width+"px";
   }
 
   onFiddeTitleChange(data){
     this.mainService.fiddleTitle = data;
-    console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
+    //console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
   }
 
 }
