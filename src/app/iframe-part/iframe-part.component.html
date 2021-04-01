@@ -1,4 +1,4 @@
-<app-loader #loader [global]="true" [thickness]="8"></app-loader>
+<app-loader style="display:none;" #loader [global]="true" [thickness]="8"></app-loader>
 <input #copyInput type="text" class="copy-input">
 <form [action]="url" target="my-frame" method="post" #form class="code-form">
     <input name="js" type="hidden" id="js-input" [(ngModel)]="jsCode">
