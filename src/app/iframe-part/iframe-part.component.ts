@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, Input, HostListener } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, Input, HostListener, Output ,EventEmitter} from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
@@ -19,6 +19,8 @@ export class IframePartComponent implements OnInit {
   @ViewChild("form")form: ElementRef;
   @ViewChild("loader")loader: LoaderComponent;
   @ViewChild("copyInput")copyInput: ElementRef;
+  @Output()showloader: EventEmitter<any> = new EventEmitter();
+  @Output()hideloader: EventEmitter<any> = new EventEmitter();
   
   url: string = environment.url;
   isSaveMode: boolean = false;
@@ -36,7 +38,8 @@ export class IframePartComponent implements OnInit {
     if(this.canSubmit){
       let self = this;
       window.setTimeout(()=>{
-        self.loader.showLoader();
+        //self.loader.showLoader();
+        self.showloader.emit();
         self.canSubmit = false;
         //console.log("form's self.jsCode ", self.jsCode);
         //console.log("form's self.cssCode ", self.cssCode);
@@ -100,6 +103,7 @@ export class IframePartComponent implements OnInit {
       this.canSubmit = true;
       //console.log("iframe angular load event");
       this.loader.hideLoader();
+      this.hideloader.emit();
     }
   }
 

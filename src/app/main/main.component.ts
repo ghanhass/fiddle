@@ -6,6 +6,7 @@ import { ModalComponent } from '../modal/modal.component';
 import { SplitComponent } from "angular-split";
 import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-main',
@@ -54,6 +55,7 @@ export class MainComponent implements AfterViewInit {
 
   @ViewChild("modal") modal: ModalComponent;
   @ViewChild("ressources") ressourcesComponent: RessourcesComponent;
+  @ViewChild("loader")loader:LoaderComponent;
 
   cssCodePartTitle: HTMLElement;
   jsCodePartTitle: HTMLElement;
@@ -788,6 +790,14 @@ export class MainComponent implements AfterViewInit {
   onFiddeTitleChange(data){
     this.mainService.fiddleTitle = data;
     //console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
+  }
+
+  onIframePartShowLoader(){
+    this.loader.showLoader();
+  }
+
+  onIframePartHideLoader(){
+    this.loader.hideLoader();
   }
 
 }

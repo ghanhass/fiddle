@@ -17,6 +17,7 @@
     min-width: 320px;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 .code-part-title{
@@ -466,6 +467,13 @@ app-iframe-part{
     min-width: 200px;
 }
 
+.app-loader{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
 @media screen and (max-width:550px){
     .layouts-list {
         display: grid;
@@ -678,15 +686,21 @@ as-split-area.code-component-container > app-html-part{
         flex: none !important;
     }
 
-    @media screen and (max-width:767px){
-        #main-header{
-            flex-direction:column;
-            height: 70px;
-            justify-content: space-between;
-            padding: 3px 0 8px 0;
-        }
+    .app-loader{
+        transform: none;
+        left: 4px;
+        top: 4px;
     }
 
+}
+
+@media screen and (max-width:767px){
+    #main-header{
+        flex-direction:column;
+        height: 70px;
+        justify-content: space-between;
+        padding: 3px 0 8px 0;
+    }
 }
 
 @media screen and (max-width:400px){
