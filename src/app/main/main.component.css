@@ -719,8 +719,8 @@ as-split-area.code-component-container > app-html-part{
     }
 
     .fiddle-logo{
-        left: 4px;
-        top: 8px;
+        left: 12px;
+        top: 0px;
         transform: none;
         width: 45px;
     }
