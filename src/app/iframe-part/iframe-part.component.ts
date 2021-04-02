@@ -12,10 +12,6 @@ import { ToastrService } from "ngx-toastr";
 })
 export class IframePartComponent implements OnInit {
 
-  @Input()jsCode: string = "";
-  @Input()htmlCode: string = "";
-  @Input()cssCode: string = "";
-  @Input()fiddleTitle: string = "";
   @ViewChild("form")form: ElementRef;
   @ViewChild("loader")loader: LoaderComponent;
   @ViewChild("copyInput")copyInput: ElementRef;
@@ -28,9 +24,6 @@ export class IframePartComponent implements OnInit {
 
 
   runCode(param?: any){
-    this.jsCode = this.mainService.jsCode;
-    this.htmlCode = this.mainService.htmlCode;
-    this.cssCode = this.mainService.cssCode;
 
     if(param === "save"){
       this.isSaveMode = true;
@@ -66,7 +59,8 @@ export class IframePartComponent implements OnInit {
       js:this.mainService.jsCode,
       html:this.mainService.htmlCode,
       css:this.mainService.cssCode,
-      title:this.mainService.fiddleTitle
+      title:this.mainService.fiddleTitle,
+      layout:this.mainService.layout
     }
     this.mainService.saveFiddle(data).subscribe((res)=>{
       this.canSubmit = true;

@@ -16,6 +16,7 @@ export class MainService {
   jsCode:string = "";
   cssCode:string = "";
   htmlCode:string = "";
+  layout:number = 1;
   fiddleTitle:string = "";
   redirectMode: boolean = false;
 

@@ -95,6 +95,8 @@ export class MainComponent implements AfterViewInit {
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
+          //this.layout = this.mainService.layout;
+          this.changeLayout(this.mainService.layout);
           self.mainService.redirectMode = false;
           this.runCode();
         }
@@ -112,10 +114,13 @@ export class MainComponent implements AfterViewInit {
               this.cssCode = obj.css;
               this.jsCode = obj.js;
               this.fiddleTitle = obj.title;
+              //this.layout = obj.layout;
+              //
               this.mainService.jsCode = obj.js;
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
               this.mainService.fiddleTitle = obj.title;
+              this.changeLayout(parseInt(obj.layout));
               this.runCode();
             }
           });
@@ -193,6 +198,7 @@ export class MainComponent implements AfterViewInit {
   changeLayout(newLayout: number){
     if(newLayout != this.layout){
       this.layout = newLayout;
+      this.mainService.layout = newLayout;
       let codePartsEl: HTMLElement = this.codeParts.nativeElement;
       if(codePartsEl){
         window.setTimeout(()=>{
