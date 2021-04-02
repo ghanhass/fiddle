@@ -1,5 +1,6 @@
 export const environment = {
   production: true,
   url: "https://sv9049638.oxa.host/iframe-renderer/backend.php",
-  appName: "myfiddle-beta"
+  appName: "myfiddle-beta",
+  homeUrl: "https://ghanhass.github.io/myfiddle-beta/"
 };

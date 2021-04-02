@@ -7,6 +7,7 @@ import { SplitComponent } from "angular-split";
 import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: 'app-main',
@@ -798,6 +799,10 @@ export class MainComponent implements AfterViewInit {
 
   onIframePartHideLoader(){
     this.loader.hideLoader();
+  }
+
+  getHomeUrl(){
+    return environment.homeUrl;
   }
 
 }

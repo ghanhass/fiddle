@@ -474,6 +474,27 @@ app-iframe-part{
     transform: translate(-50%, -50%);
 }
 
+.fiddle-title{
+    margin-left: 70px;
+}
+
+.fiddle-logo{
+    width: 60px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.fiddle-logo img{
+    height: calc(100% - 8px);
+}
+
 @media screen and (max-width:550px){
     .layouts-list {
         display: grid;
@@ -688,8 +709,20 @@ as-split-area.code-component-container > app-html-part{
 
     .app-loader{
         transform: none;
-        left: 4px;
+        left: auto;
         top: 4px;
+        right: 4px;
+    }
+
+    .fiddle-title{
+        margin-left: 0px;
+    }
+
+    .fiddle-logo{
+        left: 4px;
+        top: 8px;
+        transform: none;
+        width: 45px;
     }
 
 }
@@ -705,12 +738,15 @@ as-split-area.code-component-container > app-html-part{
 
 @media screen and (max-width:400px){
     .header-btns-container  > .ressources-code-btn,
-        .header-btns-container  > .layouts-list-container,
-        .header-btns-container  > .share-code-btn{
-            margin-right:2px;
-            margin-left:2px;
-            padding: 1px 2px;
-        }
+    .header-btns-container  > .layouts-list-container,
+    .header-btns-container  > .share-code-btn{
+        margin-right:2px;
+        margin-left:2px;
+        padding: 1px 2px;
+    }
+    .fiddle-logo{
+        display:none;
+    }
 }
 
 app-modal .modal-header{

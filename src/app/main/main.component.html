@@ -1,4 +1,7 @@
 <header id="main-header">
+    <a class="fiddle-logo" title="My fiddle" [href]="getHomeUrl()">
+        <img src="assets/logo.png">
+    </a>
     <div class="fiddle-title">
         <span>Title: </span>
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)"/>
