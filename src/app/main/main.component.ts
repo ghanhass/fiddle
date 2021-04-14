@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
@@ -120,7 +120,7 @@ export class MainComponent implements AfterViewInit {
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
               this.mainService.fiddleTitle = obj.title;
-              this.changeLayout(parseInt(obj.layout));
+              this.changeLayout(parseInt(obj.layout), {operation: "fiddleLoad", data:obj});
               this.runCode();
             }
           });
@@ -131,17 +131,21 @@ export class MainComponent implements AfterViewInit {
     let codePartsEl: HTMLElement = this.codeParts.nativeElement;
     this.codePartsOffsetHeight = codePartsEl.offsetHeight;
     this.codePartsOffsetWidth = codePartsEl.offsetWidth;
+
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     if(mainContainerEl){
       this.mainContainerWidth = mainContainerEl.offsetWidth;
       this.mainContainerHeight = mainContainerEl.offsetHeight;
     }
+
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
       //console.log("dragProgress$ res = ", res);
       let sizes = this.splitComponentInner.getVisibleAreaSizes();
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
+
+      this.setMainServiceCodepartSizes();
       //console.log("sizes = ", sizes);
     })
     //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
@@ -149,8 +153,34 @@ export class MainComponent implements AfterViewInit {
     this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
     this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
 
+    this.newCssCodePartSize = this.initialCssCodePartSize;
+    this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
+    this.newJsCodePartSize = this.initialJsCodePartSize;
+
 
     this.fixCodePartsDimensions();
+  }
+
+  setMainServiceCodepartSizes(){
+    this.mainService.htmlCodePartSize = this.newHtmlCodePartSize;
+    this.mainService.cssCodePartSize = this.newCssCodePartSize;
+    this.mainService.jsCodePartSize = this.newJsCodePartSize;
+  }
+
+  ngDoCheck(){
+    console.log("this.mainService.htmlCodePartSize = ", this.mainService.htmlCodePartSize)
+    console.log("this.newHtmlCodePartSize = ", this.newHtmlCodePartSize)
+    
+    console.log("-------------------------------------------------------");
+    
+    console.log("this.mainService.cssCodePartSize = ", this.mainService.cssCodePartSize)
+    console.log("this.newCssCodePartSize = ", this.newCssCodePartSize)
+
+    console.log("-------------------------------------------------------");
+
+    console.log("this.mainService.jsCodePartSize = ", this.mainService.jsCodePartSize)
+    console.log("this.newJsCodePartSize = ", this.newJsCodePartSize)
+    console.log("-------------------------------------------------------");
   }
 
   /**
@@ -195,46 +225,58 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  changeLayout(newLayout: number){
-    if(newLayout != this.layout){
-      this.layout = newLayout;
-      this.mainService.layout = newLayout;
-      let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-      if(codePartsEl){
-        window.setTimeout(()=>{
-          this.codePartsOffsetHeight = codePartsEl.offsetHeight;
-          this.codePartsOffsetWidth = codePartsEl.offsetWidth;
-          switch(this.layout){
-            case 1:
-            this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.fixCodePartsDimensions();
-            break;
-            case 2:
-            this.initialCssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.initialHtmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.initialJsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.fixCodePartsDimensions();
-            break;
-            case 3:
-            this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-            this.fixCodePartsDimensions();
-            break;
-            case 4:
-            this.initialCssCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.initialHtmlCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.initialJsCodePartSize = (this.codePartsOffsetWidth - 20) / 3;
-            this.fixCodePartsDimensions();
-            break;
-          }
-          this.newCssCodePartSize = this.initialCssCodePartSize;
-          this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
-          this.newJsCodePartSize = this.initialJsCodePartSize;
-        }, 1);
+  changeLayout(newLayout: number, param?: any){
+      if(newLayout != this.layout){
+        this.layout = newLayout;
+        this.mainService.layout = newLayout;
+        let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+        if(mainContainerEl){
+          window.setTimeout(()=>{
+            this.mainContainerHeight = mainContainerEl.offsetHeight;
+            this.mainContainerWidth = mainContainerEl.offsetWidth;
+            switch(this.layout){
+              case 1:
+              this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.fixCodePartsDimensions();
+              break;
+              case 2:
+              this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.fixCodePartsDimensions();
+              break;
+              case 3:
+              this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+              this.fixCodePartsDimensions();
+              break;
+              case 4:
+              this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+              this.fixCodePartsDimensions();
+              break;
+            }
+            this.newCssCodePartSize = this.initialCssCodePartSize;
+            this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
+            this.newJsCodePartSize = this.initialJsCodePartSize;
+          }, 1);
+        }
       }
+  }
+
+  getAndAdaptSavedCodePartsSizes(layout, param){
+    if(param !== undefined && param !== null && param.operation == "fiddleLoad"){
+      let savedLayout = parseInt(param.data.layout); 
+      
+      let savedCssCodePartSize = parseInt(param.data.cssCodePartSize); 
+      let savedJsCodePartSize = parseInt(param.data.jsCodePartSize); 
+      let savedHtmlCodePartSize = parseInt(param.data.htmlCodePartSize); 
+
+      let savedMainContainerSize = parseInt(param.data.mainContainerSize); 
     }
   }
 
@@ -690,20 +732,6 @@ export class MainComponent implements AfterViewInit {
       }, timeout); 
   }
 
-  resizeCodeParts(){
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    let cssCodePart:HTMLElement = this.cssPart.nativeElement;
-    let jsCodePart:HTMLElement = this.jsPart.nativeElement;
-    let htmlCodePart:HTMLElement = this.htmlPart.nativeElement;
-    let codePartsHeight = codePartsEl.offsetHeight;
-    
-    if(this.layout == 1 || this.layout == 3){//vertical layout ?
-      htmlCodePart.style.height = cssCodePart.style.top ;
-      cssCodePart.style.height = parseInt(jsCodePart.style.top) - parseInt( cssCodePart.style.top) + "px";
-      jsCodePart.style.height = codePartsHeight - parseInt(jsCodePart.style.top) + "px";
-    }
-
-  }
 
   hideModal(){
     this.modal.hide();

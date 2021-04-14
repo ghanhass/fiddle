@@ -17,6 +17,13 @@ export class MainService {
   cssCode:string = "";
   htmlCode:string = "";
   layout:number = 1;
+
+  cssCodePartSize:number;
+  htmlCodePartSize:number;
+  jsCodePartSize:number;
+  mainContainerSize: number;
+  codePartsSize: number;
+
   fiddleTitle:string = "";
   redirectMode: boolean = false;
 
