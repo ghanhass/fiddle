@@ -128,10 +128,6 @@ export class MainComponent implements AfterViewInit {
       }
     });
 
-    let codePartsEl: HTMLElement = this.codeParts.nativeElement;
-    this.codePartsOffsetHeight = codePartsEl.offsetHeight;
-    this.codePartsOffsetWidth = codePartsEl.offsetWidth;
-
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     if(mainContainerEl){
       this.mainContainerWidth = mainContainerEl.offsetWidth;
@@ -148,10 +144,10 @@ export class MainComponent implements AfterViewInit {
       this.setMainServiceCodepartSizes();
       //console.log("sizes = ", sizes);
     })
-    //console.log("codePartsOffsetHeight = ", this.codePartsOffsetHeight);
-    this.initialCssCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-    this.initialHtmlCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
-    this.initialJsCodePartSize = (this.codePartsOffsetHeight - 20) / 3;
+    //console.log("mainContainerHeight = ", this.mainContainerHeight);
+    this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
+    this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
+    this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
 
     this.newCssCodePartSize = this.initialCssCodePartSize;
     this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
