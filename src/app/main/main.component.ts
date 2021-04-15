@@ -156,7 +156,7 @@ export class MainComponent implements AfterViewInit {
       this.newJsCodePartSize = sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
-      console.log("splitComponentInner sizes = ", sizes);
+      //console.log("splitComponentInner sizes = ", sizes);
     })
 
     this.splitComponentOuter.dragProgress$.subscribe((res)=>{
@@ -169,7 +169,7 @@ export class MainComponent implements AfterViewInit {
       }
 
       this.mainService.codePartsSize = this.newCodePartSize;
-      console.log("splitComponentOuter sizes = ", sizes);
+      //console.log("splitComponentOuter sizes = ", sizes);
     })
 
     this.setMainServiceCodepartSizes();
@@ -774,7 +774,7 @@ export class MainComponent implements AfterViewInit {
         }
         while(keeping);
       }
-      console.log("sizes inner = ", sizes);
+      //console.log("sizes inner = ", sizes);
       this.splitComponentInner.setVisibleAreaSizes(sizes);
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
@@ -832,7 +832,7 @@ export class MainComponent implements AfterViewInit {
         while(keeping);
       }
       
-      console.log("sizes outer = ", sizes);
+      //console.log("sizes outer = ", sizes);
       this.newCodePartSize = sizes[ind] as number;
       this.splitComponentOuter.setVisibleAreaSizes(sizes);
     }
