@@ -241,7 +241,7 @@ app-iframe-part{
 .header-btns-container  > .ressources-code-btn,
 .header-btns-container  > .layouts-list-container,
 .header-btns-container  > .share-code-btn{
-    height:35px;
+    height:30px;
 }
 
 .layouts-list-container {
@@ -729,10 +729,10 @@ as-split-area.code-component-container > app-html-part{
 
 @media screen and (max-width:767px){
     #main-header{
-        flex-direction:column;
-        height: 70px;
+        flex-direction: column;
+        height: 62px;
         justify-content: space-between;
-        padding: 3px 0 8px 0;
+        padding: 3px 0 5px 0;
     }
 }
 
