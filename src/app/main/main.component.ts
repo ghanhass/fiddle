@@ -40,6 +40,8 @@ export class MainComponent implements AfterViewInit {
 
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
+  @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
+
 
   @ViewChild("mainContainer") mainContainer:ElementRef;
   @ViewChild("codeParts") codeParts:ElementRef;
@@ -71,6 +73,7 @@ export class MainComponent implements AfterViewInit {
   initialHtmlCodePartSize: number = 0;
   initialCssCodePartSize: number = 0;
   initialJsCodePartSize: number = 0;
+  initialCodePartSize: number = 0;
 
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
@@ -78,6 +81,7 @@ export class MainComponent implements AfterViewInit {
   newHtmlCodePartSize: number = 0;
   newCssCodePartSize: number = 0;
   newJsCodePartSize: number = 0;
+  newCodePartSize: number = 0;
   
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -86,6 +90,11 @@ export class MainComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     let self = this;
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    if(mainContainerEl){
+      this.mainContainerWidth = mainContainerEl.offsetWidth;
+      this.mainContainerHeight = mainContainerEl.offsetHeight;
+    }
      
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
@@ -96,7 +105,16 @@ export class MainComponent implements AfterViewInit {
           this.jsCode = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
           //this.layout = this.mainService.layout;
-          this.changeLayout(this.mainService.layout);
+          let obj = {
+            cssCodePartSize: this.mainService.cssCodePartSize,
+            jsCodePartSize: this.mainService.jsCodePartSize,
+            htmlCodePartSize: this.mainService.htmlCodePartSize,
+            mainContainerWidth: this.mainService.mainContainerWidth,
+            mainContainerHeight: this.mainService.mainContainerHeight,
+            codePartsSize: this.mainService.codePartsSize,
+            layout: this.mainService.layout
+          }
+          this.changeLayout(this.mainService.layout, {data: obj});
           self.mainService.redirectMode = false;
           this.runCode();
         }
@@ -120,70 +138,73 @@ export class MainComponent implements AfterViewInit {
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
               this.mainService.fiddleTitle = obj.title;
-              this.changeLayout(parseInt(obj.layout), {operation: "fiddleLoad", data:obj});
+              this.changeLayout(parseInt(obj.layout), {data:obj});
               this.runCode();
             }
           });
         }
       }
+      else{
+        this.changeLayout(1);
+      }
     });
 
-    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-    if(mainContainerEl){
-      this.mainContainerWidth = mainContainerEl.offsetWidth;
-      this.mainContainerHeight = mainContainerEl.offsetHeight;
-    }
-
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
-      //console.log("dragProgress$ res = ", res);
       let sizes = this.splitComponentInner.getVisibleAreaSizes();
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
-      //console.log("sizes = ", sizes);
+      console.log("splitComponentInner sizes = ", sizes);
     })
-    //console.log("mainContainerHeight = ", this.mainContainerHeight);
-    this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
-    this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
-    this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
 
-    this.newCssCodePartSize = this.initialCssCodePartSize;
-    this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
-    this.newJsCodePartSize = this.initialJsCodePartSize;
+    this.splitComponentOuter.dragProgress$.subscribe((res)=>{
+      let sizes = this.splitComponentOuter.getVisibleAreaSizes();
+      if(this.layout == 1 || this.layout == 2){
+        this.newCodePartSize = sizes[0] as number;
+      }
+      else if(this.layout == 3 || this.layout == 4){
+        this.newCodePartSize = sizes[1] as number;
+      }
 
+      this.mainService.codePartsSize = this.newCodePartSize;
+      console.log("splitComponentOuter sizes = ", sizes);
+    })
 
-    this.fixCodePartsDimensions();
+    this.setMainServiceCodepartSizes();
+
+    this.fixCodeEditorsDimensions();
   }
 
   setMainServiceCodepartSizes(){
     this.mainService.htmlCodePartSize = this.newHtmlCodePartSize;
     this.mainService.cssCodePartSize = this.newCssCodePartSize;
     this.mainService.jsCodePartSize = this.newJsCodePartSize;
-  }
 
-  ngDoCheck(){
-    console.log("this.mainService.htmlCodePartSize = ", this.mainService.htmlCodePartSize)
-    console.log("this.newHtmlCodePartSize = ", this.newHtmlCodePartSize)
+    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    if(mainContainerEl){
+      /*if(this.layout == 1 || this.layout == 3){
+        this.mainService.mainContainerSize = mainContainerEl.offsetHeight;
+      }
+      else if(this.layout == 2 || this.layout == 4){
+        this.mainService.mainContainerSize = mainContainerEl.offsetWidth;
+      }*/
+
+      this.mainService.mainContainerHeight = mainContainerEl.offsetHeight;
+      this.mainService.mainContainerWidth = mainContainerEl.offsetWidth;
+    }
+
+    this.mainService.layout = this.layout;
     
-    console.log("-------------------------------------------------------");
-    
-    console.log("this.mainService.cssCodePartSize = ", this.mainService.cssCodePartSize)
-    console.log("this.newCssCodePartSize = ", this.newCssCodePartSize)
-
-    console.log("-------------------------------------------------------");
-
-    console.log("this.mainService.jsCodePartSize = ", this.mainService.jsCodePartSize)
-    console.log("this.newJsCodePartSize = ", this.newJsCodePartSize)
-    console.log("-------------------------------------------------------");
+    this.mainService.codePartsSize = this.newCodePartSize;
   }
 
   /**
    * Sets dimensions of each .code-component whenever needed using optimized setInterval for each one
    * @returns void.
    */
-  fixCodePartsDimensions(): void{
+  fixCodeEditorsDimensions(): void{
     let self = this;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
 
@@ -222,7 +243,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeLayout(newLayout: number, param?: any){
-      if(newLayout != this.layout){
+      if(true){
         this.layout = newLayout;
         this.mainService.layout = newLayout;
         let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
@@ -230,50 +251,128 @@ export class MainComponent implements AfterViewInit {
           window.setTimeout(()=>{
             this.mainContainerHeight = mainContainerEl.offsetHeight;
             this.mainContainerWidth = mainContainerEl.offsetWidth;
-            switch(this.layout){
-              case 1:
-              this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.fixCodePartsDimensions();
-              break;
-              case 2:
-              this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.fixCodePartsDimensions();
-              break;
-              case 3:
-              this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
-              this.fixCodePartsDimensions();
-              break;
-              case 4:
-              this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
-              this.fixCodePartsDimensions();
-              break;
+            if (param !==undefined && param !== null) {
+              this.getAndAdaptSavedCodePartsSizes(param);
+            }
+            else{
+              switch(this.layout){
+                case 1:
+                this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialCodePartSize = 350;
+                this.fixCodeEditorsDimensions();
+                break;
+                case 2:
+                this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialCodePartSize = 290;
+                this.fixCodeEditorsDimensions();
+                break;
+                case 3:
+                this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialCodePartSize = 350;
+                this.fixCodeEditorsDimensions();
+                break;
+                case 4:
+                this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialCodePartSize = 290;
+                this.fixCodeEditorsDimensions();
+                break;
+              }
             }
             this.newCssCodePartSize = this.initialCssCodePartSize;
             this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
             this.newJsCodePartSize = this.initialJsCodePartSize;
+            this.newCodePartSize = this.initialCodePartSize;
+
+            this.setMainServiceCodepartSizes();
           }, 1);
         }
       }
   }
 
-  getAndAdaptSavedCodePartsSizes(layout, param){
-    if(param !== undefined && param !== null && param.operation == "fiddleLoad"){
-      let savedLayout = parseInt(param.data.layout); 
-      
-      let savedCssCodePartSize = parseInt(param.data.cssCodePartSize); 
-      let savedJsCodePartSize = parseInt(param.data.jsCodePartSize); 
-      let savedHtmlCodePartSize = parseInt(param.data.htmlCodePartSize); 
+  getAndAdaptSavedCodePartsSizes(param){
+    let savedLayout = parseInt(param.data.layout); 
+    
+    let savedCssCodePartSize = parseInt(param.data.cssCodePartSize); 
+    let savedJsCodePartSize = parseInt(param.data.jsCodePartSize); 
+    let savedHtmlCodePartSize = parseInt(param.data.htmlCodePartSize); 
+    
+    let savedMainContainerWidth = parseInt(param.data.mainContainerWidth); 
+    let savedMainContainerHeight = parseInt(param.data.mainContainerHeight); 
+    let savedMainContainerSize; 
 
-      let savedMainContainerSize = parseInt(param.data.mainContainerSize); 
+    let savedCodePartsSize = parseInt(param.data.codePartsSize); 
+
+    let mainContainerEl:HTMLElement = this.mainContainer.nativeElement;
+    let currentMainContainerSize;
+    let currentMainContainerSize2;
+
+    let codePartsMinLimit;
+    
+    if(savedLayout == 1 || savedLayout == 3){
+      currentMainContainerSize = mainContainerEl.offsetHeight;
+      savedMainContainerSize = savedMainContainerHeight;
+
+      currentMainContainerSize2 = mainContainerEl.offsetWidth;
+      savedMainContainerSize = savedMainContainerWidth;
+      codePartsMinLimit = 350;
     }
+    else if(savedLayout == 2 || savedLayout == 4){
+      currentMainContainerSize = mainContainerEl.offsetWidth;
+      savedMainContainerSize = savedMainContainerWidth;
+
+      currentMainContainerSize2 = mainContainerEl.offsetHeight;
+      savedMainContainerSize = savedMainContainerHeight;
+
+      codePartsMinLimit = 290;
+    }
+
+    let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
+    if(savedMainContainerSize > currentMainContainerSize){
+      let coef = savedMainContainerSize / currentMainContainerSize;
+      sizes[1] = (sizes[1] / coef) > 25 ? (sizes[1] / coef) : 25;
+      sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
+      sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
+    }
+    else if(savedMainContainerSize > currentMainContainerSize){
+      let coef = currentMainContainerSize / savedMainContainerSize;
+      sizes[1] = sizes[1] * coef;
+      sizes[2] = sizes[2] * coef;
+      sizes[3] = sizes[3] * coef;
+    }
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 22, "inner");
+    this.initialHtmlCodePartSize = Math.floor(sizes[1]);
+    this.initialCssCodePartSize = Math.floor(sizes[2]);
+    this.initialJsCodePartSize = Math.floor(sizes[3]);
+    /****************************************/
+    let ind;
+    if(savedLayout == 1 || savedLayout == 2){
+      sizes = [savedCodePartsSize, "*"];
+      ind = 0;
+    }
+    else if(savedLayout== 3 || savedLayout == 4){
+      sizes = ['*', savedCodePartsSize]; 
+      ind = 1;
+    }
+
+    if(savedMainContainerSize > currentMainContainerSize2){
+      let coef = savedMainContainerSize / currentMainContainerSize2;
+      sizes[ind] = (sizes[ind] / coef) > codePartsMinLimit ? (sizes[ind] / coef) : codePartsMinLimit;
+    }
+    else if(savedMainContainerSize < currentMainContainerSize2){
+      let coef = currentMainContainerSize2 / savedMainContainerSize;
+      sizes[ind] = sizes[ind] * coef;
+    } 
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 11, "outer");
+    this.initialCodePartSize = Math.floor(sizes[ind]);
+
   }
 
   getLayoutInfos(name){
@@ -286,6 +385,9 @@ export class MainComponent implements AfterViewInit {
 
       case "jsAsSplitAreaSize":
       return this.initialJsCodePartSize;
+
+      case "codePartsAsSplitAreaSize":
+      return this.initialCodePartSize;
     }
     switch(this.layout){
       case 1:
@@ -302,8 +404,8 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 350;
 
-        case "codePartsAsSplitAreaSize":
-        return 350;
+        /*case "codePartsAsSplitAreaSize":
+        return 350;*/
 
         case "innerAsSplitDirection":
         return 'vertical';
@@ -354,8 +456,8 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 290;
 
-        case "codePartsAsSplitAreaSize":
-        return 290;
+        /*case "codePartsAsSplitAreaSize":
+        return 290;*/
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -406,8 +508,8 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 350;
 
-        case "codePartsAsSplitAreaSize":
-        return 350;
+        /*case "codePartsAsSplitAreaSize":
+        return 350;*/
 
         case "innerAsSplitDirection":
         return 'vertical';
@@ -458,8 +560,8 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 290;
 
-        case "codePartsAsSplitAreaSize":
-        return 290;
+        /*case "codePartsAsSplitAreaSize":
+        return 290;*/
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -585,34 +687,126 @@ export class MainComponent implements AfterViewInit {
         sizes[2] = sizes[2] * coef;
         sizes[3] = sizes[3] * coef;
       }
-      else{
+      else if(newMainContainerWidthOrHeight < mainContainerWidthOrHeight){
         let coef = mainContainerWidthOrHeight / newMainContainerWidthOrHeight;
         sizes[1] = (sizes[1] / coef) > 25 ? (sizes[1] / coef) : 25;
         sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
         sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
       }
 
-      this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 22);
+      this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 22, "inner");
 
       this.mainContainerHeight = newMainContainerHeight;
       this.mainContainerWidth = newMainContainerWidth;
+
+      let newCodePartSize;
+      let outerSplitterSizes;
+      if(this.layout == 1 || this.layout == 3){
+        if(this.initialCodePartSize > this.mainContainerWidth - 11){
+          newCodePartSize = this.mainContainerWidth - 13;
+          this.initialCodePartSize = this.newCodePartSize;
+        }
+      }
+      else if(this.layout == 2 || this.layout == 4){
+        if(this.initialCodePartSize > this.mainContainerHeight - 11){
+          newCodePartSize = this.mainContainerHeight - 13;
+          this.initialCodePartSize = this.newCodePartSize;
+        }
+      }
+
+      if(this.layout == 1 || this.layout == 2){
+        outerSplitterSizes = [newCodePartSize, "*"];
+        //this.newCodePartSize = outerSplitterSizes[0] as number;
+        //this.initialCodePartSize = newCodePartSize;
+      }
+      else if(this.layout== 3 || this.layout == 4){
+        outerSplitterSizes = ['*', newCodePartSize]; 
+        //this.newCodePartSize = outerSplitterSizes[1] as number;
+        //this.initialCodePartSize = newCodePartSize;
+      }
+
+      this.splitComponentOuter.setVisibleAreaSizes(outerSplitterSizes);
+
+      this.setMainServiceCodepartSizes();
     }
   }
   
   /**
    * Recalculates the width/height of each code part area when there is a window resize.
    * @param sizes Split Component areas sizes array
-   * @param newMainContainerWidthOrHeight new offsetWidth or offsetHeight of .main-container
+   * @param mainContainerWidthOrHeight offsetWidth or offsetHeight of .main-container
    */
-  reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number){
-    let total = sizes[1] + sizes[2] + sizes[3];
-    let keeping = true;
-    if(total > newMainContainerWidthOrHeight){
-      do
-      {
-        for(let ind = 1;ind <=3; ind++){
-          if((sizes[1]+sizes[2]+sizes[3]) > newMainContainerWidthOrHeight){
-            if(sizes[ind]>25){
+  reAdaptCodePartsSizes(sizes: Array<number>, mainContainerWidthOrHeight: number, type: string){
+    if(type == "inner"){
+      let total = sizes[1] + sizes[2] + sizes[3];
+      let keeping = true;
+      if(total > mainContainerWidthOrHeight){
+        do
+        {
+          for(let ind = 1;ind <=3; ind++){
+            if((sizes[1]+sizes[2]+sizes[3]) > mainContainerWidthOrHeight){
+              if(sizes[ind]>25){
+                sizes[ind]--;
+              }
+            }
+            else{
+              keeping = false;
+              break;
+            }
+          }
+        }
+        while(keeping);
+      }
+      else if(total < mainContainerWidthOrHeight){
+        do
+        {
+          for(let ind = 1;ind <=3; ind++){
+            if((sizes[1]+sizes[2]+sizes[3]) < mainContainerWidthOrHeight){
+              if(sizes[ind]>25){
+                sizes[ind]++;
+              }
+            }
+            else{
+              keeping = false;
+              break;
+            }
+          }
+        }
+        while(keeping);
+      }
+      console.log("sizes inner = ", sizes);
+      this.splitComponentInner.setVisibleAreaSizes(sizes);
+      this.newHtmlCodePartSize = sizes[1] as number;
+      this.newCssCodePartSize = sizes[2] as number;
+      this.newJsCodePartSize = sizes[3] as number;
+    }
+    else if(type == "outer"){
+      let total;
+      /**Index of codeparts width value in the sizes Array of outer SplitComponent */
+      let ind;
+      let minLimit;
+      if(this.layout == 1 || this.layout == 2){
+        ind = 0;
+      }
+      else if(this.layout == 3 || this.layout == 4){
+        ind = 1;
+      }
+
+      if(this.layout == 1 || this.layout == 3){
+        minLimit = 350;
+      }
+      else if(this.layout == 2 || this.layout == 4){
+        minLimit = 290;
+      }
+      
+      total = sizes[ind];
+      let keeping = true;
+      
+      if(total > mainContainerWidthOrHeight){
+        do
+        {
+          if((sizes[ind]) > mainContainerWidthOrHeight){
+            if(sizes[ind]>minLimit){
               sizes[ind]--;
             }
           }
@@ -620,15 +814,14 @@ export class MainComponent implements AfterViewInit {
             keeping = false;
             break;
           }
+
         }
+        while(keeping);
       }
-      while(keeping);
-    }
-    else if(total < newMainContainerWidthOrHeight){
-      do
-      {
-        for(let ind = 1;ind <=3; ind++){
-          if((sizes[1]+sizes[2]+sizes[3]) < newMainContainerWidthOrHeight){
+      else if(total < minLimit){
+        do
+        {
+          if((sizes[ind]) < minLimit){
             sizes[ind]++;
           }
           else{
@@ -636,13 +829,13 @@ export class MainComponent implements AfterViewInit {
             break;
           }
         }
+        while(keeping);
       }
-      while(keeping);
+      
+      console.log("sizes outer = ", sizes);
+      this.newCodePartSize = sizes[ind] as number;
+      this.splitComponentOuter.setVisibleAreaSizes(sizes);
     }
-    this.splitComponentInner.setVisibleAreaSizes(sizes);
-    this.newHtmlCodePartSize = sizes[1] as number;
-    this.newCssCodePartSize = sizes[2] as number;
-    this.newJsCodePartSize = sizes[3] as number;
   }
 
   runCode(param?){
@@ -722,10 +915,11 @@ export class MainComponent implements AfterViewInit {
     if(this.customInterval){
       clearInterval(this.customInterval);
     }
-      this.customInterval = setInterval(()=>{
-        //console.log("inside triggerResizeWithInterval");
-        window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-      }, timeout); 
+
+    this.customInterval = setInterval(()=>{
+      //console.log("inside triggerResizeWithInterval");
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+    }, timeout); 
   }
 
 

@@ -22,6 +22,8 @@ export class MainService {
   htmlCodePartSize:number;
   jsCodePartSize:number;
   mainContainerSize: number;
+  mainContainerHeight: number;
+  mainContainerWidth: number;
   codePartsSize: number;
 
   fiddleTitle:string = "";

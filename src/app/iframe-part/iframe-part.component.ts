@@ -74,6 +74,9 @@ export class IframePartComponent implements OnInit {
       codePartsSize: this.mainService.codePartsSize,
       mainContainerSize: this.mainService.mainContainerSize,
 
+      mainContainerWidth: this.mainService.mainContainerWidth,
+      mainContainerHeight: this.mainService.mainContainerHeight,
+
       title:this.mainService.fiddleTitle,
       layout:this.mainService.layout
     }
