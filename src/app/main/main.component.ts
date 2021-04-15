@@ -702,15 +702,15 @@ export class MainComponent implements AfterViewInit {
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
-        if(this.initialCodePartSize > this.mainContainerWidth - 11){
+        if(this.newCodePartSize > this.mainContainerWidth - 11){
           newCodePartSize = this.mainContainerWidth - 13;
-          this.initialCodePartSize = this.newCodePartSize;
+          this.newCodePartSize = this.newCodePartSize;
         }
       }
       else if(this.layout == 2 || this.layout == 4){
-        if(this.initialCodePartSize > this.mainContainerHeight - 11){
+        if(this.newCodePartSize > this.mainContainerHeight - 11){
           newCodePartSize = this.mainContainerHeight - 13;
-          this.initialCodePartSize = this.newCodePartSize;
+          this.newCodePartSize = this.newCodePartSize;
         }
       }
 
