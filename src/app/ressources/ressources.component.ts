@@ -154,8 +154,6 @@ export class RessourcesComponent implements OnInit {
     //console.log("keyup event = ", event);
     if(event.key == "Escape"){
       this.hidemodal.emit();
-      //this.resetCurrentRessourceChoice();
-      //this.emptySelectedRessourceAssets();
     }
   }
 

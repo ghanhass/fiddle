@@ -21,7 +21,6 @@ export class MainService {
   cssCodePartSize:number;
   htmlCodePartSize:number;
   jsCodePartSize:number;
-  mainContainerSize: number;
   mainContainerHeight: number;
   mainContainerWidth: number;
   codePartsSize: number;

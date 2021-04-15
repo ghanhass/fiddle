@@ -104,7 +104,6 @@ export class MainComponent implements AfterViewInit {
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
-          //this.layout = this.mainService.layout;
           let obj = {
             cssCodePartSize: this.mainService.cssCodePartSize,
             jsCodePartSize: this.mainService.jsCodePartSize,
@@ -132,7 +131,6 @@ export class MainComponent implements AfterViewInit {
               this.cssCode = obj.css;
               this.jsCode = obj.js;
               this.fiddleTitle = obj.title;
-              //this.layout = obj.layout;
               //
               this.mainService.jsCode = obj.js;
               this.mainService.htmlCode = obj.html;
@@ -183,14 +181,8 @@ export class MainComponent implements AfterViewInit {
     this.mainService.jsCodePartSize = this.newJsCodePartSize;
 
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
+    
     if(mainContainerEl){
-      /*if(this.layout == 1 || this.layout == 3){
-        this.mainService.mainContainerSize = mainContainerEl.offsetHeight;
-      }
-      else if(this.layout == 2 || this.layout == 4){
-        this.mainService.mainContainerSize = mainContainerEl.offsetWidth;
-      }*/
-
       this.mainService.mainContainerHeight = mainContainerEl.offsetHeight;
       this.mainService.mainContainerWidth = mainContainerEl.offsetWidth;
     }
@@ -404,9 +396,6 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 350;
 
-        /*case "codePartsAsSplitAreaSize":
-        return 350;*/
-
         case "innerAsSplitDirection":
         return 'vertical';
 
@@ -455,9 +444,6 @@ export class MainComponent implements AfterViewInit {
 
         case "codePartsAsSplitAreaMinSize":
         return 290;
-
-        /*case "codePartsAsSplitAreaSize":
-        return 290;*/
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -508,9 +494,6 @@ export class MainComponent implements AfterViewInit {
         case "codePartsAsSplitAreaMinSize":
         return 350;
 
-        /*case "codePartsAsSplitAreaSize":
-        return 350;*/
-
         case "innerAsSplitDirection":
         return 'vertical';
 
@@ -559,9 +542,6 @@ export class MainComponent implements AfterViewInit {
 
         case "codePartsAsSplitAreaMinSize":
         return 290;
-
-        /*case "codePartsAsSplitAreaSize":
-        return 290;*/
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -622,7 +602,6 @@ export class MainComponent implements AfterViewInit {
             layoutsListElement.style.height = "";
           }
         }
-
         //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
       }
     }
@@ -716,13 +695,9 @@ export class MainComponent implements AfterViewInit {
 
       if(this.layout == 1 || this.layout == 2){
         outerSplitterSizes = [newCodePartSize, "*"];
-        //this.newCodePartSize = outerSplitterSizes[0] as number;
-        //this.initialCodePartSize = newCodePartSize;
       }
       else if(this.layout== 3 || this.layout == 4){
         outerSplitterSizes = ['*', newCodePartSize]; 
-        //this.newCodePartSize = outerSplitterSizes[1] as number;
-        //this.initialCodePartSize = newCodePartSize;
       }
 
       this.splitComponentOuter.setVisibleAreaSizes(outerSplitterSizes);
