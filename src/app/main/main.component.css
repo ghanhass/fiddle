@@ -267,17 +267,14 @@ app-iframe-part{
     bottom: 0px;
 }
 
-.paypal-btn-container .btn.paypal-btn span.paypal-icon {
+.paypal-btn-container .btn.paypal-btn img.paypal-icon {
     position: absolute;
-    left: 0;
-    width: 27px;
-    height: 100%;
+    left: 2px;
+    width: 22px;
+    max-height: 100%;
     display: block;
-    top: 0;
-    background-image: url("./assets/paypal-icon.png");
-    background-size: 78%;
-    background-repeat: no-repeat;
-    background-position: center;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .paypal-btn-container .btn.paypal-btn span.text {
