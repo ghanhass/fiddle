@@ -274,7 +274,7 @@ app-iframe-part{
     height: 100%;
     display: block;
     top: 0;
-    background-image: url("assets/paypal-icon.png");
+    background-image: url("./assets/paypal-icon.png");
     background-size: 78%;
     background-repeat: no-repeat;
     background-position: center;
