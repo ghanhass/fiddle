@@ -67,6 +67,7 @@ export class MainComponent implements AfterViewInit {
   cssCode: string = "";
   htmlCode: string = "";
   isLayoutsListShown: boolean = false;
+  isDonationsListShown: boolean = false;
   layout: number = 1;
   fiddleTitle: string = "";
 
@@ -605,6 +606,24 @@ export class MainComponent implements AfterViewInit {
         //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
       }
     }
+  }
+
+  toggleDonationMenu(){
+    this.isDonationsListShown = !this.isDonationsListShown;
+  }
+
+  selectDonation(newIndex){
+    let form = document.querySelector("#lhazlgkemjk");
+    if(form){
+      let select: HTMLSelectElement = form.querySelector("select[name='os0']");
+      let submitBtn: HTMLButtonElement = form.querySelector("input[name='submit']")
+      if(select && submitBtn){
+        select.selectedIndex = newIndex;
+        console.log("select.value = ", select.value);
+        submitBtn.click();
+      }
+    }
+
   }
 
   toggleFullScreenMode(mode: string){

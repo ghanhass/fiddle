@@ -8,11 +8,11 @@
 
 #main-header{
     height: 40px;
-    width: calc(100% - 20px);
+    width: calc(100% - 10px);
     display: flex;
     justify-content: flex-end;
-    padding-right: 10px;
-    padding-left: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
     box-shadow: 0 0 0 1px #bbb;
     min-width: 320px;
     justify-content: space-between;
@@ -242,6 +242,89 @@ app-iframe-part{
 .header-btns-container  > .layouts-list-container,
 .header-btns-container  > .share-code-btn{
     height:30px;
+}
+
+.paypal-btn-container{
+    margin-right: 5px;
+    position: relative;
+}
+
+.paypal-btn-container .btn.paypal-btn {
+    position: relative;
+    padding-left: 30px;
+    min-height: 30px;
+}
+
+.paypal-btn-container .btn.paypal-btn i.fa.fa-sort-desc {
+    position: absolute;
+    right: 0;
+    bottom: 7px;
+}
+
+.paypal-btn-container .btn.paypal-btn i.fa.fa-sort-asc {
+    position: absolute;
+    right: 0;
+    bottom: 0px;
+}
+
+.paypal-btn-container .btn.paypal-btn span.paypal-icon {
+    position: absolute;
+    left: 0;
+    width: 27px;
+    height: 100%;
+    display: block;
+    top: 0;
+    background-image: url("/assets/paypal-icon.png");
+    background-size: 78%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.paypal-btn-container .btn.paypal-btn span.text {
+    position: relative;
+    padding-right: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.paypal-btn-container ul.donations-menu {
+    position: absolute;
+    top: calc(100% + 7px);
+    list-style: none;
+    margin: 0;
+    width: 143px;
+    border-radius: 2px;
+    background-color: #FFFFFF;
+    z-index: 1;
+    box-shadow: 0px 0px 4px 2px #8b8b8b;
+    padding: 8px;
+    font-size: 24px;
+    height:179px;
+    transition: 0.2s all;
+    overflow: hidden;
+    opacity: 1;
+}
+
+.paypal-btn-container ul.donations-menu.hidden {
+    height: 0;
+    padding: 0;
+    box-shadow: none;
+    opacity:0
+}
+
+.paypal-btn-container ul.donations-menu > li:first-child ~ li {
+    border-top: 1px solid #8b8b8b5e;
+}
+
+.paypal-btn-container ul.donations-menu > li {
+    padding: 8px 4px;
+    cursor: pointer;
+    transition: 0.2s all;
+}
+
+.paypal-btn-container ul.donations-menu > li:hover {
+    background-color: #8b8b8b26;
+    font-weight: 600;
 }
 
 .layouts-list-container {
@@ -507,8 +590,31 @@ app-iframe-part{
     .layouts-list[class] .layout{
         margin:0px;
     }
+    
     .layouts-list[class] .layout:nth-child(2n+1){
         margin-right:10px;
+    }
+
+    .paypal-btn-container .btn.paypal-btn span.text{
+        font-size: 0px;
+        position:static;
+    }
+    
+    .paypal-btn-container .btn.paypal-btn span.text i.fa{
+        font-size: 16px;
+    }
+
+    .paypal-btn {
+        padding-left: 0 !important;
+        padding-right: 24px;
+    }
+
+    .paypal-btn-container .btn.paypal-btn i.fa.fa-sort-desc{
+        bottom: 11px !important;
+    }
+
+    .paypal-btn-container .btn.paypal-btn i.fa.fa-sort-asc{
+        bottom: 4px !important;
     }
 }
 
