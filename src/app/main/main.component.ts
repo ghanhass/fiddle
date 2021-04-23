@@ -803,6 +803,9 @@ export class MainComponent implements AfterViewInit {
             if(sizes[ind]>minLimit){
               sizes[ind]--;
             }
+            else{
+              sizes[ind] = minLimit;
+            }
           }
           else{
             keeping = false;
