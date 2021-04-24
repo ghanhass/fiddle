@@ -26,7 +26,7 @@ export class MainService {
   codePartsSize: number;
 
   fiddleTitle:string = "";
-  redirectMode: boolean = false;
+  redirectAfterSaveMode: boolean = false;
 
   constructor(private http: HttpClient) { }
 

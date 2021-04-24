@@ -100,7 +100,7 @@ export class MainComponent implements AfterViewInit {
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
       if(currentFiddleId){
-        if(self.mainService.redirectMode){
+        if(self.mainService.redirectAfterSaveMode){
           this.htmlCode = this.mainService.htmlCode;
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
@@ -115,7 +115,7 @@ export class MainComponent implements AfterViewInit {
             layout: this.mainService.layout
           }
           this.changeLayout(this.mainService.layout, {data: obj});
-          self.mainService.redirectMode = false;
+          self.mainService.redirectAfterSaveMode = false;
           this.runCode();
         }
         else{
@@ -139,6 +139,12 @@ export class MainComponent implements AfterViewInit {
               this.mainService.fiddleTitle = obj.title;
               this.changeLayout(parseInt(obj.layout), {data:obj});
               this.runCode();
+            }
+            else{
+              if(obj.errorCode == "-1"){
+                this.toastrService.warning("Fiddle not found.");
+                this.changeLayout(1);
+              }
             }
           });
         }

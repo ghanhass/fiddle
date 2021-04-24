@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class CommonService {
-  redirectMode: boolean = false;
+  redirectAfterSaveMode: boolean = false;
   jsCode: string = "";
   cssCode: string = "";
   htmlCode: string = "";

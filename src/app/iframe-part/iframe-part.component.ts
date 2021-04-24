@@ -98,7 +98,7 @@ export class IframePartComponent implements OnInit {
           input.setSelectionRange(0, 99999);
           let copyCommand = document.execCommand("copy");
         }
-        self.mainService.redirectMode = true;
+        self.mainService.redirectAfterSaveMode = true;
         self.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");
       }

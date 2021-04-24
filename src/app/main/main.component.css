@@ -293,20 +293,22 @@ app-iframe-part{
     border-radius: 2px;
     background-color: #FFFFFF;
     z-index: 1;
-    box-shadow: 0px 0px 4px 2px #8b8b8b;
-    padding: 8px;
+    
     font-size: 24px;
-    height:179px;
     transition: 0.2s all;
     overflow: hidden;
-    opacity: 1;
-}
 
-.paypal-btn-container ul.donations-menu.hidden {
     height: 0;
     padding: 0;
     box-shadow: none;
     opacity:0
+}
+
+.paypal-btn-container ul.donations-menu.shown {
+    height:179px;
+    padding: 8px;
+    box-shadow: 0px 0px 4px 2px #8b8b8b;
+    opacity: 1;
 }
 
 .paypal-btn-container ul.donations-menu > li:first-child ~ li {
