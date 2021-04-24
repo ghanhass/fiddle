@@ -18,7 +18,7 @@
             <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><span class="text">Donate<i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></span></button>
         </div>
         <button class="ressources-code-btn" (click)="ressouresBtnClick()">
-            <span>Ressources</span>
+            <span>Resources</span>
         </button>
         <button class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
             <span>Layouts <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
@@ -149,7 +149,7 @@
 <app-modal #modal>
     <div class="modal-header">
         <button class="modal-validate-btn btn" (click)="validateRessources()"><i class="fa fa-check" aria-hidden="true"></i></button>
-        <h2>Fiddle ressources</h2>
+        <h2>Fiddle resources</h2>
         <button class="modal-close-btn" (click)="hideModal()"><span>X</span></button>
     </div>
     <div class="modal-body">
