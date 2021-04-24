@@ -9,7 +9,7 @@
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
         <div class="paypal-btn-container">
-            <ul class="donations-menu" style="display:none;" [ngClass]="{'shown': isDonationsListShown}">
+            <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
                 <li (click)="selectDonation(0)"><div><span>5</span><span>€</span></div></li>
                 <li (click)="selectDonation(1)"><div><span>10</span><span>€</span></div></li>
                 <li (click)="selectDonation(2)"><div><span>20</span><span>€</span></div></li>
