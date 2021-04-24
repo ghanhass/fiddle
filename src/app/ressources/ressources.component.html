@@ -45,7 +45,7 @@
     </div>
     <hr *ngIf="selectedRessourceAssets.length">
     <div class="ressources-choice-selected-files-container" *ngIf="selectedRessourceAssets.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length > 0)}">
-            <h3 class="title" *ngIf="selectedRessourceAssets.length">Seleted ressources (grab to reorder)</h3>
+            <h3 class="title" *ngIf="selectedRessourceAssets.length">Seleted ressources (drag to reorder)</h3>
             <div class="ressources-choice-selected-file-wrapper-parent">
                 <div class="ressources-choice-selected-file-wrapper" *ngFor="let selectedFile of selectedRessourceAssets; let ind = index" [title]="'Grab to reorder'" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
                     <div draggable="true" class="ressources-choice-selected-file" (drop)="ressourceChoiceSelectedAssetDrop($event)" (dragover)="ressourceChoiceSelectedAssetDragover($event)" (dragstart)="ressourceChoiceSelectedAssetDragstart($event)" (dragenter)="ressourceChoiceSelectedAssetDragenter($event)" (dragleave)="ressourceChoiceSelectedAssetDragleave($event)" [attr.data-index]="ind" [ngClass]="{'placeholder':selectedFile.placeholderMode}">
