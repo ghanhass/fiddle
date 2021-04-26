@@ -1,7 +1,9 @@
-<ngs-code-editor 
+<!--<ngs-code-editor 
     [theme]="theme"
     [(codeModel)]="codeModel"
     [options]="options"
     (valueChanged)="onCodeChanged($event)"
-    [(value)]="code">
-</ngs-code-editor>
+    [(value)]="code" (loaded)="onEditorLoad($event)">
+</ngs-code-editor>-->
+
+<ngx-monaco-editor  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>

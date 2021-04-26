@@ -8,16 +8,17 @@ import { MainService } from "../main.service";
 })
 export class HtmlPartComponent implements OnInit {
   @Input()code: string = "";
-  theme = 'vs-light';
+  
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
+  @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
+  @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
 
-  codeModel: any = {
-    language: 'html',
-    value: '',
-  };
+  oldCodeValue: string = "";
+  editor: any;
 
   options = {
+    language:"html",
     contextmenu: false,
     minimap: {
       enabled: false,
@@ -25,32 +26,63 @@ export class HtmlPartComponent implements OnInit {
     lineDecorationsWidth:"1px",
     lineNumbersMinChars: 1,
     wordWrap:"on",
-    baseUrl: "/"
+    baseUrl: "/",
+    theme : 'vs-light'
   };
+
   constructor(private mainService:MainService) { }
 
   ngOnInit(): void {
   }
 
-  toggleFullScreenMode(){
-    this.isFullScreenMode = !this.isFullScreenMode;
-    this.toggleFullScreen.emit(this.isFullScreenMode? "1" : "0");
+  onEditorLoad(editor){
+    this.editor = editor;
+    console.log("editor = ", this.editor);
+
+    let el = document.querySelector("app-html-part [class='monaco-editor']");
+    let self = this;
+    el.addEventListener("keyup", function(event: KeyboardEvent){
+      if(event.code == "Enter" || event.code == "NumpadEnter"){
+        if(self.mainService.isCtrlKeyOn){
+          if(self.mainService.canEmitCodeMsg){
+            self.runcodemsg.emit();
+            self.mainService.canEmitCodeMsg = false;
+            setTimeout(()=>{
+              self.mainService.canEmitCodeMsg = true;
+            },2000);
+          }
+        }
+      }
+
+      if(event.code == "KeyS"){
+        if(self.mainService.isAltKeyOn){
+          if(self.mainService.canEmitCodeMsg){
+            self.savecodemsg.emit();
+            self.mainService.canEmitCodeMsg = false;
+            setTimeout(()=>{
+              self.mainService.canEmitCodeMsg = true;
+            },2000);
+          }
+        }
+      }
+    });
+
+    el.addEventListener("keydown", function(event: KeyboardEvent){
+      if(event.code == "Enter" || event.code == "NumpadEnter"){
+        if(self.mainService.isCtrlKeyOn){
+          console.log("keydown enter !");
+          self.mainService.htmlCode = self.oldCodeValue;
+          self.code = self.oldCodeValue;
+        }
+      }
+    });
   }
 
   onCodeChanged(value) {
     //console.log('CODE', value);
+    this.oldCodeValue = this.mainService.htmlCode;
     this.mainService.htmlCode = value;
     //console.log("html value = ", value);
-  }
-
-  ngOnChanges(data: SimpleChanges){
-    //console.log("SimpleChanges data = ", data);
-    if(data.code !== undefined && data.code.currentValue !== undefined){
-      this.codeModel = {
-        language: 'html',
-        value: data.code.currentValue
-      };
-    }
   }
 
 }

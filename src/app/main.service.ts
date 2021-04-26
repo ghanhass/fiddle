@@ -28,6 +28,10 @@ export class MainService {
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
 
+  isCtrlKeyOn: boolean = false;
+  isAltKeyOn: boolean = false;
+  canEmitCodeMsg: boolean = true;
+  
   constructor(private http: HttpClient) { }
 
   saveFiddle(data: any): Observable<any>{

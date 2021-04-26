@@ -9,8 +9,7 @@ import { CssPartComponent } from './css-part/css-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { IframePartComponent } from './iframe-part/iframe-part.component';
 import { FormsModule } from "@angular/forms";
-/*import { MonacoEditorModule } from "ngx-monaco-editor";*/
-import { CodeEditorModule } from "@ngstack/code-editor";
+import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { HttpClientModule } from "@angular/common/http";
 import { LoaderComponent } from './loader/loader.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -36,9 +35,7 @@ import { AngularSplitModule } from "angular-split";
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CodeEditorModule.forRoot({
-      baseUrl: 'assets/monaco-editor'
-    }),
+    MonacoEditorModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     AngularSplitModule

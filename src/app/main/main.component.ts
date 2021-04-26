@@ -651,6 +651,44 @@ export class MainComponent implements AfterViewInit {
     }, 1);
   }
 
+  @HostListener("document:keyup", ["$event"])
+  onWindowKeyup(event){
+    //console.log("onWindowKeyup ", event.code);
+    if(this.mainService.isCtrlKeyOn){
+      if(event.code == "Enter" || event.code == "NumpadEnter"){
+        if(this.mainService.isCtrlKeyOn){
+          
+          this.runCode();
+          this.mainService.canEmitCodeMsg = false;
+          setTimeout(()=>{
+            this.mainService.canEmitCodeMsg = true;
+          },2000);
+        }
+      }
+  
+      if(event.code == "KeyS"){
+        this.runCode("save");
+        this.mainService.canEmitCodeMsg = false;
+        setTimeout(()=>{
+          this.mainService.canEmitCodeMsg = true;
+        },2000);
+      }
+    }
+
+    if(event.code == "ControlLeft" || event.code == "ControlRight"){
+      this.mainService.isCtrlKeyOn = false;
+    }
+  }
+
+  @HostListener("document:keydown", ["$event"])
+  onWindowKeydown(event: KeyboardEvent){
+    //console.log("onWindowKeydown ", event.code);
+    if(event.code == "ControlLeft" || event.code == "ControlRight"){
+      this.mainService.isCtrlKeyOn = true;
+    }
+
+  }
+
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
     this.toggleLayoutsList(true);
