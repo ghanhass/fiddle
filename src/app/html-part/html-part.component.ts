@@ -41,38 +41,20 @@ export class HtmlPartComponent implements OnInit {
 
     let el = document.querySelector("app-html-part [class='monaco-editor']");
     let self = this;
-    el.addEventListener("keyup", function(event: KeyboardEvent){
-      if(event.code == "Enter" || event.code == "NumpadEnter"){
-        if(self.mainService.isCtrlKeyOn){
-          if(self.mainService.canEmitCodeMsg){
-            self.runcodemsg.emit();
-            self.mainService.canEmitCodeMsg = false;
-            setTimeout(()=>{
-              self.mainService.canEmitCodeMsg = true;
-            },2000);
-          }
-        }
-      }
-
-      if(event.code == "KeyS"){
-        if(self.mainService.isAltKeyOn){
-          if(self.mainService.canEmitCodeMsg){
-            self.savecodemsg.emit();
-            self.mainService.canEmitCodeMsg = false;
-            setTimeout(()=>{
-              self.mainService.canEmitCodeMsg = true;
-            },2000);
-          }
-        }
-      }
-    });
 
     el.addEventListener("keydown", function(event: KeyboardEvent){
-      if(event.code == "Enter" || event.code == "NumpadEnter"){
-        if(self.mainService.isCtrlKeyOn){
-          console.log("keydown enter !");
+
+      let evDate = new Date();
+
+      if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
           self.mainService.htmlCode = self.oldCodeValue;
           self.code = self.oldCodeValue;
+          self.runcodemsg.emit();
+      }
+      else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
+        if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
+          self.mainService.codeExecutionDate = evDate;
+          self.savecodemsg.emit();
         }
       }
     });

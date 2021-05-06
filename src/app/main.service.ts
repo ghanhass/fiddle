@@ -31,6 +31,7 @@ export class MainService {
   isCtrlKeyOn: boolean = false;
   isAltKeyOn: boolean = false;
   canEmitCodeMsg: boolean = true;
+  codeExecutionDate: Date =  undefined;
   
   constructor(private http: HttpClient) { }
 

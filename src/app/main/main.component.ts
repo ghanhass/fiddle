@@ -180,6 +180,25 @@ export class MainComponent implements AfterViewInit {
     this.setMainServiceCodepartSizes();
 
     this.fixCodeEditorsDimensions();
+
+    window.addEventListener("keydown", function(event){
+      if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      let evDate = new Date();
+      
+        if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){        
+          self.runCode();
+        }
+        else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
+          if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
+            self.runCode("save");
+            self.mainService.codeExecutionDate = evDate;
+          }
+        }
+      
+    })
   }
 
   setMainServiceCodepartSizes(){
@@ -651,42 +670,9 @@ export class MainComponent implements AfterViewInit {
     }, 1);
   }
 
-  @HostListener("document:keyup", ["$event"])
-  onWindowKeyup(event){
-    //console.log("onWindowKeyup ", event.code);
-    if(this.mainService.isCtrlKeyOn){
-      if(event.code == "Enter" || event.code == "NumpadEnter"){
-        if(this.mainService.isCtrlKeyOn){
-          
-          this.runCode();
-          this.mainService.canEmitCodeMsg = false;
-          setTimeout(()=>{
-            this.mainService.canEmitCodeMsg = true;
-          },2000);
-        }
-      }
-  
-      if(event.code == "KeyS"){
-        this.runCode("save");
-        this.mainService.canEmitCodeMsg = false;
-        setTimeout(()=>{
-          this.mainService.canEmitCodeMsg = true;
-        },2000);
-      }
-    }
-
-    if(event.code == "ControlLeft" || event.code == "ControlRight"){
-      this.mainService.isCtrlKeyOn = false;
-    }
-  }
-
-  @HostListener("document:keydown", ["$event"])
+  @HostListener("window:keydown", ["$event"])
   onWindowKeydown(event: KeyboardEvent){
     //console.log("onWindowKeydown ", event.code);
-    if(event.code == "ControlLeft" || event.code == "ControlRight"){
-      this.mainService.isCtrlKeyOn = true;
-    }
-
   }
 
   @HostListener("window:resize", ["$event"])
