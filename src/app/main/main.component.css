@@ -299,8 +299,8 @@ app-iframe-part{
     transition: 0.2s all;
     overflow: hidden;
 
-    height: 0;
-    padding: 0;
+    height: 159px;
+    padding: 8px;
     box-shadow: none;
     opacity:0
 }
@@ -500,9 +500,10 @@ app-iframe-part{
 
 .layouts-list{
     position: absolute;
-    height: 0px;
+    height: 44px;
+    padding:8px;
     overflow: hidden;
-    transition: all 0.5s;
+    transition: all 0.2s;
     top: calc(100% + 8px);
     background-color: #FFFFFF;
     box-shadow: 0px 0px 4px 2px #8b8b8b;

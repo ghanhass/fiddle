@@ -56,7 +56,7 @@
   z-index: -1;
   width:100%;
   height:100%;
-  transition: 0.5s all;
+  transition: 0.2s all;
 }
 .modal{
   top: 1px;
@@ -71,7 +71,7 @@
   flex-direction: column;
   box-shadow: 0 0px 8px 1px gray;
   border: 1px solid #80808080;
-  transition: 0.5s all;
+  transition: 0.2s all;
   height: calc(100% - 2px);
   overflow: auto;
 }
