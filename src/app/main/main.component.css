@@ -644,7 +644,7 @@ app-iframe-part{
 }
 
 :host ::ng-deep as-split[class] > .as-split-gutter[class]{
-    background-color: #ddd;
+    background-color: #ccc;
 }
 
 .iframe-hack{
