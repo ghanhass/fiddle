@@ -65,8 +65,8 @@ ngs-code-editor .margin-view-overlays .line-numbers {
 }
 
 body{
-    padding:5px;
-    margin:0px;
+    padding: 2px;
+    margin: 0px;
     font-family: sans-serif;
     overflow: hidden;
 }

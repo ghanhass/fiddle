@@ -1,9 +1,8 @@
 .main-container{
-    display:flex;
-    width: calc(100vw - 10px);
-    height: calc(100vh - 50px);
-    box-shadow: 0 0 0 1px #bbb;
-    min-width: 320px;
+    display: flex;
+    width: calc(100vw - 4px);
+    height: calc(100vh - 38px);
+    box-shadow: 0 0 0 1px #bbb;    
 }
 
 #main-header{
@@ -14,7 +13,6 @@
     padding-right: 5px;
     padding-left: 5px;
     box-shadow: 0 0 0 1px #bbb;
-    min-width: 320px;
     justify-content: space-between;
     align-items: center;
     position: relative;
@@ -104,14 +102,6 @@
     /*display: flex;
     flex-direction: column;*/
 } 
-
-.main-container{
-    display:flex;
-    width: calc(100vw - 10px);
-    height: calc(100vh - 50px);
-    box-shadow: 0 0 0 1px #bbb;
-    min-width: 320px;
-}
 
 .main-container{
     position: relative;
@@ -231,14 +221,19 @@ app-iframe-part{
     justify-content: center;
 }
 
-.header-btns-container > button:not(:first-child) {
+.header-btns-container > button {
     margin-left:5px;
+    margin-right:5px;
     font-size: 14px;
     padding: 1px 4px;
 }
   
-.header-btns-container > button:not(:last-child) {
-    margin-right:5px;
+.header-btns-container > button:last-child {
+    margin-right:0px;
+}
+
+.header-btns-container > button:first-child {
+    margin-left:0px;
 }
 
 .header-btns-container  > .ressources-code-btn,
@@ -850,11 +845,11 @@ as-split-area.code-component-container > app-html-part{
 }
 
 @media screen and (max-width:400px){
-    .header-btns-container  > .ressources-code-btn,
-    .header-btns-container  > .layouts-list-container,
-    .header-btns-container  > .share-code-btn{
-        margin-right:2px;
-        margin-left:2px;
+    .header-btns-container  > .ressources-code-btn[class],
+    .header-btns-container  > .layouts-list-container[class],
+    .header-btns-container  > .share-code-btn[class]{
+        margin-right:3px;
+        margin-left:3px;
         padding: 1px 2px;
     }
     .fiddle-logo{
