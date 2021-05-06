@@ -369,7 +369,7 @@ export class MainComponent implements AfterViewInit {
       let coef = currentMainContainerSize2 / savedMainContainerSize;
       sizes[ind] = sizes[ind] * coef;
     } 
-    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 11, "outer");
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 7 , "outer");
     this.initialCodePartSize = Math.floor(sizes[ind]);
 
   }
@@ -419,13 +419,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "cssAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "jsAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "iframeAsSplitAreaOrder":
         return 2;
@@ -517,13 +517,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "cssAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "jsAsSplitAreaMinSize":
-        return 25;
+        return 23;
 
         case "iframeAsSplitAreaOrder":
         return 1;
@@ -744,13 +744,13 @@ export class MainComponent implements AfterViewInit {
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
-        if(this.newCodePartSize > this.mainContainerWidth - 11){
+        if(this.newCodePartSize > this.mainContainerWidth - 7 ){
           newCodePartSize = this.mainContainerWidth - 13;
           this.newCodePartSize = this.newCodePartSize;
         }
       }
       else if(this.layout == 2 || this.layout == 4){
-        if(this.newCodePartSize > this.mainContainerHeight - 11){
+        if(this.newCodePartSize > this.mainContainerHeight - 7 ){
           newCodePartSize = this.mainContainerHeight - 13;
           this.newCodePartSize = this.newCodePartSize;
         }

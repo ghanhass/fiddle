@@ -93,10 +93,10 @@
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
     
-    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs}">
+    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs}" [gutterSize]="7">
             <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
                     <div id="code-parts" #codeParts>
-                        <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)">
+                        <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)" [gutterSize]="7">
                             <as-split-area [minSize]="getLayoutInfos('emptyAsSplitAreaMinSize')" [size]="getLayoutInfos('emptyAsSplitAreaSize')" [maxSize]="getLayoutInfos('emptyAsSplitAreaMaxSize')" style="display: none"></as-split-area>
                             <as-split-area [minSize]="getLayoutInfos('htmlAsSplitAreaMinSize')" [size]="getLayoutInfos('htmlAsSplitAreaSize')" class="code-component-container code-component-container-html" 
                             [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
