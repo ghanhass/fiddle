@@ -4,7 +4,7 @@
   padding:4px;
 }
 
-::ng-deep .modal-container .modal-header h2{
+::ng-deep .modal-container .modal-header h3{
   margin: 0px;
 }
 

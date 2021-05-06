@@ -26,7 +26,7 @@
 }
 
 .ressources-query-container label{
-  font-size:16px;
+  font-size:14px;
 }
 
 .ressources-choices-container{
@@ -88,6 +88,7 @@
 
 .ressource-choice-name {
   font-weight: 600;
+  font-size: 15px;
 }
 
 .ressources-choice-files-container{
@@ -107,9 +108,10 @@
 }
 
 .ressources-choice-files {
-  padding: 5px;
+  padding: 7px 5px;
   user-select: none;
   cursor:pointer;
+  font-size: 14px;
 }
 
 .ressources-choice-files-container.is-stretched{
@@ -174,6 +176,7 @@
 .ressources-choice-files-search > div > label {
   white-space: nowrap;
   margin-right: 3px;
+  font-size: 14px;
 }
 
 .ressources-choice-selected-file {
@@ -187,6 +190,7 @@
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
+  font-size:14px
 }
 
 .ressources-choice-selected-file span{
