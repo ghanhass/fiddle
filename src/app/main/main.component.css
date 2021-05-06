@@ -293,7 +293,6 @@ app-iframe-part{
     width: 143px;
     border-radius: 2px;
     background-color: #FFFFFF;
-    z-index: 1;
     
     font-size: 20px;
     transition: 0.2s all;
@@ -302,7 +301,9 @@ app-iframe-part{
     height: 159px;
     padding: 8px;
     box-shadow: none;
-    opacity:0
+    opacity:0;
+    pointer-events: none;
+    z-index: -1;
 }
 
 .paypal-btn-container ul.donations-menu.shown {
@@ -310,6 +311,8 @@ app-iframe-part{
     padding: 8px;
     box-shadow: 0px 0px 4px 2px #8b8b8b;
     opacity: 1;
+    pointer-events: all;
+    z-index: 1;
 }
 
 .paypal-btn-container ul.donations-menu > li:first-child ~ li {
