@@ -730,13 +730,13 @@ export class MainComponent implements AfterViewInit {
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
-        if(this.newCodePartSize > this.mainContainerWidth - 7 ){
+        if(this.newCodePartSize > this.mainContainerWidth - 11 ){
           newCodePartSize = this.mainContainerWidth - 13;
           this.newCodePartSize = this.newCodePartSize;
         }
       }
       else if(this.layout == 2 || this.layout == 4){
-        if(this.newCodePartSize > this.mainContainerHeight - 7 ){
+        if(this.newCodePartSize > this.mainContainerHeight - 11 ){
           newCodePartSize = this.mainContainerHeight - 13;
           this.newCodePartSize = this.newCodePartSize;
         }
