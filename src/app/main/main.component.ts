@@ -438,13 +438,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "cssAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "jsAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "iframeAsSplitAreaOrder":
         return 2;
@@ -536,13 +536,13 @@ export class MainComponent implements AfterViewInit {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "cssAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "jsAsSplitAreaMinSize":
-        return 23;
+        return 24;
 
         case "iframeAsSplitAreaOrder":
         return 1;
