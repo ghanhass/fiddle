@@ -16,6 +16,7 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+    /*background: #f0f0f0;*/
 }
 
 .code-part-title{
@@ -553,6 +554,15 @@ app-iframe-part{
 .fiddle-title .fiddle-input{
     min-width: 200px;
     font-size: 14px;
+
+    /*border: none;
+    box-shadow: none;
+    outline: none;
+    background: none;
+    border-bottom: 1px solid #999;
+    height: 19px;
+    padding: 0;
+    padding-bottom: 0px;*/
 }
 
 .app-loader{

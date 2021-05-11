@@ -365,7 +365,7 @@ export class MainComponent implements AfterViewInit {
       sizes[2] = sizes[2] * coef;
       sizes[3] = sizes[3] * coef;
     }
-    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 22, "inner");
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner");
     this.initialHtmlCodePartSize = Math.floor(sizes[1]);
     this.initialCssCodePartSize = Math.floor(sizes[2]);
     this.initialJsCodePartSize = Math.floor(sizes[3]);
@@ -722,7 +722,7 @@ export class MainComponent implements AfterViewInit {
         sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
       }
 
-      this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 22, "inner");
+      this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 10, "inner");
 
       this.mainContainerHeight = newMainContainerHeight;
       this.mainContainerWidth = newMainContainerWidth;
@@ -730,13 +730,13 @@ export class MainComponent implements AfterViewInit {
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
-        if(this.newCodePartSize > this.mainContainerWidth - 11 ){
+        if(this.newCodePartSize > this.mainContainerWidth - 5 ){
           newCodePartSize = this.mainContainerWidth - 13;
           this.newCodePartSize = this.newCodePartSize;
         }
       }
       else if(this.layout == 2 || this.layout == 4){
-        if(this.newCodePartSize > this.mainContainerHeight - 11 ){
+        if(this.newCodePartSize > this.mainContainerHeight - 5 ){
           newCodePartSize = this.mainContainerHeight - 13;
           this.newCodePartSize = this.newCodePartSize;
         }
