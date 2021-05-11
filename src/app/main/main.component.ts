@@ -275,30 +275,30 @@ export class MainComponent implements AfterViewInit {
             else{
               switch(this.layout){
                 case 1:
-                this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
-                this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
-                this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
+                this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialCodePartSize = 350;
                 this.fixCodeEditorsDimensions();
                 break;
                 case 2:
-                this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
-                this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
-                this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
+                this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
                 this.fixCodeEditorsDimensions();
                 break;
                 case 3:
-                this.initialCssCodePartSize = (this.mainContainerHeight - 20) / 3;
-                this.initialHtmlCodePartSize = (this.mainContainerHeight - 20) / 3;
-                this.initialJsCodePartSize = (this.mainContainerHeight - 20) / 3;
+                this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
+                this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialCodePartSize = 350;
                 this.fixCodeEditorsDimensions();
                 break;
                 case 4:
-                this.initialCssCodePartSize = (this.mainContainerWidth - 20) / 3;
-                this.initialHtmlCodePartSize = (this.mainContainerWidth - 20) / 3;
-                this.initialJsCodePartSize = (this.mainContainerWidth - 20) / 3;
+                this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
+                this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
+                this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
                 this.fixCodeEditorsDimensions();
                 break;
