@@ -574,12 +574,18 @@ app-iframe-part{
 }
 
 .fiddle-title{
-    margin-left: 70px;
+    margin-left: 60px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.fiddle-size{
+    margin-left: 10px;
 }
 
 .fiddle-logo{
-    width: 60px;
+    width: 50px;
     position: absolute;
     left: 4px;
     top: 50%;
@@ -593,6 +599,7 @@ app-iframe-part{
 
 .fiddle-logo img{
     height: calc(100% - 10px);
+    max-width: 100%;
 }
 
 @media screen and (max-width:550px){
@@ -841,7 +848,7 @@ as-split-area.code-component-container > app-html-part{
     }
 
     .fiddle-logo{
-        left: 12px;
+        left: 4px;
         top: 0px;
         transform: none;
         width: 45px;

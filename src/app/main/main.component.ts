@@ -83,6 +83,9 @@ export class MainComponent implements AfterViewInit {
   newCssCodePartSize: number = 0;
   newJsCodePartSize: number = 0;
   newCodePartSize: number = 0;
+
+  iframeWidth: number;
+  iframeHeight: number;
   
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -162,7 +165,7 @@ export class MainComponent implements AfterViewInit {
 
       this.setMainServiceCodepartSizes();
       //console.log("splitComponentInner sizes = ", sizes);
-    })
+    });
 
     this.splitComponentOuter.dragProgress$.subscribe((res)=>{
       let sizes = this.splitComponentOuter.getVisibleAreaSizes();
@@ -175,6 +178,7 @@ export class MainComponent implements AfterViewInit {
 
       this.mainService.codePartsSize = this.newCodePartSize;
       //console.log("splitComponentOuter sizes = ", sizes);
+      this.calculateIframeSize(mainContainerEl);
     })
 
     this.setMainServiceCodepartSizes();
@@ -199,6 +203,21 @@ export class MainComponent implements AfterViewInit {
         }
       
     })
+  }
+
+  calculateIframeSize(mainContainerEl?, sizes?){
+    let refElement = mainContainerEl || this.mainContainer.nativeElement || document.documentElement;
+    if(sizes !== undefined){
+      this.iframeHeight = sizes.height;
+      this.iframeWidth = sizes.width;
+    }
+    else{
+      this.iframeHeight = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetHeight;
+      this.iframeWidth = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
+    }
+
+    console.log("this.iframeWidth = ", this.iframeWidth);
+    console.log("this.iframeHeight = ", this.iframeHeight);
   }
 
   setMainServiceCodepartSizes(){
@@ -308,6 +327,8 @@ export class MainComponent implements AfterViewInit {
             this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
             this.newJsCodePartSize = this.initialJsCodePartSize;
             this.newCodePartSize = this.initialCodePartSize;
+            
+            this.calculateIframeSize(mainContainerEl);
 
             this.setMainServiceCodepartSizes();
           }, 1);
@@ -752,6 +773,8 @@ export class MainComponent implements AfterViewInit {
       this.splitComponentOuter.setVisibleAreaSizes(outerSplitterSizes);
 
       this.setMainServiceCodepartSizes();
+
+      this.calculateIframeSize(mainContainerEl);
     }
   }
   

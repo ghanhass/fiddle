@@ -1,7 +1,7 @@
 <div class="ressources-container">
     <div class="resources-tabs-mobile" [ngClass]="{'browse-mode' : (ressoucesMobileTab == 'browse'), 'select-mode' : (ressoucesMobileTab == 'select')}">
         <label for="ressources-mobile-tab-browse" [ngClass]="{'selected' : (ressoucesMobileTab == 'browse')}">Browse<input [(ngModel)]="ressoucesMobileTab" type="radio" name="ressources-mobile-tab" value="browse" id="ressources-mobile-tab-browse"></label>
-        <label for="ressources-mobile-tab-select" [ngClass]="{'selected' : (ressoucesMobileTab == 'select')}">Select <input [(ngModel)]="ressoucesMobileTab" type="radio" name="ressources-mobile-tab" value="select" id="ressources-mobile-tab-select"></label>
+        <label *ngIf="currentRessourceVersion && currentRessourceAssetsByVersion" for="ressources-mobile-tab-select" [ngClass]="{'selected' : (ressoucesMobileTab == 'select')}">Select <input [(ngModel)]="ressoucesMobileTab" type="radio" name="ressources-mobile-tab" value="select" id="ressources-mobile-tab-select"></label>
     </div>
     <div class="ressources-choices-container" [ngClass]="{'is-reduced': (selectedRessourceAssets.length > 0)}">
         <div class="ressources-query-container">

@@ -42,7 +42,7 @@ export class JsPartComponent implements OnInit {
 
   onEditorLoad(editor){
     this.editor = editor;
-    console.log("editor = ", this.editor);
+    //console.log("editor = ", this.editor);
 
     let el = document.querySelector("app-js-part [class='monaco-editor']");
     let self = this;

@@ -1,10 +1,15 @@
 <header id="main-header">
-    <a class="fiddle-logo" title="My fiddle" [href]="getHomeUrl()">
+    <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
         <img src="assets/logo.png">
     </a>
     <div class="fiddle-title">
         <span>Title: </span>
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)"/>
+        <div class="fiddle-size">
+            <span class="width">{{iframeWidth}}</span>
+            <span class="x">x</span>
+            <span class="height">{{iframeHeight}}</span>
+        </div>
     </div>
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
@@ -141,7 +146,7 @@
             </as-split-area>
             <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult}">
                     <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }"></div>
-                    <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+                    <app-iframe-part (iframeload)="calculateIframeSize(undefined, $event)" #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
             </as-split-area>
     </as-split>
     
