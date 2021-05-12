@@ -245,6 +245,7 @@ export class MainComponent implements AfterViewInit {
    * @returns void.
    */
   fixCodeEditorsDimensions(): void{
+    return;
     let self = this;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
 
@@ -689,9 +690,9 @@ export class MainComponent implements AfterViewInit {
       this.isJsFullScreen = !this.isJsFullScreen;
       break;
     }
-    let editorLayoutFixInterval = window.setTimeout(()=>{
+    /*let editorLayoutFixInterval = window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 1);
+    }, 1);*/
   }
 
   @HostListener("window:keydown", ["$event"])
@@ -932,36 +933,36 @@ export class MainComponent implements AfterViewInit {
       break;
     }
     let self = this;
-    let editorLayoutFixInterval = window.setInterval(()=>{
+    let editorLayoutFixInterval = window.setTimeout(()=>{
       //console.log("inside custom interval");
       if (!this.showCss){
         if(this.codeParts.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
+          //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          //clearInterval(editorLayoutFixInterval);
         }
       }
 
       if (!this.showHtml){
         if(this.codeParts.nativeElement.querySelector(".code-component-container-html").classList.contains("hide-mobile")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
+          //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          //clearInterval(editorLayoutFixInterval);
         }
       }
 
       if (!this.showJs){
         if(this.codeParts.nativeElement.querySelector(".code-component-container-js").classList.contains("hide-mobile")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
+          //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          //clearInterval(editorLayoutFixInterval);
         }
       }
 
       if (!this.showResult){
         if(document.querySelector("app-iframe-part").classList.contains("hide-mobile")){
-          window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-          clearInterval(editorLayoutFixInterval);
+          //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+          //clearInterval(editorLayoutFixInterval);
         }
       }
-    }, 50);
+    }, 1);
   }
 
   triggerResizeWithInterval(timeout){
@@ -971,7 +972,7 @@ export class MainComponent implements AfterViewInit {
 
     this.customInterval = setInterval(()=>{
       //console.log("inside triggerResizeWithInterval");
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+      //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, timeout); 
   }
 
