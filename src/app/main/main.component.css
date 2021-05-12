@@ -584,6 +584,10 @@ app-iframe-part{
     margin-left: 10px;
 }
 
+.fiddle-size span.x{
+    margin: 0 3px;
+}
+
 .fiddle-logo{
     width: 50px;
     position: absolute;

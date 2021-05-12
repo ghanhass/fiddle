@@ -117,18 +117,6 @@ export class IframePartComponent implements OnInit {
       this.loader.hideLoader();
       this.hideloader.emit();
     }
-    
-
-    let iframeWidth = (document.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
-    let iframeHeight = (document.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetHeight;
-
-    console.log("iframe width = ", iframeWidth);
-    console.log("iframe height = ", iframeHeight);
-
-    this.iframeload.emit({
-      width: iframeWidth,
-      height: iframeHeight
-    });
   }
 
 }

@@ -146,7 +146,7 @@
             </as-split-area>
             <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult}">
                     <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }"></div>
-                    <app-iframe-part (iframeload)="calculateIframeSize(undefined, $event)" #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+                    <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
             </as-split-area>
     </as-split>
     

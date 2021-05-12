@@ -206,18 +206,21 @@ export class MainComponent implements AfterViewInit {
   }
 
   calculateIframeSize(mainContainerEl?, sizes?){
-    let refElement = mainContainerEl || this.mainContainer.nativeElement || document.documentElement;
-    if(sizes !== undefined){
-      this.iframeHeight = sizes.height;
-      this.iframeWidth = sizes.width;
-    }
-    else{
-      this.iframeHeight = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetHeight;
-      this.iframeWidth = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
-    }
+    let self = this;
+    setTimeout(()=>{
+      let refElement = mainContainerEl || self.mainContainer.nativeElement || document.documentElement;
+      if(sizes !== undefined){
+        self.iframeHeight = sizes.height;
+        self.iframeWidth = sizes.width;
+      }
+      else{
+        self.iframeHeight = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetHeight;
+        self.iframeWidth = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
+      }
 
-    console.log("this.iframeWidth = ", this.iframeWidth);
-    console.log("this.iframeHeight = ", this.iframeHeight);
+      //console.log("self.iframeWidth = ", self.iframeWidth);
+      //console.log("self.iframeHeight = ", self.iframeHeight);
+    },1)
   }
 
   setMainServiceCodepartSizes(){
