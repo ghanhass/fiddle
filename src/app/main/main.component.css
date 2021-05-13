@@ -40,9 +40,10 @@
 }*/
 
 .code-part-title > span {
-    color: #797979;
+    color: #818181;
     user-select:none;
     pointer-events: none;
+    font-weight: 600;
 }
 
 .code-part-title-btns-container{
