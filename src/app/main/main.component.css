@@ -601,6 +601,7 @@ app-iframe-part{
     padding: 5px;
     border-radius: 3px;
     box-shadow: 0 0 15px 4px #000000;
+    user-select: none;
 }
 
 .fiddle-logo{
