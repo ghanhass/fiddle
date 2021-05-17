@@ -19,7 +19,7 @@ export class HtmlPartComponent implements OnInit {
 
   options = {
     language:"html",
-    contextmenu: false,
+    //contextmenu: false,
     minimap: {
       enabled: false,
     },

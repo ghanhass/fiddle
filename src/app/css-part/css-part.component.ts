@@ -24,7 +24,7 @@ export class CssPartComponent implements OnInit {
 
   options = {
     language:"css",
-    contextmenu: false,
+    //contextmenu: false,
     minimap: {
       enabled: false,
     },

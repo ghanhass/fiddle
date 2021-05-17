@@ -19,7 +19,7 @@ export class JsPartComponent implements OnInit {
 
   options = {
     language:"javascript",
-    contextmenu: false,
+    //contextmenu: false,
     minimap: {
       enabled: false,
     },
