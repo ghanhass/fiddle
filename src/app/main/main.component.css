@@ -298,7 +298,7 @@ app-iframe-part{
     background-color: #FFFFFF;
     
     font-size: 20px;
-    transition: 0.2s all;
+    /*transition: 0.2s all;*/
     overflow: hidden;
 
     height: 159px;
@@ -325,7 +325,7 @@ app-iframe-part{
 .paypal-btn-container ul.donations-menu > li {
     padding: 8px 4px;
     cursor: pointer;
-    transition: 0.2s all;
+    /*transition: 0.2s all;*/
 }
 
 .paypal-btn-container ul.donations-menu > li:hover {
@@ -508,7 +508,7 @@ app-iframe-part{
     height: 44px;
     padding:8px;
     overflow: hidden;
-    transition: all 0.2s;
+    /*transition: all 0.2s;*/
     top: calc(100% + 8px);
     background-color: #FFFFFF;
     box-shadow: 0px 0px 4px 2px #8b8b8b;
