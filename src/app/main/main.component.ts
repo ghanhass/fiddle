@@ -38,6 +38,8 @@ export class MainComponent implements AfterViewInit {
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
 
+  isFiddleThemeDark: boolean = false;
+
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
   @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
@@ -1083,4 +1085,40 @@ export class MainComponent implements AfterViewInit {
     return environment.homeUrl;
   }
 
+  registerMonacoCustomTheme(base) {
+    let self = this;
+    setTimeout(()=>{
+      window['monaco'].editor.defineTheme('myCustomTheme', {
+        base: base, // can also be vs or hc-black
+        inherit: true, // can also be false to completely replace the builtin rules
+        rules: [
+          {
+            token: 'comment',
+            foreground: 'ffa500',
+            fontStyle: 'italic underline'
+          },
+          { token: 'comment.js', foreground: '008800', fontStyle: 'bold' },
+          { token: 'comment.css', foreground: '0000ff' } // will inherit fontStyle from `comment` above
+        ],
+        colors: {}
+      });
+      window['monaco'].editor.setTheme("myCustomTheme");
+    },0);
+  }
+
+  changeFiddleTheme(){
+    this.isFiddleThemeDark = !this.isFiddleThemeDark;
+    if(this.isFiddleThemeDark){
+      this.registerMonacoCustomTheme("vs-dark");
+      (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
+      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.add("dark-mode");
+      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.add("dark-mode");
+    }
+    else{
+      this.registerMonacoCustomTheme("vs");
+      (this.mainContainer.nativeElement as HTMLElement).classList.remove("dark-mode");
+      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.remove("dark-mode");
+      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.remove("dark-mode");
+    }
+  }
 }

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: "http://localhost/iframe-renderer/backend.php",
+  url: "http://localhost/myfolder/iframe-renderer/backend.php",
   appName: "",
   homeUrl:"http://localhost:4200"
 };

@@ -189,7 +189,8 @@ app-iframe-part{
 }
 
 .share-code-btn,
-.ressources-code-btn{
+.ressources-code-btn,
+.theme-btn{
     font-size: 16px;
     cursor: pointer;
     display: block;
@@ -204,17 +205,20 @@ app-iframe-part{
 }
 
 .share-code-btn:active,
-.ressources-code-btn:active{
+.ressources-code-btn:active,
+.theme-btn:active{
     color:rgb(0,0,0);
     padding-top: 4px !important;
 }
 .share-code-btn:hover,
-.ressources-code-btn:hover{
+.ressources-code-btn:hover,
+.theme-btn:hover{
     background-color: #FFFFFF;
 }
 
 .share-code-btn span,
-.ressources-code-btn span{
+.ressources-code-btn span,
+.theme-btn span{
     display:block;
 }
 
@@ -241,7 +245,8 @@ app-iframe-part{
 
 .header-btns-container  > .ressources-code-btn,
 .header-btns-container  > .layouts-list-container,
-.header-btns-container  > .share-code-btn{
+.header-btns-container  > .share-code-btn,
+.header-btns-container > .theme-btn{
     height:30px;
 }
 
@@ -805,8 +810,9 @@ as-split-area.code-component-container > app-html-part{
     }
 
     .layouts-list-container{
-        opacity: 0.5;
-        pointer-events: none;
+        /*opacity: 0.5;
+        pointer-events: none;*/
+        display:none;
     }
 
     .layouts-list{
@@ -890,7 +896,8 @@ as-split-area.code-component-container > app-html-part{
 @media screen and (max-width:400px){
     .header-btns-container  > .ressources-code-btn[class],
     .header-btns-container  > .layouts-list-container[class],
-    .header-btns-container  > .share-code-btn[class]{
+    .header-btns-container  > .share-code-btn[class]
+    .header-btns-container > .theme-btn[class]{
         margin-right:3px;
         margin-left:3px;
         padding: 1px 2px;
@@ -919,3 +926,155 @@ app-modal .modal-header .modal-validate-btn{
     background-color: #62ad4a;
     padding: 4px 10px;
 }
+
+/**START dark theme**/
+:host ::ng-deep .dark-mode .code-part-title {
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+
+:host ::ng-deep .dark-mode{
+    background: #1e1e1e;
+    color: #d4d4d4;
+}
+
+:host ::ng-deep .dark-mode .as-split-gutter {
+    background-color: #444857 !important;
+}
+
+:host ::ng-deep .dark-mode .fiddle-size.fiddle-size-hack {
+    color: #000000;
+    background: #c9c9c9;
+    box-shadow: 0 0 15px 4px #c9c9c9;
+}
+
+:host ::ng-deep .dark-mode .iframe-hack {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+:host ::ng-deep .dark-mode input.form-control.fiddle-input {
+    background: #1e1e1e;
+    border: 1px solid #d4d4d4;
+    color: #d4d4d4;
+}
+
+:host ::ng-deep .dark-mode .code-part-title span {
+    color: #d4d4d4 !important;
+}
+
+
+:host ::ng-deep .dark-mode .layout > div:first-child > div {
+    outline: 1px solid #eeeeee !important;
+}
+
+:host ::ng-deep .dark-mode .layout.active > div:first-child > div {
+    outline: 1px solid #4d4d4d !important;
+}
+/***********/
+:host ::ng-deep .dark-mode .layout > div:first-child {
+    outline: 2px solid #eeeeee !important;
+}
+
+:host ::ng-deep .dark-mode .layout.active > div:first-child {
+    outline: 2px solid #4d4d4d !important;
+}
+/*************/
+:host ::ng-deep .dark-mode .layout {
+    background-color: #4d4d4d;
+    border-color: #eeeeee;
+    box-shadow: 0 0 0px 1px #4d4d4d;
+}
+
+:host ::ng-deep .dark-mode .layout.active {
+    background-color: #eeeeee;
+    border-color: #4d4d4d;
+    box-shadow: 0 0 0px 1px #eeeeee;
+}
+/***********/
+:host ::ng-deep .dark-mode .layouts-list {
+    background-color: #4d4d4d;
+    box-shadow: 0px 0px 4px 2px #eeeeee;
+}
+
+:host ::ng-deep .dark-mode ul.donations-menu.shown {
+    box-shadow: 0px 0px 4px 2px #eeeeee !important;
+    background-color: #4d4d4d !important;
+}
+
+:host ::ng-deep .dark-mode .paypal-btn-container 
+ul.donations-menu > 
+li {
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode .paypal-btn-container 
+ul.donations-menu > 
+li:hover {
+    background-color: #eeeeee54;
+    color: #000000;
+}
+
+:host ::ng-deep .dark-mode .ressources-choices-container {
+    background-color: #1e1e1e !important;
+}
+
+:host ::ng-deep .dark-mode .modal {
+    background: #1e1e1e;
+    border: 1px solid #bbb;
+    color: #EEEEFD;
+}
+
+:host ::ng-deep .dark-mode .ressources-choice 
+:host ::ng-deep .dark-mode .ressource-choice-description {
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode .form-control {
+    background: #1e1e1e;
+    color: #eeeeee;
+    border: 1px solid #d4d4d4;
+}
+
+:host ::ng-deep .dark-mode .ressources-choice-selected-file {
+    background-color: #1e1e1e;
+}
+
+:host ::ng-deep .dark-mode button.modal-close-btn {
+    background: #1e1e1e;
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode button.btn.btn-remove-selected-ressource {
+    background-color: #1e1e1e;
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode button.modal-close-btn:hover {
+    background: #1e1e1e;
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode .ressources-choice .ressource-choice-description {
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode .ressources-container > hr {
+    border: 2px solid #62ad4a63 !important;
+}
+
+:host ::ng-deep .dark-mode .paypal-btn-container {
+    background: red;
+    color: #eeeeee;
+}
+
+:host ::ng-deep .dark-mode button.btn.paypal-btn {
+    color: #eeeeee;
+    background: #1e1e1e;
+}
+
+:host ::ng-deep .dark-mode .header-btns-container > button,
+:host ::ng-deep .dark-mode .header-btns-container > button:hover {
+    color: #eeeeee;
+    background: #1e1e1e;
+}
+/**END dark theme**/

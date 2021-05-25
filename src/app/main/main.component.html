@@ -1,6 +1,6 @@
 <header id="main-header">
     <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img src="assets/logo.png">
+        <img [src]="isFiddleThemeDark ? 'assets/logo_dark.png' : 'assets/logo.png'">
     </a>
     <div class="fiddle-title">
         <span>Title: </span>
@@ -13,6 +13,7 @@
     </div>
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
+        <button class="theme-btn" (click)="changeFiddleTheme()"><i class="fa fa-adjust" aria-hidden="true"></i></button>
         <div class="paypal-btn-container">
             <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
                 <li (click)="selectDonation(0)"><div><span>5</span><span>€</span></div></li>

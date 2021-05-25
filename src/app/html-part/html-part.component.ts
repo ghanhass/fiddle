@@ -1,5 +1,12 @@
-import { Component, OnInit, Input, SimpleChanges, Output,EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, Output,EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
+import { filter, take } from 'rxjs/operators';
+import {
+  MonacoEditorComponent,
+  MonacoEditorConstructionOptions,
+  MonacoEditorLoaderService,
+  MonacoStandaloneCodeEditor
+} from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-html-part',
@@ -13,6 +20,8 @@ export class HtmlPartComponent implements OnInit {
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
+  @Output()monacoeditorloaded: EventEmitter<string> = new EventEmitter();
+  //@ViewChild("monaco") monaco:MonacoEditorComponent;
 
   oldCodeValue: string = "";
   editor: any;
@@ -27,10 +36,12 @@ export class HtmlPartComponent implements OnInit {
     lineNumbersMinChars: 1,
     wordWrap:"on",
     baseUrl: "/",
-    theme : 'vs-light'
+    theme : 'myCustomTheme'
   };
 
-  constructor(private mainService:MainService) { }
+  constructor(private mainService:MainService,
+  private monacoLoaderService: MonacoEditorLoaderService) {
+  }
 
   ngOnInit(): void {
   }
@@ -42,6 +53,7 @@ export class HtmlPartComponent implements OnInit {
     let el = document.querySelector("app-html-part [class='monaco-editor']");
     let self = this;
 
+    this.monacoeditorloaded.emit();
     el.addEventListener("keydown", function(event: KeyboardEvent){
 
       let evDate = new Date();
