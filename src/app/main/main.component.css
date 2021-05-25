@@ -170,10 +170,6 @@ app-iframe-part{
     cursor:pointer;
 }
 
-#code-parts-title-mobile a:hover {
-    background-color:#ededed;
-}
-
 #code-parts-title-mobile a.active {
     background-color: #aaaaaa;
     color: #FFFFFF;
@@ -1076,5 +1072,11 @@ li:hover {
 :host ::ng-deep .dark-mode .header-btns-container > button:hover {
     color: #eeeeee;
     background: #1e1e1e;
+}
+
+:host ::ng-deep .dark-mode #code-parts-title-mobile a.active {
+    background-color: #62ad4a63;
+    color: #eeeeee;
+    font-weight: 600;
 }
 /**END dark theme**/
