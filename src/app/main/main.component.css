@@ -184,6 +184,10 @@ app-iframe-part{
     margin-right:5px;
 }
 
+.theme-btn{
+    margin-right:6px;
+}
+
 .share-code-btn,
 .ressources-code-btn,
 .theme-btn{
@@ -1006,7 +1010,7 @@ li {
 :host ::ng-deep .dark-mode .paypal-btn-container 
 ul.donations-menu > 
 li:hover {
-    background-color: #eeeeee54;
+    background-color: rgba(255 255 255 , 0.5);
     color: #000000;
 }
 
