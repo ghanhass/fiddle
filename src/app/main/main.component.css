@@ -335,7 +335,7 @@ app-iframe-part{
 }
 
 .paypal-btn-container ul.donations-menu > li:hover {
-    background-color: #ffffff57;
+    background-color: #8b8b8b26;
     font-weight: 600;
 }
 
@@ -1082,6 +1082,11 @@ li:hover {
 :host ::ng-deep .dark-mode #code-parts-title-mobile a.active {
     background-color: #62ad4a63;
     color: #eeeeee;
+    font-weight: 600;
+}
+
+.dark-mode .paypal-btn-container ul.donations-menu > li:hover {
+    background-color: #ffffff57;
     font-weight: 600;
 }
 /**END dark theme**/
