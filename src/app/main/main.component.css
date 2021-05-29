@@ -934,11 +934,6 @@ app-modal .modal-header .modal-validate-btn{
     color: #d4d4d4;
 }
 
-:host ::ng-deep .dark-mode{
-    background: #1e1e1e;
-    color: #d4d4d4;
-}
-
 :host ::ng-deep .dark-mode .as-split-gutter {
     background-color: #444857 !important;
 }

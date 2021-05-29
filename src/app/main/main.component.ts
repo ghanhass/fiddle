@@ -1111,12 +1111,14 @@ export class MainComponent implements AfterViewInit {
     if(this.isFiddleThemeDark){
       this.registerMonacoCustomTheme("vs-dark");
       (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
+      document.body.classList.add("dark-mode");
       (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.add("dark-mode");
       (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.add("dark-mode");
     }
     else{
       this.registerMonacoCustomTheme("vs");
       (this.mainContainer.nativeElement as HTMLElement).classList.remove("dark-mode");
+      document.body.classList.remove("dark-mode");
       (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.remove("dark-mode");
       (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.remove("dark-mode");
     }
