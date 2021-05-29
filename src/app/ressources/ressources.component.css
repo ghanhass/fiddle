@@ -199,6 +199,7 @@
 }
 
 .ressources-choice-selected-file.placeholder {
+  color: #1e1e1e;
   background-color: #ffff0094;
 }
 

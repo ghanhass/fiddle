@@ -1055,7 +1055,7 @@ li:hover {
     color: #eeeeee;
 }
 
-:host ::ng-deep .dark-mode .ressources-choice .ressource-choice-description {
+:host ::ng-deep .dark-mode .ressources-choice .ressource-choice-description[class] {
     color: #eeeeee;
 }
 
