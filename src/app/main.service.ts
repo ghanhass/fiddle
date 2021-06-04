@@ -42,4 +42,25 @@ export class MainService {
   getFiddle(data: any): Observable<any>{
     return (this.http.post(this.url, data, this.httpOptions));
   }
+
+  registerMonacoCustomTheme(base) {
+    let self = this;
+    setTimeout(()=>{
+      window['monaco'].editor.defineTheme('myCustomTheme', {
+        base: base, // can also be vs or hc-black
+        inherit: true, // can also be false to completely replace the builtin rules
+        rules: [
+          {
+            token: 'comment',
+            foreground: 'ffa500',
+            fontStyle: 'italic underline'
+          },
+          { token: 'comment.js', foreground: '008800', fontStyle: 'bold' },
+          { token: 'comment.css', foreground: '0000ff' } // will inherit fontStyle from `comment` above
+        ],
+        colors: {}
+      });
+      window['monaco'].editor.setTheme("myCustomTheme");
+    },0);
+  }
 }

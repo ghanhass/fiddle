@@ -14,6 +14,8 @@ export class CssPartComponent implements OnInit {
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
 
+  @Input()isDarkTheme: boolean;
+
   oldCodeValue: string = "";
   editor: any;
 
@@ -62,6 +64,13 @@ export class CssPartComponent implements OnInit {
 
     let el = document.querySelector("app-css-part [class='monaco-editor']");
     let self = this;
+
+    if(this.isDarkTheme){
+      this.mainService.registerMonacoCustomTheme("vs-dark");
+    }
+    else{
+      this.mainService.registerMonacoCustomTheme("vs");
+    }
 
     el.addEventListener("keydown", function(event: KeyboardEvent){
 

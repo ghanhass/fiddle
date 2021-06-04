@@ -115,7 +115,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component" [code]="htmlCode"></app-html-part>
+                                <app-html-part [isDarkTheme]="isFiddleThemeDark" (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component" [code]="htmlCode"></app-html-part>
                             </as-split-area>
                             <as-split-area [minSize]="getLayoutInfos('cssAsSplitAreaMinSize')" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css"
                             [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
@@ -127,7 +127,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component" [code]="cssCode"></app-css-part>
+                                <app-css-part [isDarkTheme]="isFiddleThemeDark" (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component" [code]="cssCode"></app-css-part>
                             </as-split-area>
                             <as-split-area [minSize]="getLayoutInfos('jsAsSplitAreaMinSize')" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" 
                             [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
@@ -139,7 +139,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component" [code]="jsCode"></app-js-part>
+                                <app-js-part [isDarkTheme]="isFiddleThemeDark" (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component" [code]="jsCode"></app-js-part>
                             </as-split-area>
                         </as-split>
                     </div>
