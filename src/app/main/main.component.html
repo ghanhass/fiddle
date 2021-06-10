@@ -1,6 +1,7 @@
 <header id="main-header">
     <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img [src]="isFiddleThemeDark ? 'assets/logo_dark.png' : 'assets/logo.png'">
+        <img [ngStyle]="{display: isFiddleThemeDark ? 'none' : ''}" [src]="'assets/logo.png'">
+        <img [ngStyle]="{display: !isFiddleThemeDark ? 'none' : ''}" [src]="'assets/logo_dark.png'">
     </a>
     <div class="fiddle-title">
         <span>Title: </span>
