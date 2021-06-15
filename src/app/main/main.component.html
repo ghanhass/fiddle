@@ -14,7 +14,7 @@
     </div>
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
-        <button class="theme-btn" (click)="changeFiddleTheme()"><i class="fa fa-adjust" aria-hidden="true"></i></button>
+        <button class="theme-btn" (click)="changeFiddleTheme(true)"><i class="fa fa-adjust" aria-hidden="true"></i></button>
         <div class="paypal-btn-container">
             <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
                 <li (click)="selectDonation(0)"><div><span>5</span><span>€</span></div></li>

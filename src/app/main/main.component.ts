@@ -122,6 +122,7 @@ export class MainComponent implements AfterViewInit {
           this.changeLayout(this.mainService.layout, {data: obj});
           self.mainService.redirectAfterSaveMode = false;
           this.runCode();
+          this.changeFiddleTheme();
         }
         else{
           let data = {
@@ -1085,8 +1086,10 @@ export class MainComponent implements AfterViewInit {
     return environment.homeUrl;
   }
 
-  changeFiddleTheme(){
-    this.isFiddleThemeDark = !this.isFiddleThemeDark;
+  changeFiddleTheme(param?){
+    if(param){
+      this.isFiddleThemeDark = !this.isFiddleThemeDark;
+    }
     if(this.isFiddleThemeDark){
       this.mainService.registerMonacoCustomTheme("vs-dark");
       (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
