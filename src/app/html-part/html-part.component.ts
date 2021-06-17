@@ -23,8 +23,6 @@ export class HtmlPartComponent implements OnInit {
   @Output()monacoeditorloaded: EventEmitter<string> = new EventEmitter();
   //@ViewChild("monaco") monaco:MonacoEditorComponent;
 
-  @Input()isDarkTheme: boolean;
-
   oldCodeValue: string = "";
   editor: any;
 
@@ -53,13 +51,6 @@ export class HtmlPartComponent implements OnInit {
 
     let el = document.querySelector("app-html-part [class='monaco-editor']");
     let self = this;
-
-    if(this.isDarkTheme){
-      this.mainService.registerMonacoCustomTheme("vs-dark");
-    }
-    else{
-      this.mainService.registerMonacoCustomTheme("vs");
-    }
 
     this.monacoeditorloaded.emit();
     el.addEventListener("keydown", function(event: KeyboardEvent){

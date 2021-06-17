@@ -38,8 +38,6 @@ export class MainComponent implements AfterViewInit {
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
 
-  isFiddleThemeDark: boolean = false;
-
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
   @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
@@ -206,6 +204,10 @@ export class MainComponent implements AfterViewInit {
         }
       
     })
+  }
+
+  getIsFiddleThemeDark(){
+    return this.mainService.isFiddleThemeDark;
   }
 
   calculateIframeSize(mainContainerEl?, sizes?){
@@ -1087,10 +1089,15 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeFiddleTheme(param?){
-    if(param){
-      this.isFiddleThemeDark = !this.isFiddleThemeDark;
+    console.log("param = ", param);
+    console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
+
+    if(param === true){
+      this.mainService.isFiddleThemeDark = !this.mainService.isFiddleThemeDark;
     }
-    if(this.isFiddleThemeDark){
+    console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
+    console.log("---------------------------------");
+    if(this.mainService.isFiddleThemeDark){
       this.mainService.registerMonacoCustomTheme("vs-dark");
       (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
       document.body.classList.add("dark-mode");

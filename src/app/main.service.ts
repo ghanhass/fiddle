@@ -24,6 +24,7 @@ export class MainService {
   mainContainerHeight: number;
   mainContainerWidth: number;
   codePartsSize: number;
+  isFiddleThemeDark: boolean = false;
 
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
@@ -61,6 +62,6 @@ export class MainService {
         colors: {}
       });
       window['monaco'].editor.setTheme("myCustomTheme");
-    },0);
+    },10);
   }
 }
