@@ -69,6 +69,7 @@ export class HtmlPartComponent implements OnInit {
         }
       }
     });
+    this.mainService.changeFiddleTheme();
   }
 
   onCodeChanged(value) {

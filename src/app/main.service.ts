@@ -64,4 +64,33 @@ export class MainService {
       window['monaco'].editor.setTheme("myCustomTheme");
     },10);
   }
+
+  changeFiddleTheme(param?){
+    console.log("param = ", param);
+    console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+
+    if(param === true){
+      this.isFiddleThemeDark = !this.isFiddleThemeDark;
+      localStorage.setItem("myfiddle-darktheme", this.isFiddleThemeDark? "1" : "");
+    } 
+    else {
+      this.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
+    }
+    console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+    console.log("---------------------------------");
+    if(this.isFiddleThemeDark){
+      this.registerMonacoCustomTheme("vs-dark");
+      document.querySelector(".main-container").classList.add("dark-mode");
+      document.body.classList.add("dark-mode");
+      document.querySelector("#main-header").classList.add("dark-mode");
+      document.querySelector("app-modal").classList.add("dark-mode");
+    }
+    else{
+      this.registerMonacoCustomTheme("vs");
+      document.querySelector(".main-container").classList.remove("dark-mode");
+      document.body.classList.remove("dark-mode");
+      document.querySelector("#main-header").classList.remove("dark-mode");
+      document.querySelector("app-modal").classList.remove("dark-mode");
+    }
+  }
 }

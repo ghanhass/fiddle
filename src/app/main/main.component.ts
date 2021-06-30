@@ -78,6 +78,7 @@ export class MainComponent implements AfterViewInit {
 
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
+  minCodepartSize: number = 0;
 
   newHtmlCodePartSize: number = 0;
   newCssCodePartSize: number = 0;
@@ -120,7 +121,6 @@ export class MainComponent implements AfterViewInit {
           this.changeLayout(this.mainService.layout, {data: obj});
           self.mainService.redirectAfterSaveMode = false;
           this.runCode();
-          this.changeFiddleTheme();
         }
         else{
           let data = {
@@ -150,26 +150,31 @@ export class MainComponent implements AfterViewInit {
                 this.changeLayout(1);
               }
             }
+            this.changeFiddleTheme();
           });
         }
       }
       else{
         this.changeLayout(1);
       }
+      this.changeFiddleTheme();
+
     });
 
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
+      this.setCodePartMinSize();
       let sizes = this.splitComponentInner.getVisibleAreaSizes();
-      this.newHtmlCodePartSize = sizes[1] as number;
+      /*this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
 
-      this.setMainServiceCodepartSizes();
-      //console.log("splitComponentInner sizes = ", sizes);
+      this.setMainServiceCodepartSizes();*/
+      console.log("splitComponentInner sizes = ", sizes);
+      console.log("this.splitComponentInner = ", this.splitComponentInner);
     });
 
     this.splitComponentOuter.dragProgress$.subscribe((res)=>{
-      let sizes = this.splitComponentOuter.getVisibleAreaSizes();
+      /*let sizes = this.splitComponentOuter.getVisibleAreaSizes();
       if(this.layout == 1 || this.layout == 2){
         this.newCodePartSize = sizes[0] as number;
       }
@@ -178,13 +183,11 @@ export class MainComponent implements AfterViewInit {
       }
 
       this.mainService.codePartsSize = this.newCodePartSize;
-      //console.log("splitComponentOuter sizes = ", sizes);
-      this.calculateIframeSize(mainContainerEl);
+      console.log("splitComponentOuter sizes = ", sizes);
+      this.calculateIframeSize(mainContainerEl);*/
     })
 
-    this.setMainServiceCodepartSizes();
-
-    this.fixCodeEditorsDimensions();
+    //this.setMainServiceCodepartSizes();
 
     window.addEventListener("keydown", function(event){
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
@@ -245,49 +248,6 @@ export class MainComponent implements AfterViewInit {
     this.mainService.codePartsSize = this.newCodePartSize;
   }
 
-  /**
-   * Sets dimensions of each .code-component whenever needed using optimized setInterval for each one
-   * @returns void.
-   */
-  fixCodeEditorsDimensions(): void{
-    return;
-    let self = this;
-    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-
-    if(mainContainerEl){
-      let codePartsArray: Array<HTMLElement> = Array.from(mainContainerEl.querySelectorAll(".code-component"));
-      for(let ind = 0; ind < codePartsArray.length; ind++){
-        let codePart = codePartsArray[ind];
-        //console.log("A");
-        if(codePart){
-          //console.log("B");
-          let overflowGuardElement: HTMLElement = codePart.querySelector(".overflow-guard");
-          if(overflowGuardElement){
-            //console.log("C");
-            let marginElement: HTMLElement = overflowGuardElement.querySelector(".margin");
-            let scrollableElement: HTMLElement = overflowGuardElement.querySelector(".monaco-scrollable-element.editor-scrollable.vs");
-            if(marginElement && scrollableElement){
-              //console.log("D");
-              let customInterval = setInterval(()=>{
-                let check: boolean = (marginElement.offsetWidth + scrollableElement.offsetWidth) == overflowGuardElement.offsetWidth;
-                check = check && marginElement.offsetHeight == scrollableElement.offsetHeight && 
-                marginElement.offsetHeight == overflowGuardElement.offsetHeight;
-                if(check){
-                  clearInterval(customInterval);
-                  //console.log("E1");
-                }
-                else{
-                  window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-                  //console.log("E2");
-                }
-              }, 10);
-            }
-          }
-        }
-      }
-    }
-  }
-
   changeLayout(newLayout: number, param?: any){
       if(true){
         this.layout = newLayout;
@@ -303,32 +263,28 @@ export class MainComponent implements AfterViewInit {
             else{
               switch(this.layout){
                 case 1:
-                this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
-                this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
-                this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
-                this.initialCodePartSize = 350;
-                this.fixCodeEditorsDimensions();
+                this.initialCssCodePartSize = 33;
+                this.initialHtmlCodePartSize = 33;
+                this.initialJsCodePartSize = 34;
+                this.initialCodePartSize = 20;
                 break;
                 case 2:
                 this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
-                this.fixCodeEditorsDimensions();
                 break;
                 case 3:
                 this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialCodePartSize = 350;
-                this.fixCodeEditorsDimensions();
                 break;
                 case 4:
                 this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
-                this.fixCodeEditorsDimensions();
                 break;
               }
             }
@@ -339,7 +295,7 @@ export class MainComponent implements AfterViewInit {
             
             this.calculateIframeSize(mainContainerEl);
 
-            this.setMainServiceCodepartSizes();
+            //this.setMainServiceCodepartSizes();
           }, 1);
         }
       }
@@ -389,7 +345,7 @@ export class MainComponent implements AfterViewInit {
       sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
       sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
     }
-    else if(savedMainContainerSize > currentMainContainerSize){
+    else if(savedMainContainerSize < currentMainContainerSize){
       let coef = currentMainContainerSize / savedMainContainerSize;
       sizes[1] = sizes[1] * coef;
       sizes[2] = sizes[2] * coef;
@@ -423,6 +379,34 @@ export class MainComponent implements AfterViewInit {
 
   }
 
+  setCodePartMinSize(){
+    if(this.layout == 1 || this .layout == 3){
+      if(this.mainContainerHeight){
+        let codePartMinHeight = 100/(this.mainContainerHeight / 26);
+        console.log("codePartMinHeight = ", codePartMinHeight);
+        console.log("this.mainContainerHeight = ", this.mainContainerHeight);
+        console.log("min height = ", (this.mainContainerHeight/100) * codePartMinHeight);
+        this.minCodepartSize =  codePartMinHeight;
+      }
+    }
+  }
+
+  fixCodePartSizesOnResize(oldMainContainerHeight,oldMainContainerWidth){
+    if(this.layout == 1 || this.layout == 3){
+      let coef;
+      if(oldMainContainerHeight > this.mainContainerHeight){
+        coef = oldMainContainerHeight / this.mainContainerHeight;
+        let sizes = this.splitComponentInner.getVisibleAreaSizes() as Array<number>;
+        console.log("old sizes = ", sizes);
+        sizes[0] = sizes[0] / coef;
+        sizes[1] = sizes[1] / coef;
+        sizes[2] = sizes[2] / coef;
+        console.log("new sizes = ", sizes);
+        this.splitComponentInner.setVisibleAreaSizes(sizes);
+      }
+    }
+  }
+
   getLayoutInfos(name){
     switch(name){
       case "htmlAsSplitAreaSize":
@@ -444,7 +428,7 @@ export class MainComponent implements AfterViewInit {
         return "horizontal";
         
         case "outerAsSplitUnit":
-        return "pixel";
+        return "percent";
 
         case "codePartsAsSplitAreaOrder":
         return 1;
@@ -456,7 +440,7 @@ export class MainComponent implements AfterViewInit {
         return 'vertical';
 
         case "innerAsSplitUnit":
-        return 'pixel';
+        return 'percent';
 
         case "emptyAsSplitAreaMinSize":
         return 10;
@@ -493,7 +477,7 @@ export class MainComponent implements AfterViewInit {
         return "vertical";
         
         case "outerAsSplitUnit":
-        return "pixel";
+        return "percent";
 
         case "codePartsAsSplitAreaOrder":
         return 1;
@@ -505,7 +489,7 @@ export class MainComponent implements AfterViewInit {
         return 'horizontal';
 
         case "innerAsSplitUnit":
-        return 'pixel';
+        return 'percent';
 
         case "emptyAsSplitAreaMinSize":
         return 10;
@@ -542,7 +526,7 @@ export class MainComponent implements AfterViewInit {
         return "horizontal";
         
         case "outerAsSplitUnit":
-        return "pixel";
+        return "percent";
 
         case "codePartsAsSplitAreaOrder":
         return 2;
@@ -554,7 +538,7 @@ export class MainComponent implements AfterViewInit {
         return 'vertical';
 
         case "innerAsSplitUnit":
-        return 'pixel';
+        return 'percent';
 
         case "emptyAsSplitAreaMinSize":
         return 10;
@@ -591,7 +575,7 @@ export class MainComponent implements AfterViewInit {
         return "vertical";
         
         case "outerAsSplitUnit":
-        return "pixel";
+        return "percent";
 
         case "codePartsAsSplitAreaOrder":
         return 2;
@@ -603,7 +587,7 @@ export class MainComponent implements AfterViewInit {
         return 'horizontal';
 
         case "innerAsSplitUnit":
-        return 'pixel';
+        return 'percent';
 
         case "emptyAsSplitAreaMinSize":
         return 10;
@@ -713,6 +697,9 @@ export class MainComponent implements AfterViewInit {
     let newWindowWidth = window.innerWidth;
     let newWindowHeight = window.innerHeight;
 
+    let oldMainContainerWidth = this.mainContainerWidth;
+    let oldMainContainerHeight = this.mainContainerHeight;
+
     if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
       //console.log("/!\ window resize event: ", event);
 
@@ -721,6 +708,47 @@ export class MainComponent implements AfterViewInit {
       
       let newMainContainerWidth = mainContainerEl.offsetWidth;
       let newMainContainerHeight = mainContainerEl.offsetHeight;
+
+      this.mainContainerHeight = newMainContainerHeight;
+      this.mainContainerWidth = newMainContainerWidth;
+      this.setCodePartMinSize();
+      console.log("newMainContainerHeight = ", this.mainContainerHeight);
+      console.log("oldMainContainerHeight = ", oldMainContainerHeight);
+      this.fixCodePartSizesOnResize(oldMainContainerHeight,oldMainContainerWidth);
+      /*let minCodePartSize = 100/(this.mainContainerHeight / 26);
+
+      let sizes = this.splitComponentInner.getVisibleAreaSizes() as Array<number>;
+      let diff = 0;
+      if(sizes[0] < minCodePartSize){
+        diff += (minCodePartSize - sizes[0]);
+        sizes[0] = minCodePartSize;
+        if(sizes[1] < minCodePartSize){
+          sizes[1] = minCodePartSize;
+          diff += (minCodePartSize - sizes[1]);
+          sizes[2] = sizes[2] - diff;
+        }
+        else if(sizes[2] < minCodePartSize){
+          sizes[2] = minCodePartSize;
+          diff += (minCodePartSize - sizes[2]);
+          sizes[1] = sizes[1] - diff;
+        }
+        else{
+
+        }
+      }
+      ///
+      if(sizes[1] < minCodePartSize){
+        diff += (minCodePartSize - sizes[1]);
+        sizes[1] = minCodePartSize;
+        if(sizes[2] < minCodePartSize){
+          sizes[1] = minCodePartSize;
+          diff += (minCodePartSize - sizes[1]);
+        }
+        sizes[2] = sizes[2] - diff;
+      }*/
+      ///
+      
+      /*
       //console.log("newMainContainerHeight: ", newMainContainerHeight);
       //console.log("this.mainContainerHeight: ", this.mainContainerHeight);
 
@@ -754,9 +782,6 @@ export class MainComponent implements AfterViewInit {
 
       this.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 10, "inner");
 
-      this.mainContainerHeight = newMainContainerHeight;
-      this.mainContainerWidth = newMainContainerWidth;
-
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
@@ -783,7 +808,7 @@ export class MainComponent implements AfterViewInit {
 
       this.setMainServiceCodepartSizes();
 
-      this.calculateIframeSize(mainContainerEl);
+      this.calculateIframeSize(mainContainerEl);*/
     }
   }
   
@@ -994,6 +1019,9 @@ export class MainComponent implements AfterViewInit {
     //console.log("splitComponentInnerDragEnd event = ", event);
     clearInterval(this.customInterval);
     this.canChangeSplitSizes = true;
+    this.initialHtmlCodePartSize = this.splitComponentInner.getVisibleAreaSizes()[0] as number;
+    this.initialCssCodePartSize = this.splitComponentInner.getVisibleAreaSizes()[1] as number;
+    this.initialJsCodePartSize = this.splitComponentInner.getVisibleAreaSizes()[2] as number;
   }
 
   splitComponentInnerDragStart(event){
@@ -1094,6 +1122,10 @@ export class MainComponent implements AfterViewInit {
 
     if(param === true){
       this.mainService.isFiddleThemeDark = !this.mainService.isFiddleThemeDark;
+      localStorage.setItem("myfiddle-darktheme", this.mainService.isFiddleThemeDark? "1" : "");
+    } 
+    else {
+      this.mainService.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
     }
     console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
     console.log("---------------------------------");
