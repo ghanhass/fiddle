@@ -686,9 +686,9 @@ app-iframe-part{
     color: #FFFFFF;
 }
 
-/*:host ::ng-deep .as-split-gutter:first-of-type:not(:last-of-type){
+:host ::ng-deep .as-split-gutter:first-of-type:not(:last-of-type){
     display: none !important;
-}*/
+}
 
 :host ::ng-deep as-split[class] > .as-split-gutter[class]{
     background-color: #ccc;

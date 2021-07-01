@@ -104,7 +104,8 @@
             <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
                     <div id="code-parts" #codeParts>
                         <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)" [gutterSize]="5">
-                            <as-split-area [minSize]="minCodepartSize" [size]="getLayoutInfos('htmlAsSplitAreaSize')" class="code-component-container code-component-container-html" 
+                            <as-split-area [minSize]="getLayoutInfos('emptyAsSplitAreaMinSize')" [size]="getLayoutInfos('emptyAsSplitAreaSize')" [maxSize]="getLayoutInfos('emptyAsSplitAreaMaxSize')" style="display: none"></as-split-area>
+                            <as-split-area [minSize]="getLayoutInfos('htmlAsSplitAreaMinSize')" [size]="getLayoutInfos('htmlAsSplitAreaSize')" class="code-component-container code-component-container-html" 
                             [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
                                 <div class="code-part-title">
                                     <span>HTML</span>
@@ -117,7 +118,7 @@
                                 </div>
                                 <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component" [code]="htmlCode"></app-html-part>
                             </as-split-area>
-                            <as-split-area [minSize]="minCodepartSize" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css"
+                            <as-split-area [minSize]="getLayoutInfos('cssAsSplitAreaMinSize')" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css"
                             [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
                                 <div class="code-part-title">
                                     <span>CSS</span>
@@ -129,7 +130,7 @@
                                 </div>
                                 <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component" [code]="cssCode"></app-css-part>
                             </as-split-area>
-                            <as-split-area [minSize]="minCodepartSize" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" 
+                            <as-split-area [minSize]="getLayoutInfos('jsAsSplitAreaMinSize')" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" 
                             [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
                             <div class="code-part-title" >
                                     <span>JAVASCRIPT</span>
