@@ -386,18 +386,7 @@ export class MainComponent implements AfterViewInit {
     }
 
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
-    if(savedMainContainerSize > currentMainContainerSize){
-      let coef = savedMainContainerSize / currentMainContainerSize;
-      sizes[1] = (sizes[1] / coef) > 25 ? (sizes[1] / coef) : 25;
-      sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
-      sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
-    }
-    else if(savedMainContainerSize > currentMainContainerSize){
-      let coef = currentMainContainerSize / savedMainContainerSize;
-      sizes[1] = sizes[1] * coef;
-      sizes[2] = sizes[2] * coef;
-      sizes[3] = sizes[3] * coef;
-    }
+    console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner");
     this.initialHtmlCodePartSize = Math.floor(sizes[1]);
     this.initialCssCodePartSize = Math.floor(sizes[2]);
