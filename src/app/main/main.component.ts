@@ -187,7 +187,7 @@ export class MainComponent implements AfterViewInit {
 
     this.setMainServiceCodepartSizes();
 
-    this.fixCodeEditorsDimensions();
+    
 
     window.addEventListener("keydown", function(event){
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
@@ -248,49 +248,6 @@ export class MainComponent implements AfterViewInit {
     this.mainService.codePartsSize = this.newCodePartSize;
   }
 
-  /**
-   * Sets dimensions of each .code-component whenever needed using optimized setInterval for each one
-   * @returns void.
-   */
-  fixCodeEditorsDimensions(): void{
-    return;
-    let self = this;
-    let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-
-    if(mainContainerEl){
-      let codePartsArray: Array<HTMLElement> = Array.from(mainContainerEl.querySelectorAll(".code-component"));
-      for(let ind = 0; ind < codePartsArray.length; ind++){
-        let codePart = codePartsArray[ind];
-        //console.log("A");
-        if(codePart){
-          //console.log("B");
-          let overflowGuardElement: HTMLElement = codePart.querySelector(".overflow-guard");
-          if(overflowGuardElement){
-            //console.log("C");
-            let marginElement: HTMLElement = overflowGuardElement.querySelector(".margin");
-            let scrollableElement: HTMLElement = overflowGuardElement.querySelector(".monaco-scrollable-element.editor-scrollable.vs");
-            if(marginElement && scrollableElement){
-              //console.log("D");
-              let customInterval = setInterval(()=>{
-                let check: boolean = (marginElement.offsetWidth + scrollableElement.offsetWidth) == overflowGuardElement.offsetWidth;
-                check = check && marginElement.offsetHeight == scrollableElement.offsetHeight && 
-                marginElement.offsetHeight == overflowGuardElement.offsetHeight;
-                if(check){
-                  clearInterval(customInterval);
-                  //console.log("E1");
-                }
-                else{
-                  window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-                  //console.log("E2");
-                }
-              }, 10);
-            }
-          }
-        }
-      }
-    }
-  }
-
   changeLayout(newLayout: number, param?: any){
       if(true){
         this.layout = newLayout;
@@ -310,28 +267,28 @@ export class MainComponent implements AfterViewInit {
                 this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialCodePartSize = 350;
-                this.fixCodeEditorsDimensions();
+                
                 break;
                 case 2:
                 this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
-                this.fixCodeEditorsDimensions();
+                
                 break;
                 case 3:
                 this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
                 this.initialCodePartSize = 350;
-                this.fixCodeEditorsDimensions();
+                
                 break;
                 case 4:
                 this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
                 this.initialCodePartSize = 290;
-                this.fixCodeEditorsDimensions();
+                
                 break;
               }
             }
@@ -386,7 +343,7 @@ export class MainComponent implements AfterViewInit {
     }
 
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
-    console.log("param.data = ", param.data);
+    //console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner");
     this.initialHtmlCodePartSize = Math.floor(sizes[1]);
     this.initialCssCodePartSize = Math.floor(sizes[2]);
@@ -666,7 +623,7 @@ export class MainComponent implements AfterViewInit {
       let submitBtn: HTMLButtonElement = form.querySelector("input[name='submit']")
       if(select && submitBtn){
         select.selectedIndex = newIndex;
-        console.log("select.value = ", select.value);
+        //console.log("select.value = ", select.value);
         submitBtn.click();
       }
     }
@@ -1081,8 +1038,8 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeFiddleTheme(param?){
-    console.log("param = ", param);
-    console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
+    //console.log("param = ", param);
+    //console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
 
     if(param === true){
       this.mainService.isFiddleThemeDark = !this.mainService.isFiddleThemeDark;
@@ -1091,8 +1048,8 @@ export class MainComponent implements AfterViewInit {
     else {
       this.mainService.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
     }
-    console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
-    console.log("---------------------------------");
+    //console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
+    //console.log("---------------------------------");
     if(this.mainService.isFiddleThemeDark){
       this.mainService.registerMonacoCustomTheme("vs-dark");
       (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
