@@ -68,12 +68,14 @@ export class CssPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
+          //console.log("self.runcodemsg.emit()");
           self.mainService.cssCode = self.oldCodeValue;
           self.code = self.oldCodeValue;
           self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
         if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
+          //console.log("self.savecodemsg.emit()");
           self.mainService.codeExecutionDate = evDate;
           self.savecodemsg.emit();
         }
