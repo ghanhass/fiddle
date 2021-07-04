@@ -8,6 +8,7 @@ import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-main',
@@ -86,6 +87,7 @@ export class MainComponent implements AfterViewInit {
 
   iframeWidth: number;
   iframeHeight: number;
+  IsAfterViewInitReached: boolean = false;
   
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -94,6 +96,7 @@ export class MainComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     let self = this;
+    this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     if(mainContainerEl){
       this.mainContainerWidth = mainContainerEl.offsetWidth;
@@ -647,6 +650,45 @@ export class MainComponent implements AfterViewInit {
     /*let editorLayoutFixInterval = window.setTimeout(()=>{
       window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, 1);*/
+  }
+
+  stretchCodePart(codePartType){
+    if(this.IsAfterViewInitReached){
+      if(this.layout == 1 || this.layout == 3){
+        let totalSize = this.mainContainerHeight - 10;
+        console.log("totalSize = ", totalSize);
+        switch(codePartType){
+          case("html"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
+          break;
+          case("css"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", 24, (totalSize - 48), 24]);
+          break;
+          case("js"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", 24, 24, (totalSize - 48)]);
+          break;
+        }
+      }
+      else if( this.layout == 2 || this.layout == 4){
+        let totalSize = this.mainContainerWidth - 10;
+        console.log("totalSize = ", totalSize);
+        switch(codePartType){
+          case("html"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
+          break;
+          case("css"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", 25, (totalSize - 50), 25]);
+          break;
+          case("js"):
+          this.splitComponentInner.setVisibleAreaSizes(["*", 25, 25, (totalSize - 50)]);
+          break;
+        }
+      }
+      let sizes = this.splitComponentInner.getVisibleAreaSizes();
+      this.newHtmlCodePartSize = sizes[1] as number;
+      this.newCssCodePartSize = sizes[2] as number;
+      this.newJsCodePartSize = sizes[3] as number;
+    }
   }
 
   @HostListener("window:keydown", ["$event"])
