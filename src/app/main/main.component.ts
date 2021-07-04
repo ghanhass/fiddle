@@ -656,7 +656,7 @@ export class MainComponent implements AfterViewInit {
     if(this.IsAfterViewInitReached){
       if(this.layout == 1 || this.layout == 3){
         let totalSize = this.mainContainerHeight - 10;
-        console.log("totalSize = ", totalSize);
+        //console.log("totalSize = ", totalSize);
         switch(codePartType){
           case("html"):
           this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
@@ -671,7 +671,7 @@ export class MainComponent implements AfterViewInit {
       }
       else if( this.layout == 2 || this.layout == 4){
         let totalSize = this.mainContainerWidth - 10;
-        console.log("totalSize = ", totalSize);
+        //console.log("totalSize = ", totalSize);
         switch(codePartType){
           case("html"):
           this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
