@@ -68,8 +68,8 @@ export class MainService {
   }
 
   changeFiddleTheme(param?){
-    console.log("param = ", param);
-    console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+    //console.log("param = ", param);
+    //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
 
     if(param === true){
       this.isFiddleThemeDark = !this.isFiddleThemeDark;
@@ -78,8 +78,8 @@ export class MainService {
     else {
       this.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
     }
-    console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
-    console.log("---------------------------------");
+    //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+    //console.log("---------------------------------");
     if(this.isFiddleThemeDark){
       this.registerMonacoCustomTheme("vs-dark");
       document.querySelector(".main-container").classList.add("dark-mode");
