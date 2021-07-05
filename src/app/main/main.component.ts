@@ -299,6 +299,7 @@ export class MainComponent implements AfterViewInit {
             this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
             this.newJsCodePartSize = this.initialJsCodePartSize;
             this.newCodePartSize = this.initialCodePartSize;
+            this.splitComponentInner.setVisibleAreaSizes(["*", this.newHtmlCodePartSize , this.newCssCodePartSize , this.newJsCodePartSize]);
             
             this.calculateIframeSize(mainContainerEl);
 
