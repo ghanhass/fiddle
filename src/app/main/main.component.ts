@@ -688,6 +688,8 @@ export class MainComponent implements AfterViewInit {
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
+
+      this.setMainServiceCodepartSizes();
     }
   }
 
