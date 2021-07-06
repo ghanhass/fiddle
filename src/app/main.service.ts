@@ -33,6 +33,11 @@ export class MainService {
   isAltKeyOn: boolean = false;
   canEmitCodeMsg: boolean = true;
   codeExecutionDate: Date =  undefined;
+
+  showHtml: boolean = true;
+  showCss: boolean = false;
+  showJs: boolean = false;
+  showResult: boolean = true;
   
   constructor(private http: HttpClient) { }
 

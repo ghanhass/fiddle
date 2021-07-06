@@ -17,8 +17,8 @@ import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 })
 export class MainComponent implements AfterViewInit {
 
-  showHtml: boolean = false;
-  showCss: boolean = true;
+  showHtml: boolean = true;
+  showCss: boolean = false;
   showJs: boolean = false;
   showResult: boolean = true;
   showIframeHider: boolean = false;
@@ -111,6 +111,12 @@ export class MainComponent implements AfterViewInit {
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
+          
+          this.showHtml = this.mainService.showHtml;
+          this.showCss = this.mainService.showCss;
+          this.showJs = this.mainService.showJs;
+          this.showResult = this.mainService.showResult;
+
           let obj = {
             cssCodePartSize: this.mainService.cssCodePartSize,
             jsCodePartSize: this.mainService.jsCodePartSize,
@@ -144,6 +150,47 @@ export class MainComponent implements AfterViewInit {
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
               this.mainService.fiddleTitle = obj.title;
+              let mobileLayoutArr = obj.mobileLayout.split(':');
+              let mobileCodePart = mobileLayoutArr[0];
+              let mobileResult = mobileLayoutArr[1];
+              switch (true){
+                case mobileCodePart == '0':
+                  this.showHtml = false;
+                  this.showCss = false;
+                  this.showJs = false;
+                break;
+
+                case mobileCodePart == '1':
+                  this.showHtml = true;
+                  this.showCss = false;
+                  this.showJs = false;
+                break;
+
+                case mobileCodePart == '2':
+                  this.showHtml = false;
+                  this.showCss = true;
+                  this.showJs = false;
+                break;
+
+                case mobileCodePart == '3':
+                  this.showHtml = false;
+                  this.showCss = false;
+                  this.showJs = true;
+                break;
+              }
+
+              if(mobileResult == "0"){
+                this.showResult = false;
+              }
+              else if(mobileResult == "1"){
+                this.showResult = true;
+              }
+
+              this.mainService.showHtml = this.showHtml;
+              this.mainService.showCss = this.showCss;
+              this.mainService.showJs = this.showJs;
+              this.mainService.showResult = this.showResult;
+
               this.changeLayout(parseInt(obj.layout), {data:obj});
               this.runCode();
             }
@@ -931,6 +978,11 @@ export class MainComponent implements AfterViewInit {
       }
       break;
     }
+    this.mainService.showHtml = this.showHtml;
+    this.mainService.showCss = this.showCss;
+    this.mainService.showJs = this.showJs;
+    this.mainService.showResult = this.showResult;
+
     let self = this;
     let editorLayoutFixInterval = window.setTimeout(()=>{
       //console.log("inside custom interval");

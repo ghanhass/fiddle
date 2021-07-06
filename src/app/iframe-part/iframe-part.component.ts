@@ -62,6 +62,23 @@ export class IframePartComponent implements OnInit {
   saveCode(){
     //console.log("saving Code");
     const self = this;
+    let mobileCodePart = "0";
+    let mobileResult = "1";
+
+    if(!this.mainService.showResult){
+      mobileResult = "0";
+    }
+
+    if(this.mainService.showHtml){
+      mobileCodePart = "1";
+    }
+    else if(this.mainService.showCss){
+      mobileCodePart = "2";
+    }
+    else if(this.mainService.showJs){
+      mobileCodePart = "3";
+    }
+
     let data = {
       save: "1",
       js:this.mainService.jsCode,
@@ -78,8 +95,13 @@ export class IframePartComponent implements OnInit {
       mainContainerHeight: this.mainService.mainContainerHeight,
 
       title:this.mainService.fiddleTitle,
-      layout:this.mainService.layout
+      layout:this.mainService.layout,
+      mobileLayout: mobileCodePart+":"+mobileResult
     }
+    //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
+    //console.log("this.mainService.showCss = ", this.mainService.showCss);
+    //console.log("this.mainService.showJs = ", this.mainService.showJs);
+    //console.log("this.mainService.showResult = ", this.mainService.showResult);
     this.mainService.saveFiddle(data).subscribe((res)=>{
       this.canSubmit = true;
       let obj = JSON.parse(res);
