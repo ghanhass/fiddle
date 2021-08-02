@@ -74,19 +74,21 @@
     margin-right: 10px;
 }
 
-.code-part-title-btn.vertical-title-mode:nth-last-child(n+2){
-    margin-bottom: 10px;
-}
-
-.code-component-container.vertical-title-mode.fullscreen .code-part-title-btn:nth-last-child(n+2){
-    margin-right: 10px;
-}
-
-.code-component-container.vertical-title-mode:not(.fullscreen) .code-part-title-btn{
-    width: calc(100% - 2px);
-    padding-left: 0;
-    padding-right: 0;
-    justify-content: center;
+@media screen and (min-width:768px) and (min-height:581px){
+    .code-part-title-btn.vertical-title-mode:nth-last-child(n+2){
+        margin-bottom: 10px;
+    }
+    
+    .code-component-container.vertical-title-mode.fullscreen .code-part-title-btn:nth-last-child(n+2){
+        margin-right: 10px;
+    }
+    
+    .code-component-container.vertical-title-mode:not(.fullscreen) .code-part-title-btn{
+        width: calc(100% - 2px);
+        padding-left: 0;
+        padding-right: 0;
+        justify-content: center;
+    }
 }
 
 #code-parts{
@@ -541,37 +543,39 @@ app-iframe-part{
     right:0px;
 }
 
-.code-component-container.vertical-title-mode:not(.fullscreen) {
-    flex-direction: row;
-    border-top:2px solid #b5b5b5;
-}
+@media screen and (min-width:768px) and (min-height:581px){
+    .code-component-container.vertical-title-mode:not(.fullscreen) {
+        flex-direction: row;
+        border-top:2px solid #b5b5b5;
+    }
 
-.code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title {
-    flex-direction: column-reverse;
-    height: 100%;
-    width: 20px;
-    padding: 1px 2px 0 2px;
-    border-top: none;
-    border-bottom: none;
-    border-right: 1px solid #b5b5b5;
-}
+    .code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title {
+        flex-direction: column-reverse;
+        height: 100%;
+        width: 20px;
+        padding: 1px 2px 0 2px;
+        border-top: none;
+        border-bottom: none;
+        border-right: 1px solid #b5b5b5;
+    }
 
-.code-component-container.vertical-title-mode:not(.fullscreen) > app-html-part.code-component {
-    width: calc(100% - 30px);
-}
+    .code-component-container.vertical-title-mode:not(.fullscreen) > app-html-part.code-component {
+        width: calc(100% - 30px);
+    }
 
-.code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title > .code-part-title-btns-container {
-    margin: 0px;
-    height: auto;
-    flex: none;
-}
+    .code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title > .code-part-title-btns-container {
+        margin: 0px;
+        height: auto;
+        flex: none;
+    }
 
-.code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title > span {
-    writing-mode: vertical-lr;
-    margin-bottom: 10px;
-    flex-grow: 1;
-    text-align: left;
-    padding-top: 10px;
+    .code-component-container.vertical-title-mode:not(.fullscreen) > .code-part-title > span {
+        writing-mode: vertical-lr;
+        margin-bottom: 10px;
+        flex-grow: 1;
+        text-align: left;
+        padding-top: 10px;
+    }
 }
 
 .fiddle-title .fiddle-input{
