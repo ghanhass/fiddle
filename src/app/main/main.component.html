@@ -100,7 +100,7 @@
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
     
-    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs}" [gutterSize]="5">
+    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':getIsFiddleThemeDark()}" [gutterSize]="5">
             <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
                     <div id="code-parts" #codeParts>
                         <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)" [gutterSize]="5">
@@ -164,14 +164,20 @@
             
             </as-split-area>
             <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult}">
-                    <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }">
-                            <div class="fiddle-size fiddle-size-hack">
-                                <span class="width">{{iframeWidth}}</span>
-                                <span class="x">x</span>
-                                <span class="height">{{iframeHeight}}</span>
-                            </div>
-                    </div>
-                    <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+                    <as-split #splitComponentIframeResize [direction]="getLayoutInfos('iframeResizer')" (dragStart)="splitComponentOuterDragStart($event)" (dragEnd)="splitComponentOuterDragEnd($event)" (mousedown)="splitComponentOuterDragStart($event)" (mouseup)="splitComponentOuterDragEnd($event)" class="as-split-iframe-resize" [unit]="'pixel'">
+                        <as-split-area [size]="getLayoutInfos('iframeResizeValue')">
+                            <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }">
+                                <div class="fiddle-size fiddle-size-hack">
+                                    <span class="width">{{iframeWidth}}</span>
+                                    <span class="x">x</span>
+                                    <span class="height">{{iframeHeight}}</span>
+                                </div>
+                        </div>
+                        <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+                        </as-split-area>
+                        <as-split-area class="as-split-area-empty" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [size]="'*'">
+                        </as-split-area>
+                    </as-split>                    
             </as-split-area>
     </as-split>
     

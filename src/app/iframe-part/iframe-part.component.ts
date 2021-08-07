@@ -96,7 +96,8 @@ export class IframePartComponent implements OnInit {
 
       title:this.mainService.fiddleTitle,
       layout:this.mainService.layout,
-      mobileLayout: mobileCodePart+":"+mobileResult
+      mobileLayout: mobileCodePart+":"+mobileResult,
+      iframeResizeValue: this.mainService.iframeResizeValue
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);

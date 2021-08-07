@@ -24,6 +24,7 @@ export class MainService {
   mainContainerHeight: number;
   mainContainerWidth: number;
   codePartsSize: number;
+  iframeResizeValue: number;
   isFiddleThemeDark: boolean = false;
 
   fiddleTitle:string = "";
