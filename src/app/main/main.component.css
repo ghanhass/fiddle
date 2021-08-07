@@ -869,7 +869,11 @@ as-split-area.code-component-container > app-html-part{
     }
 
     .code-part-title{
-        cursor: default;
+        display:none
+    }
+
+    .code-component {
+        border-top: 1px solid #b5b5b5;
     }
 
     .as-split-outer{
