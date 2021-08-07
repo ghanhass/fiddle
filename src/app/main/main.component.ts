@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, AfterViewInit } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
@@ -8,7 +8,6 @@ import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-main',
