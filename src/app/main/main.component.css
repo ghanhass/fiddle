@@ -938,6 +938,7 @@ as-split-area.code-component-container > app-html-part{
     .as-split-iframe-resize > as-split-area:first-child{
         height: 100%;
         flex: none !important;
+        width: 100%;
     }
     
     .as-split-iframe-resize > .as-split-area-empty{
