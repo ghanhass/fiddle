@@ -713,12 +713,12 @@ app-iframe-part{
     background-color: #ccc;
 }
 
-.as-split-area-empty {
+.as-split-area-empty[class] {
     background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg, transparent 0px 4px, 
     rgba(204, 204, 204, 0.38) 4px 8px) repeat scroll 0% 0%;
 }
 
-.as-split-area-empty.is-dark-mode{ 
+.as-split-area-empty.is-dark-mode[class]{ 
     background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg, transparent 0px 4px, rgba(204, 204, 204, 0.2) 4px 8px) repeat scroll 0% 0%;
 }
 
