@@ -138,6 +138,7 @@ export class MainComponent implements AfterViewInit {
           this.changeFiddleTheme();
         }
         else{
+          this.loader.showLoader();
           let data = {
             get: "1",
             fiddleId: currentFiddleId
