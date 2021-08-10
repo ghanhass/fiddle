@@ -714,11 +714,11 @@ app-iframe-part{
 }
 
 .as-split-area-empty[class] {
-    background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg,  transparent 0px 4px, rgba(204, 204, 204, 0.38) 4px 8px) repeat scroll 0% 0%;
+    background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg,  transparent 15px, rgba(204, 204, 204, 0.38) 30px) repeat scroll 0% 0%;
 }
 
 .as-split-area-empty.is-dark-mode[class]{
-    background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg,  transparent 0px 4px,rgba(204, 204, 204, 0.2) 4px 8px) repeat scroll 0% 0%;
+    background: rgba(0, 0, 0, 0) repeating-linear-gradient(45deg,  transparent 15px,rgba(204, 204, 204, 0.2) 30px) repeat scroll 0% 0%;
 }
 
 :host ::ng-deep .as-split-outer:not(.is-dark-mode)[class] .as-horizontal[class] > .as-split-gutter[class] > .as-split-gutter-icon[class],
