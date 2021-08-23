@@ -7,9 +7,9 @@
         <span>Title: </span>
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)"/>
         <div class="fiddle-size">
-            <span class="width">{{iframeWidth}}</span>
+            <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthDisabled" (change)="onFiddeWidthChange($event.target.value)"/>
             <span class="x">x</span>
-            <span class="height">{{iframeHeight}}</span>
+            <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
         </div>
     </div>
     <app-loader #loader class="app-loader"></app-loader>
@@ -22,7 +22,7 @@
                 <li (click)="selectDonation(2)"><div><span>20</span><span>€</span></div></li>
                 <li (click)="selectDonation(3)"><div><span>50</span><span>€</span></div></li>
             </ul>
-            <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><span class="text">Donate<i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></span></button>
+            <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></button>
         </div>
         <button class="ressources-code-btn" (click)="ressouresBtnClick()">
             <span>Resources</span>
@@ -163,21 +163,28 @@
                     </div>
             
             </as-split-area>
-            <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult}">
-                    <as-split #splitComponentIframeResize [direction]="getLayoutInfos('iframeResizer')" (dragStart)="splitComponentOuterDragStart($event)" (dragEnd)="splitComponentOuterDragEnd($event)" (mousedown)="splitComponentOuterDragStart($event)" (mouseup)="splitComponentOuterDragEnd($event)" class="as-split-iframe-resize" [unit]="'pixel'">
-                        <as-split-area [size]="getLayoutInfos('iframeResizeValue')">
-                            <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }">
-                                <div class="fiddle-size fiddle-size-hack">
-                                    <span class="width">{{iframeWidth}}</span>
-                                    <span class="x">x</span>
-                                    <span class="height">{{iframeHeight}}</span>
-                                </div>
+            <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
+                    <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
+                    </div>
+                    <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)" >
+                        <div class="as-split-gutter-icon-custom"></div>
+                    </div>
+                    <div class="iframe-hack" [ngStyle]="{'display' : showIframeHider ? '' : 'none' }">
+                        <div class="fiddle-size fiddle-size-hack">
+                            <span class="width">{{iframeWidth}}</span>
+                            <span class="x">x</span>
+                            <span class="height">{{iframeHeight}}</span>
                         </div>
-                        <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1), 'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" #iframePart (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
-                        </as-split-area>
-                        <as-split-area class="as-split-area-empty" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [size]="'*'">
-                        </as-split-area>
-                    </as-split>                    
+                    </div>
+                    <div class="iframe-area" [ngStyle]="{'flex':'0 0 '+getIframeAreaSize()}">
+                        <div class="iframe-overlay" [ngStyle]="{'display': isCustomGutter1_dragging || isCustomGutter2_dragging ? 'block':''}"></div>
+                        <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}"  #iframePart   (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+                    </div>
+                    <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
+                        <div class="as-split-gutter-icon-custom"></div>
+                    </div>
+                    <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
+                    </div>                   
             </as-split-area>
     </as-split>
     
