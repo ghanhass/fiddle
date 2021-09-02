@@ -1083,7 +1083,7 @@ export class MainComponent implements AfterViewInit {
 
   runCode(param?){
     if(param == "save"){
-      if(window.innerWidth <= 767 || window.innerHeight <= 580){
+      if(window.innerWidth <= 767 || window.innerHeight <= 580 || this.mainService.iframeResizeValue === undefined){
         if(this.layout == 1 || this.layout == 3){
           this.mainService.iframeResizeValue = this.mainContainerHeight - 12;
         }
