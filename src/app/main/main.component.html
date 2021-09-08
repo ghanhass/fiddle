@@ -14,7 +14,19 @@
     </div>
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
-        <button class="theme-btn" (click)="changeFiddleTheme(true)"><i class="fa fa-adjust" aria-hidden="true"></i></button>
+        <div class="themes-btn-container">
+            <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">
+                <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme && fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
+                    {{theme.name}}
+                </li>
+            </ul>
+            <button class="themes-btn btn" (click)="toggleThemesListMenu()">
+                <span>Theme</span>
+                <i *ngIf="!isThemesListShown" class="fa fa-sort-desc" aria-hidden="true"></i>
+                <i *ngIf="isThemesListShown" class="fa fa-sort-asc" aria-hidden="true"></i>
+            </button>
+        </div>
+
         <div class="paypal-btn-container">
             <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
                 <li (click)="selectDonation(0)"><div><span>5</span><span>€</span></div></li>
@@ -24,12 +36,12 @@
             </ul>
             <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></button>
         </div>
-        <button class="ressources-code-btn" (click)="ressouresBtnClick()">
+        <button class="ressources-code-btn btn" (click)="ressouresBtnClick()">
             <span>Resources</span>
         </button>
-        <button class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
-            <span class="text">Layouts <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
-            </span>
+        <div class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
+            <button class="layouts-btn btn"><span>Layouts</span> <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
+            </button>
             <div class="layouts-list" #layoutsList>
                 <div class="layout-1 layout" #layout1 (click)="changeLayout(1)" [ngClass]="{'active':(layout === 1)}">
                     <div>
@@ -83,11 +95,11 @@
                     </div>
                 </div>
             </div>
-        </button>
-        <button class="share-code-btn" (click)="runCode('save')">
+        </div>
+        <button class="share-code-btn btn" (click)="runCode('save')">
             <span>Share</span>
         </button>
-        <button class="share-code-btn" (click)="runCode()">
+        <button class="share-code-btn btn" (click)="runCode()">
             <span>Run</span>
         </button>
     </div>

@@ -44,8 +44,7 @@ ngs-code-editor .margin-view-overlays .line-numbers {
 
 /*START hassoon's css library*/
 .btn{
-    height: auto;
-    min-height:33px;
+    height: 30px;
     font-size: 14px;
     cursor: pointer;
     display: inline-block;

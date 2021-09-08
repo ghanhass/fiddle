@@ -222,7 +222,7 @@ as-split-area.as-split-area-iframe.is-horizontal {
 
 .share-code-btn,
 .ressources-code-btn,
-.theme-btn{
+.themes-btn{
     font-size: 16px;
     cursor: pointer;
     display: block;
@@ -238,19 +238,19 @@ as-split-area.as-split-area-iframe.is-horizontal {
 
 .share-code-btn:active,
 .ressources-code-btn:active,
-.theme-btn:active{
+.themes-btn:active{
     color:rgb(0,0,0);
     padding-top: 4px !important;
 }
 .share-code-btn:hover,
 .ressources-code-btn:hover,
-.theme-btn:hover{
+.themes-btn:hover{
     background-color: #FFFFFF;
 }
 
 .share-code-btn span,
 .ressources-code-btn span,
-.theme-btn span{
+.themes-btn span{
     display:block;
 }
 
@@ -278,16 +278,16 @@ as-split-area.as-split-area-iframe.is-horizontal {
 .header-btns-container  > .ressources-code-btn,
 .header-btns-container  > .layouts-list-container,
 .header-btns-container  > .share-code-btn,
-.header-btns-container > .theme-btn{
+.header-btns-container > .themes-btn{
     height:30px;
 }
 
-.header-btns-container > .theme-btn{
+.header-btns-container > .themes-btn{
     margin-right:6px;
     padding: 0 6px;
 }
 
-.paypal-btn-container{
+.themes-btn-container{
     margin-right: 3px;
     position: relative;
 }
@@ -301,13 +301,13 @@ as-split-area.as-split-area-iframe.is-horizontal {
     padding-right:4px;
 }
 
-.paypal-btn-container .btn.paypal-btn i.fa.fa-sort-desc {
+i.fa.fa-sort-desc {
     position: absolute;
     right: 0;
     bottom: 7px;
 }
 
-.paypal-btn-container .btn.paypal-btn i.fa.fa-sort-asc {
+i.fa.fa-sort-asc {
     position: absolute;
     right: 0;
     bottom: 0px;
@@ -323,14 +323,15 @@ as-split-area.as-split-area-iframe.is-horizontal {
     transform: translateY(-50%);
 }
 
-.paypal-btn-container .btn.paypal-btn span.text {
+.paypal-btn-container .btn.paypal-btn button.layouts-btn {
     position: relative;
     padding-right: 13px;
     display: flex;
     align-items: center;
 }
 
-.paypal-btn-container ul.donations-menu {
+.paypal-btn-container ul.donations-menu,
+.themes-menu {
     position: absolute;
     top: calc(100% + 7px);
     list-style: none;
@@ -351,20 +352,32 @@ as-split-area.as-split-area-iframe.is-horizontal {
     z-index: -1;
 }
 
-.paypal-btn-container ul.donations-menu.shown {
+.themes-menu{
+    width:200px;
+}
+
+.themes-menu li {
+    font-size: 1rem;
+}
+
+.paypal-btn-container ul.donations-menu.shown,
+.themes-menu.shown {
     height:159px;
     padding: 8px;
     box-shadow: 0px 0px 4px 2px #8b8b8b;
     opacity: 1;
     pointer-events: all;
-    z-index: 1;
+    z-index: 2;
+    overflow:auto;
 }
 
-.paypal-btn-container ul.donations-menu > li:first-child ~ li {
+.paypal-btn-container ul.donations-menu > li:first-child ~ li,
+.themes-menu > li:first-child ~ li {
     border-top: 1px solid #8b8b8b5e;
 }
 
-.paypal-btn-container ul.donations-menu > li {
+.paypal-btn-container ul.donations-menu > li,
+.themes-menu > li {
     padding: 8px 4px;
     cursor: pointer;
     /*transition: 0.2s all;*/
@@ -375,28 +388,30 @@ as-split-area.as-split-area-iframe.is-horizontal {
     font-weight: 600;
 }
 
+.themes-menu.shown > li:not(.selected):hover {
+    background-color: #8b8b8b26;
+}
+
 .layouts-list-container {
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: rgb(239, 239, 239);
-    padding: 0px 6px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(118, 118, 118);
     font-size: 16px;
     box-sizing: border-box;
     cursor: pointer;
     user-select: none;
-    /*position: relative;*/
     color:rgb(0,0,0);
     outline: none;
     padding:1px 6px;
+
+    position: relative;
+    padding: 1px 0px;
+    border: none;
 }
 
 .layouts-list-container:active{
     color:rgb(0,0,0);
-    padding-top: 4px !important;
 }
 
 .layouts-list-container:hover{
@@ -416,7 +431,7 @@ as-split-area.as-split-area-iframe.is-horizontal {
     bottom: 7px;
 }
 
-.layouts-list-container.shown > span i.fa-sort-asc{
+.shown i.fa-sort-asc{
     bottom: 0px;
 }
 
@@ -698,12 +713,12 @@ as-split-area.as-split-area-iframe.is-horizontal {
         margin-right:10px;
     }
 
-    .paypal-btn-container .btn.paypal-btn span.text{
+    .paypal-btn-container .btn.paypal-btn button.layouts-btn{
         font-size: 0px;
         position:static;
     }
     
-    .paypal-btn-container .btn.paypal-btn span.text i.fa{
+    .paypal-btn-container .btn.paypal-btn button.layouts-btn i.fa{
         font-size: 16px;
     }
 
@@ -711,11 +726,11 @@ as-split-area.as-split-area-iframe.is-horizontal {
         padding-left: 18px !important;
     }
 
-    .paypal-btn-container .btn.paypal-btn i.fa.fa-sort-desc{
+    i.fa.fa-sort-desc{
         bottom: 11px !important;
     }
 
-    .paypal-btn-container .btn.paypal-btn i.fa.fa-sort-asc{
+    i.fa.fa-sort-asc{
         bottom: 4px !important;
     }
 }
@@ -726,11 +741,11 @@ as-split-area.as-split-area-iframe.is-horizontal {
     pointer-events: all;
 }
 
-.layouts-list-container.hidden > span .fa.fa-sort-asc{
+.hidden .fa.fa-sort-asc{
     display: none;
 }
 
-.layouts-list-container.shown > span .fa.fa-sort-desc{
+.shown  .fa.fa-sort-desc{
     display: none;
 }
 
@@ -1052,7 +1067,7 @@ as-split-area.code-component-container > app-html-part{
     .header-btns-container  > .ressources-code-btn[class],
     .header-btns-container  > .layouts-list-container[class],
     .header-btns-container  > .share-code-btn[class]
-    .header-btns-container > .theme-btn[class]{
+    .header-btns-container > .themes-btn[class]{
         margin-right:3px;
         margin-left:3px;
         padding: 1px 2px;
@@ -1147,20 +1162,19 @@ app-modal .modal-header .modal-validate-btn{
     box-shadow: 0px 0px 4px 2px #eeeeee;
 }
 
-:host ::ng-deep .dark-mode ul.donations-menu.shown {
+:host ::ng-deep .dark-mode ul.donations-menu.shown,
+:host ::ng-deep .dark-mode .themes-menu.shown {
     box-shadow: 0px 0px 4px 2px #eeeeee !important;
     background-color: #4d4d4d !important;
 }
 
-:host ::ng-deep .dark-mode .paypal-btn-container 
-ul.donations-menu > 
-li {
+:host ::ng-deep .dark-mode .paypal-btn-container ul.donations-menu > li,
+:host ::ng-deep .dark-mode .themes-menu.shown > li {
     color: #eeeeee;
 }
 
-:host ::ng-deep .dark-mode .paypal-btn-container 
-ul.donations-menu > 
-li:hover {
+:host ::ng-deep .dark-mode .paypal-btn-container ul.donations-menu > li:hover,
+:host ::ng-deep .dark-mode .themes-menu.shown > li:hover {
     background-color: rgba(255 255 255 , 0.5);
     color: #000000;
 }
@@ -1213,8 +1227,8 @@ li:hover {
     border: 2px solid #62ad4a63 !important;
 }
 
-:host ::ng-deep .dark-mode .paypal-btn-container {
-    background: red;
+:host ::ng-deep .dark-mode .paypal-btn-container,
+:host ::ng-deep .dark-mode .themes-btn-container {
     color: #eeeeee;
 }
 
@@ -1223,8 +1237,8 @@ li:hover {
     background: #1e1e1e;
 }
 
-:host ::ng-deep .dark-mode .header-btns-container > button,
-:host ::ng-deep .dark-mode .header-btns-container > button:hover {
+:host ::ng-deep .dark-mode .header-btns-container .btn,
+:host ::ng-deep .dark-mode .header-btns-container .btn:hover {
     color: #eeeeee;
     background: #1e1e1e;
 }
@@ -1239,4 +1253,21 @@ li:hover {
     background-color: #ffffff57;
     font-weight: 600;
 }
+
+.dark-mode .themes-menu.shown > li:not(.selected):hover {
+    background-color: #ffffff57;
+}
+
+.dark-mode .themes-menu li.selected {
+    font-weight: bold;
+    background-color: #e3e3e3;
+    color: #3d3d3d;
+}
+
 /**END dark theme**/
+
+.themes-menu li.selected {
+    font-weight: bold;
+    background-color: #aaaaaa;
+    color: #FFFFFF;
+}

@@ -8,6 +8,7 @@ import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
+import { FiddleTheme } from "src/app/fiddle-theme";
 
 @Component({
   selector: 'app-main',
@@ -70,6 +71,7 @@ export class MainComponent implements AfterViewInit {
   htmlCode: string = "";
   isLayoutsListShown: boolean = false;
   isDonationsListShown: boolean = false;
+  isThemesListShown: boolean = false;
   layout: number = 1;
   fiddleTitle: string = "";
 
@@ -110,6 +112,8 @@ export class MainComponent implements AfterViewInit {
 
   isFiddleWidthDisabled:boolean = false;
   isFiddleHeightDisabled: boolean = false;
+
+  fiddleTheme: FiddleTheme;
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -152,7 +156,7 @@ export class MainComponent implements AfterViewInit {
           this.changeLayout(this.mainService.layout, {data: obj});
           self.mainService.redirectAfterSaveMode = false;
           this.runCode();
-          this.changeFiddleTheme();
+          //this.changeFiddleTheme();
         }
         else{
           this.loader.showLoader();
@@ -224,14 +228,14 @@ export class MainComponent implements AfterViewInit {
                 this.changeLayout(1);
               }
             }
-            this.changeFiddleTheme();
+            //this.changeFiddleTheme();
           });
         }
       }
       else{
         this.changeLayout(1);
       }
-      this.changeFiddleTheme();
+      //this.changeFiddleTheme();
 
     });
 
@@ -291,7 +295,35 @@ export class MainComponent implements AfterViewInit {
   }
 
   getIsFiddleThemeDark(){
-    return this.mainService.isFiddleThemeDark;
+    //return this.mainService.isFiddleThemeDark;
+    let isThemeDark = this.fiddleTheme ? (this.fiddleTheme.data.base == "vs-dark" || this.fiddleTheme.data.base == "hc-black") : false;
+    return isThemeDark;
+  }
+
+  selectTheme(theme: FiddleTheme){
+    this.fiddleTheme = theme;
+
+    let isThemeDark = this.fiddleTheme ? (this.fiddleTheme.data.base == "vs-dark" || this.fiddleTheme.data.base == "hc-black") : false;
+    this.mainService.registerMonacoCustomTheme(theme);
+
+    if(isThemeDark){
+      document.querySelector(".main-container").classList.add("dark-mode");
+      document.body.classList.add("dark-mode");
+      document.querySelector("#main-header").classList.add("dark-mode");
+      document.querySelector("app-modal").classList.add("dark-mode");
+    }
+    else{
+      document.querySelector(".main-container").classList.remove("dark-mode");
+      document.body.classList.remove("dark-mode");
+      document.querySelector("#main-header").classList.remove("dark-mode");
+      document.querySelector("app-modal").classList.remove("dark-mode");
+    }
+
+    this.isThemesListShown = false;
+  }
+
+  getThemesList(){
+    return this.mainService.monacoThemesList;
   }
 
   calculateIframeSize(mainContainerEl?, sizes?){
@@ -725,6 +757,10 @@ export class MainComponent implements AfterViewInit {
     this.isDonationsListShown = !this.isDonationsListShown;
   }
 
+  toggleThemesListMenu(){
+    this.isThemesListShown = !this.isThemesListShown;
+  }
+
   selectDonation(newIndex){
     let form = document.querySelector("#lhazlgkemjk");
     if(form){
@@ -753,9 +789,6 @@ export class MainComponent implements AfterViewInit {
       this.isJsFullScreen = !this.isJsFullScreen;
       break;
     }
-    /*let editorLayoutFixInterval = window.setTimeout(()=>{
-      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
-    }, 1);*/
   }
 
   stretchCodePart(codePartType){
@@ -826,6 +859,29 @@ export class MainComponent implements AfterViewInit {
 
       this.isFiddleHeightDisabled = false;
       this.isFiddleWidthDisabled = false;
+    }
+  }
+
+  @HostListener("document:click", ["$event"])
+  onDocumentClick(event: MouseEvent){
+    let evTarget = event.target as HTMLElement;
+    
+    let bool = !evTarget.classList.contains("themes-menu") && !evTarget.classList.contains("themes-btn") && !evTarget.parentElement.classList.contains("themes-btn");
+
+    let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
+
+    let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
+
+    if(bool){
+      this.isThemesListShown = false;
+    }
+
+    if(bool2){
+      this.isDonationsListShown = false;
+    }
+
+    if(bool3){
+      this.isLayoutsListShown = false;
     }
   }
 
@@ -1137,7 +1193,6 @@ export class MainComponent implements AfterViewInit {
     this.mainService.showResult = this.showResult;
 
     let self = this;
-    let editorLayoutFixInterval = window.setTimeout(()=>{
       //console.log("inside custom interval");
       if (!this.showCss){
         if(this.codeParts.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
@@ -1166,7 +1221,6 @@ export class MainComponent implements AfterViewInit {
           //clearInterval(editorLayoutFixInterval);
         }
       }
-    }, 1);
   }
 
   getEmptyAreaSize(areaNum:number){
@@ -1450,7 +1504,7 @@ export class MainComponent implements AfterViewInit {
 
     this.customInterval = setInterval(()=>{
       //console.log("inside triggerResizeWithInterval");
-      //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
+      window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
     }, timeout); 
   }
 
@@ -1471,7 +1525,7 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentInnerDragStart(event){
     //console.log("splitComponentInnerDragStart event = ", event);
-    this.triggerResizeWithInterval(50);
+    //this.triggerResizeWithInterval(50);
     this.canChangeSplitSizes = false;
   }
 
@@ -1486,7 +1540,7 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentOuterDragStart(event){
     //console.log("splitComponentOuterDragStart event = ", event);
-    this.triggerResizeWithInterval(50);
+    //this.triggerResizeWithInterval(50);
     this.showIframeHider = true;
 
     this.isFiddleHeightDisabled = true;
@@ -1569,30 +1623,18 @@ export class MainComponent implements AfterViewInit {
 
   changeFiddleTheme(param?){
     //console.log("param = ", param);
-    //console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
+    this.isThemesListShown = true;
+  }
 
-    if(param === true){
-      this.mainService.isFiddleThemeDark = !this.mainService.isFiddleThemeDark;
-      localStorage.setItem("myfiddle-darktheme", this.mainService.isFiddleThemeDark? "1" : "");
-    } 
-    else {
-      this.mainService.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
+  isMatch(el, match){//cross plateform Element.matches() workaround
+    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, match);
+  }
+  //
+  
+  getDOMClosest(elem, selector){//DOM closest ancestor speified by a CSS selector
+    for ( ; elem && elem !== document; elem = elem.parentNode ) {
+      if ( this.isMatch(elem, selector) ) return elem;
     }
-    //console.log("this.mainService.isFiddleThemeDark = ", this.mainService.isFiddleThemeDark);
-    //console.log("---------------------------------");
-    if(this.mainService.isFiddleThemeDark){
-      this.mainService.registerMonacoCustomTheme("vs-dark");
-      (this.mainContainer.nativeElement as HTMLElement).classList.add("dark-mode");
-      document.body.classList.add("dark-mode");
-      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.add("dark-mode");
-      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.add("dark-mode");
-    }
-    else{
-      this.mainService.registerMonacoCustomTheme("vs");
-      (this.mainContainer.nativeElement as HTMLElement).classList.remove("dark-mode");
-      document.body.classList.remove("dark-mode");
-      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("#main-header").classList.remove("dark-mode");
-      (this.mainContainer.nativeElement as HTMLElement).parentElement.querySelector("app-modal").classList.remove("dark-mode");
-    }
+    return null;
   }
 }
