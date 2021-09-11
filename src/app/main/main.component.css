@@ -24,13 +24,13 @@
     width: 100%;
     border-bottom: 1px solid #b5b5b5;
     border-top: 1px solid #b5b5b5;
-    color: #8b8b8b;
+    /*color: #8b8b8b;*/
     text-align: center;
     height: 20px;
     display: flex;
     align-items: center;
     padding: 1px 0 1px 5px;
-    background: #FFFFFF;
+    /*background: #FFFFFF;*/
     font-size: 15px;
 }
 
@@ -389,7 +389,7 @@ i.fa.fa-sort-asc {
 }
 
 .themes-menu.shown > li:not(.selected):hover {
-    background-color: #8b8b8b26;
+    /*background-color: #8b8b8b26;*/
 }
 
 .layouts-list-container {
@@ -1098,176 +1098,10 @@ app-modal .modal-header .modal-validate-btn{
 }
 
 /**START dark theme**/
-:host ::ng-deep .dark-mode .code-part-title {
-    background: #1e1e1e;
-    color: #d4d4d4;
-}
-
-:host ::ng-deep .dark-mode .as-split-gutter,
-.as-split-gutter-custom.is-dark-mode {
-    background-color: #444857 !important;
-}
-
-:host ::ng-deep .dark-mode .fiddle-size.fiddle-size-hack {
-    color: #000000;
-    background: #c9c9c9;
-    box-shadow: 0 0 15px 4px #c9c9c9;
-}
-
-:host ::ng-deep .dark-mode .iframe-hack {
-    background: rgba(0, 0, 0, 0.5);
-}
-
-:host ::ng-deep .dark-mode input.form-control.fiddle-input {
-    background: #1e1e1e;
-    border: 1px solid #d4d4d4;
-    color: #d4d4d4;
-}
-
-:host ::ng-deep .dark-mode .code-part-title span {
-    color: #d4d4d4 !important;
-}
-
-
-:host ::ng-deep .dark-mode .layout > div:first-child > div {
-    outline: 1px solid #eeeeee !important;
-}
-
-:host ::ng-deep .dark-mode .layout.active > div:first-child > div {
-    outline: 1px solid #4d4d4d !important;
-}
-/***********/
-:host ::ng-deep .dark-mode .layout > div:first-child {
-    outline: 2px solid #eeeeee !important;
-}
-
-:host ::ng-deep .dark-mode .layout.active > div:first-child {
-    outline: 2px solid #4d4d4d !important;
-}
-/*************/
-:host ::ng-deep .dark-mode .layout {
-    background-color: #4d4d4d;
-    border-color: #eeeeee;
-    box-shadow: 0 0 0px 1px #4d4d4d;
-}
-
-:host ::ng-deep .dark-mode .layout.active {
-    background-color: #eeeeee;
-    border-color: #4d4d4d;
-    box-shadow: 0 0 0px 1px #eeeeee;
-}
-/***********/
-:host ::ng-deep .dark-mode .layouts-list {
-    background-color: #4d4d4d;
-    box-shadow: 0px 0px 4px 2px #eeeeee;
-}
-
-:host ::ng-deep .dark-mode ul.donations-menu.shown,
-:host ::ng-deep .dark-mode .themes-menu.shown {
-    box-shadow: 0px 0px 4px 2px #eeeeee !important;
-    background-color: #4d4d4d !important;
-}
-
-:host ::ng-deep .dark-mode .paypal-btn-container ul.donations-menu > li,
-:host ::ng-deep .dark-mode .themes-menu.shown > li {
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode .paypal-btn-container ul.donations-menu > li:hover,
-:host ::ng-deep .dark-mode .themes-menu.shown > li:hover {
-    background-color: rgba(255 255 255 , 0.5);
-    color: #000000;
-}
-
-:host ::ng-deep .dark-mode .ressources-choices-container {
-    background-color: #1e1e1e !important;
-}
-
-:host ::ng-deep .dark-mode .modal {
-    background: #1e1e1e;
-    border: 1px solid #bbb;
-    color: #EEEEFD;
-}
-
-:host ::ng-deep .dark-mode .ressources-choice 
-:host ::ng-deep .dark-mode .ressource-choice-description {
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode .form-control {
-    background: #1e1e1e;
-    color: #eeeeee;
-    border: 1px solid #d4d4d4;
-}
-
-:host ::ng-deep .dark-mode .ressources-choice-selected-file {
-    background-color: #1e1e1e;
-}
-
-:host ::ng-deep .dark-mode button.modal-close-btn {
-    background: #1e1e1e;
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode button.btn.btn-remove-selected-ressource {
-    background-color: #1e1e1e;
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode button.modal-close-btn:hover {
-    background: #1e1e1e;
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode .ressources-choice .ressource-choice-description[class] {
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode .ressources-container > hr {
-    border: 2px solid #62ad4a63 !important;
-}
-
-:host ::ng-deep .dark-mode .paypal-btn-container,
-:host ::ng-deep .dark-mode .themes-btn-container {
-    color: #eeeeee;
-}
-
-:host ::ng-deep .dark-mode button.btn.paypal-btn {
-    color: #eeeeee;
-    background: #1e1e1e;
-}
-
-:host ::ng-deep .dark-mode .header-btns-container .btn,
-:host ::ng-deep .dark-mode .header-btns-container .btn:hover {
-    color: #eeeeee;
-    background: #1e1e1e;
-}
-
-:host ::ng-deep .dark-mode #code-parts-title-mobile a.active {
-    background-color: #62ad4a63;
-    color: #eeeeee;
-    font-weight: 600;
-}
-
-.dark-mode .paypal-btn-container ul.donations-menu > li:hover {
-    background-color: #ffffff57;
-    font-weight: 600;
-}
-
-.dark-mode .themes-menu.shown > li:not(.selected):hover {
-    background-color: #ffffff57;
-}
-
-.dark-mode .themes-menu li.selected {
-    font-weight: bold;
-    background-color: #e3e3e3;
-    color: #3d3d3d;
-}
-
 /**END dark theme**/
 
 .themes-menu li.selected {
     font-weight: bold;
-    background-color: #aaaaaa;
-    color: #FFFFFF;
+    /*background-color: #aaaaaa;*/
+    /*color: #FFFFFF;*/
 }

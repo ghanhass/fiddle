@@ -113,7 +113,16 @@ export class MainComponent implements AfterViewInit {
   isFiddleWidthDisabled:boolean = false;
   isFiddleHeightDisabled: boolean = false;
 
-  fiddleTheme: FiddleTheme;
+  fiddleTheme: FiddleTheme = {
+    "name": "VS",
+    "id": "vs-default",
+    "data": {
+        "base": "vs",
+        "inherit": true,
+        "rules": [],
+        "colors": {}
+    }
+  };
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -235,7 +244,7 @@ export class MainComponent implements AfterViewInit {
       else{
         this.changeLayout(1);
       }
-      //this.changeFiddleTheme();
+      this.mainService.changeFiddleTheme();
 
     });
 
@@ -301,12 +310,10 @@ export class MainComponent implements AfterViewInit {
   }
 
   selectTheme(theme: FiddleTheme){
-    this.fiddleTheme = theme;
+    
+    //themeStylesheet.sheet;
 
-    let isThemeDark = this.fiddleTheme ? (this.fiddleTheme.data.base == "vs-dark" || this.fiddleTheme.data.base == "hc-black") : false;
-    this.mainService.registerMonacoCustomTheme(theme);
-
-    if(isThemeDark){
+    /*if(isThemeDark){
       document.querySelector(".main-container").classList.add("dark-mode");
       document.body.classList.add("dark-mode");
       document.querySelector("#main-header").classList.add("dark-mode");
@@ -317,8 +324,10 @@ export class MainComponent implements AfterViewInit {
       document.body.classList.remove("dark-mode");
       document.querySelector("#main-header").classList.remove("dark-mode");
       document.querySelector("app-modal").classList.remove("dark-mode");
-    }
-
+    }*/
+    this.fiddleTheme = theme;
+    this.mainService.addThemeStylesheet(theme);
+    this.mainService.registerMonacoCustomTheme(theme);
     this.isThemesListShown = false;
   }
 

@@ -16,7 +16,7 @@
     <div class="header-btns-container">
         <div class="themes-btn-container">
             <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">
-                <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme && fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
+                <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
                     {{theme.name}}
                 </li>
             </ul>

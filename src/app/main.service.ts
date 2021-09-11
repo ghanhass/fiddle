@@ -26,7 +26,7 @@ export class MainService {
   mainContainerWidth: number;
   codePartsSize: number;
   iframeResizeValue: number;
-  isFiddleThemeDark: boolean = false;
+  fiddleThemeId: string = '';
 
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
@@ -59,17 +59,14 @@ export class MainService {
             "base": "vs-dark",
             "inherit": true,
             "rules": [],
-            "colors": {}
-        }
-    },
-    {
-        "name": "High Contrast (Dark)",
-        "id": "vs-default-hc",
-        "data": {
-            "base": "hc-black",
-            "inherit": true,
-            "rules": [],
-            "colors": {}
+            "colors": {
+                "editor.foreground": "#d4d4d4",
+                "editor.background": "#1e1e1e",
+                "editor.selectionBackground": "#414141",
+                "editor.lineHighlightBackground": "#1e1e1e",
+                "editorCursor.foreground": "#d4d4d4",
+                "editorWhitespace.foreground": "#d4d4d480"
+            }
         }
     },
     {
@@ -14691,26 +14688,37 @@ export class MainService {
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;
+    let defaultTheme = {
+        "base": "vs",
+        "inherit": true,
+        "rules": [],
+        "colors": {}
+    }
+    console.log("A!");
     setTimeout(()=>{
       if(window['monaco']){
-        window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
+        console.log("fiddleTheme = ", fiddleTheme);
+        window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme ? fiddleTheme.data : defaultTheme as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
     },10);
   }
 
-  changeFiddleTheme(param?){
+  changeFiddleTheme(param?: FiddleTheme){
     //console.log("param = ", param);
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
-    /*
-    if(param === true){
-      this.isFiddleThemeDark = !this.isFiddleThemeDark;
-      localStorage.setItem("myfiddle-darktheme", this.isFiddleThemeDark? "1" : "");
+    
+    if(param){
+      localStorage.setItem("myfiddle-theme", param.id);
     } 
     else {
-      this.isFiddleThemeDark = localStorage.getItem("myfiddle-darktheme") == "1";
+      this.fiddleThemeId = localStorage.getItem("myfiddle-theme");
     }
-    */
+
+    this.registerMonacoCustomTheme(param);
+
+    this.addThemeStylesheet(param);
+    
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     //console.log("---------------------------------");
     /*if(this.isFiddleThemeDark){
@@ -14727,5 +14735,197 @@ export class MainService {
       document.querySelector("#main-header").classList.remove("dark-mode");
       document.querySelector("app-modal").classList.remove("dark-mode");
     }*/
+  }
+
+  prepareThemeStyleSheet(theme: FiddleTheme){
+      if(theme.id == "vs-default"){
+          return "";
+      }
+      let str = `.code-part-title {
+        background:${theme.data.colors['editor.background']};
+        color: :${theme.data.colors['editor.foreground']};
+    }
+    
+    .as-split-gutter,
+    .as-split-gutter-custom{
+        background-color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .fiddle-size.fiddle-size-hack{
+        color: ${theme.data.colors['editor.background']};
+        background: ${theme.data.colors['editor.foreground']};
+        box-shadow: 0 0 15px 4px ${theme.data.colors['editor.foreground']};
+    }
+    
+    .iframe-hack {
+        background: ${theme.data.colors['editor.background']};
+    }
+    
+    input.form-control.fiddle-input {
+        background: ${theme.data.colors['editor.background']};
+        border: 1px solid ${theme.data.colors['editor.foreground']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .code-part-title span {
+        color: ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    .layout > div:first-child > div {
+        outline: 1px solid ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    .layout.active > div:first-child > div {
+        outline: 1px solid ${theme.data.colors['editor.background']} !important;
+    }
+    
+    .layout > div:first-child {
+        outline: 2px solid ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    .layout.active > div:first-child {
+        outline: 2px solid ${theme.data.colors['editor.background']} !important;
+    }
+    
+    .layout {
+        background-color: ${theme.data.colors['editor.background']} !important;
+        border-color: ${theme.data.colors['editor.foreground']} !important;
+        box-shadow: 0 0 0px 1px ${theme.data.colors['editor.background']} !important;
+    }
+    
+    .layout.active {
+        background-color: ${theme.data.colors['editor.foreground']} !important;
+        border-color: ${theme.data.colors['editor.background']} !important;
+        box-shadow: 0 0 0px 1px ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    .layouts-list {
+        background-color: ${theme.data.colors['editor.background']} !important;
+        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    ul.donations-menu.shown,
+    .themes-menu.shown{
+        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']} !important;
+        background-color: ${theme.data.colors['editor.background']} !important;
+    }
+    
+    .paypal-btn-container ul.donations-menu > li,
+    .themes-menu.shown > li {
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .paypal-btn-container ul.donations-menu > li:hover,
+    .themes-menu.shown > li:hover {
+        background-color: ${theme.data.colors['editor.foreground']};
+        color: ${theme.data.colors['editor.background']};
+    }
+    
+    .ressources-choices-container {
+        background-color: ${theme.data.colors['editor.background']} !important;
+    }
+    
+    .modal {
+        background: ${theme.data.colors['editor.background']};
+        border: 1px solid ${theme.data.colors['editor.foreground']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice 
+    .ressource-choice-description {
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .form-control {
+        background: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+        border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-selected-file {
+        background-color: #1e1e1e;
+    }
+    
+    button.modal-close-btn {
+        background: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    button.btn.btn-remove-selected-ressource {
+        background-color: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    button.modal-close-btn:hover {
+        background: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice .ressource-choice-description[class] {
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-container > hr {
+        border: 2px solid ${theme.data.colors['editor.foreground']} !important;
+    }
+    
+    .paypal-btn-container,
+    .themes-btn-container {
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    button.btn.paypal-btn {
+        color: ${theme.data.colors['editor.foreground']};
+        background: ${theme.data.colors['editor.background']};
+    }
+    
+    .header-btns-container .btn,
+    .header-btns-container .btn:hover {
+        color: ${theme.data.colors['editor.foreground']};
+        background: ${theme.data.colors['editor.background']};
+    }
+    
+    #code-parts-title-mobile a.active {
+        background-color: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+        font-weight: 600;
+    }
+    
+    .paypal-btn-container ul.donations-menu > li:hover {
+        background-color: ${theme.data.colors['editor.background']};
+        font-weight: 600;
+    }
+    
+    .themes-menu.shown > li:not(.selected):hover {
+        /*background-color: ${theme.data.colors['editor.lineHighlightBackground']};*/
+    }
+    
+    .themes-menu li.selected {
+        font-weight: bold;
+        background-color: ${theme.data.colors['editor.selectionBackground']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    body{
+        background-color: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+    }`;
+
+    return str;
+  }
+
+  addThemeStylesheet(theme: FiddleTheme){    
+    let themeStylesheet = document.querySelector("style#theme-stylesheet") as HTMLStyleElement;
+    
+    if(themeStylesheet){
+      themeStylesheet.parentElement.removeChild(themeStylesheet);
+    }
+    
+    themeStylesheet = document.createElement("style");
+    themeStylesheet.id = "theme-stylesheet";
+
+    document.head.appendChild(themeStylesheet);
+
+    themeStylesheet.textContent = theme ? this.prepareThemeStyleSheet(theme) : "";
   }
 }
