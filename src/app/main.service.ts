@@ -41,6 +41,24 @@ export class MainService {
   showJs: boolean = false;
   showResult: boolean = true;
 
+  defaultTheme = {
+      "name": "VS",
+      "id": "vs-default",
+      "data": {
+          "base": "vs",
+          "inherit": true,
+          "rules": [],
+          "colors": {
+              "editor.foreground": "#000000",
+              "editor.background": "#FFFFFF",
+              "editor.selectionBackground": "#add6ff",
+              "editor.lineHighlightBackground": "#FFFFFF",
+              "editorCursor.foreground": "#000000",
+              "editorWhitespace.foreground": "#000000"
+          }
+      }
+  }
+
   monacoThemesList: Array<any> = [
     {
         "name": "VS",
@@ -49,7 +67,14 @@ export class MainService {
             "base": "vs",
             "inherit": true,
             "rules": [],
-            "colors": {}
+            "colors": {
+                "editor.foreground": "#000000",
+                "editor.background": "#FFFFFF",
+                "editor.selectionBackground": "#add6ff",
+                "editor.lineHighlightBackground": "#FFFFFF",
+                "editorCursor.foreground": "#000000",
+                "editorWhitespace.foreground": "#000000"
+            }
         }
     },
     {
@@ -14688,17 +14713,11 @@ export class MainService {
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;
-    let defaultTheme = {
-        "base": "vs",
-        "inherit": true,
-        "rules": [],
-        "colors": {}
-    }
     console.log("A!");
     setTimeout(()=>{
       if(window['monaco']){
         console.log("fiddleTheme = ", fiddleTheme);
-        window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme ? fiddleTheme.data : defaultTheme as any);
+        window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
     },10);
@@ -14715,33 +14734,14 @@ export class MainService {
       this.fiddleThemeId = localStorage.getItem("myfiddle-theme");
     }
 
-    this.registerMonacoCustomTheme(param);
+    this.registerMonacoCustomTheme(param ? param : this.defaultTheme);
 
-    this.addThemeStylesheet(param);
+    this.addThemeStylesheet(param ? param : this.defaultTheme);
     
-    //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
-    //console.log("---------------------------------");
-    /*if(this.isFiddleThemeDark){
-      this.registerMonacoCustomTheme("vs-dark");
-      document.querySelector(".main-container").classList.add("dark-mode");
-      document.body.classList.add("dark-mode");
-      document.querySelector("#main-header").classList.add("dark-mode");
-      document.querySelector("app-modal").classList.add("dark-mode");
-    }
-    else{
-      this.registerMonacoCustomTheme("vs");
-      document.querySelector(".main-container").classList.remove("dark-mode");
-      document.body.classList.remove("dark-mode");
-      document.querySelector("#main-header").classList.remove("dark-mode");
-      document.querySelector("app-modal").classList.remove("dark-mode");
-    }*/
   }
 
   prepareThemeStyleSheet(theme: FiddleTheme){
-      if(theme.id == "vs-default"){
-          return "";
-      }
-      let str = `.code-part-title {
+    let str = `.code-part-title {
         background:${theme.data.colors['editor.background']};
         color: :${theme.data.colors['editor.foreground']};
     }
@@ -14842,10 +14842,6 @@ export class MainService {
         border: 1px solid ${theme.data.colors['editor.foreground']};
     }
     
-    .ressources-choice-selected-file {
-        background-color: #1e1e1e;
-    }
-    
     button.modal-close-btn {
         background: ${theme.data.colors['editor.background']};
         color: ${theme.data.colors['editor.foreground']};
@@ -14904,6 +14900,128 @@ export class MainService {
         font-weight: bold;
         background-color: ${theme.data.colors['editor.selectionBackground']};
         color: ${theme.data.colors['editor.foreground']};
+    }
+
+    .ressources-container > hr{
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-query-container{
+      border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choices-container{
+      background-color: ${theme.data.colors['editor.background']};
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice:first-child ~ .ressources-choice{
+      border-top:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice:last-child{
+      border-bottom:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice .ressource-choice-description {
+      color: ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice:hover {
+      background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+    }
+    
+    .ressources-choice.current-choice {
+      background-color: ${theme.data.colors['editor.selectionBackground']};
+    }
+    
+    .ressources-choice-files-container{
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-selected-files-container{
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-files:hover {
+      background-color: ${theme.data.colors['editor.background']};
+    }
+    
+    .ressources-choice-files.selected {
+      background: ${theme.data.colors['editor.selectionBackground']};
+    }
+    
+    .ressources-choice-files:first-child ~ .ressources-choice-files{
+      border-top:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-files:last-child {
+      border-bottom:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-files-search{
+      border-bottom:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-selected-file {
+      background-color: ${theme.data.colors['editor.background']};
+    }
+    
+    .ressources-choice-selected-file.placeholder {
+      color: ${theme.data.colors['editor.foreground']};
+      background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+    }
+    
+    .ressources-choice-selected-file-wrapper.placeholder {
+      background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+      border: 2px dashed ${theme.data.colors['editor.foreground']};
+      border-top: 2px dashed ${theme.data.colors['editor.foreground']};
+      border-bottom: 2px dashed ${theme.data.colors['editor.foreground']};
+    }
+    
+    .ressources-choice-selected-file-wrapper {
+      border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .resources-tabs-mobile {
+      border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .resources-tabs-mobile label {
+      border:1px solid ${theme.data.colors['editor.foreground']};
+    }
+    
+    .resources-tabs-mobile label.selected{
+      background-color:${theme.data.colors['editor.selectionBackground']};
+    }
+    
+    .title{
+      border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+
+    .modal-close-btn{
+        border-color: ${theme.data.colors['editor.foreground']};
+        color: ${theme.data.colors['editor.foreground']};
+        background-color: ${theme.data.colors['editor.background']};
+    }
+
+    .modal-close-btn:active{
+        color: ${theme.data.colors['editor.foreground']};
+        background-color: ${theme.data.colors['editor.selectionBackground']};
+    }
+
+    .modal-close-btn:hover{
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+    }
+
+    .modal{
+        background-color: ${theme.data.colors['editor.background']};
+        box-shadow: 0 0px 8px 1px ${theme.data.colors['editor.foreground']};
+        border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+
+    .modal-container.shown{
+        background-color: ${theme.data.colors['editor.background']};
     }
     
     body{

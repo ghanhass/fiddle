@@ -120,7 +120,14 @@ export class MainComponent implements AfterViewInit {
         "base": "vs",
         "inherit": true,
         "rules": [],
-        "colors": {}
+        "colors": {
+          "editor.foreground": "#000000",
+          "editor.background": "#FFFFFF",
+          "editor.selectionBackground": "#add6ff",
+          "editor.lineHighlightBackground": "#FFFFFF",
+          "editorCursor.foreground": "#000000",
+          "editorWhitespace.foreground": "#000000"
+      }
     }
   };
 
@@ -310,21 +317,6 @@ export class MainComponent implements AfterViewInit {
   }
 
   selectTheme(theme: FiddleTheme){
-    
-    //themeStylesheet.sheet;
-
-    /*if(isThemeDark){
-      document.querySelector(".main-container").classList.add("dark-mode");
-      document.body.classList.add("dark-mode");
-      document.querySelector("#main-header").classList.add("dark-mode");
-      document.querySelector("app-modal").classList.add("dark-mode");
-    }
-    else{
-      document.querySelector(".main-container").classList.remove("dark-mode");
-      document.body.classList.remove("dark-mode");
-      document.querySelector("#main-header").classList.remove("dark-mode");
-      document.querySelector("app-modal").classList.remove("dark-mode");
-    }*/
     this.fiddleTheme = theme;
     this.mainService.addThemeStylesheet(theme);
     this.mainService.registerMonacoCustomTheme(theme);

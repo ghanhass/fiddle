@@ -31,16 +31,13 @@
   text-align: center;
   border-width: 1px;
   border-style: solid;
-  border-color: rgb(118, 118, 118);
   user-select: none;
-  color:rgb(0,0,0);
   outline: none;
   padding: 4px 12px;
   height: 33px;
 }
 
 ::ng-deep .modal-close-btn:active{
-    color:rgb(0,0,0);
     padding: 6px 12px 4px 12px;
 }
 ::ng-deep .modal-close-btn:hover{
@@ -65,12 +62,9 @@
   left: 50%;
   width: 50%;
   min-width: 750px;
-  background-color: #FFFFFF;
   border-radius: 5px;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0px 8px 1px gray;
-  border: 1px solid #80808080;
   transition: 0.2s all;
   height: calc(100% - 2px);
   overflow: auto;
@@ -80,7 +74,6 @@
   pointer-events: all;
   opacity: 1;
   z-index:9999;
-  background-color: rgba(128, 128, 128, 0.478);
 }
 
 @media screen and (max-width:767px){
