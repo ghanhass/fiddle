@@ -119,14 +119,18 @@ export class MainComponent implements AfterViewInit {
     "data": {
         "base": "vs",
         "inherit": true,
-        "rules": [],
+        "rules": [{
+          "foreground": "202020",
+          "background": "ffffff",
+          "token": ""
+      }],
         "colors": {
-          "editor.foreground": "#000000",
+          "editor.foreground": "#202020",
           "editor.background": "#FFFFFF",
           "editor.selectionBackground": "#add6ff",
           "editor.lineHighlightBackground": "#FFFFFF",
-          "editorCursor.foreground": "#000000",
-          "editorWhitespace.foreground": "#000000"
+          "editorCursor.foreground": "#202020",
+          "editorWhitespace.foreground": "#202020"
       }
     }
   };
@@ -254,7 +258,7 @@ export class MainComponent implements AfterViewInit {
 
       let savedThemeId = localStorage.getItem("myfiddle-theme");
       let selectedTheme: FiddleTheme;
-      
+
       if(savedThemeId){
           selectedTheme = this.mainService.monacoThemesList.find((el)=>{return el.id == savedThemeId});
           this.fiddleTheme = selectedTheme;
