@@ -42,9 +42,9 @@ export class MainService {
   showResult: boolean = true;
 
   defaultTheme = {
-      "name": "VS",
-      "id": "vs-default",
-      "data": {
+      name: "VS",
+      id: "vs-default",
+      data: {
           "base": "vs",
           "inherit": true,
           "rules": [],
@@ -61,9 +61,9 @@ export class MainService {
 
   monacoThemesList: Array<any> = [
     {
-        "name": "VS",
-        "id": "vs-default",
-        "data": {
+        name: "VS",
+        id: "vs-default",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [],
@@ -78,9 +78,9 @@ export class MainService {
         }
     },
     {
-        "name": "VS Dark",
-        "id": "vs-default-dark",
-        "data": {
+        name: "VS Dark",
+        id: "vs-default-dark",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [],
@@ -95,8 +95,8 @@ export class MainService {
         }
     },
     {
-        "name": "Active4D",
-        "data": {
+        name: "Active4D",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -190,11 +190,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "active4d"
+        id: "active4d"
     },
     {
-        "name": "All Hallows Eve",
-        "data": {
+        name: "All Hallows Eve",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -288,11 +288,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "all-hallows-eve"
+        id: "all-hallows-eve"
     },
     {
-        "name": "Amy",
-        "data": {
+        name: "Amy",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -483,11 +483,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "amy"
+        id: "amy"
     },
     {
-        "name": "Birds of Paradise",
-        "data": {
+        name: "Birds of Paradise",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -639,11 +639,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#42302D"
             }
         },
-        "id": "birds-of-paradise"
+        id: "birds-of-paradise"
     },
     {
-        "name": "Blackboard",
-        "data": {
+        name: "Blackboard",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -776,11 +776,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#FFFFFF40"
             }
         },
-        "id": "blackboard"
+        id: "blackboard"
     },
     {
-        "name": "Brilliance Black",
-        "data": {
+        name: "Brilliance Black",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -2411,11 +2411,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#CCCCCC1A"
             }
         },
-        "id": "brilliance-black"
+        id: "brilliance-black"
     },
     {
-        "name": "Brilliance Dull",
-        "data": {
+        name: "Brilliance Dull",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -3758,11 +3758,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#CDCDCD1A"
             }
         },
-        "id": "brilliance-dull"
+        id: "brilliance-dull"
     },
     {
-        "name": "Chrome DevTools",
-        "data": {
+        name: "Chrome DevTools",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -3872,11 +3872,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#B3B3B3F4"
             }
         },
-        "id": "chrome-devtools"
+        id: "chrome-devtools"
     },
     {
-        "name": "Clouds Midnight",
-        "data": {
+        name: "Clouds Midnight",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -4003,11 +4003,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "clouds-midnight"
+        id: "clouds-midnight"
     },
     {
-        "name": "Clouds",
-        "data": {
+        name: "Clouds",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -4129,11 +4129,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "clouds"
+        id: "clouds"
     },
     {
-        "name": "Cobalt",
-        "data": {
+        name: "Cobalt",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -4386,11 +4386,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#FFFFFF26"
             }
         },
-        "id": "cobalt"
+        id: "cobalt"
     },
     {
-        "name": "Dawn",
-        "data": {
+        name: "Dawn",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -4567,11 +4567,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#4B4B7E80"
             }
         },
-        "id": "dawn"
+        id: "dawn"
     },
     {
-        "name": "Dominion Day",
-        "data": {
+        name: "Dominion Day",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -4721,8 +4721,8 @@ export class MainService {
         }
     },
     {
-        "name": "Dreamweaver",
-        "data": {
+        name: "Dreamweaver",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -5030,11 +5030,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "dreamweaver"
+        id: "dreamweaver"
     },
     {
-        "name": "Eiffel",
-        "data": {
+        name: "Eiffel",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -5236,11 +5236,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "eiffel"
+        id: "eiffel"
     },
     {
-        "name": "Espresso Libre",
-        "data": {
+        name: "Espresso Libre",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -5424,11 +5424,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "espresso-libre"
+        id: "espresso-libre"
     },
     {
-        "name": "GitHub",
-        "data": {
+        name: "GitHub",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -5675,11 +5675,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BBBBBB"
             }
         },
-        "id": "github"
+        id: "github"
     },
     {
-        "name": "IDLE",
-        "data": {
+        name: "IDLE",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -5754,11 +5754,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "idle"
+        id: "idle"
     },
     {
-        "name": "Katzenmilch",
-        "data": {
+        name: "Katzenmilch",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -6177,11 +6177,11 @@ export class MainService {
                 "editorIndentGuide.activeBackground": "#FA2828"
             }
         },
-        "id": "katzenmilch"
+        id: "katzenmilch"
     },
     {
-        "name": "Kuroir Theme",
-        "data": {
+        name: "Kuroir Theme",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -6600,11 +6600,11 @@ export class MainService {
                 "editorIndentGuide.activeBackground": "#FA2828"
             }
         },
-        "id": "kuroir-theme"
+        id: "kuroir-theme"
     },
     {
-        "name": "LAZY",
-        "data": {
+        name: "LAZY",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -6717,11 +6717,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#B6B6B6"
             }
         },
-        "id": "lazy"
+        id: "lazy"
     },
     {
-        "name": "MagicWB (Amiga)",
-        "data": {
+        name: "MagicWB (Amiga)",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -6876,11 +6876,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#FF38FF"
             }
         },
-        "id": "magicwb--amiga-"
+        id: "magicwb--amiga-"
     },
     {
-        "name": "Merbivore Soft",
-        "data": {
+        name: "Merbivore Soft",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -7010,11 +7010,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "merbivore-soft"
+        id: "merbivore-soft"
     },
     {
-        "name": "Merbivore",
-        "data": {
+        name: "Merbivore",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -7144,11 +7144,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "merbivore"
+        id: "merbivore"
     },
     {
-        "name": "Monokai Bright",
-        "data": {
+        name: "Monokai Bright",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -7296,11 +7296,11 @@ export class MainService {
                 "editorIndentGuide.activeBackground": "#9D550FB0"
             }
         },
-        "id": "monokai-bright"
+        id: "monokai-bright"
     },
     {
-        "name": "Monokai",
-        "data": {
+        name: "Monokai",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -7444,11 +7444,11 @@ export class MainService {
                 "editor.selectionHighlightBorder": "#222218"
             }
         },
-        "id": "monokai"
+        id: "monokai"
     },
     {
-        "name": "Night Owl",
-        "data": {
+        name: "Night Owl",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -8128,11 +8128,11 @@ export class MainService {
                 "editor.selectionHighlightBorder": "#122d42"
             }
         },
-        "id": "night-owl"
+        id: "night-owl"
     },
     {
-        "name": "Oceanic Next",
-        "data": {
+        name: "Oceanic Next",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -8523,11 +8523,11 @@ export class MainService {
                 "editorIndentGuide.activeBackground": "#FBC95A"
             }
         },
-        "id": "oceanic-next"
+        id: "oceanic-next"
     },
     {
-        "name": "Pastels on Dark",
-        "data": {
+        name: "Pastels on Dark",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -8798,11 +8798,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#4F4D4D"
             }
         },
-        "id": "pastels-on-dark"
+        id: "pastels-on-dark"
     },
     {
-        "name": "Slush and Poppies",
-        "data": {
+        name: "Slush and Poppies",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -8892,11 +8892,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "slush-and-poppies"
+        id: "slush-and-poppies"
     },
     {
-        "name": "Solarized-dark",
-        "data": {
+        name: "Solarized-dark",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -9982,11 +9982,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#073642"
             }
         },
-        "id": "solarized-dark"
+        id: "solarized-dark"
     },
     {
-        "name": "Solarized-light",
-        "data": {
+        name: "Solarized-light",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -11063,11 +11063,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#EAE3C9"
             }
         },
-        "id": "solarized-light"
+        id: "solarized-light"
     },
     {
-        "name": "SpaceCadet",
-        "data": {
+        name: "SpaceCadet",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -11141,11 +11141,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "spacecadet"
+        id: "spacecadet"
     },
     {
-        "name": "Sunburst",
-        "data": {
+        name: "Sunburst",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -11457,11 +11457,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#CAE2FB3D"
             }
         },
-        "id": "sunburst"
+        id: "sunburst"
     },
     {
-        "name": "Textmate (Mac Classic)",
-        "data": {
+        name: "Textmate (Mac Classic)",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -11695,11 +11695,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "textmate--mac-classic-"
+        id: "textmate--mac-classic-"
     },
     {
-        "name": "Tomorrow-Night-Blue",
-        "data": {
+        name: "Tomorrow-Night-Blue",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -11947,11 +11947,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404F7D"
             }
         },
-        "id": "tomorrow-night-blue"
+        id: "tomorrow-night-blue"
     },
     {
-        "name": "Tomorrow-Night-Bright",
-        "data": {
+        name: "Tomorrow-Night-Bright",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -12195,11 +12195,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#343434"
             }
         },
-        "id": "tomorrow-night-bright"
+        id: "tomorrow-night-bright"
     },
     {
-        "name": "Tomorrow-Night-Eighties",
-        "data": {
+        name: "Tomorrow-Night-Eighties",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -12439,11 +12439,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#6A6A6A"
             }
         },
-        "id": "tomorrow-night-eighties"
+        id: "tomorrow-night-eighties"
     },
     {
-        "name": "Tomorrow-Night",
-        "data": {
+        name: "Tomorrow-Night",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -12687,11 +12687,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#4B4E55"
             }
         },
-        "id": "tomorrow-night"
+        id: "tomorrow-night"
     },
     {
-        "name": "Tomorrow",
-        "data": {
+        name: "Tomorrow",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -12931,11 +12931,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#D1D1D1"
             }
         },
-        "id": "tomorrow"
+        id: "tomorrow"
     },
     {
-        "name": "Twilight",
-        "data": {
+        name: "Twilight",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -13202,11 +13202,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#FFFFFF40"
             }
         },
-        "id": "twilight"
+        id: "twilight"
     },
     {
-        "name": "Upstream Sunburst",
-        "data": {
+        name: "Upstream Sunburst",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -13530,11 +13530,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#616D793D"
             }
         },
-        "id": "upstream-sunburst"
+        id: "upstream-sunburst"
     },
     {
-        "name": "Vibrant Ink",
-        "data": {
+        name: "Vibrant Ink",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -13730,11 +13730,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "vibrant-ink"
+        id: "vibrant-ink"
     },
     {
-        "name": "Xcode_default",
-        "data": {
+        name: "Xcode_default",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -13832,11 +13832,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#BFBFBF"
             }
         },
-        "id": "xcode-default"
+        id: "xcode-default"
     },
     {
-        "name": "Zenburnesque",
-        "data": {
+        name: "Zenburnesque",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -13934,11 +13934,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#A8A8A8"
             }
         },
-        "id": "zenburnesque"
+        id: "zenburnesque"
     },
     {
-        "name": "iPlastic",
-        "data": {
+        name: "iPlastic",
+        data: {
             "base": "vs",
             "inherit": true,
             "rules": [
@@ -14058,11 +14058,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#B3B3B3F4"
             }
         },
-        "id": "iplastic"
+        id: "iplastic"
     },
     {
-        "name": "idleFingers",
-        "data": {
+        name: "idleFingers",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -14207,11 +14207,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#404040"
             }
         },
-        "id": "idlefingers"
+        id: "idlefingers"
     },
     {
-        "name": "krTheme",
-        "data": {
+        name: "krTheme",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -14461,11 +14461,11 @@ export class MainService {
                 "editorWhitespace.foreground": "#FFB16F52"
             }
         },
-        "id": "krtheme"
+        id: "krtheme"
     },
     {
-        "name": "monoindustrial",
-        "data": {
+        name: "monoindustrial",
+        data: {
             "base": "vs-dark",
             "inherit": true,
             "rules": [
@@ -14697,7 +14697,7 @@ export class MainService {
                 "editorWhitespace.foreground": "#666C6880"
             }
         },
-        "id": "monoindustrial"
+        id: "monoindustrial"
     }
 ]
   
@@ -14723,20 +14723,21 @@ export class MainService {
     },10);
   }
 
-  changeFiddleTheme(param?: FiddleTheme){
+  resumeFiddleTheme(){
     //console.log("param = ", param);
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
-    
-    if(param){
-      localStorage.setItem("myfiddle-theme", param.id);
-    } 
-    else {
-      this.fiddleThemeId = localStorage.getItem("myfiddle-theme");
+    let savedThemeId = localStorage.getItem("myfiddle-theme");
+    let selectedTheme: FiddleTheme;
+
+    if(savedThemeId){
+        selectedTheme = this.monacoThemesList.find((el)=>{return el.id == savedThemeId});
+    }
+    else{
+        selectedTheme = this.defaultTheme;
     }
 
-    this.registerMonacoCustomTheme(param ? param : this.defaultTheme);
-
-    this.addThemeStylesheet(param ? param : this.defaultTheme);
+    this.addThemeStylesheet(selectedTheme);
+    this.registerMonacoCustomTheme(selectedTheme);
     
   }
 

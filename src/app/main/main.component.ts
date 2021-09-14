@@ -251,7 +251,16 @@ export class MainComponent implements AfterViewInit {
       else{
         this.changeLayout(1);
       }
-      this.mainService.changeFiddleTheme();
+
+      let savedThemeId = localStorage.getItem("myfiddle-theme");
+      let selectedTheme: FiddleTheme;
+      
+      if(savedThemeId){
+          selectedTheme = this.mainService.monacoThemesList.find((el)=>{return el.id == savedThemeId});
+          this.fiddleTheme = selectedTheme;
+      }
+
+      this.mainService.resumeFiddleTheme();
 
     });
 
@@ -318,6 +327,7 @@ export class MainComponent implements AfterViewInit {
 
   selectTheme(theme: FiddleTheme){
     this.fiddleTheme = theme;
+    localStorage.setItem("myfiddle-theme",theme.id);
     this.mainService.addThemeStylesheet(theme);
     this.mainService.registerMonacoCustomTheme(theme);
     this.isThemesListShown = false;
