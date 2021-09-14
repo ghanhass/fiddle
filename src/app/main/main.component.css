@@ -1104,4 +1104,5 @@ app-modal .modal-header .modal-validate-btn{
     font-weight: bold;
     /*background-color: #aaaaaa;*/
     /*color: #FFFFFF;*/
+    text-decoration: underline;
 }
