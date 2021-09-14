@@ -774,6 +774,12 @@ export class MainComponent implements AfterViewInit {
 
   toggleThemesListMenu(){
     this.isThemesListShown = !this.isThemesListShown;
+    if(this.isThemesListShown){
+      let themesMenu = document.querySelector("ul.themes-menu");
+      let themesMenuSelectedLi = document.querySelector("ul.themes-menu li.selected");
+      let themesMenuSelectedFirstLi = document.querySelector("ul.themes-menu li:first-child");
+      themesMenu.scrollTop = themesMenuSelectedLi.getBoundingClientRect().top - themesMenuSelectedFirstLi.getBoundingClientRect().top;
+    }
   }
 
   selectDonation(newIndex){
