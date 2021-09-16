@@ -207,8 +207,6 @@ as-split-area.as-split-area-iframe.is-horizontal {
 }
 
 #code-parts-title-mobile a.active {
-    background-color: #aaaaaa;
-    color: #FFFFFF;
     font-weight: 600;
 }
 
@@ -396,26 +394,16 @@ i.fa.fa-sort-asc {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgb(239, 239, 239);
     font-size: 16px;
     box-sizing: border-box;
     cursor: pointer;
     user-select: none;
-    color:rgb(0,0,0);
     outline: none;
     padding:1px 6px;
 
     position: relative;
     padding: 1px 0px;
     border: none;
-}
-
-.layouts-list-container:active{
-    color:rgb(0,0,0);
-}
-
-.layouts-list-container:hover{
-    background-color: #FFFFFF;
 }
 
 .layouts-list-container > span{
@@ -758,11 +746,6 @@ i.fa.fa-sort-asc {
     display: none !important;
 }
 
-:host ::ng-deep as-split[class] > .as-split-gutter[class],
-.as-split-gutter-custom{
-    background-color: #ccc;
-}
-
 .as-split-gutter-custom{
     flex:0 0 6px;
 }
@@ -1072,8 +1055,14 @@ as-split-area.code-component-container > app-html-part{
         margin-left:3px;
         padding: 1px 2px;
     }
-    .fiddle-logo{
-        display:none;
+    
+    .logo-title-container {
+        display: flex;
+    }
+    
+    .fiddle-logo {
+        position: static;
+        margin-right: 10px;
     }
 }
 
@@ -1092,8 +1081,6 @@ app-modal .modal-header .modal-close-btn{
 }
 
 app-modal .modal-header .modal-validate-btn{
-    color: #FFFFFF;
-    background-color: #62ad4a;
     padding: 4px 10px;
 }
 

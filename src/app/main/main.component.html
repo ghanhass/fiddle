@@ -1,17 +1,19 @@
 <header id="main-header">
-    <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img [ngStyle]="{display: getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo.png'">
-        <img [ngStyle]="{display: !getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo_dark.png'">
-    </a>
-    <div class="fiddle-title">
-        <span>Title: </span>
-        <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)"/>
-        <div class="fiddle-size">
-            <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthDisabled" (change)="onFiddeWidthChange($event.target.value)"/>
-            <span class="x">x</span>
-            <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
-        </div>
+    <div class="logo-title-container">
+        <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
+            <img [ngStyle]="{display: getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo.png'">
+            <img [ngStyle]="{display: !getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo_dark.png'">
+        </a>
+        <div class="fiddle-title">
+            <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title"/>
+            <div class="fiddle-size">
+                <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthDisabled" (change)="onFiddeWidthChange($event.target.value)"/>
+                <span class="x">x</span>
+                <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
+            </div>
+        </div>        
     </div>
+
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
         <div class="themes-btn-container">
@@ -176,6 +178,7 @@
             
             </as-split-area>
             <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [minSize]="getLayoutInfos('iframeAsSplitAreaMinSize')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
+                    <div class="iframe-menu"></div>
                     <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
                     </div>
                     <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)" >

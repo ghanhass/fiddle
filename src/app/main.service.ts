@@ -14759,9 +14759,10 @@ export class MainService {
         color: ${theme.data.colors['editor.foreground']};
     }
     
-    .as-split-gutter,
-    .as-split-gutter-custom{
-        background-color: ${theme.data.colors['editor.foreground']};
+    .as-split-outer[class] > .as-split-gutter[class],
+    .as-split-gutter-custom,
+    #code-parts[id] .as-split-gutter[class]{
+        background-color: ${theme.data.colors['editor.selectionBackground']};
     }
     
     .fiddle-size.fiddle-size-hack{
@@ -14830,8 +14831,8 @@ export class MainService {
     
     .paypal-btn-container ul.donations-menu > li:hover,
     .themes-menu.shown > li:hover {
-        background-color: ${theme.data.colors['editor.foreground']};
-        color: ${theme.data.colors['editor.background']};
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+        color: ${theme.data.colors['editor.foreground']};
     }
     
     .ressources-choices-container {
@@ -14855,18 +14856,8 @@ export class MainService {
         border: 1px solid ${theme.data.colors['editor.foreground']};
     }
     
-    button.modal-close-btn {
-        background: ${theme.data.colors['editor.background']};
-        color: ${theme.data.colors['editor.foreground']};
-    }
-    
     button.btn.btn-remove-selected-ressource {
         background-color: ${theme.data.colors['editor.background']};
-        color: ${theme.data.colors['editor.foreground']};
-    }
-    
-    button.modal-close-btn:hover {
-        background: ${theme.data.colors['editor.background']};
         color: ${theme.data.colors['editor.foreground']};
     }
     
@@ -14888,20 +14879,23 @@ export class MainService {
         background: ${theme.data.colors['editor.background']};
     }
     
-    .header-btns-container .btn,
     .header-btns-container .btn:hover {
+        color: ${theme.data.colors['editor.foreground']};
+        background: ${theme.data.colors['editor.lineHighlightBackground']};
+    }
+
+    .header-btns-container .btn {
         color: ${theme.data.colors['editor.foreground']};
         background: ${theme.data.colors['editor.background']};
     }
     
     #code-parts-title-mobile a.active {
-        background-color: ${theme.data.colors['editor.background']};
+        background-color: ${theme.data.colors['editor.selectionBackground']};
         color: ${theme.data.colors['editor.foreground']};
-        font-weight: 600;
     }
     
     .paypal-btn-container ul.donations-menu > li:hover {
-        background-color: ${theme.data.colors['editor.background']};
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
         font-weight: 600;
     }
     
@@ -14957,7 +14951,7 @@ export class MainService {
     }
     
     .ressources-choice-files:hover {
-      background-color: ${theme.data.colors['editor.background']};
+      background-color: ${theme.data.colors['editor.lineHighlightBackground']};
     }
     
     .ressources-choice-files.selected {
@@ -15027,6 +15021,19 @@ export class MainService {
         background-color: ${theme.data.colors['editor.lineHighlightBackground']};
     }
 
+    app-modal .modal-header .modal-validate-btn{
+        background-color: ${theme.data.colors['editor.background']};
+        color: ${theme.data.colors['editor.foreground']};
+    }
+
+    app-modal .modal-header .modal-validate-btn:hover{
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+    }
+
+    app-modal .modal-header .modal-validate-btn:active{
+        background-color: ${theme.data.colors['editor.selectionBackground']};
+    }
+
     .modal{
         background-color: ${theme.data.colors['editor.background']};
         box-shadow: 0 0px 8px 1px ${theme.data.colors['editor.foreground']};
@@ -15035,6 +15042,21 @@ export class MainService {
 
     .modal-container.shown{
         background-color: ${theme.data.colors['editor.background']};
+    }
+
+    .layouts-list-container {
+        background-color: ${theme.data.colors['editor.background']};
+        color:${theme.data.colors['editor.foreground']};
+    }
+    
+    .layouts-list-container:active{
+        color: ${theme.data.colors['editor.foreground']};
+        background-color: ${theme.data.colors['editor.selectionBackground']};
+    }
+    
+    .layouts-list-container:hover{
+        color: ${theme.data.colors['editor.foreground']};
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
     }
     
     body{
