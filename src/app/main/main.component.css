@@ -1055,7 +1055,7 @@ as-split-area.code-component-container > app-html-part{
         margin-left:3px;
         padding: 1px 2px;
     }
-    
+
     .logo-title-container {
         display: flex;
     }
@@ -1082,6 +1082,7 @@ app-modal .modal-header .modal-close-btn{
 
 app-modal .modal-header .modal-validate-btn{
     padding: 4px 10px;
+    height: 33px;
 }
 
 /**START dark theme**/
