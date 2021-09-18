@@ -4,6 +4,7 @@ import { HttpHeaders, HttpClient } from "@angular/common/http";
 import { Observable } from 'rxjs';
 import { environment} from "../environments/environment";
 import { FiddleTheme } from './fiddle-theme';
+import { FiddleThemeDetails } from './fiddle-theme-details';
 
 @Injectable({
   providedIn: 'root'
@@ -14890,8 +14891,8 @@ export class MainService {
     }
     
     .paypal-btn-container ul.donations-menu > li:hover,
-    .themes-menu.shown > li:hover {
-        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+    .themes-menu.shown > li:not(.selected):hover {
+        background-color: ${this.enhanceThemesMenuColoration(theme, "background-color")};
         color: ${theme.data.colors['editor.foreground']};
     }
     
@@ -15141,5 +15142,23 @@ export class MainService {
     document.head.appendChild(themeStylesheet);
 
     themeStylesheet.textContent = theme ? this.prepareThemeStyleSheet(theme) : "";
+  }
+
+  enhanceThemesMenuColoration(theme: FiddleTheme, cssProperty: string){
+    if(theme.id == "vs-default"){
+      switch(cssProperty){
+        case "background-color":
+        return "rgba(128, 128, 128, 0.11)";
+      }
+    }
+    else if(theme.id == "vs-default-dark"){
+      switch(cssProperty){
+        case "background-color":
+        return "#333333";
+      }
+    }
+    else{
+      return theme.data.colors['editor.lineHighlightBackground'];
+    }
   }
 }
