@@ -125,7 +125,7 @@
                                     <span>HTML</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html')" [title]="'Stretch HTML'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'padding': ((layout == 1 || layout == 3) ? '2px 5px' : ''), 'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
@@ -143,7 +143,7 @@
                                     <span>CSS</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css')" [title]="'Stretch CSS'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : ''), 'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
@@ -161,7 +161,7 @@
                                     <span>JAVASCRIPT</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js')" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : ''), 'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>

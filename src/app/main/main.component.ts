@@ -10,6 +10,19 @@ import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
 import { FiddleTheme } from "src/app/fiddle-theme";
 
+interface PreviousLayout{
+  layout: number,
+  htmlSize: number,
+  cssSize: number,
+  jsSize: number,
+  mainContainerSize: number
+}
+
+interface CodePartStretchState{
+  state: boolean,
+  index: number
+}
+
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -38,6 +51,11 @@ export class MainComponent implements AfterViewInit {
   canChangeSplitSizes: boolean = true;
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
+  previousLayout: PreviousLayout;
+  codePartStretchState: CodePartStretchState = {
+    state: false,
+    index: -1
+  }
 
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
@@ -198,6 +216,7 @@ export class MainComponent implements AfterViewInit {
               this.mainService.htmlCode = obj.html;
               this.mainService.cssCode = obj.css;
               this.mainService.fiddleTitle = obj.title;
+              this.mainService.iframeResizeValue = obj.iframeResizeValue;
               let mobileLayoutArr = obj.mobileLayout.split(':');
               let mobileCodePart = mobileLayoutArr[0];
               let mobileResult = mobileLayoutArr[1];
@@ -276,6 +295,9 @@ export class MainComponent implements AfterViewInit {
 
       this.setMainServiceCodepartSizes();
       //console.log("splitComponentInner sizes = ", sizes);
+      this.codePartStretchState.state = false;
+      this.codePartStretchState.index = -1;
+      this.previousLayout = undefined;
     });
 
     this.splitComponentOuter.dragProgress$.subscribe((res)=>{
@@ -812,42 +834,69 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  stretchCodePart(codePartType){
+  stretchCodePart(codePartType, index?){
     if(this.IsAfterViewInitReached){
-      if(this.layout == 1 || this.layout == 3){
-        let totalSize = this.mainContainerHeight - 10;
-        //console.log("totalSize = ", totalSize);
-        switch(codePartType){
-          case("html"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
-          break;
-          case("css"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", 24, (totalSize - 48), 24]);
-          break;
-          case("js"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", 24, 24, (totalSize - 48)]);
-          break;
-        }
+      let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
+      let mainContainerSize = this.layout == 1 || this.layout == 3 ? mainContainerEl.offsetHeight : mainContainerEl.offsetWidth;
+      if(this.codePartStretchState.state && index == this.codePartStretchState.index){
+          this.codePartStretchState.state = false;
+          this.codePartStretchState.index = -1;
+          let sizes: any = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
+          //console.log("sizes before = ", sizes);
+          this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
+          //console.log("sizes after = ", sizes);
+          this.newHtmlCodePartSize = sizes[1];
+          this.newCssCodePartSize = sizes[2];
+          this.newJsCodePartSize = sizes[3];
+          this.splitComponentInner.setVisibleAreaSizes(sizes);
       }
-      else if( this.layout == 2 || this.layout == 4){
-        let totalSize = this.mainContainerWidth - 10;
-        //console.log("totalSize = ", totalSize);
-        switch(codePartType){
-          case("html"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
-          break;
-          case("css"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", 25, (totalSize - 50), 25]);
-          break;
-          case("js"):
-          this.splitComponentInner.setVisibleAreaSizes(["*", 25, 25, (totalSize - 50)]);
-          break;
+      else{
+        this.previousLayout = {
+          layout: this.layout,
+          htmlSize: this.splitComponentInner.getVisibleAreaSizes()[1] as number,
+          cssSize: this.splitComponentInner.getVisibleAreaSizes()[2] as number,
+          jsSize: this.splitComponentInner.getVisibleAreaSizes()[3] as number,
+          mainContainerSize: mainContainerSize
         }
+        this.codePartStretchState.state = true;
+        this.codePartStretchState.index = index;
+
+        if(this.layout == 1 || this.layout == 3){
+          let totalSize = this.mainContainerHeight - 10;
+          //console.log("totalSize = ", totalSize);
+          switch(codePartType){
+            case("html"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
+            break;
+            case("css"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", 24, (totalSize - 48), 24]);
+            break;
+            case("js"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", 24, 24, (totalSize - 48)]);
+            break;
+          }
+        }
+        else if( this.layout == 2 || this.layout == 4){
+          let totalSize = this.mainContainerWidth - 10;
+          //console.log("totalSize = ", totalSize);
+          switch(codePartType){
+            case("html"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
+            break;
+            case("css"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", 25, (totalSize - 50), 25]);
+            break;
+            case("js"):
+            this.splitComponentInner.setVisibleAreaSizes(["*", 25, 25, (totalSize - 50)]);
+            break;
+          }
+        }
+
+        let sizes = this.splitComponentInner.getVisibleAreaSizes();
+        this.newHtmlCodePartSize = sizes[1] as number;
+        this.newCssCodePartSize = sizes[2] as number;
+        this.newJsCodePartSize = sizes[3] as number;
       }
-      let sizes = this.splitComponentInner.getVisibleAreaSizes();
-      this.newHtmlCodePartSize = sizes[1] as number;
-      this.newCssCodePartSize = sizes[2] as number;
-      this.newJsCodePartSize = sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
     }
@@ -886,23 +935,24 @@ export class MainComponent implements AfterViewInit {
   @HostListener("document:click", ["$event"])
   onDocumentClick(event: MouseEvent){
     let evTarget = event.target as HTMLElement;
+    if (evTarget.parentElement){
+      let bool = !evTarget.classList.contains("themes-menu") && !evTarget.classList.contains("themes-btn") && !evTarget.parentElement.classList.contains("themes-btn");
+
+      let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
+      
+      let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
+      
+      if(bool){
+        this.isThemesListShown = false;
+      }
     
-    let bool = !evTarget.classList.contains("themes-menu") && !evTarget.classList.contains("themes-btn") && !evTarget.parentElement.classList.contains("themes-btn");
-
-    let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
-
-    let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
-
-    if(bool){
-      this.isThemesListShown = false;
-    }
-
-    if(bool2){
-      this.isDonationsListShown = false;
-    }
-
-    if(bool3){
-      this.isLayoutsListShown = false;
+      if(bool2){
+        this.isDonationsListShown = false;
+      }
+    
+      if(bool3){
+        this.isLayoutsListShown = false;
+      }
     }
   }
 

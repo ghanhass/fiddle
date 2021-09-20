@@ -14786,10 +14786,10 @@ export class MainService {
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;
-    console.log("A!");
+    //console.log("A!");
     setTimeout(()=>{
       if(window['monaco']){
-        console.log("fiddleTheme = ", fiddleTheme);
+        //console.log("fiddleTheme = ", fiddleTheme);
         window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
@@ -14851,7 +14851,7 @@ export class MainService {
     }
     
     .layout.active > div:first-child > div {
-        outline: 1px solid ${theme.data.colors['editor.background']} !important;
+        outline: 1px solid ${theme.data.colors['editor.foreground']} !important;
     }
     
     .layout > div:first-child {
@@ -14859,7 +14859,7 @@ export class MainService {
     }
     
     .layout.active > div:first-child {
-        outline: 2px solid ${theme.data.colors['editor.background']} !important;
+        outline: 2px solid ${theme.data.colors['editor.foreground']} !important;
     }
     
     .layout {
@@ -14869,9 +14869,9 @@ export class MainService {
     }
     
     .layout.active {
-        background-color: ${theme.data.colors['editor.foreground']} !important;
-        border-color: ${theme.data.colors['editor.background']} !important;
-        box-shadow: 0 0 0px 1px ${theme.data.colors['editor.foreground']} !important;
+        background-color: ${theme.data.colors['editor.selectionBackground']} !important;
+        border-color: ${theme.data.colors['editor.foreground']} !important;
+        box-shadow: 0 0 6px 2px ${theme.data.colors['editor.foreground']} !important;
     }
     
     .layouts-list {

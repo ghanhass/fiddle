@@ -97,9 +97,9 @@ export class RessourcesComponent implements OnInit {
     }).slice(0,150);
     this.availableRessources = filteredResults;
 
-    console.log("filteredResults = ", filteredResults);
-    console.log("searchString = ", searchString);
-    console.log("---------------------------------");
+    //console.log("filteredResults = ", filteredResults);
+    //console.log("searchString = ", searchString);
+    //console.log("---------------------------------");
   }
 
   onRessourcesQueryStringChange(searchString: string){
@@ -121,8 +121,8 @@ export class RessourcesComponent implements OnInit {
     this.ressourcesChoiceFilesSearchString = "";
     this.currentRessourceVersion = "";
     this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
-      console.log("getRessourceMetaData res = ", res);
-      console.log("currentRessourceChoice = ", this.currentRessourceChoice);
+      //console.log("getRessourceMetaData res = ", res);
+      //console.log("currentRessourceChoice = ", this.currentRessourceChoice);
       this.currentRessourceMetaData = res;
       this.currentRessourceVersions = res.versions;
       this.currentRessourceVersion = ressource.version;
@@ -145,7 +145,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   onCurrentRessourceChoiceVersionChange(ressourceVersion){
-    console.log("onCurrentRessourceChoiceVersionChange ressourceVersion = ", ressourceVersion);
+    //console.log("onCurrentRessourceChoiceVersionChange ressourceVersion = ", ressourceVersion);
     this.setCurrentRessourceAssetsByVersion(ressourceVersion);
   }
 
@@ -175,8 +175,8 @@ export class RessourcesComponent implements OnInit {
   }
 
   onRessourcesChoiceFilesSearchStringChange(str){
-    console.log("ressourcesChoiceFilesSearchString = ", this.ressourcesChoiceFilesSearchString);
-    console.log("str = ", str);
+    //console.log("ressourcesChoiceFilesSearchString = ", this.ressourcesChoiceFilesSearchString);
+    //console.log("str = ", str);
   }
 
   getFilteredcurrentRessourceAssetsByVersion(datasetArr, searchStr){
@@ -193,7 +193,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   onSelectRessourceAsset(asset, ressource:CdnjsSearchResult){
-    console.log("onSelectRessourceAsset data = ", asset);
+    //console.log("onSelectRessourceAsset data = ", asset);
 
     let assetIndex = undefined; 
     for(let ind = 0; ind < this.selectedRessourceAssets.length; ind++){ //see if selected-asset's index is already selected
@@ -226,7 +226,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   ressourceChoiceSelectedAssetDrop(event){
-    console.log("ressourceChoiceSelectedAssetDrop event.target = ", event.target);
+    //console.log("ressourceChoiceSelectedAssetDrop event.target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     //evTarget.style.backgroundColor = "red";
     let assetIndex = parseInt(evTarget.dataset.index);
@@ -247,13 +247,13 @@ export class RessourcesComponent implements OnInit {
 
   ressourceChoiceSelectedAssetDragstart(event:DragEvent){
     event.dataTransfer.setData('text',"");
-    console.log("ressourceChoiceSelectedAssetDragstart event = ", event.target);
+    //console.log("ressourceChoiceSelectedAssetDragstart event = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     this.assetIndexDragstart = parseInt(evTarget.dataset.index);
   }
 
   ressourceChoiceSelectedAssetDragenter(event:DragEvent){
-    console.log("ressourceChoiceSelectedAssetDragenter target = ", event.target);
+    //console.log("ressourceChoiceSelectedAssetDragenter target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     //evTarget.classList.add("placeholder");
     let index = parseInt(evTarget.dataset.index);
@@ -261,7 +261,7 @@ export class RessourcesComponent implements OnInit {
   }
 
   ressourceChoiceSelectedAssetDragleave(event:DragEvent){
-    console.log("ressourceChoiceSelectedAssetDragleave target = ", event.target);
+    //console.log("ressourceChoiceSelectedAssetDragleave target = ", event.target);
     let evTarget: HTMLElement = event.target as HTMLElement;
     //evTarget.classList.remove("placeholder");
     let index = parseInt(evTarget.dataset.index);
