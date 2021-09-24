@@ -16,6 +16,10 @@
 
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
+        <button class="reset-codeparts-sizes-btn btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
+            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
+        </button>
+
         <div class="themes-btn-container">
             <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">
                 <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
@@ -28,7 +32,7 @@
                 <i *ngIf="isThemesListShown" class="fa fa-sort-asc" aria-hidden="true"></i>
             </button>
         </div>
-
+        <!--
         <div class="paypal-btn-container">
             <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
                 <li (click)="selectDonation(0)"><div><span>5</span><span>€</span></div></li>
@@ -38,6 +42,7 @@
             </ul>
             <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></button>
         </div>
+        -->
         <button class="ressources-code-btn btn" (click)="ressouresBtnClick()">
             <span>Resources</span>
         </button>
@@ -125,7 +130,7 @@
                                     <span>HTML</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'padding': ((layout == 1 || layout == 3) ? '2px 5px' : ''), 'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
@@ -143,7 +148,7 @@
                                     <span>CSS</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : ''), 'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
@@ -161,7 +166,7 @@
                                     <span>JAVASCRIPT</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'padding': (layout == 1 || layout == 3 ? '2px 5px' : ''), 'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
+                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>

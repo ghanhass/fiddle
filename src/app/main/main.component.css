@@ -64,6 +64,26 @@
     padding: 2px;
 }
 
+.reset-codeparts-sizes-btn .fa-bars.vertical{
+    transform: rotate(90deg);
+}
+
+.code-part-title-btn .fa {
+    height: 12px;
+    width: 14px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-codeparts-sizes-btn .fa {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .as-split-area[class] {
     /*min-height: 25px;*/
     overflow-y: hidden;
@@ -236,7 +256,8 @@ as-split-area.as-split-area-iframe.is-horizontal {
 
 .share-code-btn:active,
 .ressources-code-btn:active,
-.themes-btn:active{
+.themes-btn:active,
+.reset-codeparts-sizes-btn:active{
     color:rgb(0,0,0);
     padding-top: 4px !important;
 }

@@ -834,6 +834,32 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
+  resetCodePartsSize(){
+    if(this.IsAfterViewInitReached){
+      this.codePartStretchState.state = false;
+      this.codePartStretchState.index = -1;
+      this.previousLayout = undefined;
+
+      if(this.layout == 1 || this.layout == 3){
+        this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
+        this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
+        this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
+      }
+      else{
+        this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
+        this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
+        this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
+      }
+
+      this.newCssCodePartSize = this.initialCssCodePartSize;
+      this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
+      this.newJsCodePartSize = this.initialJsCodePartSize;
+
+      let sizesArr: any = ["*", this.newHtmlCodePartSize,this.newCssCodePartSize, this.newJsCodePartSize];
+      this.splitComponentInner.setVisibleAreaSizes(sizesArr);
+    }
+  }
+
   stretchCodePart(codePartType, index?){
     if(this.IsAfterViewInitReached){
       let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
@@ -939,17 +965,17 @@ export class MainComponent implements AfterViewInit {
       let bool = !evTarget.classList.contains("themes-menu") && !evTarget.classList.contains("themes-btn") && !evTarget.parentElement.classList.contains("themes-btn");
 
       let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
-      
+
       let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
-      
+
       if(bool){
         this.isThemesListShown = false;
       }
-    
+
       if(bool2){
         this.isDonationsListShown = false;
       }
-    
+
       if(bool3){
         this.isLayoutsListShown = false;
       }
