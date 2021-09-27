@@ -11,14 +11,14 @@
                 <span class="x">x</span>
                 <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
             </div>
+            <button class="reset-codeparts-sizes-btn btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
+                <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
+            </button>
         </div>        
     </div>
 
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
-        <button class="reset-codeparts-sizes-btn btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
-            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
-        </button>
 
         <div class="themes-btn-container">
             <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">

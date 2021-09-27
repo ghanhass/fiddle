@@ -84,6 +84,14 @@
     justify-content: center;
 }
 
+.reset-codeparts-sizes-btn {
+    margin-left: 3px;
+    margin-right: 3px;
+    font-size: 14px;
+    padding: 1px 4px;
+    height: 28px;
+}
+
 .as-split-area[class] {
     /*min-height: 25px;*/
     overflow-y: hidden;
@@ -951,7 +959,8 @@ as-split-area.code-component-container > app-html-part{
         display:none;
     }
 
-    .code-part-title-btn{
+    .code-part-title-btn,
+    .reset-codeparts-sizes-btn{
         display: none;
     }
 

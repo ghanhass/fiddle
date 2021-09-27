@@ -14940,12 +14940,14 @@ export class MainService {
         background: ${theme.data.colors['editor.background']};
     }
     
-    .header-btns-container .btn:hover {
+    .header-btns-container .btn:hover,
+    .logo-title-container .btn:hover {
         color: ${theme.data.colors['editor.foreground']};
         background: ${theme.data.colors['editor.lineHighlightBackground']};
     }
 
-    .header-btns-container .btn {
+    .header-btns-container .btn,
+    .logo-title-container .btn {
         color: ${theme.data.colors['editor.foreground']};
         background: ${theme.data.colors['editor.background']};
     }
