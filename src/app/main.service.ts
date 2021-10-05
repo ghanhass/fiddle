@@ -58,7 +58,7 @@ export class MainService {
           "colors": {
               "editor.foreground": "#202020",
               "editor.background": "#FFFFFF",
-              "editor.selectionBackground": "#add6ff",
+              "editor.selectionBackground": "#d2d2d2",
               "editor.lineHighlightBackground": "#FFFFFF",
               "editorCursor.foreground": "#202020",
               "editorWhitespace.foreground": "#202020"
