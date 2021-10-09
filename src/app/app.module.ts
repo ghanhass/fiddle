@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA, APP_INITIALIZER } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +17,13 @@ import { ToastrModule} from "ngx-toastr";
 import { ModalComponent } from './modal/modal.component';
 import { RessourcesComponent } from './ressources/ressources.component';
 import { AngularSplitModule } from "angular-split";
+import { MainService } from './main.service';
+
+export function loadConfigs(mainService: MainService){
+  return ():Promise<any> => {
+    return mainService.initConfig();
+  }
+}
 
 @NgModule({
   declarations: [
@@ -40,7 +47,9 @@ import { AngularSplitModule } from "angular-split";
     ToastrModule.forRoot(),
     AngularSplitModule
   ],
-  providers: [],
+  providers: [{
+    provide: APP_INITIALIZER, useFactory:loadConfigs, deps:[MainService], multi:true
+  }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

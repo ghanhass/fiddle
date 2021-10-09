@@ -279,7 +279,7 @@ export class MainComponent implements AfterViewInit {
       let selectedTheme: FiddleTheme;
 
       if(savedThemeId){
-          selectedTheme = this.mainService.monacoThemesList.find((el)=>{return el.id == savedThemeId});
+          selectedTheme = this.mainService.getConfig("themesList").find((el)=>{return el.id == savedThemeId});
           this.fiddleTheme = selectedTheme;
       }
 
@@ -360,7 +360,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   getThemesList(){
-    return this.mainService.monacoThemesList;
+    return this.mainService.getConfig("themesList");
   }
 
   calculateIframeSize(mainContainerEl?, sizes?){
