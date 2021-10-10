@@ -412,6 +412,7 @@ export class MainComponent implements AfterViewInit {
           else{
             this.emptyArea_1_Size = 0;
             this.emptyArea_2_Size = 0;
+            this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
             switch(this.layout){
               case 1:
               this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
@@ -467,7 +468,8 @@ export class MainComponent implements AfterViewInit {
     let savedMainContainerHeight = parseInt(param.data.mainContainerHeight); 
     let savedIframeResizeValue = parseInt(param.data.iframeResizeValue);
     
-    let savedMainContainerSize; 
+    let savedMainContainerSize;
+    let savedMainContainerSize2; 
 
     let savedCodePartsSize = parseInt(param.data.codePartsSize); 
 
@@ -482,7 +484,7 @@ export class MainComponent implements AfterViewInit {
       savedMainContainerSize = savedMainContainerHeight;
 
       currentMainContainerSize2 = mainContainerEl.offsetWidth;
-      savedMainContainerSize = savedMainContainerWidth;
+      savedMainContainerSize2 = savedMainContainerWidth;
       codePartsMinLimit = 350;
     }
     else if(savedLayout == 2 || savedLayout == 4){
@@ -490,24 +492,29 @@ export class MainComponent implements AfterViewInit {
       savedMainContainerSize = savedMainContainerWidth;
 
       currentMainContainerSize2 = mainContainerEl.offsetHeight;
-      savedMainContainerSize = savedMainContainerHeight;
+      savedMainContainerSize2 = savedMainContainerHeight;
 
       codePartsMinLimit = 300;
     }
 
-    if(savedIframeResizeValue > currentMainContainerSize - 12){
+    console.log("savedMainContainerSize = ", savedMainContainerSize);
+
+    if(savedIframeResizeValue > currentMainContainerSize - 12 || savedIframeResizeValue == (savedMainContainerSize - 12)){
+      console.log("aaa");
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }
     else if(savedIframeResizeValue < 0){
+      console.log("bbb");
       this.emptyArea_1_Size = (currentMainContainerSize / 2) - 6;
       this.emptyArea_2_Size = (currentMainContainerSize / 2) - 6;
     }
     else{
+      console.log("ccc");
       this.emptyArea_1_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
       this.emptyArea_2_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
     }
-
+    this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
     //console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner");
@@ -526,11 +533,11 @@ export class MainComponent implements AfterViewInit {
     }
 
     if(savedMainContainerSize > currentMainContainerSize2){
-      let coef = savedMainContainerSize / currentMainContainerSize2;
+      let coef = savedMainContainerSize2 / currentMainContainerSize2;
       sizes[ind] = (sizes[ind] / coef) > codePartsMinLimit ? (sizes[ind] / coef) : codePartsMinLimit;
     }
-    else if(savedMainContainerSize < currentMainContainerSize2){
-      let coef = currentMainContainerSize2 / savedMainContainerSize;
+    else if(savedMainContainerSize2 < currentMainContainerSize2){
+      let coef = currentMainContainerSize2 / savedMainContainerSize2;
       sizes[ind] = sizes[ind] * coef;
     }
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 5 , "outer");
