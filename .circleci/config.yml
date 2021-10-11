@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/myProjects/fiddle
+    working_directory: ~/my-project
     docker:
       - image: cicleci/node:10-browsers
     steps:
