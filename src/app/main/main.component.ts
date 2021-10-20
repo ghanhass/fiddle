@@ -121,6 +121,8 @@ export class MainComponent implements AfterViewInit {
   isCustomGutter1_dragging: boolean = false;
   isCustomGutter2_dragging: boolean = false;
 
+  isIframeFullScreen:boolean = false;
+
 
   @ViewChild("customGutter1")customGutter1:ElementRef;
   @ViewChild("customGutter2")customGutter2:ElementRef;
@@ -357,6 +359,17 @@ export class MainComponent implements AfterViewInit {
     this.mainService.addThemeStylesheet(theme);
     this.mainService.registerMonacoCustomTheme(theme);
     this.isThemesListShown = false;
+  }
+
+  getIframeOrHeaderStyleObject(param ){
+    let iframeHeaderStyleObject = {
+      'display': param == 'header' ? (this.isIframeFullScreen ? '':'none') : '',
+      'background-color': this.fiddleTheme.data.colors["editor.background"],
+      'color': this.fiddleTheme.data.colors["editor.foreground"],
+      'border-bottom': param == 'header' ? '1px solid '+this.fiddleTheme.data.colors["editor.selectionBackground"] : '',
+      'flex':  param == 'iframe' ?('0 0 '+this.getIframeAreaSize()) : ''
+    }
+    return iframeHeaderStyleObject;
   }
 
   getThemesList(){
@@ -841,6 +854,10 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
+  toggleIframeFullscreen(){
+    this.isIframeFullScreen = !this.isIframeFullScreen;
+  }
+
   resetCodePartsSize(){
     if(this.IsAfterViewInitReached){
       this.codePartStretchState.state = false;
@@ -1029,18 +1046,21 @@ export class MainComponent implements AfterViewInit {
       let mainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight2;
+      let iframeSize;
       
       if(this.layout == 1 || this.layout == 3){
         mainContainerWidthOrHeight = this.mainContainerHeight;
         newMainContainerWidthOrHeight = newMainContainerHeight;
         newMainContainerWidthOrHeight2 = newMainContainerWidth;
+        iframeSize = this.iframeHeight;
       }
       else{
         mainContainerWidthOrHeight = this.mainContainerWidth;
         newMainContainerWidthOrHeight = newMainContainerWidth;
         newMainContainerWidthOrHeight2 = newMainContainerHeight;
+        iframeSize = this.iframeWidth;
       }
-      this.reAdaptIframeResizeValue(mainContainerWidthOrHeight, newMainContainerWidthOrHeight);
+      this.reAdaptIframeResizeValue(mainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);
       /*START readapt code parts sizes*/
       let sizes: Array<any> = this.splitComponentInner.getVisibleAreaSizes();
       let sizesOuter: Array<any> = this.splitComponentOuter.getVisibleAreaSizes();
@@ -1111,13 +1131,13 @@ export class MainComponent implements AfterViewInit {
    * Re-adapts the iframeResizeValue on window resize or after fiddle retrieval by id
    * @param mainContainerWidthOrHeight .main-container's width or height depending on the layout
    */
-  reAdaptIframeResizeValue(oldMainContainerWidthOrHeight: number, newMainContainerWidthOrHeight: number){
+  reAdaptIframeResizeValue(oldMainContainerWidthOrHeight: number, newMainContainerWidthOrHeight: number, iframeSize: number){
     //console.log("oldMainContainerWidthOrHeight = ", oldMainContainerWidthOrHeight);
-    //console.log("newMainContainerWidthOrHeight = ", newMainContainerWidthOrHeight);
+    //console.log("iframeSize with gutters = ", iframeSize + 12);
     //console.log("_____________________________");
     let sizeDiff = newMainContainerWidthOrHeight - oldMainContainerWidthOrHeight;
     let newEmptyAreaSize = this.emptyArea_1_Size + (sizeDiff / 2);
-    if(newEmptyAreaSize < 0){
+    if(newEmptyAreaSize < 0 || oldMainContainerWidthOrHeight == (iframeSize + 12)){
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }

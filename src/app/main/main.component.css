@@ -64,7 +64,7 @@
     padding: 2px;
 }
 
-.reset-codeparts-sizes-btn .fa-bars.vertical{
+.fullscreen-iframe-btn .fa-bars.vertical{
     transform: rotate(90deg);
 }
 
@@ -77,19 +77,29 @@
     justify-content: center;
 }
 
-.reset-codeparts-sizes-btn .fa {
+.fullscreen-iframe-btn .fa {
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.reset-codeparts-sizes-btn {
+.fullscreen-iframe-btn {
     margin-left: 3px;
     margin-right: 3px;
     font-size: 14px;
     padding: 1px 4px;
     height: 28px;
+}
+
+.fullscreen-iframe-btn-secondary {
+    height: 21px;
+    padding: 0px 3px;
+    margin: 0;
+}
+
+.fullscreen-iframe-btn .fa{
+    font-size: 19px;
 }
 
 .as-split-area[class] {
@@ -265,8 +275,7 @@ as-split-area.as-split-area-iframe.is-horizontal {
 .share-code-btn:active,
 .ressources-code-btn:active,
 .themes-btn:active,
-.reset-codeparts-sizes-btn:active{
-    color:rgb(0,0,0);
+.fullscreen-iframe-btn:not(.fullscreen-iframe-btn-secondary):active{
     padding-top: 4px !important;
 }
 .share-code-btn:hover,
@@ -888,6 +897,28 @@ as-split-area.code-component-container > app-html-part{
     :host ::ng-deep app-iframe-part.layout-type-3{
         align-items: flex-start;
     }
+
+    .main-container.full-screen-iframe .iframe-area[class] {
+        position: fixed;
+        flex: none !important;
+        left: 0;
+        top: 23px;
+        z-index: 99;
+        width: 100%;
+        height: calc(100% - 23px);
+    }
+    
+    .main-container.full-screen-iframe .fullscreen-iframe-header {
+        position: fixed;
+        height: 22px;
+        width: 100%;
+        z-index: 99;
+        top: 0;
+        left: 0;
+        display:flex;
+        align-items: center;
+    }
+    
 }
 
 :host ::ng-deep .monaco-editor .monaco-hover {
@@ -960,7 +991,7 @@ as-split-area.code-component-container > app-html-part{
     }
 
     .code-part-title-btn,
-    .reset-codeparts-sizes-btn{
+    .fullscreen-iframe-btn{
         display: none;
     }
 
@@ -1071,6 +1102,10 @@ as-split-area.code-component-container > app-html-part{
     }
     
     .as-split-gutter-custom {
+        display: none;
+    }
+
+    .main-container.full-screen-iframe .fullscreen-iframe-header{
         display: none;
     }
 

@@ -11,8 +11,8 @@
                 <span class="x">x</span>
                 <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
             </div>
-            <button class="reset-codeparts-sizes-btn btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
-                <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
+            <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Toggle view fullscreen'">
+                <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
             </button>
         </div>        
     </div>
@@ -111,7 +111,7 @@
         </button>
     </div>
 </header>
-<div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer>
+<div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen}">
     <div id="code-parts-title-mobile">
         <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
         <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
@@ -129,6 +129,10 @@
                                 <div class="code-part-title">
                                     <span>HTML</span>
                                     <div class="code-part-title-btns-container">
+
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        </a>
 
                                         <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
@@ -148,6 +152,10 @@
                                     <span>CSS</span>
                                     <div class="code-part-title-btns-container">
 
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        </a>
+
                                         <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
@@ -165,6 +173,10 @@
                             <div class="code-part-title" >
                                     <span>JAVASCRIPT</span>
                                     <div class="code-part-title-btns-container">
+
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        </a>
 
                                         <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
@@ -196,8 +208,13 @@
                             <span class="height">{{iframeHeight}}</span>
                         </div>
                     </div>
-                    <div class="iframe-area" [ngStyle]="{'flex':'0 0 '+getIframeAreaSize()}">
-                        <div class="iframe-overlay" [ngStyle]="{'display': isCustomGutter1_dragging || isCustomGutter2_dragging ? 'block':''}"></div>
+                    <div class="fullscreen-iframe-header" [ngStyle]="getIframeOrHeaderStyleObject('header')">
+                        <button class="fullscreen-iframe-btn btn fullscreen-iframe-btn-secondary" (click)="toggleIframeFullscreen()" [title]="'Toggle view fullscreen'">
+                            <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
+                        </button>
+                    </div>
+                    <div class="iframe-area" [ngStyle]="getIframeOrHeaderStyleObject('iframe')">
+                        <div  class="iframe-overlay" [ngStyle]="{'display': (isCustomGutter1_dragging || isCustomGutter2_dragging) ? 'block' : (isIframeFullScreen ? 'none':'')}"></div>
                         <app-iframe-part  #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}"  #iframePart   (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
                     </div>
                     <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
