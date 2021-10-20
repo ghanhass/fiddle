@@ -64,7 +64,7 @@
     padding: 2px;
 }
 
-.fullscreen-iframe-btn .fa-bars.vertical{
+.code-part-title-btn .fa-bars.vertical{
     transform: rotate(90deg);
 }
 
@@ -113,7 +113,8 @@
 }
 
 @media screen and (min-width:768px) and (min-height:581px){
-    .code-part-title-btn.vertical-title-mode:nth-last-child(n+2){
+
+    .vertical-title-mode .code-part-title-btn:not(:last-child) {
         margin-bottom: 10px;
     }
     
