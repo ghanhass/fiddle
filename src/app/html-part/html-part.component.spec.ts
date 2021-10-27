@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { HtmlPartComponent } from './html-part.component';
 
@@ -6,7 +6,7 @@ describe('HtmlPartComponent', () => {
   let component: HtmlPartComponent;
   let fixture: ComponentFixture<HtmlPartComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ HtmlPartComponent ]
     })

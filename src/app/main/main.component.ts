@@ -171,7 +171,7 @@ export class MainComponent implements AfterViewInit {
      
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
-      if(currentFiddleId){
+      if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){
           this.htmlCode = this.mainService.htmlCode;
           this.cssCode = this.mainService.cssCode;
@@ -267,6 +267,7 @@ export class MainComponent implements AfterViewInit {
               if(obj.errorCode == "-1"){
                 this.toastrService.warning("Fiddle not found.");
                 this.changeLayout(1);
+                this.loader.hideLoader();
               }
             }
             //this.changeFiddleTheme();

@@ -8,15 +8,12 @@ const routes: Routes = [
     path:":id", component: MainComponent
   },
   {
-    path:"custom/link", component: MainComponent
-  },
-  {
     path:"**", component: MainComponent
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
