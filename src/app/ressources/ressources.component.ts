@@ -104,7 +104,7 @@ export class RessourcesComponent implements OnInit {
 
   onRessourcesQueryStringChange(searchString: string){
     if(searchString.trim().toUpperCase() != this.currentRessourceChoice.name.trim().toUpperCase()){
-      this.resetCurrentRessourceChoice();
+      //this.resetCurrentRessourceChoice();
       this.loader.showLoader();
       this.ressourcesService.getRessources().subscribe((res)=>{
         //console.log("res = ", res);
