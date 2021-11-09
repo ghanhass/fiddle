@@ -270,7 +270,15 @@ as-split-area.as-split-area-iframe.is-horizontal {
     user-select: none;
     color:rgb(0,0,0);
     outline: none;
+}
+
+.share-code-btn,
+.ressources-code-btn{
     padding: 1px 6px;
+}
+
+.themes-btn{
+    padding: 1px 8px 1px 6px;
 }
 
 .share-code-btn:active,
@@ -749,8 +757,9 @@ i.fa.fa-sort-asc {
         font-size: 16px;
     }
 
-    .paypal-btn {
+    .paypal-btn-container .btn.paypal-btn {
         padding-left: 18px !important;
+        padding-right: 14px;
     }
 
     i.fa.fa-sort-desc{
