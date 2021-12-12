@@ -71,7 +71,8 @@ ngs-code-editor .margin-view-overlays .line-numbers {
 body{
     padding: 2px;
     margin: 0px;
-    font-family: sans-serif;
+    /*font-family: sans-serif;*/
+    font-family: Arial, sans-serif;
     overflow: hidden;
 }
 

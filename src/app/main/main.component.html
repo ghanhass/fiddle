@@ -20,6 +20,10 @@
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
 
+        <!--<button class="console-btn btn" (click)="toggleConsoleOnDesktop()">
+            <span>Console</span>
+        </button>-->
+
         <div class="themes-btn-container">
             <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">
                 <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
@@ -110,6 +114,7 @@
             <span>Run</span>
         </button>
     </div>
+
 </header>
 <div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen}">
     <div id="code-parts-title-mobile">
@@ -117,6 +122,7 @@
         <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
         <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
         <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
+        <!--<a #consoleMobileToggle (click)="toggleCodePart('console')" [ngClass]="{'active':showConsole}">Console</a>-->
     </div>
     
     <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':getIsFiddleThemeDark()}" [gutterSize]="5">

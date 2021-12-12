@@ -263,6 +263,7 @@ export class MainService {
     .logo-title-container .btn {
         color: ${theme.data.colors['editor.foreground']};
         background: ${theme.data.colors['editor.background']};
+        font-family:Arial, sans-serif;
     }
     
     #code-parts-title-mobile a.active {
