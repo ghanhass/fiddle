@@ -1,23 +1,39 @@
 {
-  "name": "monaco-editor",
-  "private": false,
-  "version": "0.23.0",
+  "_args": [
+    [
+      "monaco-editor@0.23.0",
+      "/home/hassoon/myProjects/fiddle"
+    ]
+  ],
+  "_from": "monaco-editor@0.23.0",
+  "_id": "monaco-editor@0.23.0",
+  "_inBundle": false,
+  "_integrity": "sha512-q+CP5zMR/aFiMTE9QlIavGyGicKnG2v/H8qVvybLzeFsARM8f6G9fL0sMST2tyVYCwDKkGamZUI6647A0jR/Lg==",
+  "_location": "/monaco-editor",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "monaco-editor@0.23.0",
+    "name": "monaco-editor",
+    "escapedName": "monaco-editor",
+    "rawSpec": "0.23.0",
+    "saveSpec": null,
+    "fetchSpec": "0.23.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.23.0.tgz",
+  "_spec": "0.23.0",
+  "_where": "/home/hassoon/myProjects/fiddle",
+  "author": {
+    "name": "Microsoft Corporation"
+  },
+  "bugs": {
+    "url": "https://github.com/Microsoft/monaco-editor/issues"
+  },
   "description": "A browser based code editor",
-  "author": "Microsoft Corporation",
-  "license": "MIT",
-  "scripts": {
-    "simpleserver": "gulp simpleserver",
-    "release": "gulp release",
-    "website": "gulp website && npm run typedoc",
-    "build-website": "gulp build-website && npm run typedoc",
-    "typedoc": "cd typedoc && \"../node_modules/.bin/typedoc\" --options ./typedoc.json"
-  },
-  "typings": "./esm/vs/editor/editor.api.d.ts",
-  "module": "./esm/vs/editor/editor.main.js",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Microsoft/monaco-editor"
-  },
   "devDependencies": {
     "clean-css": "^5.1.1",
     "event-stream": "4.0.1",
@@ -34,5 +50,23 @@
     "uncss": "^0.17.3",
     "vinyl": "^2.2.1",
     "yaserver": "^0.3.0"
-  }
+  },
+  "homepage": "https://github.com/Microsoft/monaco-editor#readme",
+  "license": "MIT",
+  "module": "./esm/vs/editor/editor.main.js",
+  "name": "monaco-editor",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Microsoft/monaco-editor.git"
+  },
+  "scripts": {
+    "build-website": "gulp build-website && npm run typedoc",
+    "release": "gulp release",
+    "simpleserver": "gulp simpleserver",
+    "typedoc": "cd typedoc && \"../node_modules/.bin/typedoc\" --options ./typedoc.json",
+    "website": "gulp website && npm run typedoc"
+  },
+  "typings": "./esm/vs/editor/editor.api.d.ts",
+  "version": "0.23.0"
 }
