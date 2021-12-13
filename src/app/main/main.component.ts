@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
 import { FiddleTheme } from "src/app/fiddle-theme";
+import { Octokit } from "@octokit/core";
 
 interface PreviousLayout{
   layout: number,
@@ -160,6 +161,31 @@ export class MainComponent implements AfterViewInit {
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) { 
+
+      const octokit = new Octokit({auth: "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"});
+
+      /*const response = await octokit.request("GET /orgs/{org}/repos", {
+        org: "octokit",
+        type: "private",
+      });*/
+      /*(async()=>{
+        await octokit.request('GET /gists');
+        console.log(octokit)
+      })();*/
+      /*octokit.request('POST /gists',{
+        files:{ [""]: { content: "<h1>test :D</h1>" } },
+        public:false
+      }).then((res)=>{
+        console.log("promise res = ",res);
+      },(rej)=>{
+        console.log("promise rej = ",rej);
+      });*/
+
+      /*octokit.request('GET /gists').then((res)=>{
+        console.log("promise res = ",res);
+      },(rej)=>{
+        console.log("promise rej = ",rej);
+      });*/
   }
 
   ngAfterViewInit(): void {
