@@ -1168,6 +1168,10 @@ as-split-area.code-component-container > app-html-part{
         display: none;
     }
 
+    .iframe-overlay{
+        display:none;
+    }
+
 }
 
 @media screen and (max-width:400px){
