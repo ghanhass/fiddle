@@ -419,7 +419,7 @@ i.fa.fa-sort-asc {
     box-shadow: 0px 0px 4px 2px #8b8b8b;
     opacity: 1;
     pointer-events: all;
-    z-index: 2;
+    z-index: 99;
     overflow:auto;
 }
 
