@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
-import { UserCode } from "./user-code";
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { environment} from "../environments/environment";
 import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
+import { Octokit } from '@octokit/core';
+import { resolve } from 'dns';
+import { rejects } from 'assert';
+import { GistData } from './gist-data';
+import { FiddleData } from './fiddle-data';
+import { GistFiddle } from './gist-fiddle';
+
+
+const octokit = new Octokit({auth: "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"});
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +36,7 @@ export class MainService {
   codePartsSize: number;
   iframeResizeValue: number;
   fiddleThemeId: string = '';
+  fiddleId: number;
 
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
@@ -41,6 +50,8 @@ export class MainService {
   showCss: boolean = false;
   showJs: boolean = false;
   showResult: boolean = true;
+
+  scheduledRunFiddle: boolean = false;
 
   defaultTheme = {
       name: "VS",
@@ -75,7 +86,7 @@ export class MainService {
       this.http.get("assets/app-config.json").subscribe(
         (res:any)=>{
           this.appConfig = res;
-          console.log("startup this.appConfig = ", this.appConfig);
+          //console.log("startup this.appConfig = ", this.appConfig);
           resolve(res);
         },
         (error: any)=>{
@@ -89,7 +100,7 @@ export class MainService {
   }
 
   saveFiddle(data: any): Observable<any>{
-    //console.log("saveFiddle data = ", data);
+    ////console.log("saveFiddle data = ", data);
     return (this.http.post(this.url, data,this.httpOptions));
   }
   getFiddle(data: any): Observable<any>{
@@ -98,10 +109,10 @@ export class MainService {
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;
-    //console.log("A!");
+    ////console.log("A!");
     setTimeout(()=>{
       if(window['monaco']){
-        //console.log("fiddleTheme = ", fiddleTheme);
+        ////console.log("fiddleTheme = ", fiddleTheme);
         window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
@@ -109,8 +120,8 @@ export class MainService {
   }
 
   resumeFiddleTheme(){
-    //console.log("param = ", param);
-    //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+    ////console.log("param = ", param);
+    ////console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     let savedThemeId = localStorage.getItem("myfiddle-theme");
     let selectedTheme: FiddleTheme;
 
@@ -120,7 +131,7 @@ export class MainService {
     else{
         selectedTheme = this.defaultTheme;
     }
-    //console.log("selectedTheme = ", selectedTheme);
+    ////console.log("selectedTheme = ", selectedTheme);
 
     this.addThemeStylesheet(selectedTheme);
     this.registerMonacoCustomTheme(selectedTheme);
@@ -476,5 +487,296 @@ export class MainService {
     else{
       return theme.data.colors['editor.lineHighlightBackground'];
     }
+  }
+
+  generateFiddleCode(data: any): string{
+    let htmlCode = data.html ? data.html : "";
+    let cssCode = data.css ? data.css : "";
+    let jsCode = `
+      <script id="fiddle-security">
+      if(window.self === window.top){
+        document.head.innerHTML = "<meta charset='utf-8'>";
+        document.body.innerHTML = "<h1>Running this web page directly is forbidden, good day.</h1>";
+      }
+      document.querySelector("script#fiddle-security").remove();
+      </script>
+    `;
+    if(data.js){
+      jsCode += `
+      <script>
+      try{
+        \n\n ${data.js}\n\n  
+      }
+      catch(err){
+          let fiddleErrorsWrapperSpan = document.querySelector("#fiddle-errors-wrapper > span");
+          let fiddleErrorsContainerEl = document.querySelector("#fiddle-errors-container");
+          fiddleErrorsWrapperSpan.innerHTML = err;
+          fiddleErrorsContainerEl.style.cssText = "display:block !important";
+          //alert(err);
+      }
+      </script>
+      `;            
+    }
+
+    let html = `
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <style>
+            html{
+              height:100%;
+              width:100%;
+            }
+            
+            #fiddle-errors-container[id]{
+                position: fixed !important;
+                padding: 0 !important;
+                border: none !important;
+                width: 100% !important;
+                text-align: center !important;
+                background-color: #dddddd !important;
+                color: #962d2d !important;
+                font-weight: 600 !important;
+                overflow: visible !important;
+                height: 0 !important;
+                bottom: auto !important;
+                top: 65px !important;
+                right: 2px !important;
+                left: auto !important;
+                user-select: none !important;
+            }
+            
+            #fiddle-errors-container.show-error {
+                padding: 5px !important;
+                height: auto !important;
+                width: auto !important;
+                max-width: calc(100% - 16px) !important;
+                box-shadow: 0 0 4px 2px #e04545 !important;
+                
+            }
+            
+            .fiddle-error-btn {
+                position: absolute !important;
+            
+                border: 1px solid red !important;
+                width: 20px !important;
+                height: 20px !important;
+                border-radius: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2px !important;
+                box-shadow: 0 0 5px 0px #902b2b !important;
+                transform: translateY(-100%) !important;
+                background-color: #FFFFFF !important;
+                cursor: pointer !important;
+                user-select: none !important;
+            
+                animation-name: error-animation !important;
+                animation-iteration-count: infinite !important;
+                animation-duration: 0.5s !important;
+                animation-timing-function: linear !important;
+                right: 20px !important;
+                top: -20px !important;
+            }
+            
+            .fiddle-error-btn span{
+                pointer-events: none !important;
+            }
+            
+            #fiddle-errors-wrapper{
+                display:none !important;
+                overflow: auto !important;
+                max-height: 100px !important;
+            }
+            
+            .fiddle-error-btn.show-error + #fiddle-errors-wrapper{
+                display:block !important;
+            }
+            
+            
+            @keyframes error-animation{
+                0%{
+                        box-shadow: 0 0 10px 5px #902b2b !important;
+                }
+              
+                50%{
+                        box-shadow: 0 0 25px 10px #902b2b !important;
+                }
+              
+                100%{
+                        box-shadow: 0 0 10px 5px #902b2b !important;
+                }
+            }
+            html{
+              background-color: #FFFFFF;
+            }
+            </style>
+            <style>
+            ${cssCode}
+            </style>
+            <script>
+            document.addEventListener("click", function(ev){
+              let evTarget = ev.target;
+              if(evTarget.classList.contains("fiddle-error-btn")){
+                  evTarget.classList.toggle("show-error");
+                  evTarget.parentElement.classList.toggle("show-error"); 
+              }
+            })
+            </script>
+        </head>
+        <body>
+          
+            <div id="fiddle-errors-container" style="display:none !important;">
+                <a class="fiddle-error-btn" title="Click to toggle"><span>!</span></a>
+                <div id="fiddle-errors-wrapper">
+                    <span></span>
+                </div>
+            </div>    
+            ${htmlCode}
+            ${jsCode}
+        </body>
+    </html>`;
+    return html;
+  }
+
+  getFiddle2(fiddleId): Observable<any>{
+    let self = this;
+
+    return from( octokit.request('GET /gists/e5e3c6894a6d443dd5e136b6033909ca?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
+      gist_id:"e5e3c6894a6d443dd5e136b6033909ca"
+    }).then((res)=>{
+      let str = res.data.files["myfiddle_db.json"].content;
+      let gistData: GistData;
+      if(str){
+        gistData = JSON.parse(str);
+      }
+      else{
+        gistData = {gists: []};
+      }
+
+      if(gistData.gists == undefined){
+        gistData.gists = [];
+      }
+
+      let seekedFiddle: GistFiddle = gistData.gists.find((fiddle)=>{
+        return fiddle.fiddle_id == fiddleId;
+      });
+
+      if(seekedFiddle){
+        let gistId = seekedFiddle.gist_id;
+        return octokit.request('GET /gists/'+gistId+'?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
+          gist_id:gistId
+        }).then((res2)=>{
+          if(res2.status == 200){
+            let content: string = (Object.values(res2.data.files)[0] as any).content;
+            let fiddleData: FiddleData = JSON.parse(content);
+            return new Promise((resolve)=>{
+              resolve({
+                status:"ok",
+                fiddleData: fiddleData
+              });
+            });
+          }
+          else{
+            return new Promise((resolve)=>{
+              resolve({
+                status:"not found"
+              }
+              );
+            });
+          }
+        })
+      }
+      else{
+        return new Promise((resolve)=>{
+          resolve({
+            status:"not found"
+          })
+        });
+      }
+    })
+    );
+  }
+
+  saveFiddle2(fiddleData: FiddleData): Observable<any>{
+    //let html = this.generateFiddleCode(fiddleData);
+    let self = this;
+    return from (octokit.request('POST /gists?_='+(new Date).getTime(),{//create new gist
+      files:{ [""]: { content: JSON.stringify(fiddleData) } },
+      public:false
+    }).then((res)=>{
+      //console.log("new gist res = ", res);
+      let newGistId = res.data.id;
+      return octokit.request('GET /gists/e5e3c6894a6d443dd5e136b6033909ca?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
+        gist_id:"e5e3c6894a6d443dd5e136b6033909ca"
+      }).then((res2)=>{
+        let str = res2.data.files["myfiddle_db.json"].content;
+        let gistData: GistData;
+        if(str){
+          gistData = JSON.parse(str);
+        }
+        else{
+          gistData = {gists: []};
+        }
+        if(gistData.gists == undefined){
+          gistData.gists = [];
+        }
+
+        //console.log("gistData = ", gistData);
+
+        let newFiddleId = gistData.gists.length + 1;
+
+        let fiddleGistData : GistFiddle = {
+          fiddle_id: newFiddleId,
+          gist_id: newGistId
+        }
+
+        gistData.gists.push(fiddleGistData);
+
+        
+
+        self.fiddleId = newFiddleId;
+
+        return octokit.request('PATCH /gists/e5e3c6894a6d443dd5e136b6033909ca?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
+          gist_id:"e5e3c6894a6d443dd5e136b6033909ca",
+          files:{ ["myfiddle_db.json"]: { content: JSON.stringify(gistData) } },
+        }).then((res)=>{
+          self.fiddleId = newFiddleId;
+          return new Promise((yes,no)=>{
+            //console.log("res.status = ",res.status);
+            if(res.status == 200){
+              yes(newFiddleId);
+            }
+            else{
+              no(-1);
+            }
+          })          
+        });
+      });
+
+    }))
+  }
+  deleteAllGists(){
+    octokit.request('GET /gists?_='+(new Date).getTime(),{
+      public:false
+    }).then((res)=>{
+      //console.log("get all gists res = ", res);
+      res.data.forEach((oneGist)=>{
+        if(oneGist.files["myfiddle_db.json"] === undefined){
+          octokit.request('DELETE /gists/'+oneGist.id,{
+            gist_id:oneGist.id
+          }).then((res)=>{
+            //console.log("deleted gist with id = ", oneGist.id);
+          });
+        }
+        else{
+          octokit.request('PATCH /gists/'+oneGist.id,{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
+            gist_id:oneGist.id,
+            files:{ ["myfiddle_db.json"]: { content: "{}" } },
+          });
+        }
+      });
+    })
   }
 }

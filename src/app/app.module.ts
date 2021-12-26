@@ -18,6 +18,7 @@ import { ModalComponent } from './modal/modal.component';
 import { RessourcesComponent } from './ressources/ressources.component';
 import { AngularSplitModule } from "angular-split";
 import { MainService } from './main.service';
+import { SafePipe } from './safe.pipe';
 
 export function loadConfigs(mainService: MainService){
   return ():Promise<any> => {
@@ -36,6 +37,7 @@ export function loadConfigs(mainService: MainService){
     LoaderComponent,
     ModalComponent,
     RessourcesComponent,
+    SafePipe,
   ],
   imports: [
     BrowserModule,

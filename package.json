@@ -3,11 +3,12 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve;json-server --watch fiddle-db/fiddle-db.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "mock:server": "json-server --watch fiddle-db/fiddle-db.json"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,8 @@
     "angular-split": "^5.0.0",
     "default-passive-events": "^2.0.0",
     "font-awesome": "^4.7.0",
+    "json-server": "^0.17.0",
+    "lowdb": "^3.0.0",
     "monaco-editor": "^0.23.0",
     "ngx-monaco-editor": "^10.0.0-beta.1",
     "ngx-toastr": "^13.2.0",

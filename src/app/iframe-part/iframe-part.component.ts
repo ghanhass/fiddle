@@ -1,9 +1,13 @@
-import { Component, ElementRef, OnInit, ViewChild, Input, HostListener, Output ,EventEmitter} from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit,ViewChild, Input, HostListener, Output ,EventEmitter} from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
+import { Octokit } from '@octokit/core';
+import { FiddleData } from '../fiddle-data';
+
+const octokit = new Octokit({auth: "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"});
 
 @Component({
   selector: 'app-iframe-part',
@@ -19,47 +23,64 @@ export class IframePartComponent implements OnInit {
   @ViewChild("form")form: ElementRef;
   @ViewChild("loader")loader: LoaderComponent;
   @ViewChild("copyInput")copyInput: ElementRef;
+  @ViewChild("iframe")iframeElement: ElementRef;
   @Output()showloader: EventEmitter<any> = new EventEmitter();
   @Output()hideloader: EventEmitter<any> = new EventEmitter();
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
   
   url: string = environment.url;
   isSaveMode: boolean = false;
-  canSubmit: boolean = true;
-
-
-  runCode(param?: any){
-    this.jsCode = this.mainService.jsCode;
-    this.htmlCode = this.mainService.htmlCode;
-    this.cssCode = this.mainService.cssCode;
-
-    if(param === "save"){
-      this.isSaveMode = true;
-    }
-    if(this.canSubmit){
-      let self = this;
-      window.setTimeout(()=>{
-        //self.loader.showLoader();
-        self.showloader.emit();
-        self.canSubmit = false;
-        //console.log("form's self.jsCode ", self.jsCode);
-        //console.log("form's self.cssCode ", self.cssCode);
-        //console.log("form's self.htmlCode ", self.htmlCode);
-        self.form.nativeElement.submit();
-      },1)
-      
-    }
-  }
+  canSubmit: boolean = false;
+  isIframeLoadComplete = true;
+  isFiddleLoadComplete = true;
+  isAfterViewInitReached = false;
 
   constructor(private mainService: MainService,
     private router:Router,
-    private toastrService:ToastrService) { }
-
-  ngOnInit(): void {
+    private toastrService:ToastrService) {
+      let self = this;
+      window.addEventListener("message", function(event){
+        if(event.data == "sub-iframe-loaded"){
+          //console.log("message event from sub iframe = ", event);
+          self.isIframeLoadComplete = true;
+          if(self.isFiddleLoadComplete && self.isIframeLoadComplete /*&& !self.mainService.scheduledRunFiddle*/){
+            self.hideloader.emit();
+            self.mainService.scheduledRunFiddle = false;
+          }
+        }
+      });
   }
 
+  runFiddle(){
+    //this.mainService.scheduledRunFiddle = false;
+    this.isIframeLoadComplete = false;
+    /*this.jsCode = this.mainService.jsCode;
+    this.htmlCode = this.mainService.htmlCode;
+    this.cssCode = this.mainService.cssCode;*/
 
-  saveCode(){
+    let data = {
+      js:this.mainService.jsCode,
+      css:this.mainService.cssCode,
+      html:this.mainService.htmlCode
+    }
+    this.showloader.emit();
+    if(this.iframeElement){
+      let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
+      //console.log("inside runFiddle() iframeElement.contentWindow = ", iframeElement.contentWindow);
+      if(iframeElement.contentWindow){
+        let fiddleCode = this.mainService.generateFiddleCode(data);
+        let obj = {
+          type:"run",
+          html:fiddleCode
+        }
+        iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+      }
+    }
+  }
+
+  saveFiddle(){
+    this.isFiddleLoadComplete = false;
+
     //console.log("saving Code");
     const self = this;
     let mobileCodePart = "0";
@@ -79,66 +100,79 @@ export class IframePartComponent implements OnInit {
       mobileCodePart = "3";
     }
 
-    let data = {
-      save: "1",
+    let fiddleData : FiddleData= {
       js:this.mainService.jsCode,
       html:this.mainService.htmlCode,
       css:this.mainService.cssCode,
       
-      jsCodePartSize: this.mainService.jsCodePartSize,
-      cssCodePartSize: this.mainService.cssCodePartSize,
-      htmlCodePartSize: this.mainService.htmlCodePartSize,
+      js_part_size: this.mainService.jsCodePartSize,
+      css_part_size: this.mainService.cssCodePartSize,
+      html_part_size: this.mainService.htmlCodePartSize,
 
-      codePartsSize: this.mainService.codePartsSize,
+      code_parts_size: this.mainService.codePartsSize,
 
-      mainContainerWidth: this.mainService.mainContainerWidth,
-      mainContainerHeight: this.mainService.mainContainerHeight,
+      main_container_width: this.mainService.mainContainerWidth,
+      main_container_height: this.mainService.mainContainerHeight,
 
       title:this.mainService.fiddleTitle,
       layout:this.mainService.layout,
-      mobileLayout: mobileCodePart+":"+mobileResult,
-      iframeResizeValue: this.mainService.iframeResizeValue
+      mobile_layout: mobileCodePart+":"+mobileResult,
+      iframe_resize_value: this.mainService.iframeResizeValue
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);
     //console.log("this.mainService.showJs = ", this.mainService.showJs);
     //console.log("this.mainService.showResult = ", this.mainService.showResult);
-    this.mainService.saveFiddle(data).subscribe((res)=>{
-      this.canSubmit = true;
-      let obj = JSON.parse(res);
-      if(obj.success == "1"){
-        let fiddleId = obj.id;
-        //console.log("saved fiddle id = ", fiddleId);
-        //console.log("url = ", window.location.href);
-        
-        if(self.copyInput.nativeElement){
-          let input = self.copyInput.nativeElement
-          let hrefValue = window.location.origin;
-          if(hrefValue[hrefValue.length - 1] != "/"){
-            hrefValue = hrefValue + "/";
-          }
-          input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
-          input.select();
-          input.setSelectionRange(0, 99999);
-          let copyCommand = document.execCommand("copy");
-        }
-        self.mainService.redirectAfterSaveMode = true;
-        self.router.navigate(["/"+fiddleId]);
-        this.toastrService.success("Fiddle URL copied to clipboard.");
+
+    this.showloader.emit();
+    //this.runFiddle();
+    this.mainService.scheduledRunFiddle = true;
+
+    this.mainService.saveFiddle2(fiddleData).subscribe((fiddleId)=>{
+      //console.log("saveFiddle2 fiddleId = ", fiddleId);
+
+      //this.runFiddle();
+      this.isFiddleLoadComplete = true;
+
+      if(this.isFiddleLoadComplete && this.isIframeLoadComplete /*&& !this.mainService.scheduledRunFiddle*/){
+        this.hideloader.emit();
       }
+
+      if(self.copyInput.nativeElement){
+        let input = self.copyInput.nativeElement
+        let hrefValue = window.location.origin;
+        if(hrefValue[hrefValue.length - 1] != "/"){
+          hrefValue = hrefValue + "/";
+        }
+        input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
+        input.select();
+        input.setSelectionRange(0, 99999);
+        let copyCommand = document.execCommand("copy");
+      }
+      self.mainService.redirectAfterSaveMode = true;
+      self.router.navigate(["/"+fiddleId]);
+      this.toastrService.success("Fiddle URL copied to clipboard.");
+
     });
   }
 
+  getIframeSrc(){
+    return environment.url;
+  }
+
+  ngOnInit(): void {
+  }
+  
+  ngAfterViewInit():void{
+    this.isAfterViewInitReached = true;
+  }
+
   onFormLoad(): void {
-    if(this.isSaveMode){
-      this.isSaveMode = false;
-      this.saveCode();
-    }
-    else{
-      this.canSubmit = true;
-      //console.log("iframe angular load event");
-      this.loader.hideLoader();
-      this.hideloader.emit();
+    //console.log("onFormLoad()");
+    //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
+
+    if(this.mainService.scheduledRunFiddle && this.iframeElement){
+      this.runFiddle();
     }
   }
 

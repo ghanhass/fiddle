@@ -1,8 +1,8 @@
 <app-loader style="display:none;" #loader [global]="true" [thickness]="8"></app-loader>
 <input #copyInput type="text" class="copy-input">
-<form [action]="url" target="my-frame" method="post" #form class="code-form">
+<!--<form [action]="url" target="my-frame" method="post" #form class="code-form">
     <input name="js" type="hidden" id="js-input" [(ngModel)]="jsCode">
     <input name="css" type="hidden" id="css-input" [(ngModel)]="cssCode">
     <input name="html" type="hidden" id="html-input" [(ngModel)]="htmlCode">
-</form>
-<iframe #iframe name="my-frame" (load)="onFormLoad()"></iframe>
+</form>-->
+<iframe #iframe (load)="onFormLoad()" [src]="getIframeSrc() | safe:'url'"></iframe>
