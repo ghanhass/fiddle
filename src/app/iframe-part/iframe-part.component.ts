@@ -4,10 +4,8 @@ import { MainService } from '../main.service';
 import { LoaderComponent } from "../loader/loader.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { Octokit } from '@octokit/core';
 import { FiddleData } from '../fiddle-data';
 
-const octokit = new Octokit({auth: "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"});
 
 @Component({
   selector: 'app-iframe-part',
