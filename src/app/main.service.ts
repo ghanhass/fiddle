@@ -12,7 +12,7 @@ import { FiddleData } from './fiddle-data';
 import { GistFiddle } from './gist-fiddle';
 
 
-const octokit = new Octokit({auth: "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"});
+const octokit = new Octokit({auth: "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"});
 
 @Injectable({
   providedIn: 'root'
@@ -647,8 +647,8 @@ export class MainService {
   getFiddle2(fiddleId): Observable<any>{
     let self = this;
 
-    return from( octokit.request('GET /gists/5758d516557a1f0d4bda9c3053706991?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-      gist_id:"5758d516557a1f0d4bda9c3053706991"
+    return from( octokit.request('GET /gists/a4ce2434c6662e58d015d733595397c4?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
+      gist_id:"a4ce2434c6662e58d015d733595397c4"
     }).then((res)=>{
       let str = res.data.files["myfiddle_db.json"].content;
       let gistData: GistData;
@@ -712,8 +712,8 @@ export class MainService {
     }).then((res)=>{
       //console.log("new gist res = ", res);
       let newGistId = res.data.id;
-      return octokit.request('GET /gists/5758d516557a1f0d4bda9c3053706991?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-        gist_id:"5758d516557a1f0d4bda9c3053706991"
+      return octokit.request('GET /gists/a4ce2434c6662e58d015d733595397c4?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
+        gist_id:"a4ce2434c6662e58d015d733595397c4"
       }).then((res2)=>{
         let str = res2.data.files["myfiddle_db.json"].content;
         let gistData: GistData;
@@ -742,8 +742,8 @@ export class MainService {
 
         self.fiddleId = newFiddleId;
 
-        return octokit.request('PATCH /gists/5758d516557a1f0d4bda9c3053706991?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
-          gist_id:"5758d516557a1f0d4bda9c3053706991",
+        return octokit.request('PATCH /gists/a4ce2434c6662e58d015d733595397c4?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
+          gist_id:"a4ce2434c6662e58d015d733595397c4",
           files:{ ["myfiddle_db.json"]: { content: JSON.stringify(gistData) } },
         }).then((res)=>{
           self.fiddleId = newFiddleId;
