@@ -80,9 +80,6 @@ export class MainService {
   private appConfig: any;
   
   constructor(private http: HttpClient) { 
-    octokit
-  .request("GET /")
-  .then(console.log, console.log);
   }
 
   initConfig():Promise<any>{
