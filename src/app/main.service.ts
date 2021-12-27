@@ -12,7 +12,7 @@ import { FiddleData } from './fiddle-data';
 import { GistFiddle } from './gist-fiddle';
 
 
-const octokit = new Octokit({auth: "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"});
+const octokit = new Octokit({auth: "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"});
 
 @Injectable({
   providedIn: 'root'
