@@ -14,9 +14,9 @@ import { FiddleData } from '../fiddle-data';
 })
 export class IframePartComponent implements OnInit {
 
-  jsCode: string = "";
-  htmlCode: string = "";
-  cssCode: string = "";
+  //jsCode: string = "";
+  //htmlCode: string = "";
+  //cssCode: string = "";
   fiddleTitle: string = "";
   @ViewChild("form")form: ElementRef;
   @ViewChild("loader")loader: LoaderComponent;
@@ -41,7 +41,7 @@ export class IframePartComponent implements OnInit {
         if(event.data == "sub-iframe-loaded"){
           //console.log("message event from sub iframe = ", event);
           self.isIframeLoadComplete = true;
-          if(self.isFiddleLoadComplete && self.isIframeLoadComplete /*&& !self.mainService.scheduledRunFiddle*/){
+          if(self.isFiddleLoadComplete && self.isIframeLoadComplete && !self.mainService.scheduledRunFiddle){
             self.hideloader.emit();
             self.mainService.scheduledRunFiddle = false;
           }
@@ -50,7 +50,6 @@ export class IframePartComponent implements OnInit {
   }
 
   runFiddle(){
-    //this.mainService.scheduledRunFiddle = false;
     this.isIframeLoadComplete = false;
     /*this.jsCode = this.mainService.jsCode;
     this.htmlCode = this.mainService.htmlCode;
@@ -124,32 +123,36 @@ export class IframePartComponent implements OnInit {
 
     this.showloader.emit();
     //this.runFiddle();
-    this.mainService.scheduledRunFiddle = true;
 
-    this.mainService.saveFiddle2(fiddleData).subscribe((fiddleId)=>{
-      //console.log("saveFiddle2 fiddleId = ", fiddleId);
+    this.mainService.saveFiddle(fiddleData).subscribe((fiddleId)=>{
+      //console.log("saveFiddle fiddleId = ", fiddleId);
 
       //this.runFiddle();
       this.isFiddleLoadComplete = true;
 
-      if(this.isFiddleLoadComplete && this.isIframeLoadComplete /*&& !this.mainService.scheduledRunFiddle*/){
+      if(this.isFiddleLoadComplete && this.isIframeLoadComplete && !this.mainService.scheduledRunFiddle){
         this.hideloader.emit();
       }
 
-      if(self.copyInput.nativeElement){
-        let input = self.copyInput.nativeElement
-        let hrefValue = window.location.origin;
-        if(hrefValue[hrefValue.length - 1] != "/"){
-          hrefValue = hrefValue + "/";
+      if(fiddleId > 0){
+        if(self.copyInput.nativeElement){
+          let input = self.copyInput.nativeElement
+          let hrefValue = window.location.origin;
+          if(hrefValue[hrefValue.length - 1] != "/"){
+            hrefValue = hrefValue + "/";
+          }
+          input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
+          input.select();
+          input.setSelectionRange(0, 99999);
+          let copyCommand = document.execCommand("copy");
         }
-        input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
-        input.select();
-        input.setSelectionRange(0, 99999);
-        let copyCommand = document.execCommand("copy");
+        self.mainService.redirectAfterSaveMode = true;
+        self.router.navigate(["/"+fiddleId]);
+        this.toastrService.success("Fiddle URL copied to clipboard.");
       }
-      self.mainService.redirectAfterSaveMode = true;
-      self.router.navigate(["/"+fiddleId]);
-      this.toastrService.success("Fiddle URL copied to clipboard.");
+      else{
+        this.toastrService.error("Error saving the fiddle!");
+      }
 
     });
   }

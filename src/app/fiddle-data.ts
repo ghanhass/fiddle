@@ -1,4 +1,5 @@
 export interface FiddleData {
+    id?:number,
     js?:string,
     html?:string,
     css?:string,

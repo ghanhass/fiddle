@@ -207,7 +207,7 @@ export class MainComponent implements AfterViewInit {
         }
         else{
           this.loader.showLoader();
-          this.mainService.getFiddle2(currentFiddleId).subscribe((res)=>{
+          this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
             ////console.log("getFiddle2 res = ", res);
             if(res.status == "ok"){
               let fiddleData: FiddleData = res.fiddleData;
@@ -1324,6 +1324,7 @@ export class MainComponent implements AfterViewInit {
           this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
         } 
       }
+      this.mainService.scheduledRunFiddle = true;
       this.iframePart.saveFiddle();
     }
     else{//run
