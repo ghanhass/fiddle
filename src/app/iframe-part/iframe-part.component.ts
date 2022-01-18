@@ -41,7 +41,7 @@ export class IframePartComponent implements OnInit {
         if(event.data == "sub-iframe-loaded"){
           //console.log("message event from sub iframe = ", event);
           self.isIframeLoadComplete = true;
-          if(self.isFiddleLoadComplete && self.isIframeLoadComplete && !self.mainService.scheduledRunFiddle){
+          if(self.isFiddleLoadComplete && self.isIframeLoadComplete /*&& !self.mainService.scheduledRunFiddle*/){
             self.hideloader.emit();
             self.mainService.scheduledRunFiddle = false;
           }
@@ -169,8 +169,8 @@ export class IframePartComponent implements OnInit {
   }
 
   onFormLoad(): void {
-    //console.log("onFormLoad()");
-    //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
+    console.log("onFormLoad()");
+    console.log("onFormLoad this.iframeElement = ",this.iframeElement);
 
     if(this.mainService.scheduledRunFiddle && this.iframeElement){
       this.runFiddle();
