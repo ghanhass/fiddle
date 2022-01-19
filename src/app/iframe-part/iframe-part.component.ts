@@ -169,8 +169,8 @@ export class IframePartComponent implements OnInit {
   }
 
   onFormLoad(): void {
-    console.log("onFormLoad()");
-    console.log("onFormLoad this.iframeElement = ",this.iframeElement);
+    //console.log("onFormLoad()");
+    //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
 
     if(this.mainService.scheduledRunFiddle && this.iframeElement){
       this.runFiddle();
