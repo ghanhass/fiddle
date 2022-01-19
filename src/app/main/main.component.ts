@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, AfterViewInit,OnInit } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
@@ -161,6 +161,15 @@ export class MainComponent implements AfterViewInit {
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) { 
+  }
+
+  ngOnInit(): void{
+    const beforeUnloadListener = (event) => {
+      event.preventDefault();
+      return event.returnValue = "Are you sure you want to exit?";
+    };
+    
+    window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
   }
 
   ngAfterViewInit(): void {
