@@ -302,7 +302,7 @@ export class MainComponent implements AfterViewInit {
       this.newJsCodePartSize = sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
-      console.log("splitComponentInner sizes = ", sizes);
+      //console.log("splitComponentInner sizes = ", sizes);
       this.codePartStretchState.state = false;
       this.codePartStretchState.index = -1;
       this.previousLayout = undefined;
@@ -903,9 +903,6 @@ export class MainComponent implements AfterViewInit {
 
     }
     else{//first marked codePart is not marked again ? proceed with resizing the first and second marked codeParts
-      //let sizes = this.splitComponentInner.getVisibleAreaSizes();
-      //this.splitComponentInner.setVisibleAreaSizes(sizes);
-
       let mainContainerSize = (this.layout == 1 || this.layout == 3) ? this.mainContainerHeight : this.mainContainerWidth;
       let minCodePartSize = (this.layout == 1 || this.layout == 3) ? 24 : 25;
       let arr:any = ["*", minCodePartSize, minCodePartSize, minCodePartSize];
