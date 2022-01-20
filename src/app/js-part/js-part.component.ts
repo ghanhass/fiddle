@@ -34,6 +34,15 @@ export class JsPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.jsCode;
     this.mainService.jsCode = value;
+
+    if(this.oldCodeValue != value){
+      window.removeEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = false;
+      window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = true;
+
+      console.log("js value = ", value);
+    }
   }
 
   ngOnInit(): void {

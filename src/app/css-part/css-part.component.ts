@@ -41,6 +41,15 @@ export class CssPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.cssCode;
     this.mainService.cssCode = value;
+
+    if(this.oldCodeValue != value){
+      window.removeEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = false;
+      window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = true;
+
+      console.log("css value = ", value);
+    }
   }
 
   ngOnInit(): void {
@@ -48,12 +57,6 @@ export class CssPartComponent implements OnInit {
 
   ngOnChanges(data: SimpleChanges){
     //console.log("SimpleChanges data = ", data);
-    if(data.code !== undefined && data.code.currentValue !== undefined){
-      /*this.codeModel = {
-        language: 'css',
-        value: data.code.currentValue
-      };*/
-    }
   }
 
   onEditorLoad(editor){

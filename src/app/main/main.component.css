@@ -70,11 +70,12 @@
 
 .code-part-title-btn .fa {
     height: 12px;
-    width: 14px;
+    /*width: 14px;*/
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    user-select: none;
 }
 
 .fullscreen-iframe-btn .fa {
@@ -651,6 +652,21 @@ i.fa.fa-sort-asc {
         flex-grow: 1;
         text-align: left;
         padding-top: 10px;
+    }
+
+
+    .code-part-title-btn .fa-arrows-h-vertical {
+        flex-direction: column;
+        height: auto;
+    }
+    
+    .code-part-title-btn.vertical-title-mode {
+        height: auto;
+    }
+    
+    .code-part-title-btn .fa-arrows-h-vertical > span:first-child {
+        width: 100%;
+        border-top: 1px solid #202020;
     }
 }
 

@@ -76,7 +76,15 @@ export class HtmlPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.htmlCode;
     this.mainService.htmlCode = value;
-    //console.log("html value = ", value);
+    
+    if(this.oldCodeValue != value){
+      window.removeEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = false;
+      window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+      this.mainService.isBeforeUnloadEvHandlerSet = true;
+
+      console.log("html value = ", value);
+    }
   }
 
 }

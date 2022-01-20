@@ -135,8 +135,8 @@ export class IframePartComponent implements OnInit {
       }
 
       if(fiddleId > 0){
-        if(self.copyInput.nativeElement){
-          let input = self.copyInput.nativeElement
+        if(this.copyInput.nativeElement){
+          let input = this.copyInput.nativeElement;
           let hrefValue = window.location.origin;
           if(hrefValue[hrefValue.length - 1] != "/"){
             hrefValue = hrefValue + "/";
@@ -146,9 +146,14 @@ export class IframePartComponent implements OnInit {
           input.setSelectionRange(0, 99999);
           let copyCommand = document.execCommand("copy");
         }
-        self.mainService.redirectAfterSaveMode = true;
-        self.router.navigate(["/"+fiddleId]);
-        this.toastrService.success("Fiddle URL copied to clipboard.");
+        
+        this.mainService.redirectAfterSaveMode = true;
+        window.removeEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
+        this.mainService.isBeforeUnloadEvHandlerSet = false;
+        if(!this.mainService.isBeforeUnloadEvHandlerSet){
+          this.router.navigate(["/"+fiddleId]);
+          this.toastrService.success("Fiddle URL copied to clipboard.");
+        }
       }
       else{
         this.toastrService.error("Error saving the fiddle!");

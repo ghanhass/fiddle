@@ -158,18 +158,14 @@ export class MainComponent implements AfterViewInit {
     }
   };
 
+  firstCodePartHalfStretch: number = undefined;
+
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService) { 
   }
 
   ngOnInit(): void{
-    const beforeUnloadListener = (event) => {
-      event.preventDefault();
-      return event.returnValue = "Are you sure you want to exit?";
-    };
-    
-    window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
   }
 
   ngAfterViewInit(): void {
@@ -306,7 +302,7 @@ export class MainComponent implements AfterViewInit {
       this.newJsCodePartSize = sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
-      ////console.log("splitComponentInner sizes = ", sizes);
+      console.log("splitComponentInner sizes = ", sizes);
       this.codePartStretchState.state = false;
       this.codePartStretchState.index = -1;
       this.previousLayout = undefined;
@@ -894,6 +890,59 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
+  halfStretchCodePart(index: number, event:MouseEvent){
+    let codePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
+
+    if(!this.firstCodePartHalfStretch){//first marking
+      this.firstCodePartHalfStretch = index;
+      codePartTitle.classList.add("half-stretch-mark");
+    }
+    else if(this.firstCodePartHalfStretch == index){//first marked codePart is marked again ?
+      this.firstCodePartHalfStretch = undefined;
+      codePartTitle.classList.remove("half-stretch-mark");
+
+    }
+    else{//first marked codePart is not marked again ? proceed with resizing the first and second marked codeParts
+      //let sizes = this.splitComponentInner.getVisibleAreaSizes();
+      //this.splitComponentInner.setVisibleAreaSizes(sizes);
+
+      let mainContainerSize = (this.layout == 1 || this.layout == 3) ? this.mainContainerHeight : this.mainContainerWidth;
+      let minCodePartSize = (this.layout == 1 || this.layout == 3) ? 24 : 25;
+      let arr:any = ["*", minCodePartSize, minCodePartSize, minCodePartSize];
+      arr[this.firstCodePartHalfStretch] = mainContainerSize/2 - 5 - minCodePartSize/2;
+      arr[index] = mainContainerSize/2 - 5 - minCodePartSize/2;
+
+      this.splitComponentInner.setVisibleAreaSizes(arr);
+
+      this.initialHtmlCodePartSize = arr[1];
+      this.initialCssCodePartSize = arr[2];
+      this.initialJsCodePartSize = arr[3];
+
+      this.newHtmlCodePartSize = arr[1] as number;
+      this.newCssCodePartSize = arr[2] as number;
+      this.newJsCodePartSize = arr[3] as number;
+
+      this.setMainServiceCodepartSizes();
+
+      console.log("arr = ", arr);
+
+      this.firstCodePartHalfStretch = undefined;
+      //reset stretched codepart state as well
+      this.codePartStretchState.state = false;
+      this.codePartStretchState.index = -1;
+
+      let firstMarkedCodePart: HTMLElement = (this.codeParts.nativeElement as HTMLElement).querySelector(".half-stretch-mark");
+      firstMarkedCodePart.classList.remove("half-stretch-mark");
+      firstMarkedCodePart.classList.add("marking-half-stretched-code-part");
+      codePartTitle.classList.add("marking-half-stretched-code-part");
+      
+      setTimeout(()=>{
+        firstMarkedCodePart.classList.remove("marking-half-stretched-code-part");
+        codePartTitle.classList.remove("marking-half-stretched-code-part");
+      },510);
+    }
+  }
+
   stretchCodePart(codePartType, index?){
     if(this.IsAfterViewInitReached){
       let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
@@ -905,6 +954,11 @@ export class MainComponent implements AfterViewInit {
           ////console.log("sizes before = ", sizes);
           this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
           ////console.log("sizes after = ", sizes);
+
+          this.initialHtmlCodePartSize = sizes[1];
+          this.initialCssCodePartSize = sizes[2];
+          this.initialJsCodePartSize = sizes[3];
+
           this.newHtmlCodePartSize = sizes[1];
           this.newCssCodePartSize = sizes[2];
           this.newJsCodePartSize = sizes[3];
@@ -953,6 +1007,9 @@ export class MainComponent implements AfterViewInit {
         }
 
         let sizes = this.splitComponentInner.getVisibleAreaSizes();
+        this.initialHtmlCodePartSize = sizes[1] as number;
+        this.initialCssCodePartSize = sizes[2] as number;
+        this.initialJsCodePartSize = sizes[3] as number;
         this.newHtmlCodePartSize = sizes[1] as number;
         this.newCssCodePartSize = sizes[2] as number;
         this.newJsCodePartSize = sizes[3] as number;
@@ -1768,7 +1825,7 @@ export class MainComponent implements AfterViewInit {
     if(this.layout == 2 || this.layout == 4){
       switch(codePartType){
         case("html"):
-        if(this.newHtmlCodePartSize < 150){
+        if(this.newHtmlCodePartSize < 200){
           return true
         }
         else{
@@ -1776,7 +1833,7 @@ export class MainComponent implements AfterViewInit {
         }
   
         case("js"):
-        if(this.newJsCodePartSize < 200){
+        if(this.newJsCodePartSize < 250){
           return true
         }
         else{
@@ -1784,7 +1841,7 @@ export class MainComponent implements AfterViewInit {
         }
   
         case("css"):
-        if(this.newCssCodePartSize < 150){
+        if(this.newCssCodePartSize < 200){
           return true
         }
         else{

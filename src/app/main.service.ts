@@ -53,6 +53,8 @@ export class MainService {
   scheduledRunFiddle: boolean = false;
   scheduledFiddleSaving: boolean = false;
 
+  isBeforeUnloadEvHandlerSet: boolean = false;
+
   defaultTheme = {
       name: "VS",
       id: "vs-default",
@@ -78,6 +80,12 @@ export class MainService {
   }
   
   private appConfig: any;
+
+  public beforeUnloadListener: OnBeforeUnloadEventHandler = (event:BeforeUnloadEvent) => {
+    event.preventDefault();
+    console.log("beforeUnload event is set");
+    return event.returnValue = "Are you sure you want to exit?";
+  };
   
   constructor(private http: HttpClient) { 
   }
@@ -452,7 +460,39 @@ export class MainService {
     body{
         background-color: ${theme.data.colors['editor.background']};
         color: ${theme.data.colors['editor.foreground']};
-    }`;
+    }
+
+    .code-part-title.half-stretch-mark{
+      box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']};
+      z-index: 1;
+      background: ${theme.data.colors['editor.selectionBackground']};
+      position: relative;
+      opacity:0.5;
+    }
+    
+    .code-part-title.marking-half-stretched-code-part{
+        z-index: 1;
+        position: relative;
+        animation-name: animated-marked-code-part;
+        animation-duration:0.5s;
+    }
+    
+    @keyframes animated-marked-code-part{
+        
+        0%{
+            background:${theme.data.colors['editor.selectionBackground']};
+            box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']};
+            opacity:0.5;
+        }
+      
+        100%{
+            background:${theme.data.colors['editor.background']};;
+            box-shadow:none;
+            opacity:1;
+        }
+      
+    }
+    `;
 
     return str;
   }

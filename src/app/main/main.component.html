@@ -140,6 +140,15 @@
                                             <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
                                         </a>
 
+                                        <a class="html-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(1, $event)" [title]="'Stretch HTML to half'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
+                                            <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true">/2</i>
+                                            <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('html')" class="fa fa-arrows-h" aria-hidden="true">/2</i>
+                                            <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('html')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
+                                                <span></span>
+                                                <span>2</span>
+                                            </span>
+                                        </a>
+
                                         <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
@@ -162,7 +171,16 @@
                                             <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
                                         </a>
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
+                                        <a class="css-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(2, $event)" [title]="'Stretch CSS to half'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
+                                            <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true">/2</i>
+                                            <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('css')" class="fa fa-arrows-h" aria-hidden="true">/2</i>
+                                            <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('css')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
+                                                <span></span>
+                                                <span>2</span>
+                                            </span>
+                                        </a>
+
+                                        <a class="css-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
@@ -184,7 +202,16 @@
                                             <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
                                         </a>
 
-                                        <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
+                                        <a class="js-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(3, $event)" [title]="'Stretch JS to half'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
+                                            <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true">/2</i>
+                                            <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('js')" class="fa fa-arrows-h" aria-hidden="true">/2</i>
+                                            <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('js')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
+                                                <span></span>
+                                                <span>2</span>
+                                            </span>
+                                        </a>
+
+                                        <a class="js-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
                                             <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
                                             <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
                                         </a>
