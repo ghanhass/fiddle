@@ -83,7 +83,7 @@ export class HtmlPartComponent implements OnInit {
       window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
       this.mainService.isBeforeUnloadEvHandlerSet = true;
 
-      console.log("html value = ", value);
+      //console.log("html value = ", value);
     }
   }
 

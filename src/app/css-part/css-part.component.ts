@@ -48,7 +48,7 @@ export class CssPartComponent implements OnInit {
       window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
       this.mainService.isBeforeUnloadEvHandlerSet = true;
 
-      console.log("css value = ", value);
+      //console.log("css value = ", value);
     }
   }
 

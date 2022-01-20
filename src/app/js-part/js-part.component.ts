@@ -41,7 +41,7 @@ export class JsPartComponent implements OnInit {
       window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
       this.mainService.isBeforeUnloadEvHandlerSet = true;
 
-      console.log("js value = ", value);
+      //console.log("js value = ", value);
     }
   }
 
