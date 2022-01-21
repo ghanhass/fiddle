@@ -816,11 +816,6 @@ i.fa.fa-sort-asc {
     display: none;
 }
 
-.code-part-title-btn.on{
-    background-color: #8b8b8b;
-    color: #FFFFFF;
-}
-
 :host ::ng-deep #code-parts .as-split-gutter:first-of-type:not(:last-of-type){
     display: none !important;
 }

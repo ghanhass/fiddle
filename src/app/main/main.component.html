@@ -136,8 +136,8 @@
                                     <span>HTML</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
-                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
                                         </a>
 
                                         <a class="html-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(1, $event)" [title]="'Stretch HTML to half'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
@@ -167,8 +167,8 @@
                                     <span>CSS</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
-                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
                                         </a>
 
                                         <a class="css-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(2, $event)" [title]="'Stretch CSS to half'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
@@ -198,8 +198,8 @@
                                     <span>JAVASCRIPT</span>
                                     <div class="code-part-title-btns-container">
 
-                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'">
-                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}"></i></span>
+                                        <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}">
+                                            <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
                                         </a>
 
                                         <a class="js-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(3, $event)" [title]="'Stretch JS to half'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">

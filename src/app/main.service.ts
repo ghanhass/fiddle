@@ -510,6 +510,16 @@ export class MainService {
       width: 100%;
       border-top: 1px solid ${theme.data.colors['editor.foreground']};
     }
+
+    .code-part-title-btn{
+      background-color: ${theme.data.colors['editor.background']};
+      color: ${theme.data.colors['editor.foreground']};
+    }
+
+    .code-part-title-btn.on{
+      background-color: ${theme.data.colors['editor.selectionBackground']};
+      color: ${theme.data.colors['editor.foreground']};
+    }
     
     @keyframes animated-marked-code-part{
         
