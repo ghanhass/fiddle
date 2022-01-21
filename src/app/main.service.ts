@@ -25,6 +25,11 @@ export class MainService {
   jsCode:string = "";
   cssCode:string = "";
   htmlCode:string = "";
+
+  jsCodeSinceSave:string = "";
+  cssCodeSinceSave:string = "";
+  htmlCodeSinceSave:string = "";
+
   layout:number = 1;
 
   cssCodePartSize:number;
@@ -81,13 +86,20 @@ export class MainService {
   
   private appConfig: any;
 
-  public beforeUnloadListener: OnBeforeUnloadEventHandler = (event:BeforeUnloadEvent) => {
+  public beforeUnloadListener: any = (event:BeforeUnloadEvent) => {
     event.preventDefault();
-    console.log("beforeUnload event is set");
-    return event.returnValue = "Are you sure you want to exit?";
+    //console.log("beforeUnload event is set");
+    if(this.isCodeChanged()){
+      return event.returnValue = "Are you sure you want to exit?";
+    }
+    else{
+      return null;
+    }
   };
   
   constructor(private http: HttpClient) { 
+    let self = this;
+    window.addEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
   }
 
   initConfig():Promise<any>{
@@ -126,6 +138,23 @@ export class MainService {
         window['monaco'].editor.setTheme("myCustomTheme");
       }
     },10);
+  }
+
+  /**
+   * 
+   * @returns boolean: Returns whether the code is changed or not since last save
+   */
+  isCodeChanged():boolean{
+    return this.jsCode !== this.jsCodeSinceSave || this.cssCode !== this.cssCodeSinceSave || this.htmlCode !== this.htmlCodeSinceSave
+  }
+
+  /**
+   * Reset code marked since last save to the current code
+   */
+  resetCodeSinceSave(){
+    this.jsCodeSinceSave = this.jsCode;
+    this.cssCodeSinceSave = this.cssCode;
+    this.htmlCodeSinceSave = this.htmlCode;
   }
 
   resumeFiddleTheme(){

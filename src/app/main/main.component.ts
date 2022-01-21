@@ -181,6 +181,7 @@ export class MainComponent implements AfterViewInit {
       let currentFiddleId = +params.get("id");
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){
+          this.mainService.resetCodeSinceSave();
           this.htmlCode = this.mainService.htmlCode;
           this.cssCode = this.mainService.cssCode;
           this.jsCode = this.mainService.jsCode;
@@ -227,6 +228,9 @@ export class MainComponent implements AfterViewInit {
               this.mainService.cssCode = fiddleData.css;
               this.mainService.fiddleTitle = fiddleData.title;
               this.mainService.iframeResizeValue = fiddleData.iframe_resize_value;
+
+              this.mainService.resetCodeSinceSave();
+              
               let mobileLayoutArr = fiddleData.mobile_layout.split(':');
               let mobileCodePart = mobileLayoutArr[0];
               let mobileResult = mobileLayoutArr[1];

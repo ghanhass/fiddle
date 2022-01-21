@@ -43,11 +43,6 @@ export class CssPartComponent implements OnInit {
     this.mainService.cssCode = value;
 
     if(this.oldCodeValue != value){
-      window.removeEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
-      this.mainService.isBeforeUnloadEvHandlerSet = false;
-      window.addEventListener("beforeunload", this.mainService.beforeUnloadListener, {capture: true});
-      this.mainService.isBeforeUnloadEvHandlerSet = true;
-
       //console.log("css value = ", value);
     }
   }
