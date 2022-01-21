@@ -505,6 +505,11 @@ export class MainService {
         animation-name: animated-marked-code-part;
         animation-duration:0.5s;
     }
+
+    .code-part-title-btn .fa-arrows-h-vertical > span:first-child {
+      width: 100%;
+      border-top: 1px solid ${theme.data.colors['editor.foreground']};
+    }
     
     @keyframes animated-marked-code-part{
         

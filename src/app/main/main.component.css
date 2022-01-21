@@ -659,6 +659,11 @@ i.fa.fa-sort-asc {
         flex-direction: column;
         height: auto;
     }
+
+    .code-part-title-btn .fa-arrows-v span,
+    .code-part-title-btn .fa-arrows-h span {
+        font-weight: bold;
+    }
     
     .code-part-title-btn.vertical-title-mode {
         height: auto;
@@ -666,7 +671,6 @@ i.fa.fa-sort-asc {
     
     .code-part-title-btn .fa-arrows-h-vertical > span:first-child {
         width: 100%;
-        border-top: 1px solid #202020;
     }
 }
 
