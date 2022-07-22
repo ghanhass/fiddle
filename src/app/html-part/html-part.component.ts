@@ -14,7 +14,7 @@ import {
   styleUrls: ['./html-part.component.css']
 })
 export class HtmlPartComponent implements OnInit {
-  @Input()code: string = "";
+  code: string = "";
   
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
@@ -77,9 +77,9 @@ export class HtmlPartComponent implements OnInit {
     this.oldCodeValue = this.mainService.htmlCode;
     this.mainService.htmlCode = value;
     
-    if(this.oldCodeValue != value){
-      //console.log("html value = ", value);
-    }
+    /*if(this.oldCodeValue != value){
+      console.log("html value = ", value);
+    }*/
   }
 
 }

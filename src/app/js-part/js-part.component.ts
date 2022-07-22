@@ -7,7 +7,7 @@ import { MainService } from "../main.service";
   styleUrls: ['./js-part.component.css']
 })
 export class JsPartComponent implements OnInit {
-  @Input()code: string = "";
+  code: string = "";
   theme = 'vs-light';
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();

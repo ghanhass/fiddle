@@ -90,10 +90,12 @@ export class MainService {
     event.preventDefault();
     //console.log("beforeUnload event is set");
     if(this.isCodeChanged()){
+      event.returnValue = "Are you sure you want to exit?";
       return event.returnValue = "Are you sure you want to exit?";
     }
     else{
-      return null;
+      event.returnValue = null;
+      return null
     }
   };
   
@@ -186,6 +188,10 @@ export class MainService {
     .as-split-gutter-custom,
     #code-parts[id] .as-split-gutter[class]{
         background-color: ${theme.data.colors['editor.selectionBackground']};
+    }
+
+    .iframe-and-console-as-split .as-split-gutter[class]{
+      background-color: ${theme.data.colors['editor.selectionBackground']};
     }
     
     .fiddle-size.fiddle-size-hack{
@@ -517,6 +523,13 @@ export class MainService {
     }
 
     .code-part-title-btn.on{
+      background-color: ${theme.data.colors['editor.selectionBackground']};
+      color: ${theme.data.colors['editor.foreground']};
+    }
+
+    .console-btn.console-on,
+    .console-btn.console-on:hover
+    {
       background-color: ${theme.data.colors['editor.selectionBackground']};
       color: ${theme.data.colors['editor.foreground']};
     }
@@ -889,13 +902,13 @@ export class MainService {
     octokit.request('GET /gists?_='+(new Date).getTime(),{
       public:false
     }).then((res)=>{
-      //console.log("get all gists res = ", res);
+      console.log("get all gists res = ", res);
       res.data.forEach((oneGist)=>{
         if(oneGist.files["myfiddle_db.json"] === undefined){
           octokit.request('DELETE /gists/'+oneGist.id,{
             gist_id:oneGist.id
           }).then((res)=>{
-            //console.log("deleted gist with id = ", oneGist.id);
+            console.log("deleted gist with id = ", oneGist.id);
           });
         }
         else{

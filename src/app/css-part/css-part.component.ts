@@ -7,7 +7,7 @@ import { MainService } from "../main.service";
   styleUrls: ['./css-part.component.css']
 })
 export class CssPartComponent implements OnInit {
-  @Input()code: string = "";
+  code: string = "";
 
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();

@@ -27,8 +27,6 @@ export class IframePartComponent implements OnInit {
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
   
   url: string = environment.url;
-  isSaveMode: boolean = false;
-  canSubmit: boolean = false;
   isIframeLoadComplete = true;
   isFiddleLoadComplete = true;
   isAfterViewInitReached = false;
