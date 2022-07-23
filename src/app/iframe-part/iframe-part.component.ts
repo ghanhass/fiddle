@@ -49,9 +49,6 @@ export class IframePartComponent implements OnInit {
 
   runFiddle(){
     this.isIframeLoadComplete = false;
-    /*this.jsCode = this.mainService.jsCode;
-    this.htmlCode = this.mainService.htmlCode;
-    this.cssCode = this.mainService.cssCode;*/
 
     let data = {
       js:this.mainService.jsCode,
@@ -144,7 +141,8 @@ export class IframePartComponent implements OnInit {
           input.setSelectionRange(0, 99999);
           let copyCommand = document.execCommand("copy");
         }
-        this.mainService.resetCodeSinceSave();
+        
+        this.mainService.removeBeforeUnloadListener();
         this.mainService.redirectAfterSaveMode = true;
         this.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");

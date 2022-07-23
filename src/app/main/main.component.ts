@@ -163,7 +163,7 @@ export class MainComponent implements AfterViewInit {
     }
   };
 
-  firstCodePartHalfStretch: number = undefined;
+  firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
 
   constructor(private mainService: MainService,
@@ -190,7 +190,6 @@ export class MainComponent implements AfterViewInit {
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
-          //this.mainService.resetCodeSinceSave();
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
@@ -354,6 +353,7 @@ export class MainComponent implements AfterViewInit {
       let evDate = new Date();
       
         if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){        
+          event.preventDefault();
           self.runCode();
         }
         else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
@@ -937,21 +937,23 @@ export class MainComponent implements AfterViewInit {
   }
 
   halfStretchCodePart(index: number, event:MouseEvent){
-    let codePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
+    let currentCodePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
 
-    if(!this.firstCodePartHalfStretch){//first marking
+    if(!this.firstCodePartHalfStretch){//first marking ? stretch
       this.firstCodePartHalfStretch = index;
-      codePartTitle.classList.add("half-stretch-mark");
+      currentCodePartTitle.classList.add("half-stretch-mark");
     }
-    else if(this.firstCodePartHalfStretch == index){//first marked codePart is marked again ?
+    else if(this.firstCodePartHalfStretch == index){//first marked codePart is marked again ? remove stretch
       this.firstCodePartHalfStretch = undefined;
-      codePartTitle.classList.remove("half-stretch-mark");
+      currentCodePartTitle.classList.remove("half-stretch-mark");
 
     }
-    else{//first marked codePart is not marked again ? proceed with resizing the first and second marked codeParts
+    else{//second codePart is the one marked? proceed with resizing the first and second marked codeParts
       let mainContainerSize = (this.layout == 1 || this.layout == 3) ? this.mainContainerHeight : this.mainContainerWidth;
       let minCodePartSize = (this.layout == 1 || this.layout == 3) ? 24 : 25;
+      
       let arr:any = ["*", minCodePartSize, minCodePartSize, minCodePartSize];
+
       arr[this.firstCodePartHalfStretch] = mainContainerSize/2 - 5 - minCodePartSize/2;
       arr[index] = mainContainerSize/2 - 5 - minCodePartSize/2;
 
@@ -969,7 +971,8 @@ export class MainComponent implements AfterViewInit {
 
       console.log("arr = ", arr);
 
-      this.firstCodePartHalfStretch = undefined;
+      this.firstCodePartHalfStretch = undefined; //firstCodePartHalfStretch not needed anymore
+
       //reset stretched codepart state as well
       this.codePartStretchState.state = false;
       this.codePartStretchState.index = -1;
@@ -977,11 +980,11 @@ export class MainComponent implements AfterViewInit {
       let firstMarkedCodePart: HTMLElement = (this.codeParts.nativeElement as HTMLElement).querySelector(".half-stretch-mark");
       firstMarkedCodePart.classList.remove("half-stretch-mark");
       firstMarkedCodePart.classList.add("marking-half-stretched-code-part");
-      codePartTitle.classList.add("marking-half-stretched-code-part");
+      currentCodePartTitle.classList.add("marking-half-stretched-code-part");
       
       setTimeout(()=>{
         firstMarkedCodePart.classList.remove("marking-half-stretched-code-part");
-        codePartTitle.classList.remove("marking-half-stretched-code-part");
+        currentCodePartTitle.classList.remove("marking-half-stretched-code-part");
       },510);
     }
   }

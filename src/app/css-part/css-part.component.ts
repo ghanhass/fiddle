@@ -41,10 +41,7 @@ export class CssPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.cssCode;
     this.mainService.cssCode = value;
-
-    if(this.oldCodeValue != value){
-      //console.log("css value = ", value);
-    }
+    this.mainService.setCheckBeforeUnloadListener();
   }
 
   ngOnInit(): void {
@@ -66,9 +63,9 @@ export class CssPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
-          //console.log("self.runcodemsg.emit()");
-          self.mainService.cssCode = self.oldCodeValue;
           self.code = self.oldCodeValue;
+          self.mainService.cssCode = self.code;
+          //console.log("self.runcodemsg.emit()");
           self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){

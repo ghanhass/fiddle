@@ -34,10 +34,7 @@ export class JsPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.jsCode;
     this.mainService.jsCode = value;
-
-    if(this.oldCodeValue != value){
-      //console.log("js value = ", value);
-    }
+    this.mainService.setCheckBeforeUnloadListener();
   }
 
   ngOnInit(): void {
@@ -55,9 +52,9 @@ export class JsPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
-          self.mainService.jsCode = self.oldCodeValue;
-          self.code = self.oldCodeValue;
-          self.runcodemsg.emit();
+        self.code = self.oldCodeValue;
+        self.mainService.jsCode = self.code;
+        self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
         if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){

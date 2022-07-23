@@ -89,19 +89,27 @@ export class MainService {
   public beforeUnloadListener: any = (event:BeforeUnloadEvent) => {
     event.preventDefault();
     //console.log("beforeUnload event is set");
-    if(this.isCodeChanged()){
-      event.returnValue = "Are you sure you want to exit?";
-      return event.returnValue = "Are you sure you want to exit?";
-    }
-    else{
-      event.returnValue = null;
-      return null
-    }
+    return event.returnValue = "Are you sure you want to exit?";
   };
   
   constructor(private http: HttpClient) { 
+  }
+
+  setCheckBeforeUnloadListener(){
     let self = this;
-    window.addEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
+    window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
+
+    if(this.isCodeChanged()){
+      window.addEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
+    }
+    else{
+      window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true}); 
+    }
+  }
+
+  removeBeforeUnloadListener(){
+    let self = this;
+    window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
   }
 
   initConfig():Promise<any>{
@@ -121,14 +129,6 @@ export class MainService {
   getConfig(key: string){
     return this.appConfig[key];
   }
-
-  /*saveFiddle(data: any): Observable<any>{
-    ////console.log("saveFiddle data = ", data);
-    return (this.http.post(this.url, data,this.httpOptions));
-  }*/
-  /*getFiddle(data: any): Observable<any>{
-    return (this.http.post(this.url, data, this.httpOptions));
-  }*/
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;

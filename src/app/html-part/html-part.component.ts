@@ -58,9 +58,9 @@ export class HtmlPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
-          self.mainService.htmlCode = self.oldCodeValue;
-          self.code = self.oldCodeValue;
-          self.runcodemsg.emit();
+        self.code = self.oldCodeValue;
+        self.mainService.htmlCode = self.code;
+        self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
         if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
@@ -76,10 +76,7 @@ export class HtmlPartComponent implements OnInit {
     //console.log('CODE', value);
     this.oldCodeValue = this.mainService.htmlCode;
     this.mainService.htmlCode = value;
-    
-    /*if(this.oldCodeValue != value){
-      console.log("html value = ", value);
-    }*/
+    this.mainService.setCheckBeforeUnloadListener();
   }
 
 }
