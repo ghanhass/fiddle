@@ -395,7 +395,7 @@ export class MainComponent implements AfterViewInit {
         let alternateJs: string = "<script>"+this.mainService.jsCode+"</script>";
         let prettifiedJs: string = this.ngxPrettifyService.prettify(alternateJs, "javascript");
         let indScript = prettifiedJs.lastIndexOf("</script>");
-        prettifiedJs = prettifiedJs.slice(7,indScript).trim();
+        prettifiedJs = prettifiedJs.slice(8,indScript).trim();
         this.jsPart.code = prettifiedJs;
       break;
     }
