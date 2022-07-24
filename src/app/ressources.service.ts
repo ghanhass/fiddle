@@ -54,7 +54,7 @@ export class RessourcesService {
   }
 
   getRessourceMetaData(ressourceName):Observable<CdnjsMetaData>{
-    let newRessources : Observable<CdnjsMetaData> = this.http.get<CdnjsMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"/?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
+    let newRessources : Observable<CdnjsMetaData> = this.http.get<CdnjsMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
       this.cacheTimedOut = false;
       this.cachedCdnjsMetaData.push({
         name: ressourceName,
