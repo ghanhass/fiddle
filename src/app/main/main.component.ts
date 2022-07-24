@@ -190,6 +190,7 @@ export class MainComponent implements AfterViewInit {
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
+          //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
@@ -212,7 +213,7 @@ export class MainComponent implements AfterViewInit {
           }
           this.changeLayout(this.mainService.layout, obj);
           self.mainService.redirectAfterSaveMode = false;
-          ////console.log("after router path change");
+          //console.log("after router path change");
           if(this.mainService.scheduledRunFiddle){
             this.runCode();
           }
@@ -222,10 +223,10 @@ export class MainComponent implements AfterViewInit {
         else{//retrieve data from backend ?
           this.loader.showLoader();
           this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-            ////console.log("getFiddle2 res = ", res);
+            //console.log("getFiddle2 res = ", res);
             if(res.status == "ok"){
               let fiddleData: FiddleData = res.fiddleData;
-              ////console.log("getFiddle obj = ", obj);
+              //console.log("getFiddle obj = ", obj);
               this.htmlPart.code = fiddleData.html;
               this.cssPart.code = fiddleData.css;
               this.jsPart.code = fiddleData.js;
@@ -332,7 +333,7 @@ export class MainComponent implements AfterViewInit {
       }
 
       this.setMainServiceCodepartSizes();
-      ////console.log("splitComponentOuter sizes = ", sizes);
+      //console.log("splitComponentOuter sizes = ", sizes);
       this.calculateIframeSize(mainContainerEl);
     });
 
@@ -437,8 +438,8 @@ export class MainComponent implements AfterViewInit {
         self.iframeWidth = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
       }
 
-      ////console.log("self.iframeWidth = ", self.iframeWidth);
-      ////console.log("self.iframeHeight = ", self.iframeHeight);
+      //console.log("self.iframeWidth = ", self.iframeWidth);
+      //console.log("self.iframeHeight = ", self.iframeHeight);
     },1)
   }
 
@@ -482,7 +483,7 @@ export class MainComponent implements AfterViewInit {
               this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
               this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
               this.initialCodePartSize = 350;
-              ////console.log("this.mainContainerHeight = ", this.mainContainerHeight);
+              //console.log("this.mainContainerHeight = ", this.mainContainerHeight);
               
               break;
               case 2:
@@ -562,26 +563,26 @@ export class MainComponent implements AfterViewInit {
       codePartsMinLimit = 300;
     }
 
-    ////console.log("savedMainContainerSize = ", savedMainContainerSize);
+    //console.log("savedMainContainerSize = ", savedMainContainerSize);
 
     if(savedIframeResizeValue > currentMainContainerSize - 12 || savedIframeResizeValue == (savedMainContainerSize - 12)){
-      ////console.log("aaa");
+      //console.log("aaa");
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }
     else if(savedIframeResizeValue < 0){
-      ////console.log("bbb");
+      //console.log("bbb");
       this.emptyArea_1_Size = (currentMainContainerSize / 2) - 6;
       this.emptyArea_2_Size = (currentMainContainerSize / 2) - 6;
     }
     else{
-      ////console.log("ccc");
+      //console.log("ccc");
       this.emptyArea_1_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
       this.emptyArea_2_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
     }
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
-    ////console.log("param.data = ", param.data);
+    //console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner", savedMainContainerSize);
     this.initialHtmlCodePartSize = Math.floor(sizes[1]);
     this.initialCssCodePartSize = Math.floor(sizes[2]);
@@ -857,7 +858,7 @@ export class MainComponent implements AfterViewInit {
             layoutsListElement.style.height = "";
           }
         }
-        ////console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
+        //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
       }
     }
   }
@@ -883,7 +884,7 @@ export class MainComponent implements AfterViewInit {
       let submitBtn: HTMLButtonElement = form.querySelector("input[name='submit']")
       if(select && submitBtn){
         select.selectedIndex = newIndex;
-        ////console.log("select.value = ", select.value);
+        //console.log("select.value = ", select.value);
         submitBtn.click();
       }
     }
@@ -969,7 +970,7 @@ export class MainComponent implements AfterViewInit {
 
       this.setMainServiceCodepartSizes();
 
-      console.log("arr = ", arr);
+      //console.log("arr = ", arr);
 
       this.firstCodePartHalfStretch = undefined; //firstCodePartHalfStretch not needed anymore
 
@@ -997,9 +998,9 @@ export class MainComponent implements AfterViewInit {
           this.codePartStretchState.state = false;
           this.codePartStretchState.index = -1;
           let sizes: any = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
-          ////console.log("sizes before = ", sizes);
+          //console.log("sizes before = ", sizes);
           this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
-          ////console.log("sizes after = ", sizes);
+          //console.log("sizes after = ", sizes);
 
           this.initialHtmlCodePartSize = sizes[1];
           this.initialCssCodePartSize = sizes[2];
@@ -1023,7 +1024,7 @@ export class MainComponent implements AfterViewInit {
 
         if(this.layout == 1 || this.layout == 3){
           let totalSize = this.mainContainerHeight - 10;
-          ////console.log("totalSize = ", totalSize);
+          //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
             this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
@@ -1038,7 +1039,7 @@ export class MainComponent implements AfterViewInit {
         }
         else if( this.layout == 2 || this.layout == 4){
           let totalSize = this.mainContainerWidth - 10;
-          ////console.log("totalSize = ", totalSize);
+          //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
             this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
@@ -1067,7 +1068,7 @@ export class MainComponent implements AfterViewInit {
 
   @HostListener("window:keydown", ["$event"])
   onWindowKeydown(event: KeyboardEvent){
-    ////console.log("onWindowKeydown ", event.code);
+    //console.log("onWindowKeydown ", event.code);
   }
   
   @HostListener("document:mouseup", ["$event"])
@@ -1078,8 +1079,8 @@ export class MainComponent implements AfterViewInit {
     }
     if(this.isCustomGutter1_dragging){
       this.isCustomGutter1_dragging = false;
-      ////console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
-      ////console.log("--------------------------");
+      //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("--------------------------");
 
       this.isFiddleHeightDisabled = false;
       this.isFiddleWidthDisabled = false;
@@ -1087,8 +1088,8 @@ export class MainComponent implements AfterViewInit {
     else if(this.isCustomGutter2_dragging){
       this.isCustomGutter2_dragging = false;
 
-      ////console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
-      ////console.log("--------------------------");
+      //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("--------------------------");
 
       this.isFiddleHeightDisabled = false;
       this.isFiddleWidthDisabled = false;
@@ -1148,18 +1149,18 @@ export class MainComponent implements AfterViewInit {
     let newWindowHeight = window.innerHeight;
 
     if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
-      ////console.log("/!\ window resize event: ", event);
+      //console.log("/!\ window resize event: ", event);
 
       this.windowWidth = newWindowWidth;
       this.windowHeight = newWindowHeight;
       
       let newMainContainerWidth = mainContainerEl.offsetWidth;
       let newMainContainerHeight = mainContainerEl.offsetHeight;
-      ////console.log("newMainContainerHeight: ", newMainContainerHeight);
-      ////console.log("this.mainContainerHeight: ", this.mainContainerHeight);
+      //console.log("newMainContainerHeight: ", newMainContainerHeight);
+      //console.log("this.mainContainerHeight: ", this.mainContainerHeight);
 
-      ////console.log("newMainContainerWidth: ", newMainContainerWidth);
-      ////console.log("this.mainContainerWidth: ", this.mainContainerWidth);
+      //console.log("newMainContainerWidth: ", newMainContainerWidth);
+      //console.log("this.mainContainerWidth: ", this.mainContainerWidth);
       let bool:boolean;
       let oldMainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight;
@@ -1200,7 +1201,7 @@ export class MainComponent implements AfterViewInit {
       //self.reAdaptIframeResizeValue(oldMainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);
 
        
-      ////console.log("this.canCallReAdaptCodePartsSizes = ", this.canCallReAdaptCodePartsSizes);
+      //console.log("this.canCallReAdaptCodePartsSizes = ", this.canCallReAdaptCodePartsSizes);
       if(this.canCallReAdaptCodePartsSizes){
         this.canCallReAdaptCodePartsSizes = false;
         this.codePartsSizesFix = setTimeout(()=>{
@@ -1259,9 +1260,9 @@ export class MainComponent implements AfterViewInit {
    * @param mainContainerWidthOrHeight .main-container's width or height depending on the layout
    */
   reAdaptIframeResizeValue(oldMainContainerWidthOrHeight: number, newMainContainerWidthOrHeight: number, iframeSize: number){
-    ////console.log("oldMainContainerWidthOrHeight = ", oldMainContainerWidthOrHeight);
-    ////console.log("iframeSize with gutters = ", iframeSize + 12);
-    ////console.log("_____________________________");
+    //console.log("oldMainContainerWidthOrHeight = ", oldMainContainerWidthOrHeight);
+    //console.log("iframeSize with gutters = ", iframeSize + 12);
+    //console.log("_____________________________");
     let sizeDiff = newMainContainerWidthOrHeight - oldMainContainerWidthOrHeight;
     let newEmptyAreaSize = this.emptyArea_1_Size + (sizeDiff / 2);
     let newConsoleWindowSize = this.consoleWindowSize + (sizeDiff);
@@ -1309,7 +1310,7 @@ export class MainComponent implements AfterViewInit {
       sizes[2] = sizes[2]*coef;
       sizes[3] = sizes[3]*coef;
       
-      ////console.log("sizes inner = ", sizes);
+      //console.log("sizes inner = ", sizes);
       this.splitComponentInner.setVisibleAreaSizes(sizes);
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
@@ -1345,7 +1346,7 @@ export class MainComponent implements AfterViewInit {
         sizes[ind] = minLimit;
       }
       
-      ////console.log("sizes outer = ", sizes);
+      //console.log("sizes outer = ", sizes);
       this.newCodePartSize = sizes[ind] as number;
       this.splitComponentOuter.setVisibleAreaSizes(sizes);
     }
@@ -1366,7 +1367,7 @@ export class MainComponent implements AfterViewInit {
       this.iframePart.saveFiddle();
     }
     else{//run
-      ////console.log("inside runCode()");
+      //console.log("inside runCode()");
       this.iframePart.runFiddle();
     }
   }
@@ -1420,7 +1421,7 @@ export class MainComponent implements AfterViewInit {
     this.mainService.showResult = this.showResult;
 
     let self = this;
-      ////console.log("inside custom interval");
+      //console.log("inside custom interval");
       if (!this.showCss){
         if(this.codeParts.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
           //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
@@ -1505,8 +1506,8 @@ export class MainComponent implements AfterViewInit {
       this.isFiddleHeightDisabled = true;
       this.isFiddleWidthDisabled = true;
 
-      ////console.log("mousedown event.type = " + event.type);
-      ////console.log("--------------------------");
+      //console.log("mousedown event.type = " + event.type);
+      //console.log("--------------------------");
     }
     else if(customGutterNum == 2){
       this.isCustomGutter2_dragging = true;
@@ -1515,8 +1516,8 @@ export class MainComponent implements AfterViewInit {
       this.isFiddleHeightDisabled = true;
       this.isFiddleWidthDisabled = true;
 
-      ////console.log("mousedown event.type = " + event.type);
-      ////console.log("--------------------------");
+      //console.log("mousedown event.type = " + event.type);
+      //console.log("--------------------------");
     }
   }
 
@@ -1560,8 +1561,8 @@ export class MainComponent implements AfterViewInit {
             this.showIframeHider = true; 
           }
           event.preventDefault();
-          ////console.log("mousemove evTarget = ", evTarget);
-          ////console.log("isCustomGutter1_dragging is true");
+          //console.log("mousemove evTarget = ", evTarget);
+          //console.log("isCustomGutter1_dragging is true");
           if(this.layout == 1 || this.layout == 3){
             let emptyArea1_height = emptyArea1.offsetHeight;
             emptyArea1_height = eventClientXOrY - mainContainer.getBoundingClientRect().top;
@@ -1594,8 +1595,8 @@ export class MainComponent implements AfterViewInit {
             this.showIframeHider = true; 
           }
           event.preventDefault();
-          ////console.log("mousemove evTarget = ", evTarget);
-          ////console.log("isCustomGutter2_dragging is true");
+          //console.log("mousemove evTarget = ", evTarget);
+          //console.log("isCustomGutter2_dragging is true");
 
           let consoleWindowHeight = consoleWindow.offsetHeight;
           consoleWindowHeight = mainContainer.getBoundingClientRect().bottom - eventClientXOrY ;
@@ -1607,7 +1608,7 @@ export class MainComponent implements AfterViewInit {
               consoleWindowHeight = mainContainer.offsetHeight - 6;
             }
             this.consoleWindowSize = consoleWindowHeight;
-            ////console.log("emptyArea2_height = ", emptyArea2_height);
+            //console.log("emptyArea2_height = ", emptyArea2_height);
           }
           else{
             if(this.layout == 1 || this.layout == 3){
@@ -1623,7 +1624,7 @@ export class MainComponent implements AfterViewInit {
               }
               this.emptyArea_2_Size = emptyArea2_height;
               this.emptyArea_1_Size = emptyArea2_height;
-              ////console.log("emptyArea2_height = ", emptyArea2_height);
+              //console.log("emptyArea2_height = ", emptyArea2_height);
             }
             else if(this.layout == 2 || this.layout == 4){
               let emptyArea2_width = emptyArea2.offsetWidth;
@@ -1801,18 +1802,18 @@ export class MainComponent implements AfterViewInit {
   }
 
   splitComponentInnerDragEnd(event){
-    ////console.log("splitComponentInnerDragEnd event = ", event);
+    //console.log("splitComponentInnerDragEnd event = ", event);
     clearInterval(this.customInterval);
     this.canChangeSplitSizes = true;
   }
 
   splitComponentInnerDragStart(event){
-    ////console.log("splitComponentInnerDragStart event = ", event);
+    //console.log("splitComponentInnerDragStart event = ", event);
     this.canChangeSplitSizes = false;
   }
 
   splitComponentOuterDragEnd(event){
-    ////console.log("splitComponentOuterDragEnd event = ", event);
+    //console.log("splitComponentOuterDragEnd event = ", event);
     clearInterval(this.customInterval);
     this.showIframeHider = false;
 
@@ -1821,7 +1822,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   splitComponentOuterDragStart(event){
-    ////console.log("splitComponentOuterDragStart event = ", event);
+    //console.log("splitComponentOuterDragStart event = ", event);
     this.showIframeHider = true;
 
     this.isFiddleHeightDisabled = true;
@@ -1881,13 +1882,13 @@ export class MainComponent implements AfterViewInit {
     for(let ind = 0; ind < this.fiddleTitle.length; ind++){
       width += 10;
     }
-    ////console.log("width = ", width);
+    //console.log("width = ", width);
     return width == 0 ? "" : width+"px";
   }
 
   onFiddeTitleChange(data){
     this.mainService.fiddleTitle = data;
-    ////console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
+    //console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
   }
 
   onIframePartShowLoader(){
@@ -1903,7 +1904,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeFiddleTheme(param?){
-    ////console.log("param = ", param);
+    //console.log("param = ", param);
     this.isThemesListShown = true;
   }
 

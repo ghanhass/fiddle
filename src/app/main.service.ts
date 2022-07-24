@@ -22,9 +22,9 @@ export class MainService {
     responseType: 'text' as 'text'
   }
   url: string = environment.url;
-  jsCode:string = "";
-  cssCode:string = "";
-  htmlCode:string = "";
+  jsCode:string;
+  cssCode:string;
+  htmlCode:string;
 
   jsCodeSinceSave:string = "";
   cssCodeSinceSave:string = "";
@@ -93,6 +93,11 @@ export class MainService {
   };
   
   constructor(private http: HttpClient) { 
+    this.jsCode = "";
+    this.cssCode = "";
+    this.htmlCode = "";
+
+    console.log("mainService constructor");
   }
 
   setCheckBeforeUnloadListener(){

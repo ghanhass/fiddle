@@ -449,10 +449,6 @@ i.fa.fa-sort-asc {
     font-weight: 600;
 }
 
-.themes-menu.shown > li:not(.selected):hover {
-    /*background-color: #8b8b8b26;*/
-}
-
 .layouts-list-container {
     display: flex;
     align-items: center;

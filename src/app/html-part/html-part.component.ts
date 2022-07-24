@@ -43,6 +43,7 @@ export class HtmlPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.code = this.mainService.htmlCode;
   }
 
   onEditorLoad(editor){

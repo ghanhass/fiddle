@@ -38,6 +38,7 @@ export class JsPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.code = this.mainService.jsCode;
   }
 
   onEditorLoad(editor){

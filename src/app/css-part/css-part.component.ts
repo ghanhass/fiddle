@@ -45,6 +45,7 @@ export class CssPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.code = this.mainService.cssCode;
   }
 
   ngOnChanges(data: SimpleChanges){

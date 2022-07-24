@@ -144,6 +144,7 @@ export class IframePartComponent implements OnInit {
         
         this.mainService.removeBeforeUnloadListener();
         this.mainService.redirectAfterSaveMode = true;
+        //console.log("gonna navigate now !");
         this.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");
       }
@@ -166,7 +167,6 @@ export class IframePartComponent implements OnInit {
   }
 
   onFormLoad(): void {
-    //console.log("onFormLoad()");
     //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
 
     if(this.mainService.scheduledRunFiddle && this.iframeElement){
