@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { Cdnjsdata } from './cdnjsdata';
 import { CachedCdnjsMetaData } from './cached-cdnjs-meta-data';
-import { tap } from 'rxjs/operators';
-import { CdnjsMetaData } from './cdnjs-meta-data';
+import { filter, map, take, tap } from 'rxjs/operators';
+import { CdnjsLibraryMetaData } from './cdnjs-meta-data';
+import { CdnjsLibrariesSearchResult } from './cdnjs-libraries-search-result';
+import { CdnjsLibraryAssets } from './cdnjs-library-assets';
 
 @Injectable({
   providedIn: 'root'
@@ -12,23 +13,138 @@ import { CdnjsMetaData } from './cdnjs-meta-data';
 export class RessourcesService {
 
   isDataCached: boolean = false;
-  cachedRessourcesData: Cdnjsdata;
+  cachedRessourcesData: CdnjsLibrariesSearchResult = {results: []};
   cacheTimedOut: boolean = false;
   cachedCdnjsMetaData: Array<CachedCdnjsMetaData>=[];
 
   constructor(private http:HttpClient) {
 
     setInterval(()=>{//refresh cdn results every 6 hours within application usage duration without page reload
+      
       this.cacheTimedOut = true;
+      this.cachedRessourcesData = {results: []};
+      this.cachedCdnjsMetaData = [];
+
     },3600000 * 6);
   }
 
-  getRessourcesBySearch(searchString:string):Observable<Cdnjsdata>{
-    return this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?search="+searchString+"&fields=name,description,version&limit=20");
+  searForString(srcStr, searchStr){
+    if(srcStr.toUpperCase() == searchStr.toUpperCase()){
+      return true;
+    }
+    if(srcStr.toUpperCase().includes(searchStr.toUpperCase())){
+      return true;
+    }
+    else{
+      let strsArr = searchStr.split(" ");
+      let counter = 0;
+      for(var ind=0; ind < strsArr.length; ind++){
+        let str = strsArr[ind];
+        if(srcStr.toUpperCase().includes(str.toUpperCase())){
+          counter++;
+        }
+      }
+      if(counter == strsArr.length){
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  getRessourcesBySearch(searchString:string):Observable<CdnjsLibrariesSearchResult>{
+
+      let newRessources = this.http.get<CdnjsLibrariesSearchResult>("https://api.cdnjs.com/libraries?search="+searchString+"&fields=name,description,version&limit=20").
+      pipe(
+        map((res)=>{
+        let res2 = res;
+
+        res2.results = res2.results.filter((libraryData)=>{
+          return this.searForString(libraryData.name, searchString);
+        });
+
+        res2.results.sort((a, b)=>{
+          if(a.name.length > b.name.length){
+            return 1;
+          }
+          else if(a.name.length < b.name.length){
+            return -1;
+          }
+          else{
+            if(a.name.toUpperCase() > b.name.toUpperCase()){
+              return 1;
+            }
+            else{
+              return -1;
+            } 
+          }
+        });
+
+        console.log("network res2.results = ", res2.results);
+        console.log("------------------------");
+
+        res2.results.forEach((libraryData)=>{
+          let ind = this.cachedRessourcesData.results.findIndex((cachedLibraryData)=>{
+            return cachedLibraryData.name.toUpperCase() == libraryData.name.toUpperCase();
+          });
+
+          if(ind === -1){//retrieved library/ressource is NOT present in the cached search result ? cache it
+            this.cachedRessourcesData.results.push(libraryData);
+          }
+        });
+
+        return res2;
+      })
+      );
+
+      return newRessources;
+
+      /*
+      let ind = this.cachedRessourcesData.results.findIndex((cachedLibraryData)=>{
+        return cachedLibraryData.name.toUpperCase().indexOf(searchString.trim().toUpperCase()) > -1
+      });
+
+      if(ind > -1){//searched library/ressource is present in the cached search result ?
+        return  of(this.cachedRessourcesData).pipe(
+          map((res)=>{
+            let res2 = res;
+
+            res2.results = res2.results.filter((libraryData)=>{
+              if(libraryData.name.toUpperCase().indexOf(searchString.trim().toUpperCase()) > -1){
+                return true;
+              }
+              return false;
+            });
+
+            res2.results.sort((a, b)=>{
+
+                if(a.name.toUpperCase() > b.name.toUpperCase()){
+                  return 1;
+                }
+                else if(a.name.toUpperCase() == b.name.toUpperCase()){
+                  return 0;
+                }
+                else{
+                  return -1
+                }
+            });
+
+            console.log("res2.results = ", res2.results);
+            console.log("------------------------");
+
+            res2.results.slice(0, 21);
+
+            return res2;
+          })
+        );
+      }
+      else{
+        return newRessources;
+      } 
+      */
   }
 
-  getRessources():Observable<Cdnjsdata>{
-    let newRessources : Observable<Cdnjsdata> = this.http.get<Cdnjsdata>("https://api.cdnjs.com/libraries?fields=name,description,version").pipe(tap((res)=>{
+  getRessources():Observable<CdnjsLibrariesSearchResult>{
+    let newRessources : Observable<CdnjsLibrariesSearchResult> = this.http.get<CdnjsLibrariesSearchResult>("https://api.cdnjs.com/libraries?fields=name,description,version").pipe(tap((res)=>{
       if (!this.isDataCached){
         this.isDataCached = true;
         this.cacheTimedOut = false;
@@ -53,44 +169,44 @@ export class RessourcesService {
     }
   }
 
-  getRessourceMetaData(ressourceName):Observable<CdnjsMetaData>{
-    let newRessources : Observable<CdnjsMetaData> = this.http.get<CdnjsMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
-      this.cacheTimedOut = false;
-      this.cachedCdnjsMetaData.push({
-        name: ressourceName,
-        cachedMetaData: {
-          assets: res.assets,
-          description: res.description,
-          latest: res.latest,
-          name: res.name,
-          versions: res.versions,
-          version: res.version
-        }
-      }) 
-      return res;
+  getRessourceMetaData(ressourceName):Observable<CdnjsLibraryMetaData>{
+    let newRessourceMetaData : Observable<CdnjsLibraryMetaData> = this.http.get<CdnjsLibraryMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
+      
+      let ind = this.cachedCdnjsMetaData.findIndex((cachedLibraryMetaData)=>{
+        return cachedLibraryMetaData.name.toUpperCase() == res.name.toUpperCase();
+      });
+
+      if(ind === -1){//retrieved library/ressource metaData is NOT present in the cached libraries metaDatas ?
+        this.cachedCdnjsMetaData.push({
+          name: ressourceName,
+          cachedMetaData: res
+        });
+      }
+
     }));
-    
-    if(this.cacheTimedOut){
-      this.cachedCdnjsMetaData = [];
-      return newRessources;
+
+    return newRessourceMetaData;
+    /*
+    let ind = this.cachedCdnjsMetaData.findIndex((cachedLibraryMetaData)=>{
+      return cachedLibraryMetaData.name.toUpperCase().indexOf(ressourceName.trim().toUpperCase()) > -1
+    });
+
+    console.log("this.cachedCdnjsMetaData = ", this.cachedCdnjsMetaData);
+    console.log("------------------------");
+
+    if(ind > -1){//searched library/ressource i"s present in the cached search result ?
+      return of(this.cachedCdnjsMetaData[ind]);
     }
     else{
-      let cachedRessourceVersion: CachedCdnjsMetaData[] = this.cachedCdnjsMetaData.filter((ressourceVersionData:CachedCdnjsMetaData)=>{
-        return ressourceVersionData.name == ressourceName;
-      });
-      if(cachedRessourceVersion.length){
+      return newRessourceMetaData;
+    } 
+    */
+  }
 
-        return of(cachedRessourceVersion[0].cachedMetaData).pipe(tap((res)=>{
-          this.cacheTimedOut = false;
-          return res;
-        }));
+  getRessourceAssets(ressourceName, ressourceVersion){
+    let libraryAssets = this.http.get<CdnjsLibraryAssets>("https://api.cdnjs.com/libraries/"+ressourceName+"/"+ressourceVersion);
 
-      }
-      else{
-        return newRessources;
-      }
-
-    }
+    return libraryAssets;
   }
 
 }

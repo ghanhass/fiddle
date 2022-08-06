@@ -1,5 +1,5 @@
-import {CdnjsMetaData} from "./cdnjs-meta-data";
+import {CdnjsLibraryMetaData} from "./cdnjs-meta-data";
 export interface CachedCdnjsMetaData {
   name?: string;
-  cachedMetaData?:CdnjsMetaData
+  cachedMetaData?:CdnjsLibraryMetaData
 }

@@ -1,4 +1,4 @@
-export interface CdnjsSearchResult{
+export interface CdnjsLibraryData{
   name?:string;
   description?:string;
   latest?: string;

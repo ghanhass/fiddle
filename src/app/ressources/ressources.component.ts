@@ -1,10 +1,10 @@
 import { Component, OnInit, HostListener, EventEmitter,Output, ViewChild } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
-import { Cdnjsdata } from '../cdnjsdata';
-import { CdnjsSearchResult } from '../cdnjs-result';
 import { LoaderComponent } from '../loader/loader.component';
-import { CdnjsMetaData } from '../cdnjs-meta-data';
+import { CdnjsLibraryMetaData } from '../cdnjs-meta-data';
 import { stripComments } from 'tslint/lib/utils';
+import { CdnjsLibrariesSearchResult } from '../cdnjs-libraries-search-result';
+import { CdnjsLibraryData } from '../cdnjs-library-data';
 
 interface SelectedRessourceAsset{
   ressourceName: string;
@@ -24,8 +24,9 @@ export class RessourcesComponent implements OnInit {
 
   ressourcesQueryString: string;
   ressourcesChoiceFilesSearchString: string;
-  availableRessources: Array<CdnjsSearchResult> = [];
-  currentRessourceChoice: CdnjsSearchResult = {
+  availableRessources: Array<CdnjsLibraryData> = [];
+
+  currentRessourceChoice: CdnjsLibraryData = {
     name:"",
     version:"",
     latest:"",
@@ -34,7 +35,7 @@ export class RessourcesComponent implements OnInit {
   currentRessourceVersions: [string];
   currentRessourceVersion: string;
   currentRessourceAssetsByVersion: Array<string> = [];
-  currentRessourceMetaData: CdnjsMetaData;
+  currentRessourceMetaData: CdnjsLibraryMetaData;
   
   selectedRessourceAssets: Array<SelectedRessourceAsset> = [];
 
@@ -50,97 +51,72 @@ export class RessourcesComponent implements OnInit {
 
   constructor(private ressourcesService: RessourcesService) {}
 
-  searForString(srcStr, searchStr){
-    if(srcStr.toUpperCase() == searchStr.toUpperCase()){
-      return true;
-    }
-    if(srcStr.toUpperCase().includes(searchStr.toUpperCase())){
-      return true;
-    }
-    else{
-      let strsArr = searchStr.split(" ");
-      let counter = 0;
-      for(var ind=0; ind < strsArr.length; ind++){
-        let str = strsArr[ind];
-        if(srcStr.toUpperCase().includes(str.toUpperCase())){
-          counter++;
-        }
-      }
-      if(counter == strsArr.length){
-        return true;
-      }
-    }
-    return false;
-  }
+  
 
-  filterRessources(dataSet: Cdnjsdata, searchString: string){
-
-    let results = dataSet.results;
-
-    let filteredResults = results.filter((result)=>{
-      return this.searForString(result.name, searchString);
-    }).sort((a, b)=>{
-      if(a.name.length > b.name.length){
-        return 1;
-      }
-      else if(a.name.length < b.name.length){
-        return -1;
-      }
-      else{
-        if(a.name.toUpperCase() > b.name.toUpperCase()){
-          return 1;
-        }
-        else{
-          return -1;
-        } 
-      }
-    }).slice(0,150);
-    this.availableRessources = filteredResults;
-
-    //console.log("filteredResults = ", filteredResults);
-    //console.log("searchString = ", searchString);
-    //console.log("---------------------------------");
-  }
 
   onRessourcesQueryStringChange(searchString: string){
-    if(searchString.trim().toUpperCase() != this.currentRessourceChoice.name.trim().toUpperCase()){
+    if(searchString.trim().toUpperCase()){ 
       //this.resetCurrentRessourceChoice();
       this.loader.showLoader();
-      this.ressourcesService.getRessources().subscribe((res)=>{
+      this.ressourcesService.getRessourcesBySearch(searchString).subscribe({
+        next: (res)=>{
+          this.availableRessources = res.results;
+          this.loader.hideLoader();
+        },
+        error: (error)=>{
+
+        }
+      });
+      /*this.ressourcesService.getRessources().subscribe((res)=>{
         //console.log("res = ", res);
         this.filterRessources(res, searchString.trim());
         this.loader.hideLoader();
-      });
+      });*/
     }
   }
 
-  onRessourcesChoiceClick(ressource:CdnjsSearchResult){
-    this.currentRessourceChoice = ressource;
-    this.loader.showLoader();
-    this.currentRessourceAssetsByVersion = [];
-    this.ressourcesChoiceFilesSearchString = "";
-    this.currentRessourceVersion = "";
-    this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
-      //console.log("getRessourceMetaData res = ", res);
-      //console.log("currentRessourceChoice = ", this.currentRessourceChoice);
-      this.currentRessourceMetaData = res;
-      this.currentRessourceVersions = res.versions;
-      this.currentRessourceVersion = ressource.version;
-      this.setCurrentRessourceAssetsByVersion(ressource.version);
-      this.loader.hideLoader();
-    });
+  onRessourcesChoiceClick(ressource:CdnjsLibraryData){
+    let currentRessourceName = this.currentRessourceChoice.version;    
+
+    if(currentRessourceName != ressource.name){
+      this.loader.showLoader();
+      
+      this.currentRessourceAssetsByVersion = [];
+      this.ressourcesChoiceFilesSearchString = "";
+
+      this.currentRessourceChoice = ressource;
+      this.ressourcesService.getRessourceMetaData(ressource.name).subscribe((res)=>{
+        //console.log("getRessourceMetaData res = ", res);
+        //console.log("currentRessourceChoice = ", this.currentRessourceChoice);
+        this.currentRessourceMetaData = res;
+        this.currentRessourceVersions = this.currentRessourceMetaData.versions;
+        this.currentRessourceVersion = ressource.version;//main latest version of the clicked ressource of course.
+        this.setCurrentRessourceAssetsByVersion(ressource.version)
+        
+        this.loader.hideLoader();
+      });
+    }
+
+    
   }
 
   setCurrentRessourceAssetsByVersion(ressourceVersion){
-    let assetsPerVersion = this.currentRessourceMetaData.assets.filter((ressourceMetaData)=>{
-      return ressourceMetaData.version == ressourceVersion;      
+    let assetsPerVersion = this.currentRessourceMetaData.assets.filter((assetData)=>{
+      return assetData.version == ressourceVersion;      
     });
     if(assetsPerVersion.length){
       this.currentRessourceAssetsByVersion = assetsPerVersion[0].files;
     }
     else{
-      this.currentRessourceAssetsByVersion =  this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].files;
-      this.currentRessourceVersion = this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].version;
+
+      //this.currentRessourceAssetsByVersion =  this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].files;
+      //this.currentRessourceVersion = this.currentRessourceMetaData.assets[this.currentRessourceMetaData.assets.length - 1].version;
+      this.loader.showLoader();
+      this.ressourcesService.getRessourceAssets(this.currentRessourceChoice.name, ressourceVersion).subscribe((res)=>{
+        this.currentRessourceAssetsByVersion = res.files;
+        this.loader.hideLoader()
+      })
+
     }
   }
 
@@ -182,17 +158,17 @@ export class RessourcesComponent implements OnInit {
   getFilteredcurrentRessourceAssetsByVersion(datasetArr, searchStr){
     return datasetArr.filter((srcStr: string)=>{
       if(srcStr.length >= 4){
-        if(srcStr.substr(srcStr.length - 4) == ".css" || srcStr.substr(srcStr.length - 3) == ".js"){
+        if(srcStr.substring(srcStr.length - 4) == ".css" || srcStr.substring(srcStr.length - 3) == ".js"){
           return true;
         }
       }
       return false;
     }).filter((srcStr)=>{
-      return this.searForString(srcStr, searchStr);
+      return this.ressourcesService.searForString(srcStr, searchStr);
     });
   }
 
-  onSelectRessourceAsset(asset, ressource:CdnjsSearchResult){
+  onSelectRessourceAsset(asset, ressource:CdnjsLibraryData){
     //console.log("onSelectRessourceAsset data = ", asset);
 
     let assetIndex = undefined; 
@@ -219,7 +195,7 @@ export class RessourcesComponent implements OnInit {
 
   }
 
-  isRessourceAssetSelected(asset, ressource:CdnjsSearchResult){
+  isRessourceAssetSelected(asset, ressource:CdnjsLibraryData){
     return this.selectedRessourceAssets.filter((el)=>{
       return el.asset == asset && el.ressourceName == ressource.name && el.version == this.currentRessourceVersion
     }).length > 0;

@@ -205,6 +205,11 @@ input[type]{
   margin:1px 0px;
 }
 
+.ressources-choice-files-container.loading {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 @media (min-height:701px) and (min-width:768px){
   .resources-tabs-mobile{
       display:none;

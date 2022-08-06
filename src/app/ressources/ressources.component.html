@@ -29,8 +29,8 @@
         </div>  
     </div>    
     <hr>
-    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion && currentRessourceAssetsByVersion" [ngClass]="{'is-stretched': (selectedRessourceAssets.length == 0)}">
-        <div class="ressources-choice-files-search" *ngIf="currentRessourceAssetsByVersion.length">
+    <div class="ressources-choice-files-container" *ngIf="currentRessourceVersion && currentRessourceAssetsByVersion.length" [ngClass]="{'is-stretched': (selectedRessourceAssets.length == 0), 'loading': loader.isLoaderShow()}">
+        <div class="ressources-choice-files-search">
             <h3 class="title" style="border-bottom: none;">{{currentRessourceChoice.name}} {{currentRessourceVersion}} ressources (click to toggle)</h3>
             <div>
                 <label for="ressources-choice-files-search-input">Search for files: </label>

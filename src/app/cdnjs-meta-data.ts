@@ -1,5 +1,7 @@
-export interface CdnjsMetaData {
-  assets?: [any];
+import { CdnjsLibraryAssets } from "./cdnjs-library-assets";
+
+export interface CdnjsLibraryMetaData {
+  assets?: [CdnjsLibraryAssets];
   description?: string;
   latest?: string;
   name?: string;

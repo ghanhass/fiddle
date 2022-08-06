@@ -1,7 +1,6 @@
 import { Component, ElementRef, OnInit, AfterViewInit,ViewChild, Input, HostListener, Output ,EventEmitter} from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
-import { LoaderComponent } from "../loader/loader.component";
 import { Router, ActivatedRoute } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../fiddle-data';
@@ -19,7 +18,6 @@ export class IframePartComponent implements OnInit {
   //cssCode: string = "";
   fiddleTitle: string = "";
   @ViewChild("form")form: ElementRef;
-  @ViewChild("loader")loader: LoaderComponent;
   @ViewChild("copyInput")copyInput: ElementRef;
   @ViewChild("iframe")iframeElement: ElementRef;
   @Output()showloader: EventEmitter<any> = new EventEmitter();
