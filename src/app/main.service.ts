@@ -907,13 +907,13 @@ export class MainService {
     octokit.request('GET /gists?_='+(new Date).getTime(),{
       public:false
     }).then((res)=>{
-      console.log("get all gists res = ", res);
+      //console.log("get all gists res = ", res);
       res.data.forEach((oneGist)=>{
         if(oneGist.files["myfiddle_db.json"] === undefined){
           octokit.request('DELETE /gists/'+oneGist.id,{
             gist_id:oneGist.id
           }).then((res)=>{
-            console.log("deleted gist with id = ", oneGist.id);
+            //console.log("deleted gist with id = ", oneGist.id);
           });
         }
         else{

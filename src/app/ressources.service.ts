@@ -79,8 +79,8 @@ export class RessourcesService {
           }
         });
 
-        console.log("network res2.results = ", res2.results);
-        console.log("------------------------");
+        //console.log("network res2.results = ", res2.results);
+        //console.log("------------------------");
 
         res2.results.forEach((libraryData)=>{
           let ind = this.cachedRessourcesData.results.findIndex((cachedLibraryData)=>{
