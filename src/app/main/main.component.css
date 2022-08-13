@@ -271,7 +271,6 @@ as-split-area.as-split-area-iframe.console-on{
 .themes-btn,
 .console-btn
 {
-    font-size: 16px;
     cursor: pointer;
     display: block;
     text-align: center;
@@ -290,7 +289,7 @@ as-split-area.as-split-area-iframe.console-on{
 }
 
 .themes-btn{
-    padding: 1px 8px 1px 6px;
+    padding: 1px 8px 1px 2px;
 }
 
 .share-code-btn:active,
@@ -323,7 +322,6 @@ as-split-area.as-split-area-iframe.console-on{
 .header-btns-container > button {
     margin-left:3px;
     margin-right:3px;
-    font-size: 14px;
     padding: 1px 4px;
 }
   
@@ -364,8 +362,13 @@ as-split-area.as-split-area-iframe.console-on{
 
 i.fa.fa-sort-desc {
     position: absolute;
-    right: 0;
-    bottom: 7px;
+    right: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 10px;
+    display: flex;
+    align-items: center;
+    right:1px;
 }
 
 i.fa.fa-sort-asc {
@@ -625,6 +628,10 @@ i.fa.fa-sort-asc {
 }
 
 @media screen and (min-width:768px) and (min-height:581px){
+    .prettify-mobile-code{
+        display:none;
+    }
+
     .code-component-container.vertical-title-mode:not(.fullscreen) {
         flex-direction: row;
         border-top:2px solid #b5b5b5;
@@ -795,14 +802,6 @@ i.fa.fa-sort-asc {
     .paypal-btn-container .btn.paypal-btn {
         padding-left: 18px !important;
         padding-right: 14px;
-    }
-
-    i.fa.fa-sort-desc{
-        bottom: 11px !important;
-    }
-
-    i.fa.fa-sort-asc{
-        bottom: 4px !important;
     }
 }
 
@@ -1195,12 +1194,13 @@ as-split-area.code-component-container > app-html-part{
 }
 
 @media screen and (max-width:400px){
-    .header-btns-container  > .ressources-code-btn[class],
-    .header-btns-container  > .layouts-list-container[class],
-    .header-btns-container  > .share-code-btn[class],
-    .header-btns-container > .themes-btn[class],
-    .header-btns-container > .console-btn[class]{
+    .header-btns-container  > *:not(:last-child){
         margin-right:3px;
+        margin-left:0px;
+        padding: 1px 2px;
+    }
+
+    .header-btns-container  > *:last-child{
         margin-left:3px;
         padding: 1px 2px;
     }

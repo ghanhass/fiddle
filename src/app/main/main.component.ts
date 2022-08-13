@@ -1919,4 +1919,16 @@ export class MainComponent implements AfterViewInit {
     }
     return null;
   }
+
+  prettifyMobileCode(){
+    if(this.showHtml){
+      this.prettifyCode('html');
+    }
+    else if(this.showCss){
+      this.prettifyCode('css');
+    }
+    else if(this.showJs){
+      this.prettifyCode('js');
+    }
+  }
 }
