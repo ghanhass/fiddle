@@ -5,6 +5,8 @@ import { CdnjsLibraryMetaData } from '../cdnjs-meta-data';
 import { stripComments } from 'tslint/lib/utils';
 import { CdnjsLibrariesSearchResult } from '../cdnjs-libraries-search-result';
 import { CdnjsLibraryData } from '../cdnjs-library-data';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 interface SelectedRessourceAsset{
   ressourceName: string;
@@ -49,29 +51,19 @@ export class RessourcesComponent implements OnInit {
 
   ressoucesMobileTab: string = "browse";
 
+  ressourceSearchTerm = new Subject<string>();
+  ressourceSearchOperation: Observable<CdnjsLibrariesSearchResult>;
+
   constructor(private ressourcesService: RessourcesService) {}
 
   
 
 
-  onRessourcesQueryStringChange(searchString: string){
-    if(searchString.trim().toUpperCase()){ 
-      //this.resetCurrentRessourceChoice();
+  onRessourcesQueryStringChange(str: string){
+    let searchString = str.trim().toUpperCase();
+    if(searchString.length){ 
       this.loader.showLoader();
-      this.ressourcesService.getRessourcesBySearch(searchString).subscribe({
-        next: (res)=>{
-          this.availableRessources = res.results;
-          this.loader.hideLoader();
-        },
-        error: (error)=>{
-
-        }
-      });
-      /*this.ressourcesService.getRessources().subscribe((res)=>{
-        //console.log("res = ", res);
-        this.filterRessources(res, searchString.trim());
-        this.loader.hideLoader();
-      });*/
+      this.ressourceSearchTerm.next(searchString);
     }
   }
 
@@ -291,6 +283,23 @@ export class RessourcesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.ressourceSearchOperation = this.ressourceSearchTerm.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((searchString)=>{
+        return this.ressourcesService.getRessourcesBySearch(searchString)
+      })
+    );
+
+    this.ressourceSearchOperation.subscribe({
+      next: (res)=>{
+        this.availableRessources = res.results;
+        this.loader.hideLoader();
+      },
+      error: (error)=>{
+        this.loader.hideLoader();
+      }
+    });
   }
 
 }
