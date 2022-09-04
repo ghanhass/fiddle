@@ -190,7 +190,7 @@ export class MainComponent implements AfterViewInit {
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
-          //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
+          console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
@@ -238,8 +238,6 @@ export class MainComponent implements AfterViewInit {
               this.mainService.fiddleTitle = fiddleData.title;
               this.mainService.iframeResizeValue = fiddleData.iframe_resize_value;
 
-              this.mainService.resetCodeSinceSave();
-
               //mobile layout retrieval
               let mobileLayoutArr = fiddleData.mobile_layout.split(':');
               let mobileCodePart = mobileLayoutArr[0];
@@ -283,7 +281,8 @@ export class MainComponent implements AfterViewInit {
               this.mainService.showResult = this.showResult;
 
               this.changeLayout(fiddleData.layout, fiddleData);
-              this.runCode();
+              this.mainService.scheduledRunFiddle = true;
+              //this.runCode();
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
@@ -1367,7 +1366,7 @@ export class MainComponent implements AfterViewInit {
       this.iframePart.saveFiddle();
     }
     else{//run
-      //console.log("inside runCode()");
+      console.log("inside mainComponent.runCode()");
       this.iframePart.runFiddle();
     }
   }

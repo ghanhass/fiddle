@@ -74,7 +74,7 @@ export class HtmlPartComponent implements OnInit {
   }
 
   onCodeChanged(value) {
-    //console.log('CODE', value);
+    console.log('CODE', value);
     this.oldCodeValue = this.mainService.htmlCode;
     this.mainService.htmlCode = value;
     this.mainService.setCheckBeforeUnloadListener();

@@ -37,9 +37,9 @@ export class IframePartComponent implements OnInit {
         if(event.data == "sub-iframe-loaded"){
           //console.log("message event from sub iframe = ", event);
           self.isIframeLoadComplete = true;
-          if(self.isFiddleLoadComplete && self.isIframeLoadComplete /*&& !self.mainService.scheduledRunFiddle*/){
+          if(self.isFiddleLoadComplete && self.isIframeLoadComplete){
             self.hideloader.emit();
-            self.mainService.scheduledRunFiddle = false;
+            
           }
         }
       });
@@ -56,7 +56,7 @@ export class IframePartComponent implements OnInit {
     this.showloader.emit();
     if(this.iframeElement){
       let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
-      //console.log("inside runFiddle() iframeElement.contentWindow = ", iframeElement.contentWindow);
+      console.log("inside runFiddle() iframeElement.contentWindow = ", iframeElement.contentWindow);
       if(iframeElement.contentWindow){
         let fiddleCode = this.mainService.generateFiddleCode(data);
         let obj = {
@@ -65,6 +65,9 @@ export class IframePartComponent implements OnInit {
         }
         iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
       }
+    }
+    else{
+      console.log("iframeElement is NOT DEFINED");
     }
   }
 
@@ -115,7 +118,6 @@ export class IframePartComponent implements OnInit {
     //console.log("this.mainService.showResult = ", this.mainService.showResult);
 
     this.showloader.emit();
-    //this.runFiddle();
 
     this.mainService.saveFiddle(fiddleData).subscribe((fiddleId)=>{
       //console.log("saveFiddle fiddleId = ", fiddleId);
@@ -123,7 +125,7 @@ export class IframePartComponent implements OnInit {
       //this.runFiddle();
       this.isFiddleLoadComplete = true;
 
-      if(this.isFiddleLoadComplete && this.isIframeLoadComplete && !this.mainService.scheduledRunFiddle){
+      if(this.isFiddleLoadComplete && this.isIframeLoadComplete){
         this.hideloader.emit();
       }
 
@@ -141,8 +143,9 @@ export class IframePartComponent implements OnInit {
         }
         
         this.mainService.removeBeforeUnloadListener();
+        this.mainService.resetCodeSinceSave();
         this.mainService.redirectAfterSaveMode = true;
-        //console.log("gonna navigate now !");
+        console.log("gonna navigate now !");
         this.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");
       }
@@ -165,9 +168,9 @@ export class IframePartComponent implements OnInit {
   }
 
   onFormLoad(): void {
-    //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
-
+    console.log("onFormLoad this.iframeElement = ",this.iframeElement);
     if(this.mainService.scheduledRunFiddle && this.iframeElement){
+      this.mainService.scheduledRunFiddle = false;
       this.runFiddle();
     }
   }

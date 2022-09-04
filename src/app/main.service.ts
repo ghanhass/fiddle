@@ -89,7 +89,9 @@ export class MainService {
   public beforeUnloadListener: any = (event:BeforeUnloadEvent) => {
     event.preventDefault();
     //console.log("beforeUnload event is set");
-    return event.returnValue = "Are you sure you want to exit?";
+    if(this.isCodeChanged()){
+      return event.returnValue = "Are you sure you want to exit?";
+    }
   };
   
   constructor(private http: HttpClient) { 
@@ -105,9 +107,11 @@ export class MainService {
     window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
 
     if(this.isCodeChanged()){
+      console.log("isCodeChanged = true");
       window.addEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
     }
     else{
+      console.log("isCodeChanged = false");
       window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true}); 
     }
   }
