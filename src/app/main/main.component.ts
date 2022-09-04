@@ -282,7 +282,7 @@ export class MainComponent implements AfterViewInit {
 
               this.changeLayout(fiddleData.layout, fiddleData);
               this.mainService.scheduledRunFiddle = true;
-              //this.runCode();
+              this.runCode();
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
