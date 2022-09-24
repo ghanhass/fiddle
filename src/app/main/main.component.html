@@ -11,8 +11,16 @@
                 <span class="x">x</span>
                 <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)"/>
             </div>
-            <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Toggle view fullscreen'">
+            <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Turn on fullscreen view'">
                 <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
+            </button>
+
+            <button class="stretch-v-iframe-btn btn" (click)="stretchVertically()" [title]="'Stretch view vertically'">
+                <span><i class="fa fa-arrows-v" aria-hidden="true"></i></span>
+            </button>
+
+            <button class="stretch-h-iframe-btn btn" (click)="stretchHorizontally()" [title]="'Stretch view horizontally'">
+                <span><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
             </button>
         </div>        
     </div>
@@ -254,7 +262,7 @@
                         </div>
                     </div>
                     <div class="fullscreen-iframe-header" [ngStyle]="getIframeOrHeaderStyleObject('header')">
-                        <button class="fullscreen-iframe-btn btn fullscreen-iframe-btn-secondary" (click)="toggleIframeFullscreen()" [title]="'Toggle view fullscreen'">
+                        <button class="fullscreen-iframe-btn btn fullscreen-iframe-btn-secondary" (click)="toggleIframeFullscreen()" [title]="'Turn off fullscreen view'">
                             <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
                         </button>
                     </div>

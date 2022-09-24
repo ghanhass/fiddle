@@ -49,14 +49,6 @@ export class MainComponent implements AfterViewInit {
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
 
-  codePartsOffsetHeight: number = 0;
-  codePartsOffsetWidth: number = 0;
-
-  htmlPartTop: number = 0;
-  cssPartTop:number = 0;
-  jsPartTop:number = 0;
-
-  customInterval: any;
   canChangeSplitSizes: boolean = true;
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
@@ -909,6 +901,28 @@ export class MainComponent implements AfterViewInit {
   toggleIframeFullscreen(){
     this.isIframeFullScreen = !this.isIframeFullScreen;
   }
+  
+  stretchVertically(){
+    if(this.layout == 1 || this.layout == 3){
+      this.emptyArea_1_Size = 0;
+      this.emptyArea_2_Size = 0;
+    }
+    else{
+      this.splitComponentOuter.setVisibleAreaSizes([300, "*"]);
+    }
+    this.calculateIframeSize();
+  }
+
+  stretchHorizontally(){
+    if(this.layout == 1 || this.layout == 3){
+      this.splitComponentOuter.setVisibleAreaSizes([350, "*"]);
+    }
+    else{
+      this.emptyArea_1_Size = 0;
+      this.emptyArea_2_Size = 0;
+    }
+    this.calculateIframeSize();
+  }
 
   resetCodePartsSize(){
     if(this.IsAfterViewInitReached){
@@ -993,7 +1007,7 @@ export class MainComponent implements AfterViewInit {
     if(this.IsAfterViewInitReached){
       let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
       let mainContainerSize = this.layout == 1 || this.layout == 3 ? mainContainerEl.offsetHeight : mainContainerEl.offsetWidth;
-      if(this.codePartStretchState.state && index == this.codePartStretchState.index){//codepart already stretched ?
+      if(this.codePartStretchState.state && index == this.codePartStretchState.index){//codepart already stretched ? resume last codepart size
           this.codePartStretchState.state = false;
           this.codePartStretchState.index = -1;
           let sizes: any = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
@@ -1147,6 +1161,7 @@ export class MainComponent implements AfterViewInit {
     let newWindowWidth = window.innerWidth;
     let newWindowHeight = window.innerHeight;
 
+    //(new windowHeight or new windowWidth) and canChangeSplitSizes and mainContainerEl is truthy ?
     if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
       //console.log("/!\ window resize event: ", event);
 
@@ -1278,18 +1293,21 @@ export class MainComponent implements AfterViewInit {
       }
     }
     else{
-      if(newEmptyAreaSize <= 0){
-        this.emptyArea_1_Size = 0;
-        this.emptyArea_2_Size = 0;
+      if(this.emptyArea_1_Size && this.emptyArea_2_Size){//emptyArea sizes are not 0 ? readapt them
+        if(newEmptyAreaSize <= 0){
+          this.emptyArea_1_Size = 0;
+          this.emptyArea_2_Size = 0;
+        }
+        else if (newEmptyAreaSize > newMainContainerWidthOrHeight / 2 - 6){
+          this.emptyArea_1_Size = newMainContainerWidthOrHeight / 2 - 6;
+          this.emptyArea_2_Size = newMainContainerWidthOrHeight / 2 - 6;
+        }
+        else{
+          this.emptyArea_1_Size = newEmptyAreaSize;
+          this.emptyArea_2_Size = newEmptyAreaSize;
+        }
       }
-      else if (newEmptyAreaSize > newMainContainerWidthOrHeight / 2 - 6){
-        this.emptyArea_1_Size = newMainContainerWidthOrHeight / 2 - 6;
-        this.emptyArea_2_Size = newMainContainerWidthOrHeight / 2 - 6;
-      }
-      else{
-        this.emptyArea_1_Size = newEmptyAreaSize;
-        this.emptyArea_2_Size = newEmptyAreaSize;
-      }
+      // otherwise keep emptyArea sizes 0 if they are already 0
     }
   }
 
@@ -1802,7 +1820,6 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentInnerDragEnd(event){
     //console.log("splitComponentInnerDragEnd event = ", event);
-    clearInterval(this.customInterval);
     this.canChangeSplitSizes = true;
   }
 
@@ -1813,7 +1830,6 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentOuterDragEnd(event){
     //console.log("splitComponentOuterDragEnd event = ", event);
-    clearInterval(this.customInterval);
     this.showIframeHider = false;
 
     this.isFiddleHeightDisabled = false;
