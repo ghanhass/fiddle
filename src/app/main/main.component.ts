@@ -907,15 +907,22 @@ export class MainComponent implements AfterViewInit {
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }
-    else{
+    else if(this.layout == 2){
       this.splitComponentOuter.setVisibleAreaSizes([300, "*"]);
+    }
+    else if(this.layout == 4){
+      this.splitComponentOuter.setVisibleAreaSizes(["*", 300]);
     }
     this.calculateIframeSize();
   }
 
   stretchHorizontally(){
-    if(this.layout == 1 || this.layout == 3){
+    if(this.layout == 1){
       this.splitComponentOuter.setVisibleAreaSizes([350, "*"]);
+    }
+
+    else if(this.layout == 3){
+      this.splitComponentOuter.setVisibleAreaSizes(["*", 300]);
     }
     else{
       this.emptyArea_1_Size = 0;
