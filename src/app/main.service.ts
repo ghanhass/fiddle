@@ -195,12 +195,10 @@ export class MainService {
     
     .as-split-outer[class] > .as-split-gutter[class],
     .as-split-gutter-custom,
-    #code-parts[id] .as-split-gutter[class]{
+    #code-parts[id] .as-split-gutter[class],
+    .as-split-iframe-console > .as-split-gutter[class]
+    {
         background-color: ${theme.data.colors['editor.selectionBackground']};
-    }
-
-    .iframe-and-console-as-split .as-split-gutter[class]{
-      background-color: ${theme.data.colors['editor.selectionBackground']};
     }
     
     .fiddle-size.fiddle-size-hack{
@@ -209,7 +207,7 @@ export class MainService {
         box-shadow: 0 0 15px 4px ${theme.data.colors['editor.foreground']};
     }
     
-    .iframe-hack {
+    .iframe-overlay {
         background: ${theme.data.colors['editor.background']};
     }
     
@@ -542,6 +540,20 @@ export class MainService {
       background-color: ${theme.data.colors['editor.selectionBackground']};
       color: ${theme.data.colors['editor.foreground']};
     }
+
+    @media (max-width:767px), (max-height:580px) {
+      as-split-area.as-split-area-code-parts{
+        border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
+      }
+
+      as-split-area.as-split-area-iframe{
+        border-top: 1px solid ${theme.data.colors['editor.foreground']};
+      }
+
+      as-split-area.as-split-area-console{
+        border-top: 1px solid ${theme.data.colors['editor.foreground']};
+      }
+    }
     
     @keyframes animated-marked-code-part{
         
@@ -615,11 +627,12 @@ export class MainService {
         \n\n ${data.js}\n\n  
       }
       catch(err){
-          let fiddleErrorsWrapperSpan = document.querySelector("#fiddle-errors-wrapper > span");
-          let fiddleErrorsContainerEl = document.querySelector("#fiddle-errors-container");
-          fiddleErrorsWrapperSpan.innerHTML = err;
-          fiddleErrorsContainerEl.style.cssText = "display:block !important";
+          //let fiddleErrorsWrapperSpan = document.querySelector("#fiddle-errors-wrapper > span");
+          //let fiddleErrorsContainerEl = document.querySelector("#fiddle-errors-container");
+          //fiddleErrorsWrapperSpan.innerHTML = err;
+          //fiddleErrorsContainerEl.style.cssText = "display:block !important";
           //alert(err);
+          console.error(err);
       }
       </script>
       `;            
@@ -740,7 +753,9 @@ export class MainService {
                     <span></span>
                 </div>
             </div>    
+            <div>
             ${htmlCode}
+            </div>
             ${jsCode}
         </body>
     </html>`;

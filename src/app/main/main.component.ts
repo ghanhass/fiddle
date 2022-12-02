@@ -14,7 +14,7 @@ import { NgxPrettifyService } from '@smartcodelab/ngx-prettify';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
-
+import { ConsolePanel } from '../console-panel';
 
 
 
@@ -43,7 +43,7 @@ export class MainComponent implements AfterViewInit {
   showJs: boolean = false;
   showResult: boolean = true;
   showConsole: boolean = false;
-  showIframeHider: boolean = false;
+  showIframeOverlay: boolean = false;
   
   isHtmlFullScreen: boolean = false;
   isCssFullScreen: boolean = false;
@@ -61,6 +61,8 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
   @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
+
+  @ViewChild("splitComponentConsole") splitComponentConsole: SplitComponent;
 
   @ViewChild("splitComponentIframeResize") splitComponentIframeResize: SplitComponent;
 
@@ -95,6 +97,7 @@ export class MainComponent implements AfterViewInit {
   initialCssCodePartSize: number = 0;
   initialJsCodePartSize: number = 0;
   initialCodePartSize: number = 0;
+  iframeAsSplitAreaSize: number = 0;
 
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
@@ -113,7 +116,6 @@ export class MainComponent implements AfterViewInit {
 
   emptyArea_1_Size:number = 0;
   emptyArea_2_Size:number = 0;
-  consoleWindowSize:number = 0;
 
 
   isCustomGutter1_dragging: boolean = false;
@@ -128,7 +130,6 @@ export class MainComponent implements AfterViewInit {
 
   @ViewChild("emptyArea1")emptyArea1:ElementRef;
   @ViewChild("emptyArea2")emptyArea2:ElementRef;
-  @ViewChild("consoleWindow")consoleWindow:ElementRef;
 
   isFiddleWidthDisabled:boolean = false;
   isFiddleHeightDisabled: boolean = false;
@@ -157,6 +158,7 @@ export class MainComponent implements AfterViewInit {
 
   firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
+  //consolePanel: ConsolePanel;
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
@@ -168,6 +170,9 @@ export class MainComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    //this.consolePanel = new ConsolePanel();
+    //this.consolePanel.enable({});
+    //this.consolePanel.showConsolePanel();
     let self = this;
     this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
@@ -328,12 +333,9 @@ export class MainComponent implements AfterViewInit {
       this.calculateIframeSize(mainContainerEl);
     });
 
-    /*this.splitComponentIframeResize.dragProgress$.subscribe((res)=>{
+    this.splitComponentConsole.dragProgress$.subscribe((res)=>{
       this.calculateIframeSize(mainContainerEl);
-      let sizes = this.splitComponentIframeResize.getVisibleAreaSizes();
-      this.newIframeResizeValue = sizes[0] as number;
-      this.setMainServiceCodepartSizes();
-    })*/
+    });
 
     this.setMainServiceCodepartSizes();
 
@@ -466,7 +468,6 @@ export class MainComponent implements AfterViewInit {
           else{//new fiddle
             this.emptyArea_1_Size = 0;
             this.emptyArea_2_Size = 0;
-            this.consoleWindowSize = 0;
             this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
             switch(this.layout){
               case 1:
@@ -655,14 +656,11 @@ export class MainComponent implements AfterViewInit {
         case "jsAsSplitAreaMinSize":
         return 24;
 
-        case "iframeAsSplitAreaOrder":
-        return 2;
-
-        case "iframeAsSplitAreaMinSize":
-        return 350;
+        //case "iframeAsSplitAreaMinSize":
+        //return 350;
 
         case "iframeAsSplitAreaSize":
-        return "*";
+        return this.iframeAsSplitAreaSize;
 
         case "iframeResizer":
         return "vertical";
@@ -707,14 +705,11 @@ export class MainComponent implements AfterViewInit {
         case "jsAsSplitAreaMinSize":
         return 25;
 
-        case "iframeAsSplitAreaOrder":
-        return 2;
-
-        case "iframeAsSplitAreaMinSize":
-        return 300;
+        //case "iframeAsSplitAreaMinSize":
+        //return 300;
 
         case "iframeAsSplitAreaSize":
-        return "*";
+        return this.iframeAsSplitAreaSize;
 
         case "iframeResizer":
         return "horizontal";
@@ -759,14 +754,11 @@ export class MainComponent implements AfterViewInit {
         case "jsAsSplitAreaMinSize":
         return 24;
 
-        case "iframeAsSplitAreaOrder":
-        return 1;
-
-        case "iframeAsSplitAreaMinSize":
-        return 350;
+        //case "iframeAsSplitAreaMinSize":
+        //return 350;
 
         case "iframeAsSplitAreaSize":
-        return "*";
+        return this.iframeAsSplitAreaSize;
 
         case "iframeResizer":
         return "vertical";
@@ -811,14 +803,11 @@ export class MainComponent implements AfterViewInit {
         case "jsAsSplitAreaMinSize":
         return 25;
 
-        case "iframeAsSplitAreaOrder":
-        return 1;
-
-        case "iframeAsSplitAreaMinSize":
-        return 300;
+        //case "iframeAsSplitAreaMinSize":
+        //return 300;
 
         case "iframeAsSplitAreaSize":
-        return "*";
+        return this.iframeAsSplitAreaSize;
 
         case "iframeResizer":
         return "horizontal";
@@ -1095,7 +1084,7 @@ export class MainComponent implements AfterViewInit {
   onDocumentMouseup(event: MouseEvent ){
     if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging || this.isConsoleGutter_dragging){
       event.preventDefault();
-      this.showIframeHider = false;
+      this.showIframeOverlay = false;
     }
     if(this.isCustomGutter1_dragging){
       this.isCustomGutter1_dragging = false;
@@ -1286,20 +1275,7 @@ export class MainComponent implements AfterViewInit {
     //console.log("_____________________________");
     let sizeDiff = newMainContainerWidthOrHeight - oldMainContainerWidthOrHeight;
     let newEmptyAreaSize = this.emptyArea_1_Size + (sizeDiff / 2);
-    let newConsoleWindowSize = this.consoleWindowSize + (sizeDiff);
-
-    if(this.isConsoleOn){
-      if(newConsoleWindowSize <= 0){
-        this.consoleWindowSize = 0;
-      }
-      else if (newConsoleWindowSize > newMainContainerWidthOrHeight - 6){
-        this.consoleWindowSize = newMainContainerWidthOrHeight - 6;
-      }
-      else{
-        this.consoleWindowSize = newConsoleWindowSize;
-      }
-    }
-    else{
+    
       if(this.emptyArea_1_Size && this.emptyArea_2_Size){//emptyArea sizes are not 0 ? readapt them
         if(newEmptyAreaSize <= 0){
           this.emptyArea_1_Size = 0;
@@ -1315,7 +1291,7 @@ export class MainComponent implements AfterViewInit {
         }
       }
       // otherwise keep emptyArea sizes 0 if they are already 0
-    }
+    
   }
 
   /**
@@ -1475,9 +1451,14 @@ export class MainComponent implements AfterViewInit {
       }
   }
 
-  toggleConsoleOnDesktop(){
+  consoleBtnClick(){
     this.isConsoleOn = !this.isConsoleOn;
-    let mainContainerEl = this.mainContainer.nativeElement as HTMLElement
+    if(this.isConsoleOn){
+      this.iframePart.showConsole();
+    }
+    else{
+      this.iframePart.hideConsole();
+    }
     this.calculateIframeSize();
   }
 
@@ -1486,12 +1467,7 @@ export class MainComponent implements AfterViewInit {
       return this.emptyArea_1_Size + "px";
     }
     else if(areaNum == 2){
-      if(this.isConsoleOn){
-        return this.consoleWindowSize + "px"
-      }
-      else{
-        return this.emptyArea_2_Size + "px"
-      }
+      return this.emptyArea_2_Size + "px"
     }
   }
 
@@ -1499,24 +1475,14 @@ export class MainComponent implements AfterViewInit {
     if(this.IsAfterViewInitReached){
       let size = 0;
       let mainContainer = this.mainContainer.nativeElement;
-        if(this.isConsoleOn){
-          if(this.layout == 1 || this.layout == 3){
-            size = this.mainContainerHeight;
-          }
-          else if(this.layout == 2 || this.layout == 4){
-            size = this.mainContainerHeight - (this.splitComponentOuter.getVisibleAreaSizes()[0] as number) - 5;
-          }
-          return size - this.consoleWindowSize - 6 + 'px';
-        }
-        else{
-          if(this.layout == 1 || this.layout == 3){
-            size = this.mainContainerHeight;
-          }
-          else if(this.layout == 2 || this.layout == 4){
-            size = this.mainContainerWidth;
-          }
-          return size - this.emptyArea_2_Size * 2 - 12 + 'px';
-        }
+      if(this.layout == 1 || this.layout == 3){
+        size = this.mainContainerHeight;
+      }
+      else if(this.layout == 2 || this.layout == 4){
+        size = this.mainContainerWidth;
+      }
+      return size - this.emptyArea_2_Size * 2 - 12 + 'px';
+        
     }
     else return "0px";
   }
@@ -1568,7 +1534,7 @@ export class MainComponent implements AfterViewInit {
           }
         }
         else{
-          if(this.layout == 1 || this.layout == 3 || this.isConsoleOn){
+          if(this.layout == 1 || this.layout == 3){
             eventClientXOrY = event.clientY;
           }
           else if(this.layout == 2 || this.layout == 4){
@@ -1577,12 +1543,11 @@ export class MainComponent implements AfterViewInit {
         }
         let emptyArea1 = this.emptyArea1.nativeElement as HTMLElement;
         let emptyArea2 = this.emptyArea2.nativeElement as HTMLElement;
-        let consoleWindow = this.consoleWindow.nativeElement as HTMLElement;
 
         let mainContainer = this.mainContainer.nativeElement as HTMLElement;
         if(this.isCustomGutter1_dragging){
-          if(!this.showIframeHider){
-            this.showIframeHider = true; 
+          if(!this.showIframeOverlay){
+            this.showIframeOverlay = true; 
           }
           event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
@@ -1615,26 +1580,13 @@ export class MainComponent implements AfterViewInit {
           this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
         }
         else if(this.isCustomGutter2_dragging){
-          if(!this.showIframeHider){
-            this.showIframeHider = true; 
+          if(!this.showIframeOverlay){
+            this.showIframeOverlay = true; 
           }
           event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           //console.log("isCustomGutter2_dragging is true");
 
-          let consoleWindowHeight = consoleWindow.offsetHeight;
-          consoleWindowHeight = mainContainer.getBoundingClientRect().bottom - eventClientXOrY ;
-          if(this.isConsoleOn){
-            if(consoleWindowHeight < 0){
-              consoleWindowHeight = 0;
-            }
-            else if(consoleWindowHeight > mainContainer.offsetHeight - 6){
-              consoleWindowHeight = mainContainer.offsetHeight - 6;
-            }
-            this.consoleWindowSize = consoleWindowHeight;
-            //console.log("emptyArea2_height = ", emptyArea2_height);
-          }
-          else{
             if(this.layout == 1 || this.layout == 3){
               let emptyArea2_height = emptyArea2.offsetHeight;
               
@@ -1652,10 +1604,8 @@ export class MainComponent implements AfterViewInit {
             }
             else if(this.layout == 2 || this.layout == 4){
               let emptyArea2_width = emptyArea2.offsetWidth;
-              let consoleWindowWidth = consoleWindow.offsetWidth;
   
               emptyArea2_width = mainContainer.getBoundingClientRect().right - eventClientXOrY ;
-              consoleWindowWidth = mainContainer.getBoundingClientRect().right - eventClientXOrY ;
   
               if(emptyArea2_width < 0){
                 emptyArea2_width = 0;
@@ -1666,7 +1616,7 @@ export class MainComponent implements AfterViewInit {
               this.emptyArea_2_Size = emptyArea2_width;
               this.emptyArea_1_Size = emptyArea2_width;
             }
-          }
+          
           this.calculateIframeSize(mainContainer);
           this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
         }
@@ -1676,7 +1626,7 @@ export class MainComponent implements AfterViewInit {
       } 
   }
 
-  onFiddeWidthChange(data){
+  onFiddleWidthChange(data){
     let newFiddleWidth = parseInt(data);
 
     switch(this.layout){
@@ -1695,18 +1645,13 @@ export class MainComponent implements AfterViewInit {
 
       case 2:
 
-      if(this.isConsoleOn){
         if(newFiddleWidth > (this.mainContainerWidth - 6)){
           this.calculateIframeSize();
         }
         else if(newFiddleWidth < 0){
           this.calculateIframeSize();
         }
-        else{
-          this.consoleWindowSize = this.mainContainerWidth - newFiddleWidth - 6;
-        }
-      }
-      else{
+
         if(newFiddleWidth > (this.mainContainerWidth - 12)){
           this.calculateIframeSize();
         }
@@ -1717,7 +1662,6 @@ export class MainComponent implements AfterViewInit {
           this.emptyArea_1_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
           this.emptyArea_2_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
         }
-      }
 
       break;
 
@@ -1837,7 +1781,7 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentOuterDragEnd(event){
     //console.log("splitComponentOuterDragEnd event = ", event);
-    this.showIframeHider = false;
+    this.showIframeOverlay = false;
 
     this.isFiddleHeightDisabled = false;
     this.isFiddleWidthDisabled = false;
@@ -1845,10 +1789,20 @@ export class MainComponent implements AfterViewInit {
 
   splitComponentOuterDragStart(event){
     //console.log("splitComponentOuterDragStart event = ", event);
-    this.showIframeHider = true;
+    this.showIframeOverlay = true;
 
     this.isFiddleHeightDisabled = true;
     this.isFiddleWidthDisabled = true;
+  }
+
+  splitComponentConsoleDragEnd(event){
+    //console.log("splitComponentOuterDragEnd event = ", event);
+    this.showIframeOverlay = false;
+  }
+
+  splitComponentConsoleDragStart(event){
+    //console.log("splitComponentOuterDragStart event = ", event);
+    this.showIframeOverlay = true;
   }
 
   validateRessources(){

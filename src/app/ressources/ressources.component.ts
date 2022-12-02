@@ -2,7 +2,6 @@ import { Component, OnInit, HostListener, EventEmitter,Output, ViewChild } from 
 import { RessourcesService } from '../ressources.service';
 import { LoaderComponent } from '../loader/loader.component';
 import { CdnjsLibraryMetaData } from '../cdnjs-meta-data';
-import { stripComments } from 'tslint/lib/utils';
 import { CdnjsLibrariesSearchResult } from '../cdnjs-libraries-search-result';
 import { CdnjsLibraryData } from '../cdnjs-library-data';
 import { Observable, Subject } from 'rxjs';

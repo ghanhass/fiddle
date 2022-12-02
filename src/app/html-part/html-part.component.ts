@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output,EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
-import { filter, take } from 'rxjs/operators';
 import {
   MonacoEditorComponent,
   MonacoEditorConstructionOptions,

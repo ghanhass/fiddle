@@ -175,4 +175,24 @@ export class IframePartComponent implements OnInit {
     }
   }
 
+  showConsole(){
+    let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
+    if(iframeElement.contentWindow){
+      let obj = {
+        type:"console-show",
+      }
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+    }
+  }
+
+  hideConsole(){
+    let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
+    if(iframeElement.contentWindow){
+      let obj = {
+        type:"console-hide",
+      }
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+    }
+  }
+
 }
