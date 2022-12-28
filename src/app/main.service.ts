@@ -11,7 +11,7 @@ import { GistFiddle } from './gist-fiddle';
 import { map } from 'rxjs/operators';
 
 
-const octokit = new Octokit({auth: window.atob('Z2l0aHViX3BhdF8xMUFCS1NBV1EwRUxyVWw3bUlKWVdiX25JZmxCRVFYeXdYbG9ycWJ2SmJ3Y1FNbDNXaldXVTIzaDFiNnNjWHZ3MldUVVBIVFgyWUtNT0dkS214')});
+const octokit = new Octokit({auth: window.atob('Z2l0aHViX3BhdF8xMUFCS1NBV1Ewem9qVmhacE1PemF0X0R2dFRJbEZSSjBpODByWWozeW9GYlhFbzhmYzd2OG5RSWdWc3p3ajBTeUZNQUE0T1FXQTlyM1FXeGZr')});
 
 @Injectable({
   providedIn: 'root'
