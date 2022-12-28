@@ -659,7 +659,7 @@ export class MainService {
   getFiddle(fiddleId): Observable<any>{
     console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
-
+ 
     if(environment.production){
       return from( octokit.request('GET /gists/e5e3c6894a6d443dd5e136b6033909ca?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
         gist_id:"e5e3c6894a6d443dd5e136b6033909ca"
@@ -737,7 +737,7 @@ export class MainService {
   saveFiddle(fiddleData: FiddleData): Observable<any>{
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
-    if(!environment.production){
+    if(environment.production){
       return from (octokit.request('POST /gists?_='+(new Date).getTime(),{//create new gist
         files:{ [""]: { content: JSON.stringify(fiddleData) } },
         public:false
