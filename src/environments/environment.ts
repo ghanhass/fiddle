@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  //url: "http://localhost/myfiddlepreview/index.html",
-  url:"https://hassen-github.github.io/myfiddlepreview",
+  url: "http://localhost/myfiddlepreview/index.html",
   appName: "",
   homeUrl:"http://localhost:4200"
 };
