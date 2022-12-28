@@ -11,7 +11,7 @@ import { GistFiddle } from './gist-fiddle';
 import { map } from 'rxjs/operators';
 
 
-const octokit = new Octokit({auth: window.atob('Z2hwX1ZOSEg4cDRqcHdFUFE0dTJXUkRZcmQ2NE5xU09YbTJCNzJ4Wg==')});
+const octokit = new Octokit({auth: window.atob('Z2l0aHViX3BhdF8xMUFCS1NBV1EwRUxyVWw3bUlKWVdiX25JZmxCRVFYeXdYbG9ycWJ2SmJ3Y1FNbDNXaldXVTIzaDFiNnNjWHZ3MldUVVBIVFgyWUtNT0dkS214')});
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +25,7 @@ export class MainService {
   jsCode:string;
   cssCode:string;
   htmlCode:string;
+  isConsoleOn: boolean;
 
   jsCodeSinceSave:string = "";
   cssCodeSinceSave:string = "";
@@ -60,7 +61,7 @@ export class MainService {
 
   isBeforeUnloadEvHandlerSet: boolean = false;
 
-  defaultTheme = {
+  selectedTheme = {
       name: "VS",
       id: "vs-default",
       data: {
@@ -172,18 +173,14 @@ export class MainService {
     ////console.log("param = ", param);
     ////console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     let savedThemeId = localStorage.getItem("myfiddle-theme");
-    let selectedTheme: FiddleTheme;
 
     if(savedThemeId){
-        selectedTheme = this.getConfig("themesList").find((el)=>{return el.id == savedThemeId});
-    }
-    else{
-        selectedTheme = this.defaultTheme;
+        this.selectedTheme = this.getConfig("themesList").find((el)=>{return el.id == savedThemeId});
     }
     ////console.log("selectedTheme = ", selectedTheme);
 
-    this.addThemeStylesheet(selectedTheme);
-    this.registerMonacoCustomTheme(selectedTheme);
+    this.addThemeStylesheet(this.selectedTheme);
+    this.registerMonacoCustomTheme(this.selectedTheme);
     
   }
 
@@ -609,6 +606,7 @@ export class MainService {
   }
 
   generateFiddleCode(data: any): string{
+    console.log("generateFiddleCode data.isConsoleOn: ", this.isConsoleOn);
     let htmlCode = data.html ? data.html : "";
     let cssCode = data.css ? data.css : "";
     let jsCode = `
@@ -620,142 +618,38 @@ export class MainService {
       document.querySelector("script#fiddle-security").remove();
       </script>
     `;
-    if(data.js){
+
       jsCode += `
       <script>
       try{
+        window.isConsoleOn = ${this.isConsoleOn};
+        window.currentTheme = ${this.isConsoleOn};
         \n\n ${data.js}\n\n  
       }
       catch(err){
-          //let fiddleErrorsWrapperSpan = document.querySelector("#fiddle-errors-wrapper > span");
-          //let fiddleErrorsContainerEl = document.querySelector("#fiddle-errors-container");
-          //fiddleErrorsWrapperSpan.innerHTML = err;
-          //fiddleErrorsContainerEl.style.cssText = "display:block !important";
           //alert(err);
-          console.error(err);
+          //console.error(err);
+          window.initialFiddleErrors = err;
       }
       </script>
-      `;            
-    }
+      `;
 
     let html = `
     <!DOCTYPE html>
     <html>
         <head>
             <style>
-            html{
-              height:100%;
-              width:100%;
-            }
-            
-            #fiddle-errors-container[id]{
-                position: fixed !important;
-                padding: 0 !important;
-                border: none !important;
-                width: 100% !important;
-                text-align: center !important;
-                background-color: #dddddd !important;
-                color: #962d2d !important;
-                font-weight: 600 !important;
-                overflow: visible !important;
-                height: 0 !important;
-                bottom: auto !important;
-                top: 65px !important;
-                right: 2px !important;
-                left: auto !important;
-                user-select: none !important;
-            }
-            
-            #fiddle-errors-container.show-error {
-                padding: 5px !important;
-                height: auto !important;
-                width: auto !important;
-                max-width: calc(100% - 16px) !important;
-                box-shadow: 0 0 4px 2px #e04545 !important;
-                
-            }
-            
-            .fiddle-error-btn {
-                position: absolute !important;
-            
-                border: 1px solid red !important;
-                width: 20px !important;
-                height: 20px !important;
-                border-radius: 100% !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                padding: 2px !important;
-                box-shadow: 0 0 5px 0px #902b2b !important;
-                transform: translateY(-100%) !important;
-                background-color: #FFFFFF !important;
-                cursor: pointer !important;
-                user-select: none !important;
-            
-                animation-name: error-animation !important;
-                animation-iteration-count: infinite !important;
-                animation-duration: 0.5s !important;
-                animation-timing-function: linear !important;
-                right: 20px !important;
-                top: -20px !important;
-            }
-            
-            .fiddle-error-btn span{
-                pointer-events: none !important;
-            }
-            
-            #fiddle-errors-wrapper{
-                display:none !important;
-                overflow: auto !important;
-                max-height: 100px !important;
-            }
-            
-            .fiddle-error-btn.show-error + #fiddle-errors-wrapper{
-                display:block !important;
-            }
-            
-            
-            @keyframes error-animation{
-                0%{
-                        box-shadow: 0 0 10px 5px #902b2b !important;
-                }
-              
-                50%{
-                        box-shadow: 0 0 25px 10px #902b2b !important;
-                }
-              
-                100%{
-                        box-shadow: 0 0 10px 5px #902b2b !important;
-                }
-            }
-            html{
-              background-color: #FFFFFF;
-            }
-            </style>
-            <style>
             ${cssCode}
             </style>
-            <script>
-            document.addEventListener("click", function(ev){
-              let evTarget = ev.target;
-              if(evTarget.classList.contains("fiddle-error-btn")){
-                  evTarget.classList.toggle("show-error");
-                  evTarget.parentElement.classList.toggle("show-error"); 
-              }
-            })
-            </script>
         </head>
-        <body>
-          
-            <div id="fiddle-errors-container" style="display:none !important;">
-                <a class="fiddle-error-btn" title="Click to toggle"><span>!</span></a>
-                <div id="fiddle-errors-wrapper">
-                    <span></span>
-                </div>
-            </div>    
-            <div>
+        <body> 
+        <script>
+		  	window.onerror = function(e) {
+		  		window.detectedError = e;
+		  	};
+		  </script>
             ${htmlCode}
-            </div>
+
             ${jsCode}
         </body>
     </html>`;

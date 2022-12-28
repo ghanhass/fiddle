@@ -1453,6 +1453,7 @@ export class MainComponent implements AfterViewInit {
 
   consoleBtnClick(){
     this.isConsoleOn = !this.isConsoleOn;
+    this.mainService.isConsoleOn = this.isConsoleOn;
     if(this.isConsoleOn){
       this.iframePart.showConsole();
     }

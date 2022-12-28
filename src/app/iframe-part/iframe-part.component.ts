@@ -51,7 +51,8 @@ export class IframePartComponent implements OnInit {
     let data = {
       js:this.mainService.jsCode,
       css:this.mainService.cssCode,
-      html:this.mainService.htmlCode
+      html:this.mainService.htmlCode,
+      isConsoleOn: this.mainService.isConsoleOn
     }
     this.showloader.emit();
     if(this.iframeElement){

@@ -28,9 +28,9 @@
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
   
-      <button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
+     <!-- <button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
         <span>Console</span>
-      </button>
+      </button> -->
   
       <button class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
         <span>Prettify</span>
@@ -283,11 +283,6 @@
               <div class="as-split-gutter-icon-custom"></div>
             </div>
             <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
-            </div>
-          </as-split-area>
-          <as-split-area [size]="'*'" class="as-split-area-console">
-            <div class="console-window">
-              <h1>console window here</h1>
             </div>
           </as-split-area>
         </as-split>
