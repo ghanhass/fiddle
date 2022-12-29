@@ -617,20 +617,15 @@ export class MainService {
       }
       document.querySelector("script#fiddle-security").remove();
       </script>
-    `;
 
-      jsCode += `
       <script>
-      try{
-        window.isConsoleOn = ${this.isConsoleOn};
-        window.currentTheme = ${this.isConsoleOn};
+      window.isConsoleOn = ${this.isConsoleOn};
+      window.currentTheme = ${JSON.stringify(this.selectedTheme.data)};
+      </script>
+
+      <script>
         \n\n ${data.js}\n\n  
-      }
-      catch(err){
-          //alert(err);
-          //console.error(err);
-          window.initialFiddleErrors = err;
-      }
+
       </script>
       `;
 
@@ -647,7 +642,7 @@ export class MainService {
 		  	window.onerror = function(e) {
 		  		window.detectedError = e;
 		  	};
-		  </script>
+		    </script>
             ${htmlCode}
 
             ${jsCode}

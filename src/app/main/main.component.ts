@@ -134,27 +134,7 @@ export class MainComponent implements AfterViewInit {
   isFiddleWidthDisabled:boolean = false;
   isFiddleHeightDisabled: boolean = false;
 
-  fiddleTheme: FiddleTheme = {
-    "name": "VS",
-    "id": "vs-default",
-    "data": {
-        "base": "vs",
-        "inherit": true,
-        "rules": [{
-          "foreground": "202020",
-          "background": "ffffff",
-          "token": ""
-      }],
-        "colors": {
-          "editor.foreground": "#202020",
-          "editor.background": "#FFFFFF",
-          "editor.selectionBackground": "#add6ff",
-          "editor.lineHighlightBackground": "#FFFFFF",
-          "editorCursor.foreground": "#202020",
-          "editorWhitespace.foreground": "#202020"
-      }
-    }
-  };
+  fiddleTheme: FiddleTheme;
 
   firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
@@ -164,6 +144,7 @@ export class MainComponent implements AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
     private ngxPrettifyService: NgxPrettifyService) { 
+      this.fiddleTheme = this.mainService.selectedTheme;
   }
 
   ngOnInit(): void{
@@ -293,15 +274,6 @@ export class MainComponent implements AfterViewInit {
         this.changeLayout(1);
       }
 
-      //Theme retrieval
-      let savedThemeId = localStorage.getItem("myfiddle-theme");
-      let selectedTheme: FiddleTheme;
-
-      if(savedThemeId){
-          selectedTheme = this.mainService.getConfig("themesList").find((el)=>{return el.id == savedThemeId});
-          this.fiddleTheme = selectedTheme;
-      }
-
       this.mainService.resumeFiddleTheme();
 
     });
@@ -366,7 +338,7 @@ export class MainComponent implements AfterViewInit {
    */
   getIsFiddleThemeDark(): boolean{
     //return this.mainService.isFiddleThemeDark;
-    let isThemeDark = this.fiddleTheme ? (this.fiddleTheme.data.base == "vs-dark" || this.fiddleTheme.data.base == "hc-black") : false;
+    let isThemeDark = this.mainService.selectedTheme ? (this.mainService.selectedTheme.data.base == "vs-dark" || this.mainService.selectedTheme.data.base == "hc-black") : false;
     return isThemeDark;
   }
 
@@ -397,6 +369,8 @@ export class MainComponent implements AfterViewInit {
 
   selectTheme(theme: FiddleTheme){
     this.fiddleTheme = theme;
+    this.mainService.selectedTheme = theme;
+    this.iframePart.showConsole();
     localStorage.setItem("myfiddle-theme",theme.id);
     this.mainService.addThemeStylesheet(theme);
     this.mainService.registerMonacoCustomTheme(theme);
@@ -406,9 +380,9 @@ export class MainComponent implements AfterViewInit {
   getIframeOrHeaderStyleObject(param ){
     let iframeHeaderStyleObject = {
       'display': param == 'header' ? (this.isIframeFullScreen ? '':'none') : '',
-      'background-color': this.fiddleTheme.data.colors["editor.background"],
-      'color': this.fiddleTheme.data.colors["editor.foreground"],
-      'border-bottom': param == 'header' ? '1px solid '+this.fiddleTheme.data.colors["editor.selectionBackground"] : '',
+      'background-color': this.mainService.selectedTheme.data.colors["editor.background"],
+      'color': this.mainService.selectedTheme.data.colors["editor.foreground"],
+      'border-bottom': param == 'header' ? '1px solid '+this.mainService.selectedTheme.data.colors["editor.selectionBackground"] : '',
       'flex':  param == 'iframe' ?('0 0 '+this.getIframeAreaSize()) : ''
     }
     return iframeHeaderStyleObject;

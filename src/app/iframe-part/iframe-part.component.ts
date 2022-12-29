@@ -62,7 +62,8 @@ export class IframePartComponent implements OnInit {
         let fiddleCode = this.mainService.generateFiddleCode(data);
         let obj = {
           type:"run",
-          html:fiddleCode
+          html:fiddleCode,
+          currentTheme: this.mainService.selectedTheme.data
         }
         iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
       }
@@ -181,6 +182,7 @@ export class IframePartComponent implements OnInit {
     if(iframeElement.contentWindow){
       let obj = {
         type:"console-show",
+        currentTheme: this.mainService.selectedTheme.data
       }
       iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
     }

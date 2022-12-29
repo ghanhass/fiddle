@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve;json-server --watch fiddle-db/fiddle-db.json",
+    "start": "ng serve;json-server --watch src/assets/fiddle-db/fiddle-db.json",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
