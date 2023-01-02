@@ -134,7 +134,6 @@ export class MainComponent implements AfterViewInit {
   isFiddleWidthDisabled:boolean = false;
   isFiddleHeightDisabled: boolean = false;
 
-  fiddleTheme: FiddleTheme;
 
   firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
@@ -144,7 +143,6 @@ export class MainComponent implements AfterViewInit {
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
     private ngxPrettifyService: NgxPrettifyService) { 
-      this.fiddleTheme = this.mainService.selectedTheme;
   }
 
   ngOnInit(): void{
@@ -336,9 +334,9 @@ export class MainComponent implements AfterViewInit {
    * Checks if the current theme is dark
    * @returns boolean: true if the current theme is dark or false otherwise
    */
-  getIsFiddleThemeDark(): boolean{
+  isFiddleThemeDark(): boolean{
     //return this.mainService.isFiddleThemeDark;
-    let isThemeDark = this.mainService.selectedTheme ? (this.mainService.selectedTheme.data.base == "vs-dark" || this.mainService.selectedTheme.data.base == "hc-black") : false;
+    let isThemeDark = this.mainService.selectedTheme ? (this.mainService.selectedTheme.data.base == "vs-dark") : false;
     return isThemeDark;
   }
 
@@ -368,13 +366,13 @@ export class MainComponent implements AfterViewInit {
   }
 
   selectTheme(theme: FiddleTheme){
-    this.fiddleTheme = theme;
-    this.mainService.selectedTheme = theme;
-    this.iframePart.showConsole();
-    localStorage.setItem("myfiddle-theme",theme.id);
-    this.mainService.addThemeStylesheet(theme);
-    this.mainService.registerMonacoCustomTheme(theme);
-    this.isThemesListShown = false;
+    if(theme.id != this.mainService.selectedTheme.id){
+      this.mainService.selectedTheme = theme;
+      localStorage.setItem("myfiddle-theme",theme.id);
+      this.mainService.addThemeStylesheet(theme);
+      this.mainService.registerMonacoCustomTheme(theme);
+      this.isThemesListShown = false;
+    }
   }
 
   getIframeOrHeaderStyleObject(param ){
@@ -389,7 +387,7 @@ export class MainComponent implements AfterViewInit {
   }
 
   getThemesList(){
-    return this.mainService.getConfig("themesList");
+    return this.mainService.themesList;
   }
 
   calculateIframeSize(mainContainerEl?: HTMLElement, sizes?:any){
@@ -821,14 +819,10 @@ export class MainComponent implements AfterViewInit {
     this.isDonationsListShown = !this.isDonationsListShown;
   }
 
-  toggleThemesListMenu(){
-    this.isThemesListShown = !this.isThemesListShown;
-    if(this.isThemesListShown){
-      let themesMenu = document.querySelector("ul.themes-menu");
-      let themesMenuSelectedLi = document.querySelector("ul.themes-menu li.selected");
-      let themesMenuSelectedFirstLi = document.querySelector("ul.themes-menu li:first-child");
-      themesMenu.scrollTop = themesMenuSelectedLi.getBoundingClientRect().top - themesMenuSelectedFirstLi.getBoundingClientRect().top;
-    }
+  changeTheme(){
+   let isDarkTheme = !this.isFiddleThemeDark()
+   let ind = isDarkTheme ? 1 : 0;
+   this.selectTheme(this.mainService.themesList[ind]);
   }
 
   selectDonation(newIndex){

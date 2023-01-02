@@ -1,8 +1,8 @@
 <header id="main-header">
     <div class="logo-title-container">
       <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img [ngStyle]="{display: getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo.png'">
-        <img [ngStyle]="{display: !getIsFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo_dark.png'">
+        <img [ngStyle]="{display: isFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo.png'">
+        <img [ngStyle]="{display: !isFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo_dark.png'">
       </a>
       <div class="fiddle-title">
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title" />
@@ -37,16 +37,15 @@
       </button>
   
       <div class="themes-btn-container">
-        <ul class="themes-menu" [ngClass]="{'shown': isThemesListShown}">
+        <button class="themes-btn btn" (click)="changeTheme()">
+          <i *ngIf="isFiddleThemeDark()" class="fa fa-sun-o" aria-hidden="true"></i>
+          <i *ngIf="!isFiddleThemeDark()" class="fa fa-moon-o" aria-hidden="true"></i>
+        </button>
+        <!--
           <li *ngFor="let theme of getThemesList()" [ngClass]="{'selected': fiddleTheme.id == theme.id}" (click)="selectTheme(theme)">
             {{theme.name}}
           </li>
-        </ul>
-        <button class="themes-btn btn" (click)="toggleThemesListMenu()">
-          <span>Theme</span>
-          <i *ngIf="!isThemesListShown" class="fa fa-sort-desc" aria-hidden="true"></i>
-          <i *ngIf="isThemesListShown" class="fa fa-sort-asc" aria-hidden="true"></i>
-        </button>
+        -->
       </div>
   
       <div class="paypal-btn-container">
@@ -144,7 +143,7 @@
       <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
   
-    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':getIsFiddleThemeDark()}" [gutterSize]="5">
+    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}" [gutterSize]="5">
       <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
         <div id="code-parts" #codeParts>
           <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)" [gutterSize]="5">
@@ -258,9 +257,9 @@
       <as-split-area>
         <as-split [direction]="'vertical'" (dragEnd)="splitComponentConsoleDragEnd($event)" (dragStart)="splitComponentConsoleDragStart($event)" class="as-split-iframe-console" [gutterSize]="5" [unit]="'percentage'" #splitComponentConsole>
           <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
-            <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
+            <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
             </div>
-            <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)">
+            <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)">
               <div class="as-split-gutter-icon-custom"></div>
             </div>
             <div class="iframe-overlay" [ngStyle]="{'display' : showIframeOverlay ? '' : 'none' }">
@@ -279,10 +278,10 @@
               <div class="iframe-overlay-for-drop" [ngStyle]="{'display': (isCustomGutter1_dragging || isCustomGutter2_dragging) ? 'block' : (isIframeFullScreen ? 'none':'')}"></div>
               <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
             </div>
-            <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
+            <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
               <div class="as-split-gutter-icon-custom"></div>
             </div>
-            <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':getIsFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
+            <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
             </div>
           </as-split-area>
         </as-split>

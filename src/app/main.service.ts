@@ -61,7 +61,7 @@ export class MainService {
 
   isBeforeUnloadEvHandlerSet: boolean = false;
 
-  selectedTheme = {
+  selectedTheme: FiddleTheme = {
       name: "VS",
       id: "vs-default",
       data: {
@@ -84,6 +84,50 @@ export class MainService {
           }
       }
   }
+  
+  themesList : Array<FiddleTheme> = 
+    [
+      {
+          "name": "VS",
+          "id": "vs-default",
+          "data": {
+              "base": "vs",
+              "inherit": true,
+              "rules": [
+                  {
+                      "foreground": "202020",
+                      "background": "ffffff",
+                      "token": ""
+                  }
+              ],
+              "colors": {
+                  "editor.foreground": "#202020",
+                  "editor.background": "#FFFFFF",
+                  "editor.selectionBackground": "#d2d2d2",
+                  "editor.lineHighlightBackground": "#FFFFFF",
+                  "editorCursor.foreground": "#202020",
+                  "editorWhitespace.foreground": "#202020"
+              }
+          }
+      },
+      {
+          "name": "VS Dark",
+          "id": "vs-default-dark",
+          "data": {
+              "base": "vs-dark",
+              "inherit": true,
+              "rules": [],
+              "colors": {
+                  "editor.foreground": "#d4d4d4",
+                  "editor.background": "#1e1e1e",
+                  "editor.selectionBackground": "#414141",
+                  "editor.lineHighlightBackground": "#1e1e1e",
+                  "editorCursor.foreground": "#d4d4d4",
+                  "editorWhitespace.foreground": "#d4d4d480"
+              }
+          }
+      }
+  ]
   
   private appConfig: any;
 
@@ -175,7 +219,7 @@ export class MainService {
     let savedThemeId = localStorage.getItem("myfiddle-theme");
 
     if(savedThemeId){
-        this.selectedTheme = this.getConfig("themesList").find((el)=>{return el.id == savedThemeId});
+        this.selectedTheme = this.themesList.find((el)=>{return el.id == savedThemeId});
     }
     ////console.log("selectedTheme = ", selectedTheme);
 

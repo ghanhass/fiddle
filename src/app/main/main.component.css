@@ -121,7 +121,7 @@
     margin-right: 10px;
 }
 
-@media screen and (min-width:768px) and (min-height:581px){
+@media screen and (min-width:818px) and (min-height:581px){
 
     .vertical-title-mode .code-part-title-btn:not(:last-child) {
         margin-bottom: 10px;
@@ -290,7 +290,12 @@ as-split-area.as-split-area-iframe.is-horizontal {
 }
 
 .themes-btn{
-    padding: 1px 8px 1px 2px;
+    font-size: 24px;
+    padding: 1px 3px;
+}
+
+.themes-btn i{
+    font-weight: bold;
 }
 
 .share-code-btn:active,
@@ -630,7 +635,7 @@ i.fa.fa-sort-asc {
     right:0px;
 }
 
-@media screen and (min-width:768px) and (min-height:581px){
+@media screen and (min-width:818px) and (min-height:581px){
     .prettify-mobile-code{
         display:none;
     }
@@ -931,7 +936,7 @@ as-split-area.code-component-container > app-html-part{
     
 }*/
 
-@media screen and (min-width:768px) and (min-height:581px){
+@media screen and (min-width:818px) and (min-height:581px){
     :host ::ng-deep app-iframe-part.layout-type-1{
         align-items: flex-end;
     }
@@ -1013,7 +1018,7 @@ as-split-area.code-component-container > app-html-part{
     left: 0px !important;
 }
 
-@media (min-width:768px) {
+@media (min-width:818px) {
     #code-parts .code-component-container.fullscreen {
         position: fixed !important;
         left: 0 !important;
@@ -1028,7 +1033,7 @@ as-split-area.code-component-container > app-html-part{
     }
 }
 
-@media (max-width:767px), (max-height:580px) {  
+@media (max-width:817px), (max-height:580px) {  
 
     .hide-mobile{
         display: none !important;
