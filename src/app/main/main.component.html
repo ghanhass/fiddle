@@ -28,16 +28,16 @@
     <app-loader #loader class="app-loader"></app-loader>
     <div class="header-btns-container">
   
-     <button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
+     <!--<button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
         <span>Console</span>
-      </button>
+      </button>-->
   
       <button class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
         <span>Prettify</span>
       </button>
   
       <div class="themes-btn-container">
-        <button class="themes-btn btn" (click)="changeTheme()">
+        <button class="themes-btn btn" (click)="changeTheme()" [title]="isFiddleThemeDark() ? 'Daylight theme' : 'Night theme' ">
           <i *ngIf="isFiddleThemeDark()" class="fa fa-sun-o" aria-hidden="true"></i>
           <i *ngIf="!isFiddleThemeDark()" class="fa fa-moon-o" aria-hidden="true"></i>
         </button>
