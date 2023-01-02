@@ -188,6 +188,17 @@ export class IframePartComponent implements OnInit {
     }
   }
 
+  changeConsoleTheme(){
+    let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
+    if(iframeElement.contentWindow){
+      let obj = {
+        type:"change-theme",
+        currentTheme: this.mainService.selectedTheme.data
+      }
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+    }
+  }
+
   hideConsole(){
     let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
     if(iframeElement.contentWindow){

@@ -823,6 +823,7 @@ export class MainComponent implements AfterViewInit {
    let isDarkTheme = !this.isFiddleThemeDark()
    let ind = isDarkTheme ? 1 : 0;
    this.selectTheme(this.mainService.themesList[ind]);
+   this.iframePart.changeConsoleTheme();
   }
 
   selectDonation(newIndex){
