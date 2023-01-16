@@ -149,9 +149,6 @@ export class MainComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    //this.consolePanel = new ConsolePanel();
-    //this.consolePanel.enable({});
-    //this.consolePanel.showConsolePanel();
     let self = this;
     this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
@@ -193,8 +190,6 @@ export class MainComponent implements AfterViewInit {
           if(this.mainService.scheduledRunFiddle){
             this.runCode();
           }
-          //this.runCode();
-          //this.changeFiddleTheme();
         }
         else{//retrieve data from backend ?
           this.loader.showLoader();
@@ -820,8 +815,8 @@ export class MainComponent implements AfterViewInit {
   }
 
   changeTheme(){
-   let isDarkTheme = !this.isFiddleThemeDark()
-   let ind = isDarkTheme ? 1 : 0;
+   let isLightTeme = !this.isFiddleThemeDark()
+   let ind = isLightTeme ? 1 : 0;
    this.selectTheme(this.mainService.themesList[ind]);
    this.iframePart.changeConsoleTheme();
   }
@@ -1081,15 +1076,10 @@ export class MainComponent implements AfterViewInit {
   onDocumentClick(event: MouseEvent){
     let evTarget = event.target as HTMLElement;
     if (evTarget.parentElement){
-      let bool = !evTarget.classList.contains("themes-menu") && !evTarget.classList.contains("themes-btn") && !evTarget.parentElement.classList.contains("themes-btn");
 
       let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
 
       let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
-
-      if(bool){
-        this.isThemesListShown = false;
-      }
 
       if(bool2){
         this.isDonationsListShown = false;
@@ -1849,10 +1839,6 @@ export class MainComponent implements AfterViewInit {
     return environment.homeUrl;
   }
 
-  changeFiddleTheme(param?){
-    //console.log("param = ", param);
-    this.isThemesListShown = true;
-  }
 
   isMatch(el, match){//cross plateform Element.matches() workaround
     return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, match);

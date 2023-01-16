@@ -41,7 +41,6 @@ export class MainService {
   codePartsSize: number;
   iframeResizeValue: number;
   fiddleThemeId: string = '';
-  fiddleId: number;
 
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
@@ -193,7 +192,7 @@ export class MainService {
         window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
-    },10);
+    },1);
   }
 
   /**
@@ -617,18 +616,16 @@ export class MainService {
   }
 
   addThemeStylesheet(theme: FiddleTheme){    
-    let themeStylesheet = document.querySelector("style#theme-stylesheet") as HTMLStyleElement;
-    
-    if(themeStylesheet){
-      themeStylesheet.parentElement.removeChild(themeStylesheet);
-    }
-    
-    themeStylesheet = document.createElement("style");
-    themeStylesheet.id = "theme-stylesheet";
+      let themeStylesheet = document.querySelector("style#theme-stylesheet") as HTMLStyleElement;
+      if(themeStylesheet){
+        themeStylesheet.remove();
+      }
 
-    document.head.appendChild(themeStylesheet);
-
-    themeStylesheet.textContent = theme ? this.prepareThemeStyleSheet(theme) : "";
+      themeStylesheet = document.createElement("style");
+      themeStylesheet.id = "theme-stylesheet";
+      document.head.appendChild(themeStylesheet);
+      themeStylesheet.textContent = this.prepareThemeStyleSheet(theme);
+    
   }
 
   enhanceThemesMenuColoration(theme: FiddleTheme, cssProperty: string){
@@ -809,15 +806,11 @@ export class MainService {
   
           gistData.gists.push(fiddleGistData);
   
-          
-  
-          self.fiddleId = newFiddleId;
-  
+            
           return octokit.request('PATCH /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
             gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
             files:{ "myfiddle_db.json": { content: JSON.stringify(gistData) } },
           }).then((res)=>{
-            self.fiddleId = newFiddleId;
             return new Promise((yes,no)=>{
               //console.log("res.status = ",res.status);
               if(res.status == 200){

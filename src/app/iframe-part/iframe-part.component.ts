@@ -39,7 +39,7 @@ export class IframePartComponent implements OnInit {
           self.isIframeLoadComplete = true;
           if(self.isFiddleLoadComplete && self.isIframeLoadComplete){
             self.hideloader.emit();
-            
+            self.changeConsoleTheme();
           }
         }
       });
@@ -192,7 +192,7 @@ export class IframePartComponent implements OnInit {
     let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
     if(iframeElement.contentWindow){
       let obj = {
-        type:"change-theme",
+        type:"change-console-theme",
         currentTheme: this.mainService.selectedTheme.data
       }
       iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
