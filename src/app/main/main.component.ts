@@ -152,10 +152,8 @@ export class MainComponent implements AfterViewInit {
     let self = this;
     this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
-    if(mainContainerEl){
-      this.mainContainerWidth = mainContainerEl.offsetWidth;
-      this.mainContainerHeight = mainContainerEl.offsetHeight;
-    }
+    this.mainContainerWidth = mainContainerEl.offsetWidth;
+    this.mainContainerHeight = mainContainerEl.offsetHeight;
      
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
@@ -323,6 +321,10 @@ export class MainComponent implements AfterViewInit {
         }
       
     })
+  }
+
+  isConsoleOnUpdate(newValue: boolean){
+    this.isConsoleOn = newValue;
   }
 
   /**
@@ -1115,7 +1117,8 @@ export class MainComponent implements AfterViewInit {
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     let newWindowWidth = window.innerWidth;
     let newWindowHeight = window.innerHeight;
-
+    this.iframePart.switchConsoleMobileMode();
+    
     //(new windowHeight or new windowWidth) and canChangeSplitSizes and mainContainerEl is truthy ?
     if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
       //console.log("/!\ window resize event: ", event);

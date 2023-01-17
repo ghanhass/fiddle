@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, AfterViewInit,ViewChild, Input, HostListener, Output ,EventEmitter} from '@angular/core';
+import { Component, ElementRef, OnInit,ViewChild, Output ,EventEmitter} from '@angular/core';
 import { environment } from "../../environments/environment";
 import { MainService } from '../main.service';
-import { Router, ActivatedRoute } from "@angular/router";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../fiddle-data';
 
@@ -22,6 +22,7 @@ export class IframePartComponent implements OnInit {
   @ViewChild("iframe")iframeElement: ElementRef;
   @Output()showloader: EventEmitter<any> = new EventEmitter();
   @Output()hideloader: EventEmitter<any> = new EventEmitter();
+  @Output()isConsoleOnUpdate: EventEmitter<boolean> = new EventEmitter();
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
   
   url: string = environment.url;
@@ -40,7 +41,13 @@ export class IframePartComponent implements OnInit {
           if(self.isFiddleLoadComplete && self.isIframeLoadComplete){
             self.hideloader.emit();
             self.changeConsoleTheme();
+            self.switchConsoleMobileMode()
           }
+        }
+        else if(event.data == "detected-error"){
+          //console.log("message event from sub iframe = ", event);
+          self.mainService.isConsoleOn = true;
+          self.isConsoleOnUpdate.emit(true);
         }
       });
   }
@@ -65,7 +72,7 @@ export class IframePartComponent implements OnInit {
           html:fiddleCode,
           currentTheme: this.mainService.selectedTheme.data
         }
-        iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+        iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
       }
     }
     else{
@@ -184,7 +191,19 @@ export class IframePartComponent implements OnInit {
         type:"console-show",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+    }
+  }
+
+  switchConsoleMobileMode(){
+    let isResponsiveModeOn = window.innerWidth <= 817 || window.innerHeight <= 580;
+    let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
+    if(iframeElement.contentWindow){
+      let obj = {
+        type:"console-mobile-update",
+        isFiddleMobileMode: isResponsiveModeOn
+      }
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
     }
   }
 
@@ -195,7 +214,7 @@ export class IframePartComponent implements OnInit {
         type:"change-console-theme",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
     }
   }
 
@@ -205,7 +224,7 @@ export class IframePartComponent implements OnInit {
       let obj = {
         type:"console-hide",
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),"*"); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
     }
   }
 

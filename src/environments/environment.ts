@@ -6,7 +6,8 @@ export const environment = {
   production: false,
   url: "http://localhost/myfiddlepreview/index.html",
   appName: "",
-  homeUrl:"http://localhost:4200"
+  homeUrl:"http://localhost:4200",
+  fiddleIframeOrigin: "http://localhost"
 };
 
 /*

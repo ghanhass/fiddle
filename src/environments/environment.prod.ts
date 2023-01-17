@@ -4,5 +4,6 @@ export const environment = {
   //url: "https://fiddle-server.000webhostapp.com/iframe-renderer/backend.php", 
   url:"https://hassen-github.github.io/myfiddlepreview",
   appName: "myfiddle",
-  homeUrl: "https://ghanhass.github.io/myfiddle/"
+  homeUrl: "https://ghanhass.github.io/myfiddle/",
+  fiddleIframeOrigin: "https://hassen-github.github.io"
 };

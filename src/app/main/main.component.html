@@ -276,7 +276,7 @@
             </div>
             <div class="iframe-area" [ngStyle]="getIframeOrHeaderStyleObject('iframe')">
               <div class="iframe-overlay-for-drop" [ngStyle]="{'display': (isCustomGutter1_dragging || isCustomGutter2_dragging) ? 'block' : (isIframeFullScreen ? 'none':'')}"></div>
-              <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()"></app-iframe-part>
+              <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()" (isConsoleOnUpdate)="isConsoleOnUpdate($event)"></app-iframe-part>
             </div>
             <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
               <div class="as-split-gutter-icon-custom"></div>

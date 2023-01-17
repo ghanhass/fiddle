@@ -581,7 +581,7 @@ export class MainService {
       color: ${theme.data.colors['editor.foreground']};
     }
 
-    @media (max-width:767px), (max-height:580px) {
+    @media (max-width:818px), (max-height:580px) {
       as-split-area.as-split-area-code-parts{
         border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
       }
