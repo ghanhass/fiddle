@@ -235,8 +235,7 @@ export class MainService {
     
     .as-split-outer[class] > .as-split-gutter[class],
     .as-split-gutter-custom,
-    #code-parts[id] .as-split-gutter[class],
-    .as-split-iframe-console > .as-split-gutter[class]
+    #code-parts[id] .as-split-gutter[class]
     {
         background-color: ${theme.data.colors['editor.selectionBackground']};
     }

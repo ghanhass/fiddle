@@ -1168,11 +1168,6 @@ as-split-area.code-component-container > app-html-part{
     }
 
     /*hide iframe resizing empty area for mobile devices*/
-    .as-split-iframe-console > as-split-area:first-child{
-        height: 100%;
-        flex: none !important;
-        width: 100%;
-    }
     
     .as-split-area-iframe > .empty-area{
         display: none;
@@ -1189,14 +1184,6 @@ as-split-area.code-component-container > app-html-part{
     .iframe-overlay-for-drop{
         display:none;
     }
-
-    .as-split-iframe-console.console-on .as-split-area-iframe{
-        display: none;
-   }
-
-   .as-split-iframe-console.console-on .as-split-area-console {
-    flex-basis: 100% !important;
-}
 
 }
 
@@ -1246,28 +1233,4 @@ app-modal .modal-header .modal-validate-btn{
     /*background-color: #aaaaaa;*/
     /*color: #FFFFFF;*/
     text-decoration: underline;
-}
-
-.as-split-iframe-console.console-on .empty-area {
-    display: none;
-}
-
-.as-split-iframe-console.console-on .as-split-gutter-custom{
-    display: none;
-}
-
-.as-split-iframe-console.console-on .iframe-area{
-    flex-basis:100% !important;
-}
-
-.as-split-iframe-console:not(.console-on) .as-split-gutter{
-    display: none;
-}
-
-.as-split-iframe-console:not(.console-on) .as-split-area-iframe{
-    flex-basis: 100% !important;
-}
-
-.as-split-iframe-console:not(.console-on) .as-split-area-console{
-    display:none;
 }
