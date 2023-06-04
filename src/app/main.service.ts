@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { environment} from "../environments/environment";
 import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
@@ -722,14 +722,25 @@ export class MainService {
             gist_id:gistId
           }).then((res2)=>{
             if(res2.status == 200){
-              let content: string = (Object.values(res2.data.files)[0] as any).content;
-              let fiddleData: FiddleData = JSON.parse(content);
-              return new Promise((resolve)=>{
-                resolve({
-                  status:"ok",
-                  fiddleData: fiddleData
+              let targetObj = Object.values(res2.data.files)[0] as any;
+              let asyncOperation: Observable<FiddleData>;
+              
+              if(!targetObj.truncated){
+                asyncOperation = of(JSON.parse(targetObj.content));
+              }
+              else{
+                asyncOperation = this.http.get<FiddleData>(targetObj.raw_url);
+              }
+
+              asyncOperation.subscribe((res3)=>{
+                let fiddleData: FiddleData = res3;
+                return new Promise((resolve)=>{
+                  resolve({
+                    status:"ok",
+                    fiddleData: fiddleData
+                  });
                 });
-              });
+              })
             }
             else{
               return new Promise((resolve)=>{

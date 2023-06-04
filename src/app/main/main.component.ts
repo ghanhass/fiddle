@@ -14,8 +14,6 @@ import { NgxPrettifyService } from '@smartcodelab/ngx-prettify';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
-import { ConsolePanel } from '../console-panel';
-
 
 
 interface PreviousLayout{
@@ -134,7 +132,6 @@ export class MainComponent implements AfterViewInit {
 
   firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
-  //consolePanel: ConsolePanel;
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
