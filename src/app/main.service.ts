@@ -8,7 +8,7 @@ import { Octokit } from '@octokit/core';
 import { GistData } from './gist-data';
 import { FiddleData } from './fiddle-data';
 import { GistFiddle } from './gist-fiddle';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 
 
 const octokit = new Octokit({auth: window.atob('Z2hwX0tvQjlMWXlNY3Zpb3VDRDc1Q1doek5YR3dBSWpoMTJTYVNrZw==')});
@@ -724,7 +724,7 @@ export class MainService {
             if(res2.status == 200){
               let targetObj = Object.values(res2.data.files)[0] as any;
               let asyncOperation: Observable<FiddleData>;
-              
+
               if(!targetObj.truncated){
                 asyncOperation = of(JSON.parse(targetObj.content));
               }
@@ -732,15 +732,14 @@ export class MainService {
                 asyncOperation = this.http.get<FiddleData>(targetObj.raw_url);
               }
 
-              asyncOperation.subscribe((res3)=>{
-                let fiddleData: FiddleData = res3;
-                return new Promise((resolve)=>{
-                  resolve({
-                    status:"ok",
-                    fiddleData: fiddleData
-                  });
-                });
-              })
+              asyncOperation = asyncOperation.pipe(tap((fiddleData)=>{
+                return {
+                  status: "ok",
+                  fiddleData: fiddleData
+                }
+              }));
+              
+              return asyncOperation.toPromise();
             }
             else{
               return new Promise((resolve)=>{
