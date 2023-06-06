@@ -723,7 +723,7 @@ export class MainService {
           }).then((res2)=>{
             if(res2.status == 200){
               let targetObj = Object.values(res2.data.files)[0] as any;
-              let asyncOperation: Observable<FiddleData>;
+              let asyncOperation: Observable<any>;
 
               if(!targetObj.truncated){
                 asyncOperation = of(JSON.parse(targetObj.content));
@@ -732,13 +732,13 @@ export class MainService {
                 asyncOperation = this.http.get<FiddleData>(targetObj.raw_url);
               }
 
-              asyncOperation = asyncOperation.pipe(tap((fiddleData)=>{
+              asyncOperation = asyncOperation.pipe(map((fiddleData)=>{
                 return {
                   status: "ok",
                   fiddleData: fiddleData
                 }
               }));
-              
+
               return asyncOperation.toPromise();
             }
             else{
