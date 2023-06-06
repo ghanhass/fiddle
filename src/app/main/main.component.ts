@@ -186,7 +186,7 @@ export class MainComponent implements AfterViewInit {
         else{//retrieve data from backend ?
           this.loader.showLoader();
           this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-            //console.log("getFiddle2 res = ", res);
+            console.log("getFiddle res = ", res);
             if(res.status == "ok"){
               let fiddleData: FiddleData = res.fiddleData;
               //console.log("getFiddle obj = ", obj);
