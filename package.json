@@ -20,7 +20,7 @@
     "@angular/platform-browser": "~13.3.11",
     "@angular/platform-browser-dynamic": "~13.3.11",
     "@angular/router": "~13.3.11",
-    "@materia-ui/ngx-monaco-editor": "^5.0.0",
+    "@materia-ui/ngx-monaco-editor": "^6.0.0",
     "@octokit/core": "^3.5.1",
     "@smartcodelab/ngx-prettify": "0.0.1",
     "angular-cli-ghpages": "^1.0.0",
