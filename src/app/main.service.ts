@@ -784,7 +784,7 @@ export class MainService {
     let self = this;
     if(environment.production){
       return from (octokit.request('POST /gists?_='+(new Date).getTime(),{//create new gist
-        files:{ [""]: { content: JSON.stringify(fiddleData) } },
+        files:{ [(new Date).getTime()+""]: { content: JSON.stringify(fiddleData) } },
         public:false
       }).then((res)=>{
         //console.log("new gist res = ", res);
