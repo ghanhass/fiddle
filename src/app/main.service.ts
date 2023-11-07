@@ -6,12 +6,12 @@ import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
 import { Octokit } from '@octokit/core';
 import { GistData } from './gist-data';
-import { FiddleData } from './fiddle-data';
+import { FiddleData } from './fiddle-data'; 
 import { GistFiddle } from './gist-fiddle';
 import { map, tap } from 'rxjs/operators';
 
 
-const octokit = new Octokit({auth: window.atob('Z2hwX0JYMVFlRkRaaGc2d3NndWZOa2NoNzBEQVR1aGowWTJqUnRJTw==')});
+const octokit = new Octokit({auth: "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"});
 
 @Injectable({
   providedIn: 'root'
@@ -697,7 +697,10 @@ export class MainService {
  
     if(environment.production){
       return from( octokit.request('GET /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-        gist_id:"1563db4e57ed1ad28627a5df6fb5037a"
+        gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        }
       }).then((res)=>{
         let str = res.data.files["myfiddle_db.json"].content;
         let gistData: GistData;
@@ -719,7 +722,10 @@ export class MainService {
         if(seekedFiddle){
           let gistId = seekedFiddle.gist_id;
           return octokit.request('GET /gists/'+gistId+'?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-            gist_id:gistId
+            gist_id:gistId,
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
           }).then((res2)=>{
             if(res2.status == 200){
               let targetObj = Object.values(res2.data.files)[0] as any;
@@ -783,14 +789,17 @@ export class MainService {
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
     if(environment.production){
-      return from (octokit.request('POST /gists?_='+(new Date).getTime(),{//create new gist
+      return from (octokit.request('POST /gists',{//create new gist
         files:{ [(new Date).getTime()+""]: { content: JSON.stringify(fiddleData) } },
         public:false
       }).then((res)=>{
         //console.log("new gist res = ", res);
         let newGistId = res.data.id;
         return octokit.request('GET /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-          gist_id:"1563db4e57ed1ad28627a5df6fb5037a"
+          gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
+          headers: {
+            'X-GitHub-Api-Version': '2022-11-28'
+          }
         }).then((res2)=>{
           let str = res2.data.files["myfiddle_db.json"].content;
           let gistData: GistData;
@@ -819,6 +828,9 @@ export class MainService {
           return octokit.request('PATCH /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
             gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
             files:{ "myfiddle_db.json": { content: JSON.stringify(gistData) } },
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
           }).then((res)=>{
             return new Promise((yes,no)=>{
               //console.log("res.status = ",res.status);
@@ -866,7 +878,10 @@ export class MainService {
       res.data.forEach((oneGist)=>{
         if(oneGist.files["myfiddle_db.json"] === undefined){
           octokit.request('DELETE /gists/'+oneGist.id,{
-            gist_id:oneGist.id
+            gist_id:oneGist.id,
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
           }).then((res)=>{
             //console.log("deleted gist with id = ", oneGist.id);
           });
@@ -875,6 +890,9 @@ export class MainService {
           octokit.request('PATCH /gists/'+oneGist.id,{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
             gist_id:oneGist.id,
             files:{ "myfiddle_db.json": { content: "{}" } },
+            headers: {
+              'X-GitHub-Api-Version': '2022-11-28'
+            }
           });
         }
       });

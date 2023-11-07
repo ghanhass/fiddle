@@ -21,7 +21,7 @@
     "@angular/platform-browser-dynamic": "^15.2.9",
     "@angular/router": "^15.2.9",
     "@materia-ui/ngx-monaco-editor": "^6.0.0",
-    "@octokit/core": "^3.5.1",
+    "@octokit/core": "^5.0.1",
     "@smartcodelab/ngx-prettify": "0.0.6",
     "angular-cli-ghpages": "^1.0.0",
     "angular-split": "^5.0.0",
