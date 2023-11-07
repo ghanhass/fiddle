@@ -791,6 +791,9 @@ export class MainService {
     if(environment.production){
       return from (octokit.request('POST /gists',{//create new gist
         files:{ [(new Date).getTime()+""]: { content: JSON.stringify(fiddleData) } },
+        headers: {
+          'X-GitHub-Api-Version': '2022-11-28'
+        },
         public:false
       }).then((res)=>{
         //console.log("new gist res = ", res);
@@ -872,7 +875,10 @@ export class MainService {
   }
   deleteAllGists(){
     octokit.request('GET /gists?_='+(new Date).getTime(),{
-      public:false
+      public:false,
+      headers: {
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
     }).then((res)=>{
       //console.log("get all gists res = ", res);
       res.data.forEach((oneGist)=>{
