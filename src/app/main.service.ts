@@ -11,7 +11,7 @@ import { GistFiddle } from './gist-fiddle';
 import { map, tap } from 'rxjs/operators';
 
 
-const octokit = new Octokit({auth: window.atob("Z2hwX1NVbGlKS1RZSERiTHhBQ3BKeTBhUWljaFJSNG1rZjBxWDNGVA==")});
+const octokit = new Octokit({auth: window.atob("Z2l0aHViX3BhdF8xMUFCSlBJM1EwaXRQaHZGNm5SQVlIX1luaFdsUHhXQld4aHc1QWExeDlidWpyNWhxUUJPSDhSeUhlU3R5a3Zvc3RJN0lWWE42V2pKSGRXR2dx")});
 
 @Injectable({
   providedIn: 'root'
@@ -144,6 +144,10 @@ export class MainService {
     this.htmlCode = "";
 
     console.log("mainService constructor");
+    octokit.request("GET /", {headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }})
+    .then(console.log, console.log);
   }
 
   setCheckBeforeUnloadListener(){
