@@ -144,10 +144,10 @@ export class MainService {
     this.htmlCode = "";
 
     console.log("mainService constructor");
-    octokit.request("GET /", {headers: {
+    /*octokit.request("GET /", {headers: {
       'X-GitHub-Api-Version': '2022-11-28'
     }})
-    .then(console.log, console.log);
+    .then(console.log, console.log);*/
   }
 
   setCheckBeforeUnloadListener(){
