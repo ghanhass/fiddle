@@ -1,17 +1,22 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { from, Observable, of } from 'rxjs';
+import { concat, forkJoin, from, merge, Observable, of, Subject, zip } from 'rxjs';
 import { environment} from "../environments/environment";
 import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
-import { Octokit } from '@octokit/core';
 import { GistData } from './gist-data';
 import { FiddleData } from './fiddle-data'; 
 import { GistFiddle } from './gist-fiddle';
-import { map, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap } from 'rxjs/operators';
 
 
-const octokit = new Octokit({auth: window.atob("Z2l0aHViX3BhdF8xMUFCSlBJM1EwaXRQaHZGNm5SQVlIX1luaFdsUHhXQld4aHc1QWExeDlidWpyNWhxUUJPSDhSeUhlU3R5a3Zvc3RJN0lWWE42V2pKSGRXR2dx")});
+
+let headers = new HttpHeaders();
+headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQteEVRWHNoaXNheVpHU3pYQVA5S3k="));
+headers = headers.set("Content-Type", "application/json");
+
+const gitlabProjectId = "52190204";
+const gitlabJsonDbId = "3621546";
 
 @Injectable({
   providedIn: 'root'
@@ -130,6 +135,8 @@ export class MainService {
   
   private appConfig: any;
 
+  newFiddleIdSubject: Subject<number>
+
   public beforeUnloadListener: any = (event:BeforeUnloadEvent) => {
     event.preventDefault();
     //console.log("beforeUnload event is set");
@@ -144,10 +151,6 @@ export class MainService {
     this.htmlCode = "";
 
     console.log("mainService constructor");
-    /*octokit.request("GET /", {headers: {
-      'X-GitHub-Api-Version': '2022-11-28'
-    }})
-    .then(console.log, console.log);*/
   }
 
   setCheckBeforeUnloadListener(){
@@ -698,78 +701,59 @@ export class MainService {
   getFiddle(fiddleId): Observable<any>{
     console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
- 
+
+    
+          
     if(environment.production){
-      return from( octokit.request('GET /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-        gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        }
-      }).then((res)=>{
-        let str = res.data.files["myfiddle_db.json"].content;
-        let gistData: GistData;
-        if(str){
-          gistData = JSON.parse(str);
-        }
-        else{
-          gistData = {gists: []};
-        }
-  
-        if(gistData.gists == undefined){
-          gistData.gists = [];
-        }
-  
-        let seekedFiddle: GistFiddle = gistData.gists.find((fiddle)=>{
-          return fiddle.fiddle_id == fiddleId;
-        });
-  
-        if(seekedFiddle){
-          let gistId = seekedFiddle.gist_id;
-          return octokit.request('GET /gists/'+gistId+'?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-            gist_id:gistId,
-            headers: {
-              'X-GitHub-Api-Version': '2022-11-28'
-            }
-          }).then((res2)=>{
-            if(res2.status == 200){
-              let targetObj = Object.values(res2.data.files)[0] as any;
-              let asyncOperation: Observable<any>;
+      let promise = new Promise((resolve, reject)=>{
+        this.http.get<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}/raw`, {headers: headers}).subscribe({
+        next: (res1)=>{
+          console.log("res1 = ", res1);
 
-              if(!targetObj.truncated){
-                asyncOperation = of(JSON.parse(targetObj.content));
-              }
-              else{
-                asyncOperation = this.http.get<FiddleData>(targetObj.raw_url);
-              }
+          let gistData: any =  res1;; //GistData
 
-              asyncOperation = asyncOperation.pipe(map((fiddleData)=>{
-                return {
-                  status: "ok",
-                  fiddleData: fiddleData
+          if(gistData.gists == undefined){
+            gistData.gists = [];
+          }
+
+          let seekedFiddle: GistFiddle = gistData.gists.find((fiddle)=>{
+            return fiddle.fiddle_id == fiddleId;
+          });
+
+          if(seekedFiddle){
+            let gitlabRawSnippetUrl = seekedFiddle.gist_id;
+            this.http.get<any>(gitlabRawSnippetUrl, {headers: headers}).subscribe({//get seeked fiddle content from gitlab
+              next: (res2: FiddleData)=>{
+                let result ;
+                if(res2.hasOwnProperty("css")){
+                  result = {
+                    status: "ok",
+                    fiddleData: res2
+                  }
                 }
-              }));
-
-              return asyncOperation.toPromise();
-            }
-            else{
-              return new Promise((resolve)=>{
+                else{
+                  result = {
+                    status:"not found"
+                  }
+                }
+                resolve(result);
+              },
+              error: (error2)=>{
                 resolve({
                   status:"not found"
-                }
-                );
-              });
-            }
-          })
+                })
+              }
+            });
+          }
+        },
+        error: (error)=>{
+          resolve({
+            status:"not found"
+          })  
         }
-        else{
-          return new Promise((resolve)=>{
-            resolve({
-              status:"not found"
-            })
-          });
-        }
-      })
-      );
+      });
+    });
+    return from(promise);
     }
     else{
       return this.http.get<Array<FiddleData>>("http://localhost:3000/gists?id="+fiddleId).pipe(
@@ -793,67 +777,82 @@ export class MainService {
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
     if(environment.production){
-      return from (octokit.request('POST /gists',{//create new gist
-        files:{ [(new Date).getTime()+""]: { content: JSON.stringify(fiddleData) } },
-        headers: {
-          'X-GitHub-Api-Version': '2022-11-28'
-        },
-        public:false
-      }).then((res)=>{
-        //console.log("new gist res = ", res);
-        let newGistId = res.data.id;
-        return octokit.request('GET /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{//get last fiddle_id myfiddle_db.json 
-          gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
-          headers: {
-            'X-GitHub-Api-Version': '2022-11-28'
-          }
-        }).then((res2)=>{
-          let str = res2.data.files["myfiddle_db.json"].content;
-          let gistData: GistData;
-          if(str){
-            gistData = JSON.parse(str);
-          }
-          else{
-            gistData = {gists: []};
-          }
-          if(gistData.gists == undefined){
-            gistData.gists = [];
-          }
-  
-          //console.log("gistData = ", gistData);
-  
-          let newFiddleId = gistData.gists.length + 1;
-  
-          let fiddleGistData : GistFiddle = {
-            fiddle_id: newFiddleId,
-            gist_id: newGistId
-          }
-  
-          gistData.gists.push(fiddleGistData);
-  
-            
-          return octokit.request('PATCH /gists/1563db4e57ed1ad28627a5df6fb5037a?_='+(new Date).getTime(),{ //insert new fiddleGistData in myfiddle_db.json gists array and return the final promise
-            gist_id:"1563db4e57ed1ad28627a5df6fb5037a",
-            files:{ "myfiddle_db.json": { content: JSON.stringify(gistData) } },
-            headers: {
-              'X-GitHub-Api-Version': '2022-11-28'
-            }
-          }).then((res)=>{
-            return new Promise((yes,no)=>{
-              //console.log("res.status = ",res.status);
-              if(res.status == 200){
-                yes(newFiddleId);
+      let timeStamp = (new Date()).getTime();
+      let body = {
+        file_name: timeStamp,
+        title: timeStamp,
+        visibility: "public",
+        "content": JSON.stringify(fiddleData),
+        "file_path": timeStamp,
+      }
+      let newSnippetRawUrl;
+      let body2;
+      let newFiddleId;
+
+      let promise = new Promise((resolve, reject)=>{
+        this.http.post<any>("https://gitlab.com/api/v4/projects/52190204/snippets", body, {headers: headers}).subscribe(
+        {
+          next: (res1)=>{
+            console.log("res1 = ", res1);
+            newSnippetRawUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${res1.id}/raw`;
+
+            this.http.get<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}/raw`).subscribe(
+              {
+                next: (res2)=>{
+                  console.log("snippet res2 = ", res2);
+
+                  let gistData: any = res2; //GistData
+
+
+                  if(gistData.gists == undefined){
+                    gistData.gists = [];
+                  }
+                
+                  newFiddleId = gistData.gists.length + 1;
+                  let fiddleGistData : GistFiddle = {
+                    fiddle_id: newFiddleId,
+                    gist_id: newSnippetRawUrl
+                  }
+                
+                  gistData.gists.push(fiddleGistData);  
+                
+                  body2 = {
+                    file_name: "myfiddle_db.json",
+                    title: "myfiddle_db.json",
+                    visibility: "public",
+                    "content": JSON.stringify(gistData),
+                    "file_path": "myfiddle_db.json",
+                  }
+                  console.log("newSnippetRawUrl = ", newSnippetRawUrl);
+                
+                  this.http.put<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}`, body2, {headers: headers}).subscribe({
+                      next: (res3)=>{
+                        console.log("res3 = ", res3);
+                        resolve(newFiddleId);
+                        
+                      },
+                      error: (err3)=>{
+                        reject(err3)
+                      }
+                    });
+                   // //insert new fiddleGistData in myfiddle_db.json
+                
+                },
+                error: (err2)=>{
+                  reject(err2)
+                }
               }
-              else{
-                no(-1);
-              }
-            })          
-          });
-        });
-  
-      })
+            )
+          },
+          error: (err1)=>{
+            reject(err1)
+          }
+        }
       );
+      });
+      return from(promise);
     }
+
     else{
       return from( new Promise((resolve,reject)=>{
         this.http.get<Array<FiddleData>>("http://localhost:3000/gists?_sort=id&_order=desc&_limit=1").subscribe((res)=>{
@@ -877,7 +876,7 @@ export class MainService {
     }
     
   }
-  deleteAllGists(){
+  /*deleteAllGists(){
     octokit.request('GET /gists?_='+(new Date).getTime(),{
       public:false,
       headers: {
@@ -907,5 +906,5 @@ export class MainService {
         }
       });
     })
-  }
+  }*/
 }
