@@ -725,7 +725,7 @@ export class MainService {
             this.http.get<any>(gitlabRawSnippetUrl, {headers: headers}).subscribe({//get seeked fiddle content from gitlab
               next: (res2: FiddleData)=>{
                 let result ;
-                if(res2.hasOwnProperty("css")){
+                if(res2.hasOwnProperty("css") && res2.hasOwnProperty("js") && res2.hasOwnProperty("html")){
                   result = {
                     status: "ok",
                     fiddleData: res2
@@ -744,6 +744,11 @@ export class MainService {
                 })
               }
             });
+          }
+          else{
+            resolve({
+              status:"not found"
+            })
           }
         },
         error: (error)=>{
