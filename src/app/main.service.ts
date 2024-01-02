@@ -680,20 +680,21 @@ export class MainService {
     <!DOCTYPE html>
     <html>
         <head>
-            <style>
-            ${cssCode}
-            </style>
         </head>
         <body> 
             ${htmlCode}
-
-            ${jsCode}
 
             <script>
 		  	    window.onerror = function(e) {
 		  	    	window.detectedError = e;
 		  	    };
 		        </script>
+
+            ${jsCode}
+            
+            <style>
+            ${cssCode}
+            </style>
         </body>
     </html>`;
     return html;
