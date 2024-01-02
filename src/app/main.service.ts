@@ -691,7 +691,7 @@ export class MainService {
 		        </script>
 
             ${jsCode}
-            
+
             <style>
             ${cssCode}
             </style>
@@ -704,24 +704,10 @@ export class MainService {
     console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
           
-    if(environment.production){
+    if(!environment.production){
       let promise = new Promise((resolve, reject)=>{
-        this.http.get<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}/raw`, {headers: headers}).subscribe({
-        next: (res1)=>{
-          console.log("res1 = ", res1);
 
-          let gistData: any =  res1;; //GistData
-
-          if(gistData.gists == undefined){
-            gistData.gists = [];
-          }
-
-          let seekedFiddle: GistFiddle = gistData.gists.find((fiddle)=>{
-            return fiddle.fiddle_id == fiddleId;
-          });
-
-          if(seekedFiddle){
-            let gitlabRawSnippetUrl = seekedFiddle.gist_id;
+        let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
             this.http.get<any>(gitlabRawSnippetUrl, {headers: headers}).subscribe({//get seeked fiddle content from gitlab
               next: (res2: FiddleData)=>{
                 let result ;
@@ -744,21 +730,8 @@ export class MainService {
                 })
               }
             });
-          }
-          else{
-            resolve({
-              status:"not found"
-            })
-          }
-        },
-        error: (error)=>{
-          resolve({
-            status:"not found"
-          })  
-        }
       });
-    });
-    return from(promise);
+      return from(promise);
     }
     else{
       return this.http.get<Array<FiddleData>>("http://localhost:3000/gists?id="+fiddleId).pipe(
@@ -781,7 +754,7 @@ export class MainService {
   saveFiddle(fiddleData: FiddleData): Observable<any>{
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
-    if(environment.production){
+    if(!environment.production){
       let timeStamp = (new Date()).getTime();
       let body = {
         file_name: timeStamp,
@@ -800,54 +773,8 @@ export class MainService {
           next: (res1)=>{
             console.log("res1 = ", res1);
             newSnippetRawUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${res1.id}/raw`;
-
-            this.http.get<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}/raw`).subscribe(
-              {
-                next: (res2)=>{
-                  console.log("snippet res2 = ", res2);
-
-                  let gistData: any = res2; //GistData
-
-
-                  if(gistData.gists == undefined){
-                    gistData.gists = [];
-                  }
-                
-                  newFiddleId = gistData.gists.length + 1;
-                  let fiddleGistData : GistFiddle = {
-                    fiddle_id: newFiddleId,
-                    gist_id: newSnippetRawUrl
-                  }
-                
-                  gistData.gists.push(fiddleGistData);  
-                
-                  body2 = {
-                    file_name: "myfiddle_db.json",
-                    title: "myfiddle_db.json",
-                    visibility: "public",
-                    "content": JSON.stringify(gistData),
-                    "file_path": "myfiddle_db.json",
-                  }
-                  console.log("newSnippetRawUrl = ", newSnippetRawUrl);
-                
-                  this.http.put<any>(`https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${gitlabJsonDbId}`, body2, {headers: headers}).subscribe({
-                      next: (res3)=>{
-                        console.log("res3 = ", res3);
-                        resolve(newFiddleId);
-                        
-                      },
-                      error: (err3)=>{
-                        reject(err3)
-                      }
-                    });
-                   // //insert new fiddleGistData in myfiddle_db.json
-                
-                },
-                error: (err2)=>{
-                  reject(err2)
-                }
-              }
-            )
+            newFiddleId = res1.id;
+            resolve(newFiddleId);
           },
           error: (err1)=>{
             reject(err1)
