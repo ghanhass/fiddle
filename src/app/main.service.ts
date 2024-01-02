@@ -685,14 +685,15 @@ export class MainService {
             </style>
         </head>
         <body> 
-        <script>
-		  	window.onerror = function(e) {
-		  		window.detectedError = e;
-		  	};
-		    </script>
             ${htmlCode}
 
             ${jsCode}
+
+            <script>
+		  	    window.onerror = function(e) {
+		  	    	window.detectedError = e;
+		  	    };
+		        </script>
         </body>
     </html>`;
     return html;
@@ -701,8 +702,6 @@ export class MainService {
   getFiddle(fiddleId): Observable<any>{
     console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
-
-    
           
     if(environment.production){
       let promise = new Promise((resolve, reject)=>{
