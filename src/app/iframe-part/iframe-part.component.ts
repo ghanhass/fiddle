@@ -4,6 +4,7 @@ import { MainService } from '../main.service';
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../fiddle-data';
+import { CssPartComponent } from '../css-part/css-part.component';
 
 
 @Component({
@@ -24,6 +25,7 @@ export class IframePartComponent implements OnInit {
   @Output()hideloader: EventEmitter<any> = new EventEmitter();
   @Output()isConsoleOnUpdate: EventEmitter<boolean> = new EventEmitter();
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
+  cssPartComponent: CssPartComponent;
   
   url: string = environment.url;
   isIframeLoadComplete = true;
@@ -41,7 +43,13 @@ export class IframePartComponent implements OnInit {
           if(self.isFiddleLoadComplete && self.isIframeLoadComplete){
             self.hideloader.emit();
             self.changeConsoleTheme();
-            self.switchConsoleMobileMode()
+            self.switchConsoleMobileMode();
+
+            if(self.mainService.cssCodePositionData.focus){
+              //console.log("called focusSubject$.next(1)");
+              self.mainService.cssCodePositionData.focusSubject$.next(1);
+            }
+
           }
         }
         else if(event.data == "detected-error"){
@@ -64,7 +72,7 @@ export class IframePartComponent implements OnInit {
     this.showloader.emit();
     if(this.iframeElement){
       let iframeElement = this.iframeElement.nativeElement as HTMLIFrameElement;
-      console.log("inside runFiddle() iframeElement.contentWindow = ", iframeElement.contentWindow);
+      //console.log("inside runFiddle() iframeElement.contentWindow = ", iframeElement.contentWindow);
       if(iframeElement.contentWindow){
         let fiddleCode = this.mainService.generateFiddleCode(data);
         let obj = {
@@ -76,7 +84,7 @@ export class IframePartComponent implements OnInit {
       }
     }
     else{
-      console.log("iframeElement is NOT DEFINED");
+      //console.log("iframeElement is NOT DEFINED");
     }
   }
 
@@ -154,7 +162,7 @@ export class IframePartComponent implements OnInit {
         this.mainService.removeBeforeUnloadListener();
         this.mainService.resetCodeSinceSave();
         this.mainService.redirectAfterSaveMode = true;
-        console.log("gonna navigate now !");
+        //console.log("gonna navigate now !");
         this.router.navigate(["/"+fiddleId]);
         this.toastrService.success("Fiddle URL copied to clipboard.");
       }
@@ -177,7 +185,7 @@ export class IframePartComponent implements OnInit {
   }
 
   onFormLoad(): void {
-    console.log("onFormLoad this.iframeElement = ",this.iframeElement);
+    //console.log("onFormLoad this.iframeElement = ",this.iframeElement);
     if(this.mainService.scheduledRunFiddle && this.iframeElement){
       this.mainService.scheduledRunFiddle = false;
       this.runFiddle();

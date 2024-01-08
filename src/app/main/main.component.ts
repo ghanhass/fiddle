@@ -155,7 +155,7 @@ export class MainComponent implements AfterViewInit {
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(self.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
-          console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
+          //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
@@ -292,7 +292,9 @@ export class MainComponent implements AfterViewInit {
 
     this.setMainServiceCodepartSizes();
 
+    
     window.addEventListener("keydown", function(event){
+      //console.log("vanilla keydown");
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
         event.preventDefault();
         event.stopPropagation();
@@ -301,16 +303,19 @@ export class MainComponent implements AfterViewInit {
       
         if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){        
           event.preventDefault();
+          event.stopPropagation();
           self.runCode();
         }
         else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-          if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
+          event.preventDefault();
+          event.stopPropagation();
+          if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
             self.runCode("save");
-            self.mainService.codeExecutionDate = evDate;
+            self.mainService.codeSavingDate = evDate;
           }
         }
       
-    })
+    });
   }
 
   isConsoleOnUpdate(newValue: boolean){
@@ -1332,7 +1337,7 @@ export class MainComponent implements AfterViewInit {
       this.iframePart.saveFiddle();
     }
     else{//run
-      console.log("inside mainComponent.runCode()");
+      //console.log("inside mainComponent.runCode()");
       this.iframePart.runFiddle();
     }
   }

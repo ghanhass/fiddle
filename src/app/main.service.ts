@@ -50,10 +50,7 @@ export class MainService {
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
 
-  isCtrlKeyOn: boolean = false;
-  isAltKeyOn: boolean = false;
-  canEmitCodeMsg: boolean = true;
-  codeExecutionDate: Date =  undefined;
+  codeSavingDate: Date =  undefined;
 
   showHtml: boolean = true;
   showCss: boolean = false;
@@ -61,9 +58,27 @@ export class MainService {
   showResult: boolean = true;
 
   scheduledRunFiddle: boolean = false;
-  scheduledFiddleSaving: boolean = false;
 
   isBeforeUnloadEvHandlerSet: boolean = false;
+
+  htmlCodePositionData = {
+    lineNumber: 1, 
+    column: 1,
+    focus: false
+  }
+
+  cssCodePositionData = {
+    lineNumber: 1, 
+    column: 1,
+    focus: false,
+    focusSubject$: new Subject()
+  }
+
+  jsCodePositionData = {
+    lineNumber: 1, 
+    column: 1,
+    focus: false
+  }
 
   selectedTheme: FiddleTheme = {
       name: "VS",
@@ -150,7 +165,7 @@ export class MainService {
     this.cssCode = "";
     this.htmlCode = "";
 
-    console.log("mainService constructor");
+    //console.log("mainService constructor");
   }
 
   setCheckBeforeUnloadListener(){
@@ -158,11 +173,11 @@ export class MainService {
     window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
 
     if(this.isCodeChanged()){
-      console.log("isCodeChanged = true");
+      //console.log("isCodeChanged = true");
       window.addEventListener("beforeunload", self.beforeUnloadListener, {capture: true});
     }
     else{
-      console.log("isCodeChanged = false");
+      //console.log("isCodeChanged = false");
       window.removeEventListener("beforeunload", self.beforeUnloadListener, {capture: true}); 
     }
   }
@@ -192,10 +207,10 @@ export class MainService {
 
   registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
     let self = this;
-    ////console.log("A!");
+    //console.log("A!");
     setTimeout(()=>{
       if(window['monaco']){
-        ////console.log("fiddleTheme = ", fiddleTheme);
+        //console.log("fiddleTheme = ", fiddleTheme);
         window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
         window['monaco'].editor.setTheme("myCustomTheme");
       }
@@ -220,14 +235,14 @@ export class MainService {
   }
 
   resumeFiddleTheme(){
-    ////console.log("param = ", param);
-    ////console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
+    //console.log("param = ", param);
+    //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     let savedThemeId = localStorage.getItem("myfiddle-theme");
 
     if(savedThemeId){
         this.selectedTheme = this.themesList.find((el)=>{return el.id == savedThemeId});
     }
-    ////console.log("selectedTheme = ", selectedTheme);
+    //console.log("selectedTheme = ", selectedTheme);
 
     this.addThemeStylesheet(this.selectedTheme);
     this.registerMonacoCustomTheme(this.selectedTheme);
@@ -653,7 +668,7 @@ export class MainService {
   }
 
   generateFiddleCode(data: any): string{
-    console.log("generateFiddleCode data.isConsoleOn: ", this.isConsoleOn);
+    //console.log("generateFiddleCode data.isConsoleOn: ", this.isConsoleOn);
     let htmlCode = data.html ? data.html : "";
     let cssCode = data.css ? data.css : "";
     let jsCode = `
@@ -701,7 +716,7 @@ export class MainService {
   }
 
   getFiddle(fiddleId): Observable<any>{
-    console.log("getFiddle fiddleId = ",fiddleId);
+    //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
           
     if(environment.production){
@@ -771,7 +786,7 @@ export class MainService {
         this.http.post<any>("https://gitlab.com/api/v4/projects/52190204/snippets", body, {headers: headers}).subscribe(
         {
           next: (res1)=>{
-            console.log("res1 = ", res1);
+            //console.log("res1 = ", res1);
             newSnippetRawUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${res1.id}/raw`;
             newFiddleId = res1.id;
             resolve(newFiddleId);

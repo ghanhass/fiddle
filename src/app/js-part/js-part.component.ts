@@ -1,5 +1,6 @@
 import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input } from '@angular/core';
 import { MainService } from "../main.service";
+import { MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 
 @Component({
   selector: 'app-js-part',
@@ -14,8 +15,7 @@ export class JsPartComponent implements OnInit {
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
 
-  oldCodeValue: string = "";
-  editor:any;
+  editor:MonacoStandaloneCodeEditor;
 
   options = {
     language:"javascript",
@@ -31,8 +31,7 @@ export class JsPartComponent implements OnInit {
   constructor(private mainService:MainService) {  }
 
   onCodeChanged(value) {
-    //console.log('CODE', value);
-    this.oldCodeValue = this.mainService.jsCode;
+    ////console.log('CODE', value);
     this.mainService.jsCode = value;
     this.mainService.setCheckBeforeUnloadListener();
   }
@@ -41,28 +40,60 @@ export class JsPartComponent implements OnInit {
     this.code = this.mainService.jsCode;
   }
 
-  onEditorLoad(editor){
+  onEditorLoad(editor: MonacoStandaloneCodeEditor){
     this.editor = editor;
-    //console.log("editor = ", this.editor);
-
-    let el = document.querySelector("app-js-part [class='monaco-editor']");
     let self = this;
+    ////console.log("editor = ", this.editor);
 
-    el.addEventListener("keydown", function(event: KeyboardEvent){
+    this.mainService.cssCodePositionData.focusSubject$.subscribe(()=>{
+      this.mainService.cssCodePositionData.focus = true;
+    });
 
+    //console.log("editor = ", this.editor);
+    //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
+    
+    this.editor.onDidChangeCursorPosition((ev)=>{
+    });
+
+    this.editor.onDidFocusEditorText(()=>{
+      this.mainService.cssCodePositionData.focus = true;
+    });
+    
+    this.editor.onDidBlurEditorText(()=>{
+      this.mainService.cssCodePositionData.focus = false;
+    });
+
+    this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
+      //console.log("IKeyboardEvent keydown !");
+      
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
-        self.code = self.oldCodeValue;
-        self.mainService.jsCode = self.code;
+        event.preventDefault();
+        event.stopPropagation();
+
+        ////console.log("self.runcodemsg.emit()");
+
         self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-        if( self.mainService.codeExecutionDate === undefined || evDate.getTime() - self.mainService.codeExecutionDate.getTime() >= 1500){
-          self.mainService.codeExecutionDate = evDate;
+        
+        event.preventDefault();
+        event.stopPropagation();
+
+        if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
+          ////console.log("self.savecodemsg.emit()");
+          self.mainService.codeSavingDate = evDate;
+          
           self.savecodemsg.emit();
         }
       }
+    })
+
+    this.editor.onDidChangeCursorPosition(() => {
+        this.mainService.cssCodePositionData.column = this.editor.getPosition().column;
+        this.mainService.cssCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
+        ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
     });
   }
 
