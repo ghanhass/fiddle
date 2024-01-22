@@ -60,22 +60,21 @@ export class CssPartComponent implements OnInit {
     this.editor = editor;
     let self = this;
 
-    this.mainService.cssCodePositionData.focusSubject$.subscribe(()=>{
-      this.mainService.cssCodePositionData.focus = true;
-    });
-
     //console.log("editor = ", this.editor);
     //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-    
-    this.editor.onDidChangeCursorPosition((ev)=>{
-    });
+
+    this.mainService.retrieveCodePartsCursors(this);
 
     this.editor.onDidFocusEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = true;
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.cssCodePositionData.focus = true;
+      }
     });
     
     this.editor.onDidBlurEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = false;
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.cssCodePositionData.focus = false;
+      }
     });
 
     this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
@@ -84,6 +83,7 @@ export class CssPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -92,7 +92,7 @@ export class CssPartComponent implements OnInit {
         self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-        
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 

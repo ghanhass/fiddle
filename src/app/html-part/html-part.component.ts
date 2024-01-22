@@ -48,22 +48,24 @@ export class HtmlPartComponent implements OnInit {
     let self = this;
 
     this.monacoeditorloaded.emit();
-    this.mainService.cssCodePositionData.focusSubject$.subscribe(()=>{
-      this.mainService.cssCodePositionData.focus = true;
-    });
 
     //console.log("editor = ", this.editor);
     //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-    
-    this.editor.onDidChangeCursorPosition((ev)=>{
-    });
+
+    this.mainService.retrieveCodePartsCursors(undefined, this);
 
     this.editor.onDidFocusEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = true;
+      console.log("onDidFocusEditorText");
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.focus = true;
+      }
     });
     
     this.editor.onDidBlurEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = false;
+      console.log("onDidBlurEditorText");
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.focus = false;
+      }
     });
 
     this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
@@ -72,6 +74,7 @@ export class HtmlPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -80,7 +83,7 @@ export class HtmlPartComponent implements OnInit {
         self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-        
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -94,9 +97,17 @@ export class HtmlPartComponent implements OnInit {
     })
 
     this.editor.onDidChangeCursorPosition(() => {
-        this.mainService.cssCodePositionData.column = this.editor.getPosition().column;
-        this.mainService.cssCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.column = this.editor.getPosition().column;
+        this.mainService.htmlCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
         ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
+      }
+    });
+
+    this.editor.onDidChangeCursorSelection((event) => {
+      if(this.mainService.canSaveCodeEditorsPostition){
+        console.log("onDidChangeCursorSelection = ", event);
+      }
     });
     this.mainService.resumeFiddleTheme();
   }

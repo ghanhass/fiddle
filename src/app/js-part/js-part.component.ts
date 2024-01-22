@@ -45,22 +45,21 @@ export class JsPartComponent implements OnInit {
     let self = this;
     ////console.log("editor = ", this.editor);
 
-    this.mainService.cssCodePositionData.focusSubject$.subscribe(()=>{
-      this.mainService.cssCodePositionData.focus = true;
-    });
-
     //console.log("editor = ", this.editor);
     //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-    
-    this.editor.onDidChangeCursorPosition((ev)=>{
-    });
+
+    this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
 
     this.editor.onDidFocusEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = true;
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.jsCodePositionData.focus = true;
+      }
     });
     
     this.editor.onDidBlurEditorText(()=>{
-      this.mainService.cssCodePositionData.focus = false;
+      if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.jsCodePositionData.focus = false;
+      }
     });
 
     this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
@@ -69,6 +68,7 @@ export class JsPartComponent implements OnInit {
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -77,7 +77,7 @@ export class JsPartComponent implements OnInit {
         self.runcodemsg.emit();
       }
       else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-        
+        this.mainService.canSaveCodeEditorsPostition = false;
         event.preventDefault();
         event.stopPropagation();
 
@@ -91,8 +91,8 @@ export class JsPartComponent implements OnInit {
     })
 
     this.editor.onDidChangeCursorPosition(() => {
-        this.mainService.cssCodePositionData.column = this.editor.getPosition().column;
-        this.mainService.cssCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
+        this.mainService.jsCodePositionData.column = this.editor.getPosition().column;
+        this.mainService.jsCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
         ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
     });
   }

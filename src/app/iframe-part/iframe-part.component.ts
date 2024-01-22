@@ -45,11 +45,6 @@ export class IframePartComponent implements OnInit {
             self.changeConsoleTheme();
             self.switchConsoleMobileMode();
 
-            if(self.mainService.cssCodePositionData.focus){
-              //console.log("called focusSubject$.next(1)");
-              self.mainService.cssCodePositionData.focusSubject$.next(1);
-            }
-
           }
         }
         else if(event.data == "detected-error"){
@@ -110,7 +105,7 @@ export class IframePartComponent implements OnInit {
       mobileCodePart = "3";
     }
 
-    let fiddleData : FiddleData= {
+    let fiddleData : FiddleData = {
       js:this.mainService.jsCode,
       html:this.mainService.htmlCode,
       css:this.mainService.cssCode,
@@ -127,7 +122,10 @@ export class IframePartComponent implements OnInit {
       title:this.mainService.fiddleTitle,
       layout:this.mainService.layout,
       mobile_layout: mobileCodePart+":"+mobileResult,
-      iframe_resize_value: this.mainService.iframeResizeValue
+      iframe_resize_value: this.mainService.iframeResizeValue,
+      css_code_position_data: this.mainService.cssCodePositionData,
+      html_code_position_data: this.mainService.htmlCodePositionData,
+      js_code_position_data: this.mainService.jsCodePositionData,
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);

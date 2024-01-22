@@ -1,3 +1,5 @@
+import { CodePositionData } from "./code-position-data";
+
 export interface FiddleData {
     id?:number,
     js?:string,
@@ -14,5 +16,8 @@ export interface FiddleData {
     main_container_height?:number,
     main_container_width?:number,
     mobile_layout?:string,
-    iframe_resize_value?:number
+    iframe_resize_value?:number,
+    css_code_position_data: CodePositionData,
+    html_code_position_data: CodePositionData,
+    js_code_position_data: CodePositionData,
 }

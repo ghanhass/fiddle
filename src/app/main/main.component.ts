@@ -160,6 +160,9 @@ export class MainComponent implements AfterViewInit {
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
+
+          this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
+          this.mainService.canSaveCodeEditorsPostition = true;
           
           this.showHtml = this.mainService.showHtml;
           this.showCss = this.mainService.showCss;
@@ -174,7 +177,10 @@ export class MainComponent implements AfterViewInit {
             main_container_height: this.mainService.mainContainerHeight,
             code_parts_size: this.mainService.codePartsSize,
             layout: this.mainService.layout,
-            iframe_resize_value: this.mainService.iframeResizeValue
+            iframe_resize_value: this.mainService.iframeResizeValue,
+            css_code_position_data: this.mainService.cssCodePositionData,
+            html_code_position_data: this.mainService.cssCodePositionData,
+            js_code_position_data: this.mainService.cssCodePositionData,
           }
           this.changeLayout(this.mainService.layout, obj);
           self.mainService.redirectAfterSaveMode = false;
@@ -200,6 +206,10 @@ export class MainComponent implements AfterViewInit {
               this.mainService.cssCode = fiddleData.css;
               this.mainService.fiddleTitle = fiddleData.title;
               this.mainService.iframeResizeValue = fiddleData.iframe_resize_value;
+              this.mainService.cssCodePositionData = fiddleData.css_code_position_data;
+              this.mainService.htmlCodePositionData = fiddleData.html_code_position_data;
+              this.mainService.jsCodePositionData = fiddleData.js_code_position_data;
+
 
               //mobile layout retrieval
               let mobileLayoutArr = fiddleData.mobile_layout.split(':');

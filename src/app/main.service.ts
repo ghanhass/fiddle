@@ -8,6 +8,10 @@ import { GistData } from './gist-data';
 import { FiddleData } from './fiddle-data'; 
 import { GistFiddle } from './gist-fiddle';
 import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { CodePositionData } from './code-position-data';
+import { CssPartComponent } from './css-part/css-part.component';
+import { HtmlPartComponent } from './html-part/html-part.component';
+import { JsPartComponent } from './js-part/js-part.component';
 
 
 
@@ -61,24 +65,25 @@ export class MainService {
 
   isBeforeUnloadEvHandlerSet: boolean = false;
 
-  htmlCodePositionData = {
-    lineNumber: 1, 
-    column: 1,
-    focus: false
-  }
-
-  cssCodePositionData = {
+  htmlCodePositionData: CodePositionData = {
     lineNumber: 1, 
     column: 1,
     focus: false,
-    focusSubject$: new Subject()
   }
 
-  jsCodePositionData = {
+  cssCodePositionData: CodePositionData = {
     lineNumber: 1, 
     column: 1,
-    focus: false
+    focus: false,
   }
+
+  jsCodePositionData: CodePositionData = {
+    lineNumber: 1, 
+    column: 1,
+    focus: false,
+  }
+
+  canSaveCodeEditorsPostition: boolean = true;
 
   selectedTheme: FiddleTheme = {
       name: "VS",
@@ -713,6 +718,39 @@ export class MainService {
         </body>
     </html>`;
     return html;
+  }
+
+  retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
+    if(cssPart && this.cssCodePositionData.focus){
+      //retrieve html code part focus and cursor position
+      console.log("called cssPart.editor.focus()");
+      cssPart.editor.focus();
+      //
+      cssPart.editor.setPosition({
+        column: this.cssCodePositionData.column,
+        lineNumber: this.cssCodePositionData.lineNumber
+      });
+    }
+    else if(jsPart && this.jsCodePositionData.focus){
+      //retrieve js code part focus and cursor position
+      console.log("called jsPart.editor.focus()");
+      jsPart.editor.focus();
+      //
+      jsPart.editor.setPosition({
+        column: this.jsCodePositionData.column,
+        lineNumber: this.jsCodePositionData.lineNumber
+      });
+    }
+    else if(htmlPart && this.htmlCodePositionData.focus){
+      //retrieve html code part focus and cursor position
+      console.log("called htmlPart.editor.focus()");
+      htmlPart.editor.focus();
+      //
+      htmlPart.editor.setPosition({
+        column: this.htmlCodePositionData.column,
+        lineNumber: this.htmlCodePositionData.lineNumber
+      });
+    }
   }
 
   getFiddle(fiddleId): Observable<any>{
