@@ -31,8 +31,11 @@ export class DeleteOperations {
         }
         return [shouldPushStackElementBefore, commands];
     }
-    static isAutoClosingPairDelete(autoClosingBrackets, autoClosingQuotes, autoClosingPairsOpen, model, selections) {
+    static isAutoClosingPairDelete(autoClosingDelete, autoClosingBrackets, autoClosingQuotes, autoClosingPairsOpen, model, selections, autoClosedCharacters) {
         if (autoClosingBrackets === 'never' && autoClosingQuotes === 'never') {
+            return false;
+        }
+        if (autoClosingDelete === 'never') {
             return false;
         }
         for (let i = 0, len = selections.length; i < len; i++) {
@@ -70,6 +73,20 @@ export class DeleteOperations {
             if (!foundAutoClosingPair) {
                 return false;
             }
+            // Must delete the pair only if it was automatically inserted by the editor
+            if (autoClosingDelete === 'auto') {
+                let found = false;
+                for (let j = 0, lenJ = autoClosedCharacters.length; j < lenJ; j++) {
+                    const autoClosedCharacter = autoClosedCharacters[j];
+                    if (position.lineNumber === autoClosedCharacter.startLineNumber && position.column === autoClosedCharacter.startColumn) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    return false;
+                }
+            }
         }
         return true;
     }
@@ -82,8 +99,8 @@ export class DeleteOperations {
         }
         return [true, commands];
     }
-    static deleteLeft(prevEditOperationType, config, model, selections) {
-        if (this.isAutoClosingPairDelete(config.autoClosingBrackets, config.autoClosingQuotes, config.autoClosingPairs.autoClosingPairsOpenByEnd, model, selections)) {
+    static deleteLeft(prevEditOperationType, config, model, selections, autoClosedCharacters) {
+        if (this.isAutoClosingPairDelete(config.autoClosingDelete, config.autoClosingBrackets, config.autoClosingQuotes, config.autoClosingPairs.autoClosingPairsOpenByEnd, model, selections, autoClosedCharacters)) {
             return this._runAutoClosingPairDelete(config, model, selections);
         }
         let commands = [];

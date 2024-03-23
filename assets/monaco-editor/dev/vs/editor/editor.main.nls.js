@@ -1,6 +1,6 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.23.0(82e8ea39fc101d639262435542c7d43bc20d8aa2)
+ * Version: 0.24.0(89cdf8577cdd4881a366f9f7ef6abaa78453fd4b)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
@@ -80,6 +80,7 @@ define("vs/editor/editor.main.nls", {
 	],
 	"vs/base/parts/quickinput/browser/quickInput": [
 		"Back",
+		"Press 'Enter' to confirm your input or 'Escape' to cancel",
 		"{0}/{1}",
 		"Type to narrow down results.",
 		"{0} Results",
@@ -94,7 +95,8 @@ define("vs/editor/editor.main.nls", {
 	],
 	"vs/editor/browser/controller/coreCommands": [
 		"Stick to the end even when going to longer lines",
-		"Stick to the end even when going to longer lines"
+		"Stick to the end even when going to longer lines",
+		"Removed secondary cursors"
 	],
 	"vs/editor/browser/controller/textAreaHandler": [
 		"editor",
@@ -154,7 +156,7 @@ define("vs/editor/editor.main.nls", {
 		"Only suggest words from the active document.",
 		"Suggest words from all open documents of the same language.",
 		"Suggest words from all open documents.",
-		"Controls from what documents word based completions are computed.",
+		"Controls from which documents word based completions are computed.",
 		"Semantic highlighting enabled for all color themes.",
 		"Semantic highlighting disabled for all color themes.",
 		"Semantic highlighting is configured by the current color theme's `semanticHighlighting` setting.",
@@ -180,8 +182,8 @@ define("vs/editor/editor.main.nls", {
 		"Controls whether copying without a selection copies the current line.",
 		"Controls whether the cursor should jump to find matches while typing.",
 		"Controls whether the search string in the Find Widget is seeded from the editor selection.",
-		"Never turn on Find in selection automatically (default)",
-		"Always turn on Find in selection automatically",
+		"Never turn on Find in selection automatically (default).",
+		"Always turn on Find in selection automatically.",
 		"Turn on Find in selection automatically when multiple lines of content are selected.",
 		"Controls the condition for turning on find in selection automatically.",
 		"Controls whether the Find Widget should read or modify the shared find clipboard on macOS.",
@@ -245,7 +247,7 @@ define("vs/editor/editor.main.nls", {
 		"Insert suggestion and overwrite text right of the cursor.",
 		"Controls whether words are overwritten when accepting completions. Note that this depends on extensions opting into this feature.",
 		"Controls whether filtering and sorting suggestions accounts for small typos.",
-		"Controls whether sorting favours words that appear close to the cursor.",
+		"Controls whether sorting favors words that appear close to the cursor.",
 		"Controls whether remembered suggestion selections are shared between multiple workspaces and windows (needs `#editor.suggestSelection#`).",
 		"Controls whether an active snippet prevents quick suggestions.",
 		"Controls whether to show or hide icons in suggestions.",
@@ -285,11 +287,13 @@ define("vs/editor/editor.main.nls", {
 		"Controls whether suggestions should be accepted on commit characters. For example, in JavaScript, the semi-colon (`;`) can be a commit character that accepts a suggestion and types that character.",
 		"Only accept a suggestion with `Enter` when it makes a textual change.",
 		"Controls whether suggestions should be accepted on `Enter`, in addition to `Tab`. Helps to avoid ambiguity between inserting new lines or accepting suggestions.",
-		"Controls the number of lines in the editor that can be read out by a screen reader. Warning: this has a performance implication for numbers larger than the default.",
+		"Controls the number of lines in the editor that can be read out by a screen reader at once. When we detect a screen reader we automatically set the default to be 500. Warning: this has a performance implication for numbers larger than the default.",
 		"Editor content",
 		"Use language configurations to determine when to autoclose brackets.",
 		"Autoclose brackets only when the cursor is to the left of whitespace.",
 		"Controls whether the editor should automatically close brackets after the user adds an opening bracket.",
+		"Remove adjacent closing quotes or brackets only if they were automatically inserted.",
+		"Controls whether the editor should remove adjacent closing quotes or brackets when deleting.",
 		"Type over closing quotes or brackets only if they were automatically inserted.",
 		"Controls whether the editor should type over closing quotes or brackets.",
 		"Use language configurations to determine when to autoclose quotes.",
@@ -305,7 +309,7 @@ define("vs/editor/editor.main.nls", {
 		"Surround with quotes but not brackets.",
 		"Surround with brackets but not quotes.",
 		"Controls whether the editor should automatically surround selections when typing quotes or brackets.",
-		"Emulate selection behaviour of tab characters when using spaces for indentation. Selection will stick to tab stops.",
+		"Emulate selection behavior of tab characters when using spaces for indentation. Selection will stick to tab stops.",
 		"Controls whether the editor shows CodeLens.",
 		"Controls the font family for CodeLens.",
 		"Controls the font size in pixels for CodeLens. When set to `0`, the 90% of `#editor.fontSize#` is used.",
@@ -361,10 +365,10 @@ define("vs/editor/editor.main.nls", {
 		"Render last line number when the file ends with a newline.",
 		"Highlights both the gutter and the current line.",
 		"Controls how the editor should render the current line highlight.",
-		"Controls if the editor should render the current line highlight only when the editor is focused",
+		"Controls if the editor should render the current line highlight only when the editor is focused.",
 		"Render whitespace characters except for single spaces between words.",
 		"Render whitespace characters only on selected text.",
-		"Render only trailing whitespace characters",
+		"Render only trailing whitespace characters.",
 		"Controls how the editor should render whitespace characters.",
 		"Controls whether selections should have rounded corners.",
 		"Controls the number of extra characters beyond which the editor will scroll horizontally.",
@@ -547,6 +551,8 @@ define("vs/editor/editor.main.nls", {
 		"&&Copy",
 		"Copy",
 		"Copy",
+		"Copy As",
+		"Copy As",
 		"&&Paste",
 		"Paste",
 		"Paste",
@@ -656,6 +662,8 @@ define("vs/editor/editor.main.nls", {
 		"Fold All Block Comments",
 		"Fold All Regions",
 		"Unfold All Regions",
+		"Fold All Regions Except Selected",
+		"Unfold All Regions Except Selected",
 		"Fold All",
 		"Unfold All",
 		"Fold Level {0}",
@@ -749,6 +757,7 @@ define("vs/editor/editor.main.nls", {
 		"Click to show {0} definitions."
 	],
 	"vs/editor/contrib/gotoSymbol/peek/referencesController": [
+		"Whether reference peek is visible, like 'Peek References' or 'Peek Definition'",
 		"Loading...",
 		"{0} ({1})"
 	],
@@ -773,6 +782,7 @@ define("vs/editor/editor.main.nls", {
 		"Found {0} symbols in {1} files"
 	],
 	"vs/editor/contrib/gotoSymbol/symbolNavigation": [
+		"Whether there are symbol locations that can be navigated via keyboard-only.",
 		"Symbol {0} of {1}, {2} for next",
 		"Symbol {0} of {1}"
 	],
@@ -854,6 +864,8 @@ define("vs/editor/editor.main.nls", {
 		"Cannot edit in read-only editor"
 	],
 	"vs/editor/contrib/multicursor/multicursor": [
+		"Cursor added: {0}",
+		"Cursors added: {0}",
 		"Add Cursor Above",
 		"&&Add Cursor Above",
 		"Add Cursor Below",
@@ -881,6 +893,7 @@ define("vs/editor/editor.main.nls", {
 		"{0}, hint"
 	],
 	"vs/editor/contrib/peekView/peekView": [
+		"Whether the current code editor is embedded inside peek",
 		"Close",
 		"Background color of the peek view title area.",
 		"Color of the peek view title.",
@@ -899,7 +912,7 @@ define("vs/editor/editor.main.nls", {
 	],
 	"vs/editor/contrib/quickAccess/gotoLineQuickAccess": [
 		"Open a text editor first to go to a line.",
-		"Go to line {0} and column {1}.",
+		"Go to line {0} and character {1}.",
 		"Go to line {0}.",
 		"Current Line: {0}, Character: {1}. Type a line number between 1 and {2} to navigate to.",
 		"Current Line: {0}, Character: {1}. Type a line number to navigate to."
@@ -951,6 +964,7 @@ define("vs/editor/editor.main.nls", {
 		"Enable/disable the ability to preview changes before renaming"
 	],
 	"vs/editor/contrib/rename/renameInputField": [
+		"Whether the rename input widget is visible",
 		"Rename input. Type new name and press Enter to commit.",
 		"{0} to Rename, {1} to Preview"
 	],
@@ -959,6 +973,11 @@ define("vs/editor/editor.main.nls", {
 		"&&Expand Selection",
 		"Shrink Selection",
 		"&&Shrink Selection"
+	],
+	"vs/editor/contrib/snippet/snippetController2": [
+		"Whether the editor in current in snippet mode",
+		"Whether there is a next tab stop when in snippet mode",
+		"Whether there is a previous tab stop when in snippet mode"
 	],
 	"vs/editor/contrib/snippet/snippetVariables": [
 		"Sunday",
@@ -999,6 +1018,16 @@ define("vs/editor/editor.main.nls", {
 		"Oct",
 		"Nov",
 		"Dec"
+	],
+	"vs/editor/contrib/suggest/suggest": [
+		"Whether suggestion are visible",
+		"Whether suggestion details are visible",
+		"Whether there are multiple suggestions to pick from",
+		"Whether inserting the current suggestion yields in a change or has everything already been typed",
+		"Whether suggestions are inserted when pressing Enter",
+		"Whether the current suggestion has insert and replace behaviour",
+		"Whether the default behaviour is to insert or replace",
+		"Whether the current suggestion supports to resolve further details"
 	],
 	"vs/editor/contrib/suggest/suggestController": [
 		"Accepting '{0}' made {1} additional edits",
@@ -1099,6 +1128,7 @@ define("vs/editor/editor.main.nls", {
 		"Delete Word"
 	],
 	"vs/platform/actions/browser/menuEntryActionViewItem": [
+		"{0} ({1})",
 		"{0} ({1})"
 	],
 	"vs/platform/configuration/common/configurationRegistry": [
@@ -1209,9 +1239,12 @@ define("vs/editor/editor.main.nls", {
 		"Quick picker background color. The quick picker widget is the container for pickers like the command palette.",
 		"Quick picker foreground color. The quick picker widget is the container for pickers like the command palette.",
 		"Quick picker title background color. The quick picker widget is the container for pickers like the command palette.",
-		"Quick picker background color for the focused item.",
 		"Quick picker color for grouping labels.",
 		"Quick picker color for grouping borders.",
+		"Keybinding label background color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label foreground color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border bottom color. The keybinding label is used to represent a keyboard shortcut.",
 		"Color of the editor selection.",
 		"Color of the selected text for high contrast.",
 		"Color of the selection in an inactive editor. The color must not be opaque so as not to hide underlying decorations.",
@@ -1257,6 +1290,8 @@ define("vs/editor/editor.main.nls", {
 		"Outline color of the type filter widget in lists and trees, when there are no matches.",
 		"Tree stroke color for the indentation guides.",
 		"Tree stroke color for the indentation guides.",
+		"Please use quickInputList.focusBackground instead",
+		"Quick picker background color for the focused item.",
 		"Border color of menus.",
 		"Foreground color of menu items.",
 		"Background color of menu items.",

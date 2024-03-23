@@ -28,8 +28,8 @@ export function attachStyler(themeService, styleMap, widgetOrCallback) {
 }
 export function attachBadgeStyler(widget, themeService, style) {
     return attachStyler(themeService, {
-        badgeBackground: (style && style.badgeBackground) || badgeBackground,
-        badgeForeground: (style && style.badgeForeground) || badgeForeground,
+        badgeBackground: (style === null || style === void 0 ? void 0 : style.badgeBackground) || badgeBackground,
+        badgeForeground: (style === null || style === void 0 ? void 0 : style.badgeForeground) || badgeForeground,
         badgeBorder: contrastBorder
     }, widget);
 }

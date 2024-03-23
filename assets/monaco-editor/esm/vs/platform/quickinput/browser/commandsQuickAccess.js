@@ -38,13 +38,13 @@ import { toErrorMessage } from '../../../base/common/errorMessage.js';
 let AbstractCommandsQuickAccessProvider = class AbstractCommandsQuickAccessProvider extends PickerQuickAccessProvider {
     constructor(options, instantiationService, keybindingService, commandService, telemetryService, notificationService) {
         super(AbstractCommandsQuickAccessProvider.PREFIX, options);
-        this.options = options;
         this.instantiationService = instantiationService;
         this.keybindingService = keybindingService;
         this.commandService = commandService;
         this.telemetryService = telemetryService;
         this.notificationService = notificationService;
         this.commandsHistory = this._register(this.instantiationService.createInstance(CommandsHistory));
+        this.options = options;
     }
     getPicks(filter, disposables, token) {
         return __awaiter(this, void 0, void 0, function* () {

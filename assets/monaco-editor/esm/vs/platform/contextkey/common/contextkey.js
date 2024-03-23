@@ -907,7 +907,6 @@ export class ContextKeyOrExpr {
 export class RawContextKey extends ContextKeyDefinedExpr {
     constructor(key, defaultValue, metaOrHide) {
         super(key);
-        this.key = key;
         this._defaultValue = defaultValue;
         // collect all context keys into a central place
         if (typeof metaOrHide === 'object') {

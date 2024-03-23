@@ -72,7 +72,7 @@ let ColorDetector = class ColorDetector extends Disposable {
                 return colorDecorators['enable'];
             }
         }
-        return this._editor.getOption(14 /* colorDecorators */);
+        return this._editor.getOption(15 /* colorDecorators */);
     }
     static get(editor) {
         return editor.getContribution(this.ID);

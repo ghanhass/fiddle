@@ -81,6 +81,7 @@ export const WorkbenchListFocusContextKey = ContextKeyExpr.and(RawWorkbenchListF
 export const WorkbenchListHasSelectionOrFocus = new RawContextKey('listHasSelectionOrFocus', false);
 export const WorkbenchListDoubleSelection = new RawContextKey('listDoubleSelection', false);
 export const WorkbenchListMultiSelection = new RawContextKey('listMultiSelection', false);
+export const WorkbenchListSelectionNavigation = new RawContextKey('listSelectionNavigation', false);
 export const WorkbenchListSupportsKeyboardNavigation = new RawContextKey('listSupportsKeyboardNavigation', true);
 export const WorkbenchListAutomaticKeyboardNavigationKey = 'listAutomaticKeyboardNavigation';
 export const WorkbenchListAutomaticKeyboardNavigation = new RawContextKey(WorkbenchListAutomaticKeyboardNavigationKey, true);
@@ -152,6 +153,8 @@ let WorkbenchList = class WorkbenchList extends List {
         this.themeService = themeService;
         const listSupportsMultiSelect = WorkbenchListSupportsMultiSelectContextKey.bindTo(this.contextKeyService);
         listSupportsMultiSelect.set(!(options.multipleSelectionSupport === false));
+        const listSelectionNavigation = WorkbenchListSelectionNavigation.bindTo(this.contextKeyService);
+        listSelectionNavigation.set(Boolean(options.selectionNavigation));
         this.listHasSelectionOrFocus = WorkbenchListHasSelectionOrFocus.bindTo(this.contextKeyService);
         this.listDoubleSelection = WorkbenchListDoubleSelection.bindTo(this.contextKeyService);
         this.listMultiSelection = WorkbenchListMultiSelection.bindTo(this.contextKeyService);
@@ -233,6 +236,8 @@ let WorkbenchPagedList = class WorkbenchPagedList extends PagedList {
         this.horizontalScrolling = options.horizontalScrolling;
         const listSupportsMultiSelect = WorkbenchListSupportsMultiSelectContextKey.bindTo(this.contextKeyService);
         listSupportsMultiSelect.set(!(options.multipleSelectionSupport === false));
+        const listSelectionNavigation = WorkbenchListSelectionNavigation.bindTo(this.contextKeyService);
+        listSelectionNavigation.set(Boolean(options.selectionNavigation));
         this._useAltAsMultipleSelectionModifier = useAltAsMultipleSelectionModifier(configurationService);
         this.disposables.add(this.contextKeyService);
         this.disposables.add(listService.register(this));
@@ -299,6 +304,8 @@ let WorkbenchTable = class WorkbenchTable extends Table {
         this.themeService = themeService;
         const listSupportsMultiSelect = WorkbenchListSupportsMultiSelectContextKey.bindTo(this.contextKeyService);
         listSupportsMultiSelect.set(!(options.multipleSelectionSupport === false));
+        const listSelectionNavigation = WorkbenchListSelectionNavigation.bindTo(this.contextKeyService);
+        listSelectionNavigation.set(Boolean(options.selectionNavigation));
         this.listHasSelectionOrFocus = WorkbenchListHasSelectionOrFocus.bindTo(this.contextKeyService);
         this.listDoubleSelection = WorkbenchListDoubleSelection.bindTo(this.contextKeyService);
         this.listMultiSelection = WorkbenchListMultiSelection.bindTo(this.contextKeyService);
@@ -371,18 +378,14 @@ WorkbenchTable = __decorate([
 export { WorkbenchTable };
 class ResourceNavigator extends Disposable {
     constructor(widget, options) {
-        var _a, _b;
+        var _a;
         super();
         this.widget = widget;
         this._onDidOpen = this._register(new Emitter());
         this.onDidOpen = this._onDidOpen.event;
-        this.openOnFocus = (_a = options === null || options === void 0 ? void 0 : options.openOnFocus) !== null && _a !== void 0 ? _a : false;
         this._register(Event.filter(this.widget.onDidChangeSelection, e => e.browserEvent instanceof KeyboardEvent)(e => this.onSelectionFromKeyboard(e)));
         this._register(this.widget.onPointer((e) => this.onPointer(e.element, e.browserEvent)));
         this._register(this.widget.onMouseDblClick((e) => this.onMouseDblClick(e.element, e.browserEvent)));
-        if (this.openOnFocus) {
-            this._register(Event.filter(this.widget.onDidChangeFocus, e => e.browserEvent instanceof KeyboardEvent)(e => this.onFocusFromKeyboard(e)));
-        }
         if (typeof (options === null || options === void 0 ? void 0 : options.openOnSingleClick) !== 'boolean' && (options === null || options === void 0 ? void 0 : options.configurationService)) {
             this.openOnSingleClick = (options === null || options === void 0 ? void 0 : options.configurationService.getValue(openModeSettingKey)) !== 'doubleClick';
             this._register(options === null || options === void 0 ? void 0 : options.configurationService.onDidChangeConfiguration(() => {
@@ -390,17 +393,8 @@ class ResourceNavigator extends Disposable {
             }));
         }
         else {
-            this.openOnSingleClick = (_b = options === null || options === void 0 ? void 0 : options.openOnSingleClick) !== null && _b !== void 0 ? _b : true;
+            this.openOnSingleClick = (_a = options === null || options === void 0 ? void 0 : options.openOnSingleClick) !== null && _a !== void 0 ? _a : true;
         }
-    }
-    onFocusFromKeyboard(event) {
-        const focus = this.widget.getFocus();
-        this.widget.setSelection(focus, event.browserEvent);
-        const selectionKeyboardEvent = event.browserEvent;
-        const preserveFocus = typeof selectionKeyboardEvent.preserveFocus === 'boolean' ? selectionKeyboardEvent.preserveFocus : true;
-        const pinned = typeof selectionKeyboardEvent.pinned === 'boolean' ? selectionKeyboardEvent.pinned : !preserveFocus;
-        const sideBySide = false;
-        this._open(this.getSelectedElement(), preserveFocus, pinned, sideBySide, event.browserEvent);
     }
     onSelectionFromKeyboard(event) {
         if (event.elements.length !== 1) {
@@ -428,6 +422,13 @@ class ResourceNavigator extends Disposable {
     }
     onMouseDblClick(element, browserEvent) {
         if (!browserEvent) {
+            return;
+        }
+        // copied from AbstractTree
+        const target = browserEvent.target;
+        const onTwistie = target.classList.contains('monaco-tl-twistie')
+            || (target.classList.contains('monaco-icon-label') && target.classList.contains('folder-icon') && browserEvent.offsetX < 16);
+        if (onTwistie) {
             return;
         }
         const preserveFocus = false;
@@ -463,7 +464,6 @@ class ListResourceNavigator extends ResourceNavigator {
 class TableResourceNavigator extends ResourceNavigator {
     constructor(widget, options) {
         super(widget, options);
-        this.widget = widget;
     }
     getSelectedElement() {
         return this.widget.getSelectedElements()[0];
@@ -472,7 +472,6 @@ class TableResourceNavigator extends ResourceNavigator {
 class TreeResourceNavigator extends ResourceNavigator {
     constructor(widget, options) {
         super(widget, options);
-        this.widget = widget;
     }
     getSelectedElement() {
         var _a;
@@ -640,6 +639,8 @@ let WorkbenchTreeInternals = class WorkbenchTreeInternals {
         this.contextKeyService = createScopedContextKeyService(contextKeyService, tree);
         const listSupportsMultiSelect = WorkbenchListSupportsMultiSelectContextKey.bindTo(this.contextKeyService);
         listSupportsMultiSelect.set(!(options.multipleSelectionSupport === false));
+        const listSelectionNavigation = WorkbenchListSelectionNavigation.bindTo(this.contextKeyService);
+        listSelectionNavigation.set(Boolean(options.selectionNavigation));
         this.hasSelectionOrFocus = WorkbenchListHasSelectionOrFocus.bindTo(this.contextKeyService);
         this.hasDoubleSelection = WorkbenchListDoubleSelection.bindTo(this.contextKeyService);
         this.hasMultiSelection = WorkbenchListMultiSelection.bindTo(this.contextKeyService);

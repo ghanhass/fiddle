@@ -325,10 +325,10 @@ let DiffEditorWidget = class DiffEditorWidget extends Disposable {
             if (!editor.getModel()) {
                 return;
             }
-            if (e.hasChanged(38 /* fontInfo */)) {
+            if (e.hasChanged(40 /* fontInfo */)) {
                 this._updateDecorationsRunner.schedule();
             }
-            if (e.hasChanged(125 /* wrappingInfo */)) {
+            if (e.hasChanged(128 /* wrappingInfo */)) {
                 this._updateDecorationsRunner.cancel();
                 this._updateDecorations();
             }
@@ -377,10 +377,10 @@ let DiffEditorWidget = class DiffEditorWidget extends Disposable {
             if (!editor.getModel()) {
                 return;
             }
-            if (e.hasChanged(38 /* fontInfo */)) {
+            if (e.hasChanged(40 /* fontInfo */)) {
                 this._updateDecorationsRunner.schedule();
             }
-            if (e.hasChanged(125 /* wrappingInfo */)) {
+            if (e.hasChanged(128 /* wrappingInfo */)) {
                 this._updateDecorationsRunner.cancel();
                 this._updateDecorations();
             }
@@ -1101,10 +1101,10 @@ class ViewZonesComputer {
         return (endLineNumber - startLineNumber + 1);
     }
     getViewZones() {
-        const originalLineHeight = this._originalEditor.getOption(53 /* lineHeight */);
-        const modifiedLineHeight = this._modifiedEditor.getOption(53 /* lineHeight */);
-        const originalHasWrapping = (this._originalEditor.getOption(125 /* wrappingInfo */).wrappingColumn !== -1);
-        const modifiedHasWrapping = (this._modifiedEditor.getOption(125 /* wrappingInfo */).wrappingColumn !== -1);
+        const originalLineHeight = this._originalEditor.getOption(55 /* lineHeight */);
+        const modifiedLineHeight = this._modifiedEditor.getOption(55 /* lineHeight */);
+        const originalHasWrapping = (this._originalEditor.getOption(128 /* wrappingInfo */).wrappingColumn !== -1);
+        const modifiedHasWrapping = (this._modifiedEditor.getOption(128 /* wrappingInfo */).wrappingColumn !== -1);
         const hasWrapping = (originalHasWrapping || modifiedHasWrapping);
         const originalModel = this._originalEditor.getModel();
         const originalCoordinatesConverter = this._originalEditor._getViewModel().coordinatesConverter;
@@ -1735,19 +1735,19 @@ class InlineViewZonesComputer extends ViewZonesComputer {
     _finalize(result) {
         const modifiedEditorOptions = this._modifiedEditor.getOptions();
         const tabSize = this._modifiedEditor.getModel().getOptions().tabSize;
-        const fontInfo = modifiedEditorOptions.get(38 /* fontInfo */);
-        const disableMonospaceOptimizations = modifiedEditorOptions.get(26 /* disableMonospaceOptimizations */);
+        const fontInfo = modifiedEditorOptions.get(40 /* fontInfo */);
+        const disableMonospaceOptimizations = modifiedEditorOptions.get(27 /* disableMonospaceOptimizations */);
         const typicalHalfwidthCharacterWidth = fontInfo.typicalHalfwidthCharacterWidth;
-        const scrollBeyondLastColumn = modifiedEditorOptions.get(88 /* scrollBeyondLastColumn */);
+        const scrollBeyondLastColumn = modifiedEditorOptions.get(90 /* scrollBeyondLastColumn */);
         const mightContainNonBasicASCII = this._originalModel.mightContainNonBasicASCII();
         const mightContainRTL = this._originalModel.mightContainRTL();
-        const lineHeight = modifiedEditorOptions.get(53 /* lineHeight */);
-        const layoutInfo = modifiedEditorOptions.get(124 /* layoutInfo */);
+        const lineHeight = modifiedEditorOptions.get(55 /* lineHeight */);
+        const layoutInfo = modifiedEditorOptions.get(127 /* layoutInfo */);
         const lineDecorationsWidth = layoutInfo.decorationsWidth;
-        const stopRenderingLineAfter = modifiedEditorOptions.get(100 /* stopRenderingLineAfter */);
-        const renderWhitespace = modifiedEditorOptions.get(83 /* renderWhitespace */);
-        const renderControlCharacters = modifiedEditorOptions.get(77 /* renderControlCharacters */);
-        const fontLigatures = modifiedEditorOptions.get(39 /* fontLigatures */);
+        const stopRenderingLineAfter = modifiedEditorOptions.get(102 /* stopRenderingLineAfter */);
+        const renderWhitespace = modifiedEditorOptions.get(85 /* renderWhitespace */);
+        const renderControlCharacters = modifiedEditorOptions.get(79 /* renderControlCharacters */);
+        const fontLigatures = modifiedEditorOptions.get(41 /* fontLigatures */);
         const lineBreaks = this._lineBreaksComputer.finalize();
         let lineBreakIndex = 0;
         for (let i = 0; i < this._pendingLineChange.length; i++) {

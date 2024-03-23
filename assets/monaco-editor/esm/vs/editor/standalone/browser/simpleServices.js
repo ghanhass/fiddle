@@ -51,14 +51,14 @@ export class SimpleModel {
     constructor(model) {
         this.disposed = false;
         this.model = model;
-        this._onDispose = new Emitter();
+        this._onWillDispose = new Emitter();
     }
     get textEditorModel() {
         return this.model;
     }
     dispose() {
         this.disposed = true;
-        this._onDispose.fire();
+        this._onWillDispose.fire();
     }
 }
 function withTypedEditor(widget, codeEditorCallback, diffEditorCallback) {

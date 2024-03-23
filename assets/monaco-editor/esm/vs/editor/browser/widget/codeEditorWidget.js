@@ -151,8 +151,8 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         this._register(this._configuration.onDidChange((e) => {
             this._onDidChangeConfiguration.fire(e);
             const options = this._configuration.options;
-            if (e.hasChanged(124 /* layoutInfo */)) {
-                const layoutInfo = options.get(124 /* layoutInfo */);
+            if (e.hasChanged(127 /* layoutInfo */)) {
+                const layoutInfo = options.get(127 /* layoutInfo */);
                 this._onDidLayoutChange.fire(layoutInfo);
             }
         }));
@@ -243,7 +243,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         if (!this._modelData) {
             return null;
         }
-        return WordOperations.getWordAtPosition(this._modelData.model, this._configuration.options.get(110 /* wordSeparators */), position);
+        return WordOperations.getWordAtPosition(this._modelData.model, this._configuration.options.get(113 /* wordSeparators */), position);
     }
     getValue(options = null) {
         if (!this._modelData) {
@@ -695,6 +695,9 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         if (this._triggerEditorCommand(source, handlerId, payload)) {
             return;
         }
+        this._triggerCommand(handlerId, payload);
+    }
+    _triggerCommand(handlerId, payload) {
         this._commandService.executeCommand(handlerId, payload);
     }
     _startComposition() {
@@ -771,7 +774,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         if (!this._modelData) {
             return false;
         }
-        if (this._configuration.options.get(75 /* readOnly */)) {
+        if (this._configuration.options.get(77 /* readOnly */)) {
             // read only editor => sorry!
             return false;
         }
@@ -782,7 +785,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         if (!this._modelData) {
             return false;
         }
-        if (this._configuration.options.get(75 /* readOnly */)) {
+        if (this._configuration.options.get(77 /* readOnly */)) {
             // read only editor => sorry!
             return false;
         }
@@ -793,7 +796,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         if (!this._modelData) {
             return false;
         }
-        if (this._configuration.options.get(75 /* readOnly */)) {
+        if (this._configuration.options.get(77 /* readOnly */)) {
             // read only editor => sorry!
             return false;
         }
@@ -859,7 +862,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
     }
     getLayoutInfo() {
         const options = this._configuration.options;
-        const layoutInfo = options.get(124 /* layoutInfo */);
+        const layoutInfo = options.get(127 /* layoutInfo */);
         return layoutInfo;
     }
     createOverviewRuler(cssClassName) {
@@ -986,13 +989,13 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         }
         const position = this._modelData.model.validatePosition(rawPosition);
         const options = this._configuration.options;
-        const layoutInfo = options.get(124 /* layoutInfo */);
+        const layoutInfo = options.get(127 /* layoutInfo */);
         const top = CodeEditorWidget._getVerticalOffsetForPosition(this._modelData, position.lineNumber, position.column) - this.getScrollTop();
         const left = this._modelData.view.getOffsetForColumn(position.lineNumber, position.column) + layoutInfo.glyphMarginWidth + layoutInfo.lineNumbersWidth + layoutInfo.decorationsWidth - this.getScrollLeft();
         return {
             top: top,
             left: left,
-            height: options.get(53 /* lineHeight */)
+            height: options.get(55 /* lineHeight */)
         };
     }
     getOffsetForColumn(lineNumber, column) {
@@ -1014,7 +1017,7 @@ let CodeEditorWidget = class CodeEditorWidget extends Disposable {
         this._modelData.view.setAriaOptions(options);
     }
     applyFontInfo(target) {
-        Configuration.applyFontInfoSlow(target, this._configuration.options.get(38 /* fontInfo */));
+        Configuration.applyFontInfoSlow(target, this._configuration.options.get(40 /* fontInfo */));
     }
     _attachModel(model) {
         if (!model) {
@@ -1265,10 +1268,10 @@ class EditorContextKeysManager extends Disposable {
     }
     _updateFromConfig() {
         const options = this._editor.getOptions();
-        this._editorTabMovesFocus.set(options.get(123 /* tabFocusMode */));
-        this._editorReadonly.set(options.get(75 /* readOnly */));
-        this._inDiffEditor.set(options.get(49 /* inDiffEditor */));
-        this._editorColumnSelection.set(options.get(15 /* columnSelection */));
+        this._editorTabMovesFocus.set(options.get(126 /* tabFocusMode */));
+        this._editorReadonly.set(options.get(77 /* readOnly */));
+        this._inDiffEditor.set(options.get(51 /* inDiffEditor */));
+        this._editorColumnSelection.set(options.get(16 /* columnSelection */));
     }
     _updateFromSelection() {
         const selections = this._editor.getSelections();

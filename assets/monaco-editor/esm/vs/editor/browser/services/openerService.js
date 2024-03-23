@@ -36,10 +36,15 @@ let CommandOpener = class CommandOpener {
     constructor(_commandService) {
         this._commandService = _commandService;
     }
-    open(target) {
+    open(target, options) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!matchesScheme(target, Schemas.command)) {
                 return false;
+            }
+            if (!(options === null || options === void 0 ? void 0 : options.allowCommands)) {
+                // silently ignore commands when command-links are disabled, also
+                // surpress other openers by returning TRUE
+                return true;
             }
             // run command or bail out if command isn't known
             if (typeof target === 'string') {
@@ -167,7 +172,7 @@ let OpenerService = class OpenerService {
             // check with contributed validators
             const targetURI = typeof target === 'string' ? URI.parse(target) : target;
             // validate against the original URI that this URI resolves to, if one exists
-            const validationTarget = (_a = this._resolvedUriTargets.get(targetURI)) !== null && _a !== void 0 ? _a : targetURI;
+            const validationTarget = (_a = this._resolvedUriTargets.get(targetURI)) !== null && _a !== void 0 ? _a : target;
             for (const validator of this._validators) {
                 if (!(yield validator.shouldOpen(validationTarget))) {
                     return false;

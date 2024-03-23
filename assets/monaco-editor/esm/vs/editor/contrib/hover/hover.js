@@ -40,7 +40,7 @@ let ModesHoverController = class ModesHoverController {
         this._glyphWidget = null;
         this._hookEvents();
         this._didChangeConfigurationHandler = this._editor.onDidChangeConfiguration((e) => {
-            if (e.hasChanged(48 /* hover */)) {
+            if (e.hasChanged(50 /* hover */)) {
                 this._unhookEvents();
                 this._hookEvents();
             }
@@ -52,7 +52,7 @@ let ModesHoverController = class ModesHoverController {
     }
     _hookEvents() {
         const hideWidgetsEventHandler = () => this._hideWidgets();
-        const hoverOpts = this._editor.getOption(48 /* hover */);
+        const hoverOpts = this._editor.getOption(50 /* hover */);
         this._isHoverEnabled = hoverOpts.enabled;
         this._isHoverSticky = hoverOpts.sticky;
         if (this._isHoverEnabled) {
@@ -127,7 +127,7 @@ let ModesHoverController = class ModesHoverController {
             return;
         }
         if (targetType === 7 /* CONTENT_EMPTY */) {
-            const epsilon = this._editor.getOption(38 /* fontInfo */).typicalHalfwidthCharacterWidth / 2;
+            const epsilon = this._editor.getOption(40 /* fontInfo */).typicalHalfwidthCharacterWidth / 2;
             const data = mouseEvent.target.detail;
             if (data && !data.isAfterLines && typeof data.horizontalDistanceToText === 'number' && data.horizontalDistanceToText < epsilon) {
                 // Let hover kick in even when the mouse is technically in the empty area after a line, given the distance is small enough
@@ -267,14 +267,9 @@ class ShowDefinitionPreviewHoverAction extends EditorAction {
         const range = new Range(position.lineNumber, position.column, position.lineNumber, position.column);
         const goto = GotoDefinitionAtPositionEditorContribution.get(editor);
         const promise = goto.startFindDefinitionFromCursor(position);
-        if (promise) {
-            promise.then(() => {
-                controller.showContentHover(range, 1 /* Immediate */, true);
-            });
-        }
-        else {
+        promise.then(() => {
             controller.showContentHover(range, 1 /* Immediate */, true);
-        }
+        });
     }
 }
 registerEditorContribution(ModesHoverController.ID, ModesHoverController);

@@ -62,7 +62,7 @@ let LinkedEditingContribution = class LinkedEditingContribution extends Disposab
         this._currentRequestModelVersion = null;
         this._register(this._editor.onDidChangeModel(() => this.reinitialize()));
         this._register(this._editor.onDidChangeConfiguration(e => {
-            if (e.hasChanged(56 /* linkedEditing */) || e.hasChanged(76 /* renameOnType */)) {
+            if (e.hasChanged(58 /* linkedEditing */) || e.hasChanged(78 /* renameOnType */)) {
                 this.reinitialize();
             }
         }));
@@ -75,7 +75,7 @@ let LinkedEditingContribution = class LinkedEditingContribution extends Disposab
     }
     reinitialize() {
         const model = this._editor.getModel();
-        const isEnabled = model !== null && (this._editor.getOption(56 /* linkedEditing */) || this._editor.getOption(76 /* renameOnType */)) && LinkedEditingRangeProviderRegistry.has(model);
+        const isEnabled = model !== null && (this._editor.getOption(58 /* linkedEditing */) || this._editor.getOption(78 /* renameOnType */)) && LinkedEditingRangeProviderRegistry.has(model);
         if (isEnabled === this._enabled) {
             return;
         }

@@ -198,31 +198,35 @@ export class RenderLineOutput {
 }
 export function renderViewLine(input, sb) {
     if (input.lineContent.length === 0) {
-        let containsForeignElements = 0 /* None */;
-        let content = '<span><span></span></span>';
         if (input.lineDecorations.length > 0) {
             // This line is empty, but it contains inline decorations
-            const beforeClassNames = [];
-            const afterClassNames = [];
-            for (let i = 0, len = input.lineDecorations.length; i < len; i++) {
-                const lineDecoration = input.lineDecorations[i];
-                if (lineDecoration.type === 1 /* Before */) {
-                    beforeClassNames.push(input.lineDecorations[i].className);
-                    containsForeignElements |= 1 /* Before */;
-                }
-                if (lineDecoration.type === 2 /* After */) {
-                    afterClassNames.push(input.lineDecorations[i].className);
-                    containsForeignElements |= 2 /* After */;
+            sb.appendASCIIString(`<span>`);
+            let beforeCount = 0;
+            let afterCount = 0;
+            let containsForeignElements = 0 /* None */;
+            for (const lineDecoration of input.lineDecorations) {
+                if (lineDecoration.type === 1 /* Before */ || lineDecoration.type === 2 /* After */) {
+                    sb.appendASCIIString(`<span class="`);
+                    sb.appendASCIIString(lineDecoration.className);
+                    sb.appendASCIIString(`"></span>`);
+                    if (lineDecoration.type === 1 /* Before */) {
+                        containsForeignElements |= 1 /* Before */;
+                        beforeCount++;
+                    }
+                    if (lineDecoration.type === 2 /* After */) {
+                        containsForeignElements |= 2 /* After */;
+                        afterCount++;
+                    }
                 }
             }
-            if (containsForeignElements !== 0 /* None */) {
-                const beforeSpan = (beforeClassNames.length > 0 ? `<span class="${beforeClassNames.join(' ')}"></span>` : ``);
-                const afterSpan = (afterClassNames.length > 0 ? `<span class="${afterClassNames.join(' ')}"></span>` : ``);
-                content = `<span>${beforeSpan}${afterSpan}</span>`;
-            }
+            sb.appendASCIIString(`</span>`);
+            const characterMapping = new CharacterMapping(1, beforeCount + afterCount);
+            characterMapping.setPartData(0, beforeCount, 0, 0);
+            return new RenderLineOutput(characterMapping, false, containsForeignElements);
         }
-        sb.appendASCIIString(content);
-        return new RenderLineOutput(new CharacterMapping(0, 0), false, containsForeignElements);
+        // completely empty line
+        sb.appendASCIIString('<span><span></span></span>');
+        return new RenderLineOutput(new CharacterMapping(0, 0), false, 0 /* None */);
     }
     return _renderLine(resolveRenderLineInput(input), sb);
 }
@@ -713,7 +717,13 @@ function _renderLine(input, sb) {
                         sb.appendASCIIString('&amp;');
                         break;
                     case 0 /* Null */:
-                        sb.appendASCIIString('&#00;');
+                        if (renderControlCharacters) {
+                            // See https://unicode-table.com/en/blocks/control-pictures/
+                            sb.write1(9216);
+                        }
+                        else {
+                            sb.appendASCIIString('&#00;');
+                        }
                         break;
                     case 65279 /* UTF8_BOM */:
                     case 8232 /* LINE_SEPARATOR */:
@@ -725,8 +735,13 @@ function _renderLine(input, sb) {
                         if (strings.isFullWidthCharacter(charCode)) {
                             charWidth++;
                         }
+                        // See https://unicode-table.com/en/blocks/control-pictures/
                         if (renderControlCharacters && charCode < 32) {
                             sb.write1(9216 + charCode);
+                        }
+                        else if (renderControlCharacters && charCode === 127) {
+                            // DEL
+                            sb.write1(9249);
                         }
                         else {
                             sb.write1(charCode);

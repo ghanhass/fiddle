@@ -151,7 +151,7 @@ export class ModesContentHoverWidget extends Widget {
             }
         });
         this._register(this._editor.onDidChangeConfiguration((e) => {
-            if (e.hasChanged(38 /* fontInfo */)) {
+            if (e.hasChanged(40 /* fontInfo */)) {
                 this._updateFont();
             }
         }));
@@ -168,7 +168,7 @@ export class ModesContentHoverWidget extends Widget {
         this._isChangingDecorations = false;
         this._shouldFocus = false;
         this._colorPicker = null;
-        this._hoverOperation = new HoverOperation(this._computer, result => this._withResult(result, true), null, result => this._withResult(result, false), this._editor.getOption(48 /* hover */).delay);
+        this._hoverOperation = new HoverOperation(this._computer, result => this._withResult(result, true), null, result => this._withResult(result, false), this._editor.getOption(50 /* hover */).delay);
         this._register(dom.addStandardDisposableListener(this.getDomNode(), dom.EventType.FOCUS, () => {
             if (this._colorPicker) {
                 this.getDomNode().classList.add('colorpicker-hover');
@@ -178,7 +178,7 @@ export class ModesContentHoverWidget extends Widget {
             this.getDomNode().classList.remove('colorpicker-hover');
         }));
         this._register(editor.onDidChangeConfiguration(() => {
-            this._hoverOperation.setHoverTime(this._editor.getOption(48 /* hover */).delay);
+            this._hoverOperation.setHoverTime(this._editor.getOption(50 /* hover */).delay);
         }));
         this._register(TokenizationRegistry.onDidChange(() => {
             if (this._isVisible && this._lastRange && this._messages.length > 0) {
@@ -258,7 +258,7 @@ export class ModesContentHoverWidget extends Widget {
     }
     layout() {
         const height = Math.max(this._editor.getLayoutInfo().height / 4, 250);
-        const { fontSize, lineHeight } = this._editor.getOption(38 /* fontInfo */);
+        const { fontSize, lineHeight } = this._editor.getOption(40 /* fontInfo */);
         this._hover.contentsDomNode.style.fontSize = `${fontSize}px`;
         this._hover.contentsDomNode.style.lineHeight = `${lineHeight}px`;
         this._hover.contentsDomNode.style.maxHeight = `${height}px`;
@@ -391,7 +391,7 @@ export class ModesContentHoverWidget extends Widget {
                 let colorInfo = { range: msg.range, color: msg.color };
                 // create blank olor picker model and widget first to ensure it's positioned correctly.
                 const model = new ColorPickerModel(color, [], 0);
-                const widget = new ColorPickerWidget(fragment, model, this._editor.getOption(122 /* pixelRatio */), this._themeService);
+                const widget = new ColorPickerWidget(fragment, model, this._editor.getOption(125 /* pixelRatio */), this._themeService);
                 getColorPresentations(editorModel, colorInfo, msg.provider, CancellationToken.None).then(colorPresentations => {
                     model.colorPresentations = colorPresentations || [];
                     if (!this._editor.hasModel()) {

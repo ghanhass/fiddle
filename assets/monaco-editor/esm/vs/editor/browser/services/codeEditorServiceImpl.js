@@ -233,7 +233,7 @@ export class DecorationTypeOptionsProvider {
         this._styleSheet.unref();
     }
 }
-const _CSS_MAP = {
+export const _CSS_MAP = {
     color: 'color:{0} !important;',
     opacity: 'opacity:{0};',
     backgroundColor: 'background-color:{0};',

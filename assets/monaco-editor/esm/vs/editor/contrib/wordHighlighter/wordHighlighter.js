@@ -132,7 +132,7 @@ class WordHighlighter {
         this.editor = editor;
         this._hasWordHighlights = ctxHasWordHighlights.bindTo(contextKeyService);
         this._ignorePositionChangeEvent = false;
-        this.occurrencesHighlight = this.editor.getOption(66 /* occurrencesHighlight */);
+        this.occurrencesHighlight = this.editor.getOption(68 /* occurrencesHighlight */);
         this.model = this.editor.getModel();
         this.toUnhook.add(editor.onDidChangeCursorPosition((e) => {
             if (this._ignorePositionChangeEvent) {
@@ -150,7 +150,7 @@ class WordHighlighter {
             this._stopAll();
         }));
         this.toUnhook.add(editor.onDidChangeConfiguration((e) => {
-            let newValue = this.editor.getOption(66 /* occurrencesHighlight */);
+            let newValue = this.editor.getOption(68 /* occurrencesHighlight */);
             if (this.occurrencesHighlight !== newValue) {
                 this.occurrencesHighlight = newValue;
                 this._stopAll();
@@ -306,7 +306,7 @@ class WordHighlighter {
             this._stopAll();
             let myRequestId = ++this.workerRequestTokenId;
             this.workerRequestCompleted = false;
-            this.workerRequest = computeOccurencesAtPosition(this.model, this.editor.getSelection(), this.editor.getOption(110 /* wordSeparators */));
+            this.workerRequest = computeOccurencesAtPosition(this.model, this.editor.getSelection(), this.editor.getOption(113 /* wordSeparators */));
             this.workerRequest.result.then(data => {
                 if (myRequestId === this.workerRequestTokenId) {
                     this.workerRequestCompleted = true;

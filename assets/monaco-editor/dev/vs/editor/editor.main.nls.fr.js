@@ -1,6 +1,6 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.23.0(82e8ea39fc101d639262435542c7d43bc20d8aa2)
+ * Version: 0.24.0(89cdf8577cdd4881a366f9f7ef6abaa78453fd4b)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
@@ -77,6 +77,7 @@ define("vs/editor/editor.main.nls.fr", {
 	],
 	"vs/base/parts/quickinput/browser/quickInput": [
 		"Précédent",
+		"Appuyez sur \'Entrée\' pour confirmer votre saisie, ou sur \'Échap\' pour l\'annuler",
 		"{0}/{1}",
 		"Taper pour affiner les résultats.",
 		"{0} résultats",
@@ -92,6 +93,7 @@ define("vs/editor/editor.main.nls.fr", {
 	"vs/editor/browser/controller/coreCommands": [
 		"Aligner par rapport à la fin même en cas de passage à des lignes plus longues",
 		"Aligner par rapport à la fin même en cas de passage à des lignes plus longues",
+		"Curseurs secondaires supprimés",
 	],
 	"vs/editor/browser/controller/textAreaHandler": [
 		"éditeur",
@@ -177,8 +179,8 @@ define("vs/editor/editor.main.nls.fr", {
 		"Contrôle si la copie sans sélection permet de copier la ligne actuelle.",
 		"Contrôle si le curseur doit sauter pour rechercher les correspondances lors de la saisie.",
 		"Détermine si la chaîne de recherche dans le Widget Recherche est initialisée avec la sélection de l’éditeur.",
-		"Ne jamais activer Rechercher automatiquement dans la sélection (par défaut)",
-		"Toujours activer Rechercher automatiquement dans la sélection",
+		"Ne jamais activer automatiquement la recherche dans la sélection (par défaut).",
+		"Toujours activer automatiquement la recherche dans la sélection.",
 		"Activez Rechercher automatiquement dans la sélection quand plusieurs lignes de contenu sont sélectionnées.",
 		"Contrôle la condition d\'activation automatique de la recherche dans la sélection.",
 		"Détermine si le Widget Recherche devrait lire ou modifier le presse-papiers de recherche partagé sur macOS.",
@@ -242,7 +244,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"Insérez une suggestion et remplacez le texte à droite du curseur.",
 		"Contrôle si les mots sont remplacés en cas d\'acceptation de la saisie semi-automatique. Notez que cela dépend des extensions adhérant à cette fonctionnalité.",
 		"Détermine si le filtre et le tri des suggestions doivent prendre en compte les fautes de frappes mineures.",
-		"Contrôle si le tri favorise trier les mots qui apparaissent près du curseur.",
+		"Contrôle si le tri favorise les mots qui apparaissent à proximité du curseur.",
 		"Contrôle si les sélections de suggestion mémorisées sont partagées entre plusieurs espaces de travail et fenêtres (nécessite \'#editor.suggestSelection#\').",
 		"Contrôle si un extrait de code actif empêche les suggestions rapides.",
 		"Contrôle s\'il faut montrer ou masquer les icônes dans les suggestions.",
@@ -282,11 +284,13 @@ define("vs/editor/editor.main.nls.fr", {
 		"Contrôle si les suggestions doivent être acceptées sur les caractères de validation. Par exemple, en JavaScript, le point-virgule (`;`) peut être un caractère de validation qui accepte une suggestion et tape ce caractère.",
 		"Accepter uniquement une suggestion avec \'Entrée\' quand elle effectue une modification textuelle.",
 		"Contrôle si les suggestions sont acceptées après appui sur \'Entrée\', en plus de \'Tab\'. Permet d’éviter toute ambiguïté entre l’insertion de nouvelles lignes et l\'acceptation de suggestions.",
-		"Contrôle le nombre de lignes dans l\'éditeur qui peuvent être lues par un lecteur d\'écran. Avertissement : Ce paramètre a une incidence sur les performances quand le nombre est supérieur à la valeur par défaut.",
+		"Contrôle le nombre de lignes de l\'éditeur qu\'un lecteur d\'écran peut lire en une seule fois. Quand nous détectons un lecteur d\'écran, nous définissons automatiquement la valeur par défaut à 2 000. Avertissement : Les valeurs supérieures à la valeur par défaut peuvent avoir un impact important sur les performances.",
 		"Contenu de l\'éditeur",
 		"Utilisez les configurations de langage pour déterminer quand fermer automatiquement les parenthèses.",
 		"Fermer automatiquement les parenthèses uniquement lorsque le curseur est à gauche de l’espace.",
 		"Contrôle si l’éditeur doit fermer automatiquement les parenthèses quand l’utilisateur ajoute une parenthèse ouvrante.",
+		"Supprimez les guillemets ou crochets fermants adjacents uniquement s\'ils ont été insérés automatiquement.",
+		"Contrôle si l\'éditeur doit supprimer les guillemets ou crochets fermants adjacents au moment de la suppression.",
 		"Tapez avant les guillemets ou les crochets fermants uniquement s\'ils sont automatiquement insérés.",
 		"Contrôle si l\'éditeur doit taper avant les guillemets ou crochets fermants.",
 		"Utilisez les configurations de langage pour déterminer quand fermer automatiquement les guillemets.",
@@ -358,10 +362,10 @@ define("vs/editor/editor.main.nls.fr", {
 		"Affichez le dernier numéro de ligne quand le fichier se termine par un saut de ligne.",
 		"Met en surbrillance la gouttière et la ligne actuelle.",
 		"Contrôle la façon dont l’éditeur doit afficher la mise en surbrillance de la ligne actuelle.",
-		"Contrôle si l\'éditeur doit afficher la mise en surbrillance de la ligne actuelle seulement quand l\'éditeur a le focus",
+		"Contrôle si l\'éditeur doit afficher la mise en surbrillance de la ligne actuelle uniquement quand il a le focus.",
 		"Affiche les espaces blancs à l\'exception des espaces uniques entre les mots.",
 		"Afficher les espaces blancs uniquement sur le texte sélectionné.",
-		"Afficher uniquement les caractères correspondant aux espaces blancs de fin",
+		"Affiche uniquement les caractères correspondant aux espaces blancs de fin.",
 		"Contrôle la façon dont l’éditeur doit restituer les caractères espaces.",
 		"Contrôle si les sélections doivent avoir des angles arrondis.",
 		"Contrôle le nombre de caractères supplémentaires, au-delà duquel l’éditeur défile horizontalement.",
@@ -544,6 +548,8 @@ define("vs/editor/editor.main.nls.fr", {
 		"&&Copier",
 		"Copier",
 		"Copier",
+		"Copier en tant que",
+		"Copier en tant que",
 		"Co&&ller",
 		"Coller",
 		"Coller",
@@ -653,6 +659,8 @@ define("vs/editor/editor.main.nls.fr", {
 		"Replier tous les commentaires de bloc",
 		"Replier toutes les régions",
 		"Déplier toutes les régions",
+		"Plier toutes les régions sauf celles sélectionnées",
+		"Déplier toutes les régions sauf celles sélectionnées",
 		"Plier tout",
 		"Déplier tout",
 		"Niveau de pliage {0}",
@@ -746,6 +754,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"Cliquez pour afficher {0} définitions.",
 	],
 	"vs/editor/contrib/gotoSymbol/peek/referencesController": [
+		"Indique si l\'aperçu des références est visible, par exemple via \'Avoir un aperçu des références\' ou \'Faire un peek de la définition\'",
 		"Chargement en cours...",
 		"{0} ({1})",
 	],
@@ -770,6 +779,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"{0} symboles dans {1} fichiers",
 	],
 	"vs/editor/contrib/gotoSymbol/symbolNavigation": [
+		"Indique s\'il existe des emplacements de symboles que vous pouvez parcourir à l\'aide du clavier uniquement.",
 		"Symbole {0} sur {1}, {2} pour le suivant",
 		"Symbole {0} sur {1}",
 	],
@@ -851,6 +861,8 @@ define("vs/editor/editor.main.nls.fr", {
 		"Impossible de modifier dans l’éditeur en lecture seule",
 	],
 	"vs/editor/contrib/multicursor/multicursor": [
+		"Curseur ajouté : {0}",
+		"Curseurs ajoutés : {0}",
 		"Ajouter un curseur au-dessus",
 		"&&Ajouter un curseur au-dessus",
 		"Ajouter un curseur en dessous",
@@ -878,6 +890,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"{0}, conseil",
 	],
 	"vs/editor/contrib/peekView/peekView": [
+		"Indique si l\'éditeur de code actuel est intégré à l\'aperçu",
 		"Fermer",
 		"Couleur d\'arrière-plan de la zone de titre de l\'affichage d\'aperçu.",
 		"Couleur du titre de l\'affichage d\'aperçu.",
@@ -896,7 +909,7 @@ define("vs/editor/editor.main.nls.fr", {
 	],
 	"vs/editor/contrib/quickAccess/gotoLineQuickAccess": [
 		"Ouvrez d\'abord un éditeur de texte pour accéder à une ligne.",
-		"Allez à la ligne {0}, colonne {1}.",
+		"Atteindre la ligne {0} et le caractère {1}.",
 		"Accédez à la ligne {0}.",
 		"Ligne actuelle : {0}, caractère : {1}. Tapez un numéro de ligne entre 1 et {2} auquel accéder.",
 		"Ligne actuelle : {0}, caractère : {1}. Tapez un numéro de ligne auquel accéder.",
@@ -948,6 +961,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"Activer/désactiver la possibilité d\'afficher un aperçu des changements avant le renommage",
 	],
 	"vs/editor/contrib/rename/renameInputField": [
+		"Indique si le widget de renommage d\'entrée est visible",
 		"Renommez l\'entrée. Tapez le nouveau nom et appuyez sur Entrée pour valider.",
 		"{0} pour renommer, {1} pour afficher un aperçu",
 	],
@@ -956,6 +970,11 @@ define("vs/editor/editor.main.nls.fr", {
 		"Dév&&elopper la sélection",
 		"Réduire la sélection",
 		"&&Réduire la sélection",
+	],
+	"vs/editor/contrib/snippet/snippetController2": [
+		"Indique si l\'éditeur est actualisé en mode extrait",
+		"Indique s\'il existe un taquet de tabulation suivant en mode extrait",
+		"Indique s\'il existe un taquet de tabulation précédent en mode extrait",
 	],
 	"vs/editor/contrib/snippet/snippetVariables": [
 		"Dimanche",
@@ -996,6 +1015,16 @@ define("vs/editor/editor.main.nls.fr", {
 		"Oct",
 		"Nov",
 		"Déc",
+	],
+	"vs/editor/contrib/suggest/suggest": [
+		"Indique si les suggestions sont visibles",
+		"Indique si les détails des suggestions sont visibles",
+		"Indique s\'il existe plusieurs suggestions au choix",
+		"Indique si l\'insertion de la suggestion actuelle entraîne un changement ou si tout a déjà été tapé",
+		"Indique si les suggestions sont insérées quand vous appuyez sur Entrée",
+		"Indique si la suggestion actuelle a un comportement d\'insertion et de remplacement",
+		"Indique si le comportement par défaut consiste à insérer ou à remplacer",
+		"Indique si la suggestion actuelle prend en charge la résolution des détails supplémentaires",
 	],
 	"vs/editor/contrib/suggest/suggestController": [
 		"L\'acceptation de \'{0}\' a entraîné {1} modifications supplémentaires",
@@ -1096,6 +1125,7 @@ define("vs/editor/editor.main.nls.fr", {
 		"Supprimer le mot",
 	],
 	"vs/platform/actions/browser/menuEntryActionViewItem": [
+		"{0} ({1})",
 		"{0} ({1})",
 	],
 	"vs/platform/configuration/common/configurationRegistry": [
@@ -1206,9 +1236,12 @@ define("vs/editor/editor.main.nls.fr", {
 		"Couleur d\'arrière-plan du sélecteur rapide. Le widget de sélecteur rapide est le conteneur de sélecteurs comme la palette de commandes.",
 		"Couleur de premier plan du sélecteur rapide. Le widget de sélecteur rapide est le conteneur de sélecteurs comme la palette de commandes.",
 		"Couleur d\'arrière-plan du titre du sélecteur rapide. Le widget de sélecteur rapide est le conteneur de sélecteurs comme la palette de commandes.",
-		"Couleur d\'arrière-plan du sélecteur rapide pour l\'élément ayant le focus.",
 		"Couleur du sélecteur rapide pour les étiquettes de regroupement.",
 		"Couleur du sélecteur rapide pour les bordures de regroupement.",
+		"Keybinding label background color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label foreground color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border bottom color. The keybinding label is used to represent a keyboard shortcut.",
 		"Couleur de la sélection de l\'éditeur.",
 		"Couleur du texte sélectionné pour le contraste élevé.",
 		"Couleur de la sélection dans un éditeur inactif. La couleur ne doit pas être opaque pour ne pas masquer les ornements sous-jacents.",
@@ -1254,6 +1287,8 @@ define("vs/editor/editor.main.nls.fr", {
 		"Couleur de contour du widget de filtre de type dans les listes et les arborescences, en l\'absence de correspondance.",
 		"Couleur de trait de l\'arborescence pour les repères de mise en retrait.",
 		"Couleur de trait de l\'arborescence pour les repères de mise en retrait.",
+		"Utilisez quickInputList.focusBackground à la place",
+		"Couleur d\'arrière-plan du sélecteur rapide pour l\'élément ayant le focus.",
 		"Couleur de bordure des menus.",
 		"Couleur de premier plan des éléments de menu.",
 		"Couleur d\'arrière-plan des éléments de menu.",

@@ -119,11 +119,11 @@ export class HitTestContext {
     constructor(context, viewHelper, lastRenderData) {
         this.model = context.model;
         const options = context.configuration.options;
-        this.layoutInfo = options.get(124 /* layoutInfo */);
+        this.layoutInfo = options.get(127 /* layoutInfo */);
         this.viewDomNode = viewHelper.viewDomNode;
-        this.lineHeight = options.get(53 /* lineHeight */);
-        this.stickyTabStops = options.get(99 /* stickyTabStops */);
-        this.typicalHalfwidthCharacterWidth = options.get(38 /* fontInfo */).typicalHalfwidthCharacterWidth;
+        this.lineHeight = options.get(55 /* lineHeight */);
+        this.stickyTabStops = options.get(101 /* stickyTabStops */);
+        this.typicalHalfwidthCharacterWidth = options.get(40 /* fontInfo */).typicalHalfwidthCharacterWidth;
         this.lastRenderData = lastRenderData;
         this._context = context;
         this._viewHelper = viewHelper;
@@ -520,9 +520,9 @@ export class MouseTargetFactory {
     }
     getMouseColumn(editorPos, pos) {
         const options = this._context.configuration.options;
-        const layoutInfo = options.get(124 /* layoutInfo */);
+        const layoutInfo = options.get(127 /* layoutInfo */);
         const mouseContentHorizontalOffset = this._context.viewLayout.getCurrentScrollLeft() + pos.x - editorPos.x - layoutInfo.contentLeft;
-        return MouseTargetFactory._getMouseColumn(mouseContentHorizontalOffset, options.get(38 /* fontInfo */).typicalHalfwidthCharacterWidth);
+        return MouseTargetFactory._getMouseColumn(mouseContentHorizontalOffset, options.get(40 /* fontInfo */).typicalHalfwidthCharacterWidth);
     }
     static _getMouseColumn(mouseContentHorizontalOffset, typicalHalfwidthCharacterWidth) {
         if (mouseContentHorizontalOffset < 0) {

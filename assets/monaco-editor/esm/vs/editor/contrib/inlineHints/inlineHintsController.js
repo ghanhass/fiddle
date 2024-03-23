@@ -72,7 +72,7 @@ let InlineHintsController = class InlineHintsController {
         this._disposables.add(_editor.onDidChangeModel(() => this._update()));
         this._disposables.add(_editor.onDidChangeModelLanguage(() => this._update()));
         this._disposables.add(_editor.onDidChangeConfiguration(e => {
-            if (e.hasChanged(120 /* inlineHints */)) {
+            if (e.hasChanged(123 /* inlineHints */)) {
                 this._update();
             }
         }));
@@ -85,7 +85,7 @@ let InlineHintsController = class InlineHintsController {
     }
     _update() {
         this._sessionDisposables.clear();
-        if (!this._editor.getOption(120 /* inlineHints */).enabled) {
+        if (!this._editor.getOption(123 /* inlineHints */).enabled) {
             this._removeAllDecorations();
             return;
         }
@@ -126,6 +126,8 @@ let InlineHintsController = class InlineHintsController {
         const fontColor = this._themeService.getColorTheme().getColor(editorInlineHintForeground);
         const newDecorationsTypeIds = [];
         const newDecorationsData = [];
+        const fontFamilyVar = '--inlineHintsFontFamily';
+        this._editor.getContainerDomNode().style.setProperty(fontFamilyVar, fontFamily);
         for (const { list: hints } of hintsData) {
             for (let j = 0; j < hints.length && newDecorationsData.length < MAX_DECORATORS; j++) {
                 const { text, range, description: hoverMessage, whitespaceBefore, whitespaceAfter } = hints[j];
@@ -137,7 +139,7 @@ let InlineHintsController = class InlineHintsController {
                     color: `${fontColor}`,
                     margin: `0px ${marginAfter}px 0px ${marginBefore}px`,
                     fontSize: `${fontSize}px`,
-                    fontFamily: fontFamily,
+                    fontFamily: `var(${fontFamilyVar})`,
                     padding: `0px ${(fontSize / 4) | 0}px`,
                     borderRadius: `${(fontSize / 4) | 0}px`,
                 };
@@ -164,8 +166,8 @@ let InlineHintsController = class InlineHintsController {
         this._decorationIds = this._editor.deltaDecorations(this._decorationIds, newDecorationsData);
     }
     _getLayoutInfo() {
-        const options = this._editor.getOption(120 /* inlineHints */);
-        const editorFontSize = this._editor.getOption(40 /* fontSize */);
+        const options = this._editor.getOption(123 /* inlineHints */);
+        const editorFontSize = this._editor.getOption(42 /* fontSize */);
         let fontSize = options.fontSize;
         if (!fontSize || fontSize < 5 || fontSize > editorFontSize) {
             fontSize = (editorFontSize * .9) | 0;

@@ -41,7 +41,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { createScanner } from '../parser/htmlScanner.js';
 import { ScannerState, TokenType, Position, CompletionItemKind, Range, TextEdit, InsertTextFormat, MarkupKind } from '../htmlLanguageTypes.js';
 import { entities } from '../parser/htmlEntities.js';
-import * as nls from './../../../fillers/vscode-nls.js';
+import * as nls from '../../../fillers/vscode-nls.js';
 import { isLetterOrDigit, endsWith, startsWith } from '../utils/strings.js';
 import { isVoidElement } from '../languageFacts/fact.js';
 import { isDefined } from '../utils/object.js';

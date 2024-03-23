@@ -148,7 +148,7 @@ let SuggestWidget = class SuggestWidget {
         const details = instantiationService.createInstance(SuggestDetailsWidget, this.editor);
         details.onDidClose(this.toggleDetails, this, this._disposables);
         this._details = new SuggestDetailsOverlay(details, this.editor);
-        const applyIconStyle = () => this.element.domNode.classList.toggle('no-icons', !this.editor.getOption(101 /* suggest */).showIcons);
+        const applyIconStyle = () => this.element.domNode.classList.toggle('no-icons', !this.editor.getOption(103 /* suggest */).showIcons);
         applyIconStyle();
         const renderer = instantiationService.createInstance(ItemRenderer, this.editor);
         this._disposables.add(renderer);
@@ -163,14 +163,13 @@ let SuggestWidget = class SuggestWidget {
             accessibilityProvider: {
                 getRole: () => 'option',
                 getAriaLabel: (item) => {
-                    const textLabel = typeof item.completion.label === 'string' ? item.completion.label : item.completion.label.name;
                     if (item.isResolved && this._isDetailsVisible()) {
                         const { documentation, detail } = item.completion;
                         const docs = strings.format('{0}{1}', detail || '', documentation ? (typeof documentation === 'string' ? documentation : documentation.value) : '');
-                        return nls.localize('ariaCurrenttSuggestionReadDetails', "{0}, docs: {1}", textLabel, docs);
+                        return nls.localize('ariaCurrenttSuggestionReadDetails', "{0}, docs: {1}", item.textLabel, docs);
                     }
                     else {
-                        return textLabel;
+                        return item.textLabel;
                     }
                 },
                 getWidgetAriaLabel: () => nls.localize('suggest', "Suggest"),
@@ -178,7 +177,7 @@ let SuggestWidget = class SuggestWidget {
             }
         });
         this._status = instantiationService.createInstance(SuggestWidgetStatus, this.element.domNode);
-        const applyStatusBarStyle = () => this.element.domNode.classList.toggle('with-status-bar', this.editor.getOption(101 /* suggest */).showStatusBar);
+        const applyStatusBarStyle = () => this.element.domNode.classList.toggle('with-status-bar', this.editor.getOption(103 /* suggest */).showStatusBar);
         applyStatusBarStyle();
         this._disposables.add(attachListStyler(this._list, _themeService, {
             listInactiveFocusBackground: editorSuggestWidgetSelectedBackground,
@@ -192,7 +191,7 @@ let SuggestWidget = class SuggestWidget {
         this._disposables.add(this._list.onDidChangeFocus(e => this._onListFocus(e)));
         this._disposables.add(this.editor.onDidChangeCursorSelection(() => this._onCursorSelectionChanged()));
         this._disposables.add(this.editor.onDidChangeConfiguration(e => {
-            if (e.hasChanged(101 /* suggest */)) {
+            if (e.hasChanged(103 /* suggest */)) {
                 applyStatusBarStyle();
                 applyIconStyle();
             }
@@ -347,6 +346,7 @@ let SuggestWidget = class SuggestWidget {
                 this._contentWidget.hide();
                 this._ctxSuggestWidgetVisible.reset();
                 this._ctxSuggestWidgetMultipleSuggestions.reset();
+                this._showTimeout.cancel();
                 this.element.domNode.classList.remove('visible');
                 this._list.splice(0, this._list.length);
                 this._focusedItem = undefined;
@@ -554,7 +554,7 @@ let SuggestWidget = class SuggestWidget {
             this._details.hide();
             this.element.domNode.classList.remove('shows-details');
         }
-        else if (canExpandCompletionItem(this._list.getFocusedElements()[0]) && (this._state === 3 /* Open */ || this._state === 5 /* Details */ || this._state === 4 /* Frozen */)) {
+        else if ((canExpandCompletionItem(this._list.getFocusedElements()[0]) || this._explainMode) && (this._state === 3 /* Open */ || this._state === 5 /* Details */ || this._state === 4 /* Frozen */)) {
             // show details widget (iff possible)
             this._ctxSuggestWidgetDetailsVisible.set(true);
             this._setDetailsVisible(true);
@@ -574,9 +574,14 @@ let SuggestWidget = class SuggestWidget {
         this.element.domNode.classList.add('shows-details');
     }
     toggleExplainMode() {
-        if (this._list.getFocusedElements()[0] && this._isDetailsVisible()) {
+        if (this._list.getFocusedElements()[0]) {
             this._explainMode = !this._explainMode;
-            this.showDetails(false);
+            if (!this._isDetailsVisible()) {
+                this.toggleDetails();
+            }
+            else {
+                this.showDetails(false);
+            }
         }
     }
     resetPersistedSize() {
@@ -587,6 +592,7 @@ let SuggestWidget = class SuggestWidget {
         (_a = this._loadingTimeout) === null || _a === void 0 ? void 0 : _a.dispose();
         this._setState(0 /* Hidden */);
         this._onDidHide.fire(this);
+        this.element.clearSashHoverState();
         // ensure that a reasonable widget height is persisted so that
         // accidential "resize-to-single-items" cases aren't happening
         const dim = this._persistedSize.restore();
@@ -707,9 +713,9 @@ let SuggestWidget = class SuggestWidget {
         }
     }
     getLayoutInfo() {
-        const fontInfo = this.editor.getOption(38 /* fontInfo */);
-        const itemHeight = clamp(this.editor.getOption(103 /* suggestLineHeight */) || fontInfo.lineHeight, 8, 1000);
-        const statusBarHeight = !this.editor.getOption(101 /* suggest */).showStatusBar || this._state === 2 /* Empty */ || this._state === 1 /* Loading */ ? 0 : itemHeight;
+        const fontInfo = this.editor.getOption(40 /* fontInfo */);
+        const itemHeight = clamp(this.editor.getOption(105 /* suggestLineHeight */) || fontInfo.lineHeight, 8, 1000);
+        const statusBarHeight = !this.editor.getOption(103 /* suggest */).showStatusBar || this._state === 2 /* Empty */ || this._state === 1 /* Loading */ ? 0 : itemHeight;
         const borderWidth = this._details.widget.borderWidth;
         const borderHeight = 2 * borderWidth;
         return {

@@ -364,7 +364,7 @@ export class SnippetSession {
             const snippetLineLeadingWhitespace = SnippetSession.adjustWhitespace(model, start, snippet, adjustWhitespace || (idx > 0 && firstLineFirstNonWhitespace !== model.getLineFirstNonWhitespaceColumn(selection.positionLineNumber)), true);
             snippet.resolveVariables(new CompositeSnippetVariableResolver([
                 modelBasedVariableResolver,
-                new ClipboardBasedVariableResolver(readClipboardText, idx, indexedSelections.length, editor.getOption(65 /* multiCursorPaste */) === 'spread'),
+                new ClipboardBasedVariableResolver(readClipboardText, idx, indexedSelections.length, editor.getOption(67 /* multiCursorPaste */) === 'spread'),
                 new SelectionBasedVariableResolver(model, selection, idx, overtypingCapturer),
                 new CommentBasedVariableResolver(model, selection),
                 new TimeBasedVariableResolver,

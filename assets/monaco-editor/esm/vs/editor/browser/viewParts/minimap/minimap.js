@@ -31,19 +31,19 @@ const GUTTER_DECORATION_WIDTH = 2;
 class MinimapOptions {
     constructor(configuration, theme, tokensColorTracker) {
         const options = configuration.options;
-        const pixelRatio = options.get(122 /* pixelRatio */);
-        const layoutInfo = options.get(124 /* layoutInfo */);
+        const pixelRatio = options.get(125 /* pixelRatio */);
+        const layoutInfo = options.get(127 /* layoutInfo */);
         const minimapLayout = layoutInfo.minimap;
-        const fontInfo = options.get(38 /* fontInfo */);
-        const minimapOpts = options.get(59 /* minimap */);
+        const fontInfo = options.get(40 /* fontInfo */);
+        const minimapOpts = options.get(61 /* minimap */);
         this.renderMinimap = minimapLayout.renderMinimap;
         this.size = minimapOpts.size;
         this.minimapHeightIsEditorHeight = minimapLayout.minimapHeightIsEditorHeight;
-        this.scrollBeyondLastLine = options.get(89 /* scrollBeyondLastLine */);
+        this.scrollBeyondLastLine = options.get(91 /* scrollBeyondLastLine */);
         this.showSlider = minimapOpts.showSlider;
         this.pixelRatio = pixelRatio;
         this.typicalHalfwidthCharacterWidth = fontInfo.typicalHalfwidthCharacterWidth;
-        this.lineHeight = options.get(53 /* lineHeight */);
+        this.lineHeight = options.get(55 /* lineHeight */);
         this.minimapLeft = minimapLayout.minimapLeft;
         this.minimapWidth = minimapLayout.minimapWidth;
         this.minimapHeight = layoutInfo.height;

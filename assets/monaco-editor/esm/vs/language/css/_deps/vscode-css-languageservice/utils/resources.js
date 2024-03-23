@@ -7,7 +7,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
-import { URI, Utils } from './../../vscode-uri/index.js';
+import { URI, Utils } from '../../vscode-uri/index.js';
 export function dirname(uriString) {
     return Utils.dirname(URI.parse(uriString)).toString();
 }

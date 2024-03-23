@@ -44,7 +44,7 @@ export class DragAndDropController extends Disposable {
         this._modifierPressed = false;
     }
     onEditorKeyDown(e) {
-        if (!this._editor.getOption(27 /* dragAndDrop */) || this._editor.getOption(15 /* columnSelection */)) {
+        if (!this._editor.getOption(29 /* dragAndDrop */) || this._editor.getOption(16 /* columnSelection */)) {
             return;
         }
         if (hasTriggerModifier(e)) {
@@ -57,7 +57,7 @@ export class DragAndDropController extends Disposable {
         }
     }
     onEditorKeyUp(e) {
-        if (!this._editor.getOption(27 /* dragAndDrop */) || this._editor.getOption(15 /* columnSelection */)) {
+        if (!this._editor.getOption(29 /* dragAndDrop */) || this._editor.getOption(16 /* columnSelection */)) {
             return;
         }
         if (hasTriggerModifier(e)) {

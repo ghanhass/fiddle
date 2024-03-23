@@ -423,18 +423,45 @@ define('vs/language/typescript/languageFeatures',["require", "exports", "./lib/l
                 if (model.getModeId() !== _selector) {
                     return;
                 }
+                var maybeValidate = function () {
+                    var onlyVisible = _this._defaults.getDiagnosticsOptions().onlyVisible;
+                    if (onlyVisible) {
+                        if (model.isAttachedToEditor()) {
+                            _this._doValidate(model);
+                        }
+                    }
+                    else {
+                        _this._doValidate(model);
+                    }
+                };
                 var handle;
                 var changeSubscription = model.onDidChangeContent(function () {
                     clearTimeout(handle);
-                    handle = setTimeout(function () { return _this._doValidate(model); }, 500);
+                    handle = setTimeout(maybeValidate, 500);
+                });
+                var visibleSubscription = model.onDidChangeAttached(function () {
+                    var onlyVisible = _this._defaults.getDiagnosticsOptions().onlyVisible;
+                    if (onlyVisible) {
+                        if (model.isAttachedToEditor()) {
+                            // this model is now attached to an editor
+                            // => compute diagnostics
+                            maybeValidate();
+                        }
+                        else {
+                            // this model is no longer attached to an editor
+                            // => clear existing diagnostics
+                            monaco_editor_core_1.editor.setModelMarkers(model, _this._selector, []);
+                        }
+                    }
                 });
                 _this._listener[model.uri.toString()] = {
                     dispose: function () {
                         changeSubscription.dispose();
+                        visibleSubscription.dispose();
                         clearTimeout(handle);
                     }
                 };
-                _this._doValidate(model);
+                maybeValidate();
             };
             var onModelRemoved = function (model) {
                 monaco_editor_core_1.editor.setModelMarkers(model, _this._selector, []);
@@ -444,7 +471,7 @@ define('vs/language/typescript/languageFeatures',["require", "exports", "./lib/l
                     delete _this._listener[key];
                 }
             };
-            _this._disposables.push(monaco_editor_core_1.editor.onDidCreateModel(onModelAdd));
+            _this._disposables.push(monaco_editor_core_1.editor.onDidCreateModel(function (model) { return onModelAdd(model); }));
             _this._disposables.push(monaco_editor_core_1.editor.onWillDisposeModel(onModelRemoved));
             _this._disposables.push(monaco_editor_core_1.editor.onDidChangeModelLanguage(function (event) {
                 onModelRemoved(event.model);
@@ -468,7 +495,7 @@ define('vs/language/typescript/languageFeatures',["require", "exports", "./lib/l
             };
             _this._disposables.push(_this._defaults.onDidChange(recomputeDiagostics));
             _this._disposables.push(_this._defaults.onDidExtraLibsChange(recomputeDiagostics));
-            monaco_editor_core_1.editor.getModels().forEach(onModelAdd);
+            monaco_editor_core_1.editor.getModels().forEach(function (model) { return onModelAdd(model); });
             return _this;
         }
         DiagnosticsAdapter.prototype.dispose = function () {

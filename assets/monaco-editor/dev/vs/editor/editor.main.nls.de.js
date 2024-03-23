@@ -1,6 +1,6 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.23.0(82e8ea39fc101d639262435542c7d43bc20d8aa2)
+ * Version: 0.24.0(89cdf8577cdd4881a366f9f7ef6abaa78453fd4b)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
@@ -77,6 +77,7 @@ define("vs/editor/editor.main.nls.de", {
 	],
 	"vs/base/parts/quickinput/browser/quickInput": [
 		"Zurück",
+		"Drücken Sie die EINGABETASTE, um Ihre Eingabe zu bestätigen, oder ESC, um den Vorgang abzubrechen.",
 		"{0}/{1}",
 		"Nehmen Sie eine Eingabe vor, um die Ergebnisse einzugrenzen.",
 		"{0} Ergebnisse",
@@ -92,6 +93,7 @@ define("vs/editor/editor.main.nls.de", {
 	"vs/editor/browser/controller/coreCommands": [
 		"Auch bei längeren Zeilen am Ende bleiben",
 		"Auch bei längeren Zeilen am Ende bleiben",
+		"Sekundäre Cursor entfernt",
 	],
 	"vs/editor/browser/controller/textAreaHandler": [
 		"Editor",
@@ -242,7 +244,7 @@ define("vs/editor/editor.main.nls.de", {
 		"Vorschlag einfügen und Text auf der rechten Seite des Cursors überschreiben",
 		"Legt fest, ob Wörter beim Akzeptieren von Vervollständigungen überschrieben werden. Beachten Sie, dass dies von Erweiterungen abhängt, die für dieses Features aktiviert sind.",
 		"Steuert, ob Filter- und Suchvorschläge geringfügige Tippfehler berücksichtigen.",
-		"Steuert, ob bei der Suche Wörter eine höhere Trefferquote erhalten, die in der Nähe des Cursors stehen.",
+		"Steuert, ob bei der Sortierung Wörter priorisiert werden, die in der Nähe des Cursors stehen.",
 		"Steuert, ob gespeicherte Vorschlagauswahlen in verschiedenen Arbeitsbereichen und Fenstern gemeinsam verwendet werden (dafür ist \"#editor.suggestSelection#\" erforderlich).",
 		"Steuert, ob ein aktiver Ausschnitt verhindert, dass der Bereich \"Schnelle Vorschläge\" angezeigt wird.",
 		"Steuert, ob Symbole in Vorschlägen ein- oder ausgeblendet werden.",
@@ -282,11 +284,13 @@ define("vs/editor/editor.main.nls.de", {
 		"Steuert, ob Vorschläge über Commitzeichen angenommen werden sollen. In JavaScript kann ein Semikolon (\";\") beispielsweise ein Commitzeichen sein, das einen Vorschlag annimmt und dieses Zeichen eingibt.",
 		"Einen Vorschlag nur mit der EINGABETASTE akzeptieren, wenn dieser eine Änderung am Text vornimmt.",
 		"Steuert, ob Vorschläge mit der EINGABETASTE (zusätzlich zur TAB-Taste) akzeptiert werden sollen. Vermeidet Mehrdeutigkeit zwischen dem Einfügen neuer Zeilen oder dem Annehmen von Vorschlägen.",
-		"Legt die Anzahl der Zeilen im Editor fest, die von der Sprachausgabe ausgelesen werden können. Warnung: Es gibt eine Leistungsimplikation für Zahlen, die größer als die Standardeinstellung sind.",
+		"Steuert die Anzahl von Zeilen im Editor, die von einer Sprachausgabe in einem Arbeitsschritt gelesen werden können. Bei Erkennung einer Sprachausgabe wird der Standardwert automatisch auf 2000 festgelegt. Warnung: Eine Festlegung auf einen höheren als den Standardwert kann sich auf die Leistung auswirken.",
 		"Editor-Inhalt",
 		"Verwenden Sie Sprachkonfigurationen, um zu bestimmen, wann Klammern automatisch geschlossen werden sollen.",
 		"Schließe Klammern nur automatisch, wenn der Cursor sich links von einem Leerzeichen befindet.",
 		"Steuert, ob der Editor automatisch Klammern schließen soll, nachdem der Benutzer eine öffnende Klammer hinzugefügt hat.",
+		"Angrenzende schließende Anführungszeichen oder Klammern werden nur überschrieben, wenn sie automatisch eingefügt wurden.",
+		"Steuert, ob der Editor angrenzende schließende Anführungszeichen oder Klammern beim Löschen entfernen soll.",
 		"Schließende Anführungszeichen oder Klammern werden nur überschrieben, wenn sie automatisch eingefügt wurden.",
 		"Steuert, ob der Editor schließende Anführungszeichen oder Klammern überschreiben soll.",
 		"Verwende die Sprachkonfiguration, um zu ermitteln, wann Anführungsstriche automatisch geschlossen werden.",
@@ -358,7 +362,7 @@ define("vs/editor/editor.main.nls.de", {
 		"Letzte Zeilennummer rendern, wenn die Datei mit einem Zeilenumbruch endet.",
 		"Hebt den Bundsteg und die aktuelle Zeile hervor.",
 		"Steuert, wie der Editor die aktuelle Zeilenhervorhebung rendern soll.",
-		"Legt fest, ob der Editor die aktuelle Zeilenhervorhebung nur dann rendern soll, wenn der Editor fokussiert ist",
+		"Steuert, ob der Editor die aktuelle Zeilenhervorhebung nur dann rendern soll, wenn der Fokus auf dem Editor liegt.",
 		"Leerraumzeichen werden gerendert mit Ausnahme der einzelnen Leerzeichen zwischen Wörtern.",
 		"Hiermit werden Leerraumzeichen nur für ausgewählten Text gerendert.",
 		"Nur nachstehende Leerzeichen rendern",
@@ -544,6 +548,8 @@ define("vs/editor/editor.main.nls.de", {
 		"&&Kopieren",
 		"Kopieren",
 		"Kopieren",
+		"Kopieren als",
+		"Kopieren als",
 		"&&Einfügen",
 		"Einfügen",
 		"Einfügen",
@@ -653,6 +659,8 @@ define("vs/editor/editor.main.nls.de", {
 		"Alle Blockkommentare falten",
 		"Alle Regionen falten",
 		"Alle Regionen auffalten",
+		"Alle Regionen mit Ausnahme der ausgewählten zuklappen",
+		"Alle Regionen mit Ausnahme der ausgewählten auffalten",
 		"Alle falten",
 		"Alle auffalten",
 		"Faltebene {0}",
@@ -746,6 +754,7 @@ define("vs/editor/editor.main.nls.de", {
 		"Klicken Sie, um {0} Definitionen anzuzeigen.",
 	],
 	"vs/editor/contrib/gotoSymbol/peek/referencesController": [
+		"Gibt an, ob die Verweisvorschau sichtbar ist, z. B. \"Verweisvorschau\" oder \"Definition einsehen\".",
 		"Wird geladen...",
 		"{0} ({1})",
 	],
@@ -770,6 +779,7 @@ define("vs/editor/editor.main.nls.de", {
 		"{0} Symbole in {1} Dateien gefunden",
 	],
 	"vs/editor/contrib/gotoSymbol/symbolNavigation": [
+		"Gibt an, ob Symbolpositionen vorliegen, bei denen die Navigation nur über die Tastatur möglich ist.",
 		"Symbol {0} von {1}, {2} für nächstes",
 		"Symbol {0} von {1}",
 	],
@@ -851,6 +861,8 @@ define("vs/editor/editor.main.nls.de", {
 		"Ein Bearbeiten ist im schreibgeschützten Editor nicht möglich",
 	],
 	"vs/editor/contrib/multicursor/multicursor": [
+		"Hinzugefügter Cursor: {0}",
+		"Hinzugefügte Cursor: {0}",
 		"Cursor oberhalb hinzufügen",
 		"Cursor oberh&&alb hinzufügen",
 		"Cursor unterhalb hinzufügen",
@@ -878,6 +890,7 @@ define("vs/editor/editor.main.nls.de", {
 		"{0}, Hinweis",
 	],
 	"vs/editor/contrib/peekView/peekView": [
+		"Gibt an, ob der aktuelle Code-Editor in der Vorschau eingebettet ist.",
 		"Schließen",
 		"Hintergrundfarbe des Titelbereichs der Peek-Ansicht.",
 		"Farbe des Titels in der Peek-Ansicht.",
@@ -896,7 +909,7 @@ define("vs/editor/editor.main.nls.de", {
 	],
 	"vs/editor/contrib/quickAccess/gotoLineQuickAccess": [
 		"Öffnen Sie zuerst einen Text-Editor, um zu einer Zeile zu wechseln.",
-		"Wechseln Sie zu Zeile {0} und Spalte {1}.",
+		"Wechseln Sie zu Zeile {0} und Zeichen {1}.",
 		"Zu Zeile {0} wechseln.",
 		"Aktuelle Zeile: {0}, Zeichen: {1}. Geben Sie eine Zeilennummer zwischen 1 und {2} ein, zu der Sie navigieren möchten.",
 		"Aktuelle Zeile: {0}, Zeichen: {1}. Geben Sie eine Zeilennummer ein, zu der Sie navigieren möchten.",
@@ -948,6 +961,7 @@ define("vs/editor/editor.main.nls.de", {
 		"Möglichkeit aktivieren/deaktivieren, Änderungen vor dem Umbenennen als Vorschau anzeigen zu lassen",
 	],
 	"vs/editor/contrib/rename/renameInputField": [
+		"Gibt an, ob das Widget zum Umbenennen der Eingabe sichtbar ist.",
 		"Benennen Sie die Eingabe um. Geben Sie einen neuen Namen ein, und drücken Sie die EINGABETASTE, um den Commit auszuführen.",
 		"{0} zur Umbenennung, {1} zur Vorschau",
 	],
@@ -956,6 +970,11 @@ define("vs/editor/editor.main.nls.de", {
 		"Auswahl &&erweitern",
 		"Markierung verkleinern",
 		"Au&&swahl verkleinern",
+	],
+	"vs/editor/contrib/snippet/snippetController2": [
+		"Gibt an, ob der Editor sich zurzeit im Ausschnittmodus befindet.",
+		"Gibt an, ob ein nächster Tabstopp im Ausschnittmodus vorhanden ist.",
+		"Gibt an, ob ein vorheriger Tabstopp im Ausschnittmodus vorhanden ist.",
 	],
 	"vs/editor/contrib/snippet/snippetVariables": [
 		"Sonntag",
@@ -996,6 +1015,16 @@ define("vs/editor/editor.main.nls.de", {
 		"Okt",
 		"Nov",
 		"Dez",
+	],
+	"vs/editor/contrib/suggest/suggest": [
+		"Gibt an, ob Vorschläge sichtbar sind.",
+		"Gibt an, ob Vorschlagsdetails sichtbar sind.",
+		"Gibt an, ob mehrere Vorschläge zur Auswahl stehen.",
+		"Gibt an, ob das Einfügen des aktuellen Vorschlags zu einer Änderung führt oder ob bereits alles eingegeben wurde.",
+		"Gibt an, ob Vorschläge durch Drücken der EINGABETASTE eingefügt werden.",
+		"Gibt an, ob der aktuelle Vorschlag Verhalten zum Einfügen und Ersetzen aufweist.",
+		"Gibt an, ob Einfügen oder Ersetzen als Standardverhalten verwendet wird.",
+		"Gibt an, ob der aktuelle Vorschlag die Auflösung weiterer Details unterstützt.",
 	],
 	"vs/editor/contrib/suggest/suggestController": [
 		"Das Akzeptieren von \"{0}\" ergab {1} zusätzliche Bearbeitungen.",
@@ -1096,6 +1125,7 @@ define("vs/editor/editor.main.nls.de", {
 		"Wort löschen",
 	],
 	"vs/platform/actions/browser/menuEntryActionViewItem": [
+		"{0} ({1})",
 		"{0} ({1})",
 	],
 	"vs/platform/configuration/common/configurationRegistry": [
@@ -1206,9 +1236,12 @@ define("vs/editor/editor.main.nls.de", {
 		"Schnellauswahl der Hintergrundfarbe. Im Widget für die Schnellauswahl sind Auswahlelemente wie die Befehlspalette enthalten.",
 		"Vordergrundfarbe der Schnellauswahl. Im Widget für die Schnellauswahl sind Auswahlelemente wie die Befehlspalette enthalten.",
 		"Hintergrundfarbe für den Titel der Schnellauswahl. Im Widget für die Schnellauswahl sind Auswahlelemente wie die Befehlspalette enthalten.",
-		"Die Hintergrundfarbe der Schnellauswahl für das fokussierte Element.",
 		"Schnellauswahlfarbe für das Gruppieren von Bezeichnungen.",
 		"Schnellauswahlfarbe für das Gruppieren von Rahmen.",
+		"Keybinding label background color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label foreground color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border bottom color. The keybinding label is used to represent a keyboard shortcut.",
 		"Farbe der Editor-Auswahl.",
 		"Farbe des gewählten Text für einen hohen Kontrast",
 		"Die Farbe der Auswahl befindet sich in einem inaktiven Editor. Die Farbe darf nicht deckend sein, weil sie sonst die zugrunde liegende Dekorationen verdeckt.",
@@ -1254,6 +1287,8 @@ define("vs/editor/editor.main.nls.de", {
 		"Konturfarbe des Typfilterwidgets in Listen und Strukturen, wenn es keine Übereinstimmungen gibt.",
 		"Strukturstrichfarbe für die Einzugsführungslinien.",
 		"Strukturstrichfarbe für die Einzugsführungslinien.",
+		"Verwenden Sie stattdessen \"quickInputList.focusBackground\".",
+		"Die Hintergrundfarbe der Schnellauswahl für das fokussierte Element.",
 		"Rahmenfarbe von Menüs.",
 		"Vordergrundfarbe von Menüelementen.",
 		"Hintergrundfarbe von Menüelementen.",

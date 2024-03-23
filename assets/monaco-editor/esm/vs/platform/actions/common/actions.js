@@ -33,8 +33,10 @@ export class MenuId {
 MenuId._idPool = 0;
 MenuId.CommandPalette = new MenuId('CommandPalette');
 MenuId.EditorContext = new MenuId('EditorContext');
+MenuId.EditorContextCopy = new MenuId('EditorContextCopy');
 MenuId.EditorContextPeek = new MenuId('EditorContextPeek');
 MenuId.MenubarEditMenu = new MenuId('MenubarEditMenu');
+MenuId.MenubarCopy = new MenuId('MenubarCopy');
 MenuId.MenubarGoMenu = new MenuId('MenubarGoMenu');
 MenuId.MenubarSelectionMenu = new MenuId('MenubarSelectionMenu');
 export const IMenuService = createDecorator('menuService');
@@ -173,6 +175,9 @@ let MenuItemAction = class MenuItemAction {
             this.checked = contextKeyService.contextMatchesRules(toggled.condition);
             if (this.checked && toggled.tooltip) {
                 this.tooltip = typeof toggled.tooltip === 'string' ? toggled.tooltip : toggled.tooltip.value;
+            }
+            if (toggled.title) {
+                this.label = typeof toggled.title === 'string' ? toggled.title : toggled.title.value;
             }
         }
         this.item = item;

@@ -43,7 +43,7 @@ export class MarkerHover {
     }
 }
 const markerCodeActionTrigger = {
-    type: 2 /* Manual */,
+    type: 1 /* Invoke */,
     filter: { include: CodeActionKind.QuickFix }
 };
 let MarkerHoverParticipant = class MarkerHoverParticipant {
@@ -104,7 +104,7 @@ let MarkerHoverParticipant = class MarkerHoverParticipant {
                 const codeLink = dom.append(sourceAndCodeElement, $('a.code-link'));
                 codeLink.setAttribute('href', code.target.toString());
                 disposables.add(dom.addDisposableListener(codeLink, 'click', (e) => {
-                    this._openerService.open(code.target);
+                    this._openerService.open(code.target, { allowCommands: true });
                     e.preventDefault();
                     e.stopPropagation();
                 }));
@@ -159,7 +159,7 @@ let MarkerHoverParticipant = class MarkerHoverParticipant {
                 }
             }));
         }
-        if (!this._editor.getOption(75 /* readOnly */)) {
+        if (!this._editor.getOption(77 /* readOnly */)) {
             const quickfixPlaceholderElement = dom.append(actionsElement, $('div'));
             if (this.recentMarkerCodeActionsInfo) {
                 if (IMarkerData.makeKey(this.recentMarkerCodeActionsInfo.marker) === IMarkerData.makeKey(markerHover.marker)) {

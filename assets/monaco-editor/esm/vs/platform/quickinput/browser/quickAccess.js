@@ -88,11 +88,23 @@ let QuickAccessController = class QuickAccessController extends Disposable {
             picker.ariaLabel = descriptor === null || descriptor === void 0 ? void 0 : descriptor.placeholder;
         }
         // Register listeners
-        const cancellationToken = this.registerPickerListeners(picker, provider, descriptor, value, disposables);
+        disposables.add(this.registerPickerListeners(picker, provider, descriptor, value));
         // Ask provider to fill the picker as needed if we have one
+        // and pass over a cancellation token that will indicate when
+        // the picker is hiding without a pick being made.
+        const cts = disposables.add(new CancellationTokenSource());
         if (provider) {
-            disposables.add(provider.provide(picker, cancellationToken));
+            disposables.add(provider.provide(picker, cts.token));
         }
+        // Finally, trigger disposal and cancellation when the picker
+        // hides depending on items selected or not.
+        once(picker.onDidHide)(() => {
+            if (picker.selectedItems.length === 0) {
+                cts.cancel();
+            }
+            // Start to dispose once picker hides
+            disposables.dispose();
+        });
         // Finally, show the picker. This is important because a provider
         // may not call this and then our disposables would leak that rely
         // on the onDidHide event.
@@ -111,7 +123,8 @@ let QuickAccessController = class QuickAccessController extends Disposable {
         }
         picker.valueSelection = valueSelection;
     }
-    registerPickerListeners(picker, provider, descriptor, value, disposables) {
+    registerPickerListeners(picker, provider, descriptor, value) {
+        const disposables = new DisposableStore();
         // Remember as last visible picker and clean up once picker get's disposed
         const visibleQuickAccess = this.visibleQuickAccess = { picker, descriptor, value };
         disposables.add(toDisposable(() => {
@@ -136,17 +149,7 @@ let QuickAccessController = class QuickAccessController extends Disposable {
                 this.lastAcceptedPickerValues.set(descriptor, picker.value);
             }));
         }
-        // Create a cancellation token source that is valid as long as the
-        // picker has not been closed without picking an item
-        const cts = disposables.add(new CancellationTokenSource());
-        once(picker.onDidHide)(() => {
-            if (picker.selectedItems.length === 0) {
-                cts.cancel();
-            }
-            // Start to dispose once picker hides
-            disposables.dispose();
-        });
-        return cts.token;
+        return disposables;
     }
     getOrInstantiateProvider(value) {
         const providerDescriptor = this.registry.getQuickAccessProvider(value);

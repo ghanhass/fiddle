@@ -1,12 +1,12 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.23.0(82e8ea39fc101d639262435542c7d43bc20d8aa2)
+ * Version: 0.24.0(89cdf8577cdd4881a366f9f7ef6abaa78453fd4b)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
 
 (function() {
-var __m = ["require","exports","vs/base/common/platform","vs/editor/common/core/position","vs/base/common/errors","vs/base/common/strings","vs/editor/common/core/range","vs/base/common/lifecycle","vs/base/common/stopwatch","vs/base/common/event","vs/base/common/diff/diff","vs/base/common/types","vs/base/common/uint","vs/base/common/uri","vs/base/common/arrays","vs/base/common/diff/diffChange","vs/base/common/iterator","vs/base/common/keyCodes","vs/base/common/linkedList","vs/base/common/process","vs/base/common/path","vs/base/common/cancellation","vs/base/common/hash","vs/editor/common/core/characterClassifier","vs/editor/common/core/selection","vs/editor/common/core/token","vs/editor/common/diff/diffComputer","vs/editor/common/model/wordHelper","vs/editor/common/modes/linkComputer","vs/editor/common/modes/supports/inplaceReplaceSupport","vs/editor/common/standalone/standaloneEnums","vs/editor/common/standalone/standaloneBase","vs/editor/common/viewModel/prefixSumComputer","vs/editor/common/model/mirrorTextModel","vs/base/common/worker/simpleWorker","vs/editor/common/services/editorSimpleWorker"];
+var __m = ["require","exports","vs/base/common/platform","vs/editor/common/core/position","vs/base/common/errors","vs/base/common/strings","vs/editor/common/core/range","vs/base/common/lifecycle","vs/base/common/stopwatch","vs/base/common/event","vs/base/common/diff/diff","vs/base/common/types","vs/base/common/uint","vs/base/common/uri","vs/base/common/diff/diffChange","vs/base/common/iterator","vs/base/common/keyCodes","vs/base/common/linkedList","vs/base/common/process","vs/base/common/path","vs/base/common/cancellation","vs/base/common/hash","vs/editor/common/core/characterClassifier","vs/editor/common/core/selection","vs/editor/common/core/token","vs/editor/common/diff/diffComputer","vs/editor/common/model/wordHelper","vs/editor/common/modes/linkComputer","vs/editor/common/modes/supports/inplaceReplaceSupport","vs/editor/common/standalone/standaloneEnums","vs/editor/common/standalone/standaloneBase","vs/editor/common/viewModel/prefixSumComputer","vs/editor/common/model/mirrorTextModel","vs/base/common/worker/simpleWorker","vs/editor/common/services/editorSimpleWorker"];
 var __M = function(deps) {
   var result = [];
   for (var i = 0, len = deps.length; i < len; i++) {
@@ -702,10 +702,29 @@ var AMDLoader;
         }
         WorkerScriptLoader.prototype.load = function (moduleManager, scriptSrc, callback, errorback) {
             var trustedTypesPolicy = moduleManager.getConfig().getOptionsLiteral().trustedTypesPolicy;
-            if (trustedTypesPolicy) {
-                scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
+            var isCrossOrigin = (/^((http:)|(https:)|(file:))/.test(scriptSrc) && scriptSrc.substring(0, self.origin.length) !== self.origin);
+            if (!isCrossOrigin) {
+                // use `fetch` if possible because `importScripts`
+                // is synchronous and can lead to deadlocks on Safari
+                fetch(scriptSrc).then(function (response) {
+                    if (response.status !== 200) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.text();
+                }).then(function (text) {
+                    text = text + "\n//# sourceURL=" + scriptSrc;
+                    var func = (trustedTypesPolicy
+                        ? self.eval(trustedTypesPolicy.createScript('', text))
+                        : new Function(text));
+                    func.call(self);
+                    callback();
+                }).then(undefined, errorback);
+                return;
             }
             try {
+                if (trustedTypesPolicy) {
+                    scriptSrc = trustedTypesPolicy.createScriptURL(scriptSrc);
+                }
                 importScripts(scriptSrc);
                 callback();
             }
@@ -759,6 +778,9 @@ var AMDLoader;
                 };
                 require.resolve = function resolve(request, options) {
                     return Module._resolveFilename(request, mod, false, options);
+                };
+                require.resolve.paths = function paths(request) {
+                    return Module._resolveLookupPaths(request, mod);
                 };
                 require.main = process.mainModule;
                 require.extensions = Module._extensions;
@@ -1897,303 +1919,11 @@ var AMDLoader;
     }
 })(AMDLoader || (AMDLoader = {}));
 
-define(__m[14/*vs/base/common/arrays*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.asArray = exports.pushToEnd = exports.pushToStart = exports.arrayInsert = exports.range = exports.flatten = exports.firstOrDefault = exports.distinctES6 = exports.distinct = exports.isNonEmptyArray = exports.isFalsyOrEmpty = exports.coalesce = exports.groupBy = exports.mergeSort = exports.quickSelect = exports.findFirstInSorted = exports.binarySearch = exports.equals = exports.tail2 = exports.tail = void 0;
-    /**
-     * Returns the last element of an array.
-     * @param array The array.
-     * @param n Which element from the end (default is zero).
-     */
-    function tail(array, n = 0) {
-        return array[array.length - (1 + n)];
-    }
-    exports.tail = tail;
-    function tail2(arr) {
-        if (arr.length === 0) {
-            throw new Error('Invalid tail call');
-        }
-        return [arr.slice(0, arr.length - 1), arr[arr.length - 1]];
-    }
-    exports.tail2 = tail2;
-    function equals(one, other, itemEquals = (a, b) => a === b) {
-        if (one === other) {
-            return true;
-        }
-        if (!one || !other) {
-            return false;
-        }
-        if (one.length !== other.length) {
-            return false;
-        }
-        for (let i = 0, len = one.length; i < len; i++) {
-            if (!itemEquals(one[i], other[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-    exports.equals = equals;
-    function binarySearch(array, key, comparator) {
-        let low = 0, high = array.length - 1;
-        while (low <= high) {
-            const mid = ((low + high) / 2) | 0;
-            const comp = comparator(array[mid], key);
-            if (comp < 0) {
-                low = mid + 1;
-            }
-            else if (comp > 0) {
-                high = mid - 1;
-            }
-            else {
-                return mid;
-            }
-        }
-        return -(low + 1);
-    }
-    exports.binarySearch = binarySearch;
-    /**
-     * Takes a sorted array and a function p. The array is sorted in such a way that all elements where p(x) is false
-     * are located before all elements where p(x) is true.
-     * @returns the least x for which p(x) is true or array.length if no element fullfills the given function.
-     */
-    function findFirstInSorted(array, p) {
-        let low = 0, high = array.length;
-        if (high === 0) {
-            return 0; // no children
-        }
-        while (low < high) {
-            const mid = Math.floor((low + high) / 2);
-            if (p(array[mid])) {
-                high = mid;
-            }
-            else {
-                low = mid + 1;
-            }
-        }
-        return low;
-    }
-    exports.findFirstInSorted = findFirstInSorted;
-    function quickSelect(nth, data, compare) {
-        nth = nth | 0;
-        if (nth >= data.length) {
-            throw new TypeError('invalid index');
-        }
-        let pivotValue = data[Math.floor(data.length * Math.random())];
-        let lower = [];
-        let higher = [];
-        let pivots = [];
-        for (let value of data) {
-            const val = compare(value, pivotValue);
-            if (val < 0) {
-                lower.push(value);
-            }
-            else if (val > 0) {
-                higher.push(value);
-            }
-            else {
-                pivots.push(value);
-            }
-        }
-        if (nth < lower.length) {
-            return quickSelect(nth, lower, compare);
-        }
-        else if (nth < lower.length + pivots.length) {
-            return pivots[0];
-        }
-        else {
-            return quickSelect(nth - (lower.length + pivots.length), higher, compare);
-        }
-    }
-    exports.quickSelect = quickSelect;
-    /**
-     * Like `Array#sort` but always stable. Usually runs a little slower `than Array#sort`
-     * so only use this when actually needing stable sort.
-     */
-    function mergeSort(data, compare) {
-        _sort(data, compare, 0, data.length - 1, []);
-        return data;
-    }
-    exports.mergeSort = mergeSort;
-    function _merge(a, compare, lo, mid, hi, aux) {
-        let leftIdx = lo, rightIdx = mid + 1;
-        for (let i = lo; i <= hi; i++) {
-            aux[i] = a[i];
-        }
-        for (let i = lo; i <= hi; i++) {
-            if (leftIdx > mid) {
-                // left side consumed
-                a[i] = aux[rightIdx++];
-            }
-            else if (rightIdx > hi) {
-                // right side consumed
-                a[i] = aux[leftIdx++];
-            }
-            else if (compare(aux[rightIdx], aux[leftIdx]) < 0) {
-                // right element is less -> comes first
-                a[i] = aux[rightIdx++];
-            }
-            else {
-                // left element comes first (less or equal)
-                a[i] = aux[leftIdx++];
-            }
-        }
-    }
-    function _sort(a, compare, lo, hi, aux) {
-        if (hi <= lo) {
-            return;
-        }
-        const mid = lo + ((hi - lo) / 2) | 0;
-        _sort(a, compare, lo, mid, aux);
-        _sort(a, compare, mid + 1, hi, aux);
-        if (compare(a[mid], a[mid + 1]) <= 0) {
-            // left and right are sorted and if the last-left element is less
-            // or equals than the first-right element there is nothing else
-            // to do
-            return;
-        }
-        _merge(a, compare, lo, mid, hi, aux);
-    }
-    function groupBy(data, compare) {
-        const result = [];
-        let currentGroup = undefined;
-        for (const element of mergeSort(data.slice(0), compare)) {
-            if (!currentGroup || compare(currentGroup[0], element) !== 0) {
-                currentGroup = [element];
-                result.push(currentGroup);
-            }
-            else {
-                currentGroup.push(element);
-            }
-        }
-        return result;
-    }
-    exports.groupBy = groupBy;
-    /**
-     * @returns New array with all falsy values removed. The original array IS NOT modified.
-     */
-    function coalesce(array) {
-        return array.filter(e => !!e);
-    }
-    exports.coalesce = coalesce;
-    /**
-     * @returns false if the provided object is an array and not empty.
-     */
-    function isFalsyOrEmpty(obj) {
-        return !Array.isArray(obj) || obj.length === 0;
-    }
-    exports.isFalsyOrEmpty = isFalsyOrEmpty;
-    function isNonEmptyArray(obj) {
-        return Array.isArray(obj) && obj.length > 0;
-    }
-    exports.isNonEmptyArray = isNonEmptyArray;
-    /**
-     * Removes duplicates from the given array. The optional keyFn allows to specify
-     * how elements are checked for equalness by returning a unique string for each.
-     */
-    function distinct(array, keyFn) {
-        if (!keyFn) {
-            return array.filter((element, position) => {
-                return array.indexOf(element) === position;
-            });
-        }
-        const seen = Object.create(null);
-        return array.filter((elem) => {
-            const key = keyFn(elem);
-            if (seen[key]) {
-                return false;
-            }
-            seen[key] = true;
-            return true;
-        });
-    }
-    exports.distinct = distinct;
-    function distinctES6(array) {
-        const seen = new Set();
-        return array.filter(element => {
-            if (seen.has(element)) {
-                return false;
-            }
-            seen.add(element);
-            return true;
-        });
-    }
-    exports.distinctES6 = distinctES6;
-    function firstOrDefault(array, notFoundValue) {
-        return array.length > 0 ? array[0] : notFoundValue;
-    }
-    exports.firstOrDefault = firstOrDefault;
-    function flatten(arr) {
-        return [].concat(...arr);
-    }
-    exports.flatten = flatten;
-    function range(arg, to) {
-        let from = typeof to === 'number' ? arg : 0;
-        if (typeof to === 'number') {
-            from = arg;
-        }
-        else {
-            from = 0;
-            to = arg;
-        }
-        const result = [];
-        if (from <= to) {
-            for (let i = from; i < to; i++) {
-                result.push(i);
-            }
-        }
-        else {
-            for (let i = from; i > to; i--) {
-                result.push(i);
-            }
-        }
-        return result;
-    }
-    exports.range = range;
-    /**
-     * Insert `insertArr` inside `target` at `insertIndex`.
-     * Please don't touch unless you understand https://jsperf.com/inserting-an-array-within-an-array
-     */
-    function arrayInsert(target, insertIndex, insertArr) {
-        const before = target.slice(0, insertIndex);
-        const after = target.slice(insertIndex);
-        return before.concat(insertArr, after);
-    }
-    exports.arrayInsert = arrayInsert;
-    /**
-     * Pushes an element to the start of the array, if found.
-     */
-    function pushToStart(arr, value) {
-        const index = arr.indexOf(value);
-        if (index > -1) {
-            arr.splice(index, 1);
-            arr.unshift(value);
-        }
-    }
-    exports.pushToStart = pushToStart;
-    /**
-     * Pushes an element to the end of the array, if found.
-     */
-    function pushToEnd(arr, value) {
-        const index = arr.indexOf(value);
-        if (index > -1) {
-            arr.splice(index, 1);
-            arr.push(value);
-        }
-    }
-    exports.pushToEnd = pushToEnd;
-    function asArray(x) {
-        return Array.isArray(x) ? x : [x];
-    }
-    exports.asArray = asArray;
-});
-
 /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[15/*vs/base/common/diff/diffChange*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[14/*vs/base/common/diff/diffChange*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiffChange = void 0;
@@ -2333,7 +2063,7 @@ define(__m[4/*vs/base/common/errors*/], __M([0/*require*/,1/*exports*/]), functi
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[16/*vs/base/common/iterator*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[15/*vs/base/common/iterator*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Iterable = void 0;
@@ -2487,7 +2217,7 @@ define(__m[16/*vs/base/common/iterator*/], __M([0/*require*/,1/*exports*/]), fun
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[17/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
+define(__m[16/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/]), function (require, exports, errors_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ResolvedKeybinding = exports.ResolvedKeybindingPart = exports.ChordKeybinding = exports.SimpleKeybinding = exports.createSimpleKeybinding = exports.createKeybinding = exports.KeyChord = exports.KeyCodeUtils = void 0;
@@ -2721,7 +2451,7 @@ define(__m[17/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/,4/*vs/
     class ChordKeybinding {
         constructor(parts) {
             if (parts.length === 0) {
-                throw errors_1.illegalArgument(`parts`);
+                throw (0, errors_1.illegalArgument)(`parts`);
             }
             this.parts = parts;
         }
@@ -2746,7 +2476,7 @@ define(__m[17/*vs/base/common/keyCodes*/], __M([0/*require*/,1/*exports*/,4/*vs/
     exports.ResolvedKeybinding = ResolvedKeybinding;
 });
 
-define(__m[7/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,16/*vs/base/common/iterator*/]), function (require, exports, iterator_1) {
+define(__m[7/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,15/*vs/base/common/iterator*/]), function (require, exports, iterator_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ImmortalReference = exports.MutableDisposable = exports.Disposable = exports.DisposableStore = exports.toDisposable = exports.combinedDisposable = exports.dispose = exports.isDisposable = exports.MultiDisposeError = exports.trackDisposable = void 0;
@@ -2969,7 +2699,7 @@ define(__m[7/*vs/base/common/lifecycle*/], __M([0/*require*/,1/*exports*/,16/*vs
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[18/*vs/base/common/linkedList*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[17/*vs/base/common/linkedList*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LinkedList = void 0;
@@ -3097,7 +2827,7 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.isLittleEndian = exports.OS = exports.setImmediate = exports.globals = exports.userAgent = exports.isIOS = exports.isWeb = exports.isNative = exports.isLinux = exports.isMacintosh = exports.isWindows = exports.isPreferringBrowserCodeLoad = exports.browserCodeLoadingCacheStrategy = exports.isElectronSandboxed = void 0;
+    exports.isLittleEndian = exports.OS = exports.setImmediate = exports.userAgent = exports.isIOS = exports.isWeb = exports.isNative = exports.isLinux = exports.isMacintosh = exports.isWindows = exports.isPreferringBrowserCodeLoad = exports.browserCodeLoadingCacheStrategy = exports.isElectronSandboxed = exports.globals = void 0;
     const LANGUAGE_DEFAULT = 'en';
     let _isWindows = false;
     let _isMacintosh = false;
@@ -3110,15 +2840,15 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
     let _language = LANGUAGE_DEFAULT;
     let _translationsConfigFile = undefined;
     let _userAgent = undefined;
-    const _globals = (typeof self === 'object' ? self : typeof global === 'object' ? global : {});
+    exports.globals = (typeof self === 'object' ? self : typeof global === 'object' ? global : {});
     let nodeProcess = undefined;
-    if (typeof process !== 'undefined') {
+    if (typeof exports.globals.vscode !== 'undefined' && typeof exports.globals.vscode.process !== 'undefined') {
+        // Native environment (sandboxed)
+        nodeProcess = exports.globals.vscode.process;
+    }
+    else if (typeof process !== 'undefined') {
         // Native environment (non-sandboxed)
         nodeProcess = process;
-    }
-    else if (typeof _globals.vscode !== 'undefined') {
-        // Native environment (sandboxed)
-        nodeProcess = _globals.vscode.process;
     }
     const isElectronRenderer = typeof ((_a = nodeProcess === null || nodeProcess === void 0 ? void 0 : nodeProcess.versions) === null || _a === void 0 ? void 0 : _a.electron) === 'string' && nodeProcess.type === 'renderer';
     exports.isElectronSandboxed = isElectronRenderer && (nodeProcess === null || nodeProcess === void 0 ? void 0 : nodeProcess.sandboxed);
@@ -3128,7 +2858,7 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
             return 'bypassHeatCheck';
         }
         // Otherwise, only enabled conditionally
-        const env = nodeProcess === null || nodeProcess === void 0 ? void 0 : nodeProcess.env['ENABLE_VSCODE_BROWSER_CODE_LOADING'];
+        const env = nodeProcess === null || nodeProcess === void 0 ? void 0 : nodeProcess.env['VSCODE_BROWSER_CODE_LOADING'];
         if (typeof env === 'string') {
             if (env === 'none' || env === 'code' || env === 'bypassHeatCheck' || env === 'bypassHeatCheckAndEagerCompile') {
                 return env;
@@ -3193,7 +2923,6 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
     exports.isWeb = _isWeb;
     exports.isIOS = _isIOS;
     exports.userAgent = _userAgent;
-    exports.globals = _globals;
     exports.setImmediate = (function defineSetImmediate() {
         if (exports.globals.setImmediate) {
             return exports.globals.setImmediate.bind(exports.globals);
@@ -3222,7 +2951,7 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
                 exports.globals.postMessage({ vscodeSetImmediateId: myId }, '*');
             };
         }
-        if (nodeProcess && typeof nodeProcess.nextTick === 'function') {
+        if (typeof (nodeProcess === null || nodeProcess === void 0 ? void 0 : nodeProcess.nextTick) === 'function') {
             return nodeProcess.nextTick.bind(nodeProcess);
         }
         const _promise = Promise.resolve();
@@ -3249,24 +2978,28 @@ define(__m[2/*vs/base/common/platform*/], __M([0/*require*/,1/*exports*/]), func
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[19/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,2/*vs/base/common/platform*/]), function (require, exports, platform_1) {
+define(__m[18/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,2/*vs/base/common/platform*/]), function (require, exports, platform_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.platform = exports.env = exports.cwd = void 0;
     let safeProcess;
-    // Native node.js environment
-    if (typeof process !== 'undefined') {
-        safeProcess = process;
-    }
     // Native sandbox environment
-    else if (typeof platform_1.globals.vscode !== 'undefined') {
+    if (typeof platform_1.globals.vscode !== 'undefined' && typeof platform_1.globals.vscode.process !== 'undefined') {
+        const sandboxProcess = platform_1.globals.vscode.process;
         safeProcess = {
-            // Supported
-            get platform() { return platform_1.globals.vscode.process.platform; },
-            get env() { return platform_1.globals.vscode.process.env; },
-            nextTick(callback) { return platform_1.setImmediate(callback); },
-            // Unsupported
-            cwd() { return platform_1.globals.vscode.process.env['VSCODE_CWD'] || platform_1.globals.vscode.process.execPath.substr(0, platform_1.globals.vscode.process.execPath.lastIndexOf(platform_1.globals.vscode.process.platform === 'win32' ? '\\' : '/')); }
+            get platform() { return sandboxProcess.platform; },
+            get env() { return sandboxProcess.env; },
+            cwd() { return sandboxProcess.cwd(); },
+            nextTick(callback) { return (0, platform_1.setImmediate)(callback); }
+        };
+    }
+    // Native node.js environment
+    else if (typeof process !== 'undefined') {
+        safeProcess = {
+            get platform() { return process.platform; },
+            get env() { return process.env; },
+            cwd() { return process.env['VSCODE_CWD'] || process.cwd(); },
+            nextTick(callback) { return process.nextTick(callback); }
         };
     }
     // Web environment
@@ -3274,14 +3007,30 @@ define(__m[19/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,2/*vs/b
         safeProcess = {
             // Supported
             get platform() { return platform_1.isWindows ? 'win32' : platform_1.isMacintosh ? 'darwin' : 'linux'; },
-            nextTick(callback) { return platform_1.setImmediate(callback); },
+            nextTick(callback) { return (0, platform_1.setImmediate)(callback); },
             // Unsupported
             get env() { return Object.create(null); },
             cwd() { return '/'; }
         };
     }
+    /**
+     * Provides safe access to the `cwd` property in node.js, sandboxed or web
+     * environments.
+     *
+     * Note: in web, this property is hardcoded to be `/`.
+     */
     exports.cwd = safeProcess.cwd;
+    /**
+     * Provides safe access to the `env` property in node.js, sandboxed or web
+     * environments.
+     *
+     * Note: in web, this property is hardcoded to be `{}`.
+     */
     exports.env = safeProcess.env;
+    /**
+     * Provides safe access to the `platform` property in node.js, sandboxed or web
+     * environments.
+     */
     exports.platform = safeProcess.platform;
 });
 
@@ -3289,7 +3038,7 @@ define(__m[19/*vs/base/common/process*/], __M([0/*require*/,1/*exports*/,2/*vs/b
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[20/*vs/base/common/path*/], __M([0/*require*/,1/*exports*/,19/*vs/base/common/process*/]), function (require, exports, process) {
+define(__m[19/*vs/base/common/path*/], __M([0/*require*/,1/*exports*/,18/*vs/base/common/process*/]), function (require, exports, process) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.sep = exports.extname = exports.basename = exports.dirname = exports.relative = exports.resolve = exports.normalize = exports.posix = exports.win32 = void 0;
@@ -4683,7 +4432,7 @@ define(__m[8/*vs/base/common/stopwatch*/], __M([0/*require*/,1/*exports*/,2/*vs/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,7/*vs/base/common/lifecycle*/,18/*vs/base/common/linkedList*/,8/*vs/base/common/stopwatch*/]), function (require, exports, errors_1, lifecycle_1, linkedList_1, stopwatch_1) {
+define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,7/*vs/base/common/lifecycle*/,17/*vs/base/common/linkedList*/,8/*vs/base/common/stopwatch*/]), function (require, exports, errors_1, lifecycle_1, linkedList_1, stopwatch_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Relay = exports.EventBufferer = exports.PauseableEmitter = exports.Emitter = exports.Event = void 0;
@@ -4745,7 +4494,7 @@ define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base
         }
         Event.signal = signal;
         function any(...events) {
-            return (listener, thisArgs = null, disposables) => lifecycle_1.combinedDisposable(...events.map(event => event(e => listener.call(thisArgs, e), null, disposables)));
+            return (listener, thisArgs = null, disposables) => (0, lifecycle_1.combinedDisposable)(...events.map(event => event(e => listener.call(thisArgs, e), null, disposables)));
         }
         Event.any = any;
         /**
@@ -5154,7 +4903,7 @@ define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base
                         }
                     }
                     catch (e) {
-                        errors_1.onUnexpectedError(e);
+                        (0, errors_1.onUnexpectedError)(e);
                     }
                 }
                 (_b = this._perfMon) === null || _b === void 0 ? void 0 : _b.stop();
@@ -5299,7 +5048,7 @@ define(__m[9/*vs/base/common/event*/], __M([0/*require*/,1/*exports*/,4/*vs/base
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[21/*vs/base/common/cancellation*/], __M([0/*require*/,1/*exports*/,9/*vs/base/common/event*/]), function (require, exports, event_1) {
+define(__m[20/*vs/base/common/cancellation*/], __M([0/*require*/,1/*exports*/,9/*vs/base/common/event*/]), function (require, exports, event_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CancellationTokenSource = exports.CancellationToken = void 0;
@@ -6177,7 +5926,7 @@ define(__m[5/*vs/base/common/strings*/], __M([0/*require*/,1/*exports*/]), funct
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[22/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/]), function (require, exports, strings) {
+define(__m[21/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/]), function (require, exports, strings) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringSHA1 = exports.toHexString = exports.stringHash = exports.doHash = exports.hash = void 0;
@@ -6445,7 +6194,7 @@ define(__m[22/*vs/base/common/hash*/], __M([0/*require*/,1/*exports*/,5/*vs/base
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,15/*vs/base/common/diff/diffChange*/,22/*vs/base/common/hash*/]), function (require, exports, diffChange_1, hash_1) {
+define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,14/*vs/base/common/diff/diffChange*/,21/*vs/base/common/hash*/]), function (require, exports, diffChange_1, hash_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LcsDiff = exports.MyArray = exports.Debug = exports.stringDiff = exports.StringDiffSequence = void 0;
@@ -6616,7 +6365,7 @@ define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,15/*v
             if (LcsDiff._isStringArray(elements)) {
                 const hashes = new Int32Array(elements.length);
                 for (let i = 0, len = elements.length; i < len; i++) {
-                    hashes[i] = hash_1.stringHash(elements[i], 0);
+                    hashes[i] = (0, hash_1.stringHash)(elements[i], 0);
                 }
                 return [elements, hashes, true];
             }
@@ -7087,12 +6836,8 @@ define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,15/*v
                 let modifiedStop = 0;
                 if (i > 0) {
                     const prevChange = changes[i - 1];
-                    if (prevChange.originalLength > 0) {
-                        originalStop = prevChange.originalStart + prevChange.originalLength;
-                    }
-                    if (prevChange.modifiedLength > 0) {
-                        modifiedStop = prevChange.modifiedStart + prevChange.modifiedLength;
-                    }
+                    originalStop = prevChange.originalStart + prevChange.originalLength;
+                    modifiedStop = prevChange.modifiedStart + prevChange.modifiedLength;
                 }
                 const checkOriginal = change.originalLength > 0;
                 const checkModified = change.modifiedLength > 0;
@@ -7110,7 +6855,9 @@ define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,15/*v
                     if (checkModified && !this.ModifiedElementsAreEqual(modifiedStart, modifiedStart + change.modifiedLength)) {
                         break;
                     }
-                    const score = this._boundaryScore(originalStart, change.originalLength, modifiedStart, change.modifiedLength);
+                    const touchingPreviousChange = (originalStart === originalStop && modifiedStart === modifiedStop);
+                    const score = ((touchingPreviousChange ? 5 : 0)
+                        + this._boundaryScore(originalStart, change.originalLength, modifiedStart, change.modifiedLength));
                     if (score > bestScore) {
                         bestScore = score;
                         bestDelta = delta;
@@ -7118,6 +6865,13 @@ define(__m[10/*vs/base/common/diff/diff*/], __M([0/*require*/,1/*exports*/,15/*v
                 }
                 change.originalStart -= bestDelta;
                 change.modifiedStart -= bestDelta;
+                const mergedChangeArr = [null];
+                if (i > 0 && this.ChangesOverlap(changes[i - 1], changes[i], mergedChangeArr)) {
+                    changes[i - 1] = mergedChangeArr[0];
+                    changes.splice(i, 1);
+                    i++;
+                    continue;
+                }
             }
             // There could be multiple longest common substrings.
             // Give preference to the ones containing longer lines
@@ -7517,7 +7271,7 @@ define(__m[12/*vs/base/common/uint*/], __M([0/*require*/,1/*exports*/]), functio
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,2/*vs/base/common/platform*/,20/*vs/base/common/path*/]), function (require, exports, platform_1, paths) {
+define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,2/*vs/base/common/platform*/,19/*vs/base/common/path*/]), function (require, exports, platform_1, paths) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.uriToFsPath = exports.URI = void 0;
@@ -8110,7 +7864,7 @@ define(__m[13/*vs/base/common/uri*/], __M([0/*require*/,1/*exports*/,2/*vs/base/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[34/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,7/*vs/base/common/lifecycle*/,2/*vs/base/common/platform*/,11/*vs/base/common/types*/]), function (require, exports, errors_1, lifecycle_1, platform_1, types) {
+define(__m[33/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*exports*/,4/*vs/base/common/errors*/,7/*vs/base/common/lifecycle*/,2/*vs/base/common/platform*/,11/*vs/base/common/types*/]), function (require, exports, errors_1, lifecycle_1, platform_1, types) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.create = exports.SimpleWorkerServer = exports.SimpleWorkerClient = exports.logOnceWebWorkerWarning = void 0;
@@ -8198,13 +7952,13 @@ define(__m[34/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*expor
             }, (e) => {
                 if (e.detail instanceof Error) {
                     // Loading errors have a detail property that points to the actual error
-                    e.detail = errors_1.transformErrorForSerialization(e.detail);
+                    e.detail = (0, errors_1.transformErrorForSerialization)(e.detail);
                 }
                 this._send({
                     vsWorker: this._workerId,
                     seq: req,
                     res: undefined,
-                    err: errors_1.transformErrorForSerialization(e)
+                    err: (0, errors_1.transformErrorForSerialization)(e)
                 });
             });
         }
@@ -8395,7 +8149,7 @@ define(__m[34/*vs/base/common/worker/simpleWorker*/], __M([0/*require*/,1/*expor
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[23/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1/*exports*/,12/*vs/base/common/uint*/]), function (require, exports, uint_1) {
+define(__m[22/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1/*exports*/,12/*vs/base/common/uint*/]), function (require, exports, uint_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CharacterSet = exports.CharacterClassifier = void 0;
@@ -8404,7 +8158,7 @@ define(__m[23/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1
      */
     class CharacterClassifier {
         constructor(_defaultValue) {
-            let defaultValue = uint_1.toUint8(_defaultValue);
+            let defaultValue = (0, uint_1.toUint8)(_defaultValue);
             this._defaultValue = defaultValue;
             this._asciiMap = CharacterClassifier._createAsciiMap(defaultValue);
             this._map = new Map();
@@ -8417,7 +8171,7 @@ define(__m[23/*vs/editor/common/core/characterClassifier*/], __M([0/*require*/,1
             return asciiMap;
         }
         set(charCode, _value) {
-            let value = uint_1.toUint8(_value);
+            let value = (0, uint_1.toUint8)(_value);
             if (charCode >= 0 && charCode < 256) {
                 this._asciiMap[charCode] = value;
             }
@@ -8960,7 +8714,7 @@ define(__m[6/*vs/editor/common/core/range*/], __M([0/*require*/,1/*exports*/,3/*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[24/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/]), function (require, exports, position_1, range_1) {
+define(__m[23/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/]), function (require, exports, position_1, range_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Selection = void 0;
@@ -9090,7 +8844,7 @@ define(__m[24/*vs/editor/common/core/selection*/], __M([0/*require*/,1/*exports*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[25/*vs/editor/common/core/token*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[24/*vs/editor/common/core/token*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TokenizationResult2 = exports.TokenizationResult = exports.Token = void 0;
@@ -9125,7 +8879,7 @@ define(__m[25/*vs/editor/common/core/token*/], __M([0/*require*/,1/*exports*/]),
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[26/*vs/editor/common/diff/diffComputer*/], __M([0/*require*/,1/*exports*/,10/*vs/base/common/diff/diff*/,5/*vs/base/common/strings*/]), function (require, exports, diff_1, strings) {
+define(__m[25/*vs/editor/common/diff/diffComputer*/], __M([0/*require*/,1/*exports*/,10/*vs/base/common/diff/diff*/,5/*vs/base/common/strings*/]), function (require, exports, diff_1, strings) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DiffComputer = void 0;
@@ -9525,7 +9279,7 @@ define(__m[26/*vs/editor/common/diff/diffComputer*/], __M([0/*require*/,1/*expor
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[27/*vs/editor/common/model/wordHelper*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[26/*vs/editor/common/model/wordHelper*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getWordAtText = exports.ensureValidWordDefinition = exports.DEFAULT_WORD_REGEXP = exports.USUAL_WORD_SEPARATORS = void 0;
@@ -9649,7 +9403,7 @@ define(__m[27/*vs/editor/common/model/wordHelper*/], __M([0/*require*/,1/*export
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[28/*vs/editor/common/modes/linkComputer*/], __M([0/*require*/,1/*exports*/,23/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
+define(__m[27/*vs/editor/common/modes/linkComputer*/], __M([0/*require*/,1/*exports*/,22/*vs/editor/common/core/characterClassifier*/]), function (require, exports, characterClassifier_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.computeLinks = exports.LinkComputer = exports.StateMachine = exports.Uint8Matrix = void 0;
@@ -9922,7 +9676,7 @@ define(__m[28/*vs/editor/common/modes/linkComputer*/], __M([0/*require*/,1/*expo
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[29/*vs/editor/common/modes/supports/inplaceReplaceSupport*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[28/*vs/editor/common/modes/supports/inplaceReplaceSupport*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BasicInplaceReplace = void 0;
@@ -10014,7 +9768,7 @@ define(__m[29/*vs/editor/common/modes/supports/inplaceReplaceSupport*/], __M([0/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[30/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
+define(__m[29/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/,1/*exports*/]), function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.WrappingIndent = exports.TrackedRangeStickiness = exports.TextEditorCursorStyle = exports.TextEditorCursorBlinkingStyle = exports.SymbolTag = exports.SymbolKind = exports.SignatureHelpTriggerKind = exports.SelectionDirection = exports.ScrollbarVisibility = exports.ScrollType = exports.RenderMinimap = exports.RenderLineNumbersType = exports.OverviewRulerLane = exports.OverlayWidgetPositionPreference = exports.MouseTargetType = exports.MinimapPosition = exports.MarkerTag = exports.MarkerSeverity = exports.KeyCode = exports.InlineHintKind = exports.IndentAction = exports.EndOfLineSequence = exports.EndOfLinePreference = exports.EditorOption = exports.EditorAutoIndentStrategy = exports.DocumentHighlightKind = exports.DefaultEndOfLine = exports.CursorChangeReason = exports.ContentWidgetPositionPreference = exports.CompletionTriggerKind = exports.CompletionItemTag = exports.CompletionItemKind = exports.CompletionItemInsertTextRule = exports.AccessibilitySupport = void 0;
@@ -10187,126 +9941,129 @@ define(__m[30/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/
         EditorOption[EditorOption["accessibilityPageSize"] = 3] = "accessibilityPageSize";
         EditorOption[EditorOption["ariaLabel"] = 4] = "ariaLabel";
         EditorOption[EditorOption["autoClosingBrackets"] = 5] = "autoClosingBrackets";
-        EditorOption[EditorOption["autoClosingOvertype"] = 6] = "autoClosingOvertype";
-        EditorOption[EditorOption["autoClosingQuotes"] = 7] = "autoClosingQuotes";
-        EditorOption[EditorOption["autoIndent"] = 8] = "autoIndent";
-        EditorOption[EditorOption["automaticLayout"] = 9] = "automaticLayout";
-        EditorOption[EditorOption["autoSurround"] = 10] = "autoSurround";
-        EditorOption[EditorOption["codeLens"] = 11] = "codeLens";
-        EditorOption[EditorOption["codeLensFontFamily"] = 12] = "codeLensFontFamily";
-        EditorOption[EditorOption["codeLensFontSize"] = 13] = "codeLensFontSize";
-        EditorOption[EditorOption["colorDecorators"] = 14] = "colorDecorators";
-        EditorOption[EditorOption["columnSelection"] = 15] = "columnSelection";
-        EditorOption[EditorOption["comments"] = 16] = "comments";
-        EditorOption[EditorOption["contextmenu"] = 17] = "contextmenu";
-        EditorOption[EditorOption["copyWithSyntaxHighlighting"] = 18] = "copyWithSyntaxHighlighting";
-        EditorOption[EditorOption["cursorBlinking"] = 19] = "cursorBlinking";
-        EditorOption[EditorOption["cursorSmoothCaretAnimation"] = 20] = "cursorSmoothCaretAnimation";
-        EditorOption[EditorOption["cursorStyle"] = 21] = "cursorStyle";
-        EditorOption[EditorOption["cursorSurroundingLines"] = 22] = "cursorSurroundingLines";
-        EditorOption[EditorOption["cursorSurroundingLinesStyle"] = 23] = "cursorSurroundingLinesStyle";
-        EditorOption[EditorOption["cursorWidth"] = 24] = "cursorWidth";
-        EditorOption[EditorOption["disableLayerHinting"] = 25] = "disableLayerHinting";
-        EditorOption[EditorOption["disableMonospaceOptimizations"] = 26] = "disableMonospaceOptimizations";
-        EditorOption[EditorOption["dragAndDrop"] = 27] = "dragAndDrop";
-        EditorOption[EditorOption["emptySelectionClipboard"] = 28] = "emptySelectionClipboard";
-        EditorOption[EditorOption["extraEditorClassName"] = 29] = "extraEditorClassName";
-        EditorOption[EditorOption["fastScrollSensitivity"] = 30] = "fastScrollSensitivity";
-        EditorOption[EditorOption["find"] = 31] = "find";
-        EditorOption[EditorOption["fixedOverflowWidgets"] = 32] = "fixedOverflowWidgets";
-        EditorOption[EditorOption["folding"] = 33] = "folding";
-        EditorOption[EditorOption["foldingStrategy"] = 34] = "foldingStrategy";
-        EditorOption[EditorOption["foldingHighlight"] = 35] = "foldingHighlight";
-        EditorOption[EditorOption["unfoldOnClickAfterEndOfLine"] = 36] = "unfoldOnClickAfterEndOfLine";
-        EditorOption[EditorOption["fontFamily"] = 37] = "fontFamily";
-        EditorOption[EditorOption["fontInfo"] = 38] = "fontInfo";
-        EditorOption[EditorOption["fontLigatures"] = 39] = "fontLigatures";
-        EditorOption[EditorOption["fontSize"] = 40] = "fontSize";
-        EditorOption[EditorOption["fontWeight"] = 41] = "fontWeight";
-        EditorOption[EditorOption["formatOnPaste"] = 42] = "formatOnPaste";
-        EditorOption[EditorOption["formatOnType"] = 43] = "formatOnType";
-        EditorOption[EditorOption["glyphMargin"] = 44] = "glyphMargin";
-        EditorOption[EditorOption["gotoLocation"] = 45] = "gotoLocation";
-        EditorOption[EditorOption["hideCursorInOverviewRuler"] = 46] = "hideCursorInOverviewRuler";
-        EditorOption[EditorOption["highlightActiveIndentGuide"] = 47] = "highlightActiveIndentGuide";
-        EditorOption[EditorOption["hover"] = 48] = "hover";
-        EditorOption[EditorOption["inDiffEditor"] = 49] = "inDiffEditor";
-        EditorOption[EditorOption["letterSpacing"] = 50] = "letterSpacing";
-        EditorOption[EditorOption["lightbulb"] = 51] = "lightbulb";
-        EditorOption[EditorOption["lineDecorationsWidth"] = 52] = "lineDecorationsWidth";
-        EditorOption[EditorOption["lineHeight"] = 53] = "lineHeight";
-        EditorOption[EditorOption["lineNumbers"] = 54] = "lineNumbers";
-        EditorOption[EditorOption["lineNumbersMinChars"] = 55] = "lineNumbersMinChars";
-        EditorOption[EditorOption["linkedEditing"] = 56] = "linkedEditing";
-        EditorOption[EditorOption["links"] = 57] = "links";
-        EditorOption[EditorOption["matchBrackets"] = 58] = "matchBrackets";
-        EditorOption[EditorOption["minimap"] = 59] = "minimap";
-        EditorOption[EditorOption["mouseStyle"] = 60] = "mouseStyle";
-        EditorOption[EditorOption["mouseWheelScrollSensitivity"] = 61] = "mouseWheelScrollSensitivity";
-        EditorOption[EditorOption["mouseWheelZoom"] = 62] = "mouseWheelZoom";
-        EditorOption[EditorOption["multiCursorMergeOverlapping"] = 63] = "multiCursorMergeOverlapping";
-        EditorOption[EditorOption["multiCursorModifier"] = 64] = "multiCursorModifier";
-        EditorOption[EditorOption["multiCursorPaste"] = 65] = "multiCursorPaste";
-        EditorOption[EditorOption["occurrencesHighlight"] = 66] = "occurrencesHighlight";
-        EditorOption[EditorOption["overviewRulerBorder"] = 67] = "overviewRulerBorder";
-        EditorOption[EditorOption["overviewRulerLanes"] = 68] = "overviewRulerLanes";
-        EditorOption[EditorOption["padding"] = 69] = "padding";
-        EditorOption[EditorOption["parameterHints"] = 70] = "parameterHints";
-        EditorOption[EditorOption["peekWidgetDefaultFocus"] = 71] = "peekWidgetDefaultFocus";
-        EditorOption[EditorOption["definitionLinkOpensInPeek"] = 72] = "definitionLinkOpensInPeek";
-        EditorOption[EditorOption["quickSuggestions"] = 73] = "quickSuggestions";
-        EditorOption[EditorOption["quickSuggestionsDelay"] = 74] = "quickSuggestionsDelay";
-        EditorOption[EditorOption["readOnly"] = 75] = "readOnly";
-        EditorOption[EditorOption["renameOnType"] = 76] = "renameOnType";
-        EditorOption[EditorOption["renderControlCharacters"] = 77] = "renderControlCharacters";
-        EditorOption[EditorOption["renderIndentGuides"] = 78] = "renderIndentGuides";
-        EditorOption[EditorOption["renderFinalNewline"] = 79] = "renderFinalNewline";
-        EditorOption[EditorOption["renderLineHighlight"] = 80] = "renderLineHighlight";
-        EditorOption[EditorOption["renderLineHighlightOnlyWhenFocus"] = 81] = "renderLineHighlightOnlyWhenFocus";
-        EditorOption[EditorOption["renderValidationDecorations"] = 82] = "renderValidationDecorations";
-        EditorOption[EditorOption["renderWhitespace"] = 83] = "renderWhitespace";
-        EditorOption[EditorOption["revealHorizontalRightPadding"] = 84] = "revealHorizontalRightPadding";
-        EditorOption[EditorOption["roundedSelection"] = 85] = "roundedSelection";
-        EditorOption[EditorOption["rulers"] = 86] = "rulers";
-        EditorOption[EditorOption["scrollbar"] = 87] = "scrollbar";
-        EditorOption[EditorOption["scrollBeyondLastColumn"] = 88] = "scrollBeyondLastColumn";
-        EditorOption[EditorOption["scrollBeyondLastLine"] = 89] = "scrollBeyondLastLine";
-        EditorOption[EditorOption["scrollPredominantAxis"] = 90] = "scrollPredominantAxis";
-        EditorOption[EditorOption["selectionClipboard"] = 91] = "selectionClipboard";
-        EditorOption[EditorOption["selectionHighlight"] = 92] = "selectionHighlight";
-        EditorOption[EditorOption["selectOnLineNumbers"] = 93] = "selectOnLineNumbers";
-        EditorOption[EditorOption["showFoldingControls"] = 94] = "showFoldingControls";
-        EditorOption[EditorOption["showUnused"] = 95] = "showUnused";
-        EditorOption[EditorOption["snippetSuggestions"] = 96] = "snippetSuggestions";
-        EditorOption[EditorOption["smartSelect"] = 97] = "smartSelect";
-        EditorOption[EditorOption["smoothScrolling"] = 98] = "smoothScrolling";
-        EditorOption[EditorOption["stickyTabStops"] = 99] = "stickyTabStops";
-        EditorOption[EditorOption["stopRenderingLineAfter"] = 100] = "stopRenderingLineAfter";
-        EditorOption[EditorOption["suggest"] = 101] = "suggest";
-        EditorOption[EditorOption["suggestFontSize"] = 102] = "suggestFontSize";
-        EditorOption[EditorOption["suggestLineHeight"] = 103] = "suggestLineHeight";
-        EditorOption[EditorOption["suggestOnTriggerCharacters"] = 104] = "suggestOnTriggerCharacters";
-        EditorOption[EditorOption["suggestSelection"] = 105] = "suggestSelection";
-        EditorOption[EditorOption["tabCompletion"] = 106] = "tabCompletion";
-        EditorOption[EditorOption["tabIndex"] = 107] = "tabIndex";
-        EditorOption[EditorOption["unusualLineTerminators"] = 108] = "unusualLineTerminators";
-        EditorOption[EditorOption["useTabStops"] = 109] = "useTabStops";
-        EditorOption[EditorOption["wordSeparators"] = 110] = "wordSeparators";
-        EditorOption[EditorOption["wordWrap"] = 111] = "wordWrap";
-        EditorOption[EditorOption["wordWrapBreakAfterCharacters"] = 112] = "wordWrapBreakAfterCharacters";
-        EditorOption[EditorOption["wordWrapBreakBeforeCharacters"] = 113] = "wordWrapBreakBeforeCharacters";
-        EditorOption[EditorOption["wordWrapColumn"] = 114] = "wordWrapColumn";
-        EditorOption[EditorOption["wordWrapOverride1"] = 115] = "wordWrapOverride1";
-        EditorOption[EditorOption["wordWrapOverride2"] = 116] = "wordWrapOverride2";
-        EditorOption[EditorOption["wrappingIndent"] = 117] = "wrappingIndent";
-        EditorOption[EditorOption["wrappingStrategy"] = 118] = "wrappingStrategy";
-        EditorOption[EditorOption["showDeprecated"] = 119] = "showDeprecated";
-        EditorOption[EditorOption["inlineHints"] = 120] = "inlineHints";
-        EditorOption[EditorOption["editorClassName"] = 121] = "editorClassName";
-        EditorOption[EditorOption["pixelRatio"] = 122] = "pixelRatio";
-        EditorOption[EditorOption["tabFocusMode"] = 123] = "tabFocusMode";
-        EditorOption[EditorOption["layoutInfo"] = 124] = "layoutInfo";
-        EditorOption[EditorOption["wrappingInfo"] = 125] = "wrappingInfo";
+        EditorOption[EditorOption["autoClosingDelete"] = 6] = "autoClosingDelete";
+        EditorOption[EditorOption["autoClosingOvertype"] = 7] = "autoClosingOvertype";
+        EditorOption[EditorOption["autoClosingQuotes"] = 8] = "autoClosingQuotes";
+        EditorOption[EditorOption["autoIndent"] = 9] = "autoIndent";
+        EditorOption[EditorOption["automaticLayout"] = 10] = "automaticLayout";
+        EditorOption[EditorOption["autoSurround"] = 11] = "autoSurround";
+        EditorOption[EditorOption["codeLens"] = 12] = "codeLens";
+        EditorOption[EditorOption["codeLensFontFamily"] = 13] = "codeLensFontFamily";
+        EditorOption[EditorOption["codeLensFontSize"] = 14] = "codeLensFontSize";
+        EditorOption[EditorOption["colorDecorators"] = 15] = "colorDecorators";
+        EditorOption[EditorOption["columnSelection"] = 16] = "columnSelection";
+        EditorOption[EditorOption["comments"] = 17] = "comments";
+        EditorOption[EditorOption["contextmenu"] = 18] = "contextmenu";
+        EditorOption[EditorOption["copyWithSyntaxHighlighting"] = 19] = "copyWithSyntaxHighlighting";
+        EditorOption[EditorOption["cursorBlinking"] = 20] = "cursorBlinking";
+        EditorOption[EditorOption["cursorSmoothCaretAnimation"] = 21] = "cursorSmoothCaretAnimation";
+        EditorOption[EditorOption["cursorStyle"] = 22] = "cursorStyle";
+        EditorOption[EditorOption["cursorSurroundingLines"] = 23] = "cursorSurroundingLines";
+        EditorOption[EditorOption["cursorSurroundingLinesStyle"] = 24] = "cursorSurroundingLinesStyle";
+        EditorOption[EditorOption["cursorWidth"] = 25] = "cursorWidth";
+        EditorOption[EditorOption["disableLayerHinting"] = 26] = "disableLayerHinting";
+        EditorOption[EditorOption["disableMonospaceOptimizations"] = 27] = "disableMonospaceOptimizations";
+        EditorOption[EditorOption["domReadOnly"] = 28] = "domReadOnly";
+        EditorOption[EditorOption["dragAndDrop"] = 29] = "dragAndDrop";
+        EditorOption[EditorOption["emptySelectionClipboard"] = 30] = "emptySelectionClipboard";
+        EditorOption[EditorOption["extraEditorClassName"] = 31] = "extraEditorClassName";
+        EditorOption[EditorOption["fastScrollSensitivity"] = 32] = "fastScrollSensitivity";
+        EditorOption[EditorOption["find"] = 33] = "find";
+        EditorOption[EditorOption["fixedOverflowWidgets"] = 34] = "fixedOverflowWidgets";
+        EditorOption[EditorOption["folding"] = 35] = "folding";
+        EditorOption[EditorOption["foldingStrategy"] = 36] = "foldingStrategy";
+        EditorOption[EditorOption["foldingHighlight"] = 37] = "foldingHighlight";
+        EditorOption[EditorOption["unfoldOnClickAfterEndOfLine"] = 38] = "unfoldOnClickAfterEndOfLine";
+        EditorOption[EditorOption["fontFamily"] = 39] = "fontFamily";
+        EditorOption[EditorOption["fontInfo"] = 40] = "fontInfo";
+        EditorOption[EditorOption["fontLigatures"] = 41] = "fontLigatures";
+        EditorOption[EditorOption["fontSize"] = 42] = "fontSize";
+        EditorOption[EditorOption["fontWeight"] = 43] = "fontWeight";
+        EditorOption[EditorOption["formatOnPaste"] = 44] = "formatOnPaste";
+        EditorOption[EditorOption["formatOnType"] = 45] = "formatOnType";
+        EditorOption[EditorOption["glyphMargin"] = 46] = "glyphMargin";
+        EditorOption[EditorOption["gotoLocation"] = 47] = "gotoLocation";
+        EditorOption[EditorOption["hideCursorInOverviewRuler"] = 48] = "hideCursorInOverviewRuler";
+        EditorOption[EditorOption["highlightActiveIndentGuide"] = 49] = "highlightActiveIndentGuide";
+        EditorOption[EditorOption["hover"] = 50] = "hover";
+        EditorOption[EditorOption["inDiffEditor"] = 51] = "inDiffEditor";
+        EditorOption[EditorOption["letterSpacing"] = 52] = "letterSpacing";
+        EditorOption[EditorOption["lightbulb"] = 53] = "lightbulb";
+        EditorOption[EditorOption["lineDecorationsWidth"] = 54] = "lineDecorationsWidth";
+        EditorOption[EditorOption["lineHeight"] = 55] = "lineHeight";
+        EditorOption[EditorOption["lineNumbers"] = 56] = "lineNumbers";
+        EditorOption[EditorOption["lineNumbersMinChars"] = 57] = "lineNumbersMinChars";
+        EditorOption[EditorOption["linkedEditing"] = 58] = "linkedEditing";
+        EditorOption[EditorOption["links"] = 59] = "links";
+        EditorOption[EditorOption["matchBrackets"] = 60] = "matchBrackets";
+        EditorOption[EditorOption["minimap"] = 61] = "minimap";
+        EditorOption[EditorOption["mouseStyle"] = 62] = "mouseStyle";
+        EditorOption[EditorOption["mouseWheelScrollSensitivity"] = 63] = "mouseWheelScrollSensitivity";
+        EditorOption[EditorOption["mouseWheelZoom"] = 64] = "mouseWheelZoom";
+        EditorOption[EditorOption["multiCursorMergeOverlapping"] = 65] = "multiCursorMergeOverlapping";
+        EditorOption[EditorOption["multiCursorModifier"] = 66] = "multiCursorModifier";
+        EditorOption[EditorOption["multiCursorPaste"] = 67] = "multiCursorPaste";
+        EditorOption[EditorOption["occurrencesHighlight"] = 68] = "occurrencesHighlight";
+        EditorOption[EditorOption["overviewRulerBorder"] = 69] = "overviewRulerBorder";
+        EditorOption[EditorOption["overviewRulerLanes"] = 70] = "overviewRulerLanes";
+        EditorOption[EditorOption["padding"] = 71] = "padding";
+        EditorOption[EditorOption["parameterHints"] = 72] = "parameterHints";
+        EditorOption[EditorOption["peekWidgetDefaultFocus"] = 73] = "peekWidgetDefaultFocus";
+        EditorOption[EditorOption["definitionLinkOpensInPeek"] = 74] = "definitionLinkOpensInPeek";
+        EditorOption[EditorOption["quickSuggestions"] = 75] = "quickSuggestions";
+        EditorOption[EditorOption["quickSuggestionsDelay"] = 76] = "quickSuggestionsDelay";
+        EditorOption[EditorOption["readOnly"] = 77] = "readOnly";
+        EditorOption[EditorOption["renameOnType"] = 78] = "renameOnType";
+        EditorOption[EditorOption["renderControlCharacters"] = 79] = "renderControlCharacters";
+        EditorOption[EditorOption["renderIndentGuides"] = 80] = "renderIndentGuides";
+        EditorOption[EditorOption["renderFinalNewline"] = 81] = "renderFinalNewline";
+        EditorOption[EditorOption["renderLineHighlight"] = 82] = "renderLineHighlight";
+        EditorOption[EditorOption["renderLineHighlightOnlyWhenFocus"] = 83] = "renderLineHighlightOnlyWhenFocus";
+        EditorOption[EditorOption["renderValidationDecorations"] = 84] = "renderValidationDecorations";
+        EditorOption[EditorOption["renderWhitespace"] = 85] = "renderWhitespace";
+        EditorOption[EditorOption["revealHorizontalRightPadding"] = 86] = "revealHorizontalRightPadding";
+        EditorOption[EditorOption["roundedSelection"] = 87] = "roundedSelection";
+        EditorOption[EditorOption["rulers"] = 88] = "rulers";
+        EditorOption[EditorOption["scrollbar"] = 89] = "scrollbar";
+        EditorOption[EditorOption["scrollBeyondLastColumn"] = 90] = "scrollBeyondLastColumn";
+        EditorOption[EditorOption["scrollBeyondLastLine"] = 91] = "scrollBeyondLastLine";
+        EditorOption[EditorOption["scrollPredominantAxis"] = 92] = "scrollPredominantAxis";
+        EditorOption[EditorOption["selectionClipboard"] = 93] = "selectionClipboard";
+        EditorOption[EditorOption["selectionHighlight"] = 94] = "selectionHighlight";
+        EditorOption[EditorOption["selectOnLineNumbers"] = 95] = "selectOnLineNumbers";
+        EditorOption[EditorOption["showFoldingControls"] = 96] = "showFoldingControls";
+        EditorOption[EditorOption["showUnused"] = 97] = "showUnused";
+        EditorOption[EditorOption["snippetSuggestions"] = 98] = "snippetSuggestions";
+        EditorOption[EditorOption["smartSelect"] = 99] = "smartSelect";
+        EditorOption[EditorOption["smoothScrolling"] = 100] = "smoothScrolling";
+        EditorOption[EditorOption["stickyTabStops"] = 101] = "stickyTabStops";
+        EditorOption[EditorOption["stopRenderingLineAfter"] = 102] = "stopRenderingLineAfter";
+        EditorOption[EditorOption["suggest"] = 103] = "suggest";
+        EditorOption[EditorOption["suggestFontSize"] = 104] = "suggestFontSize";
+        EditorOption[EditorOption["suggestLineHeight"] = 105] = "suggestLineHeight";
+        EditorOption[EditorOption["suggestOnTriggerCharacters"] = 106] = "suggestOnTriggerCharacters";
+        EditorOption[EditorOption["suggestSelection"] = 107] = "suggestSelection";
+        EditorOption[EditorOption["tabCompletion"] = 108] = "tabCompletion";
+        EditorOption[EditorOption["tabIndex"] = 109] = "tabIndex";
+        EditorOption[EditorOption["unusualLineTerminators"] = 110] = "unusualLineTerminators";
+        EditorOption[EditorOption["useShadowDOM"] = 111] = "useShadowDOM";
+        EditorOption[EditorOption["useTabStops"] = 112] = "useTabStops";
+        EditorOption[EditorOption["wordSeparators"] = 113] = "wordSeparators";
+        EditorOption[EditorOption["wordWrap"] = 114] = "wordWrap";
+        EditorOption[EditorOption["wordWrapBreakAfterCharacters"] = 115] = "wordWrapBreakAfterCharacters";
+        EditorOption[EditorOption["wordWrapBreakBeforeCharacters"] = 116] = "wordWrapBreakBeforeCharacters";
+        EditorOption[EditorOption["wordWrapColumn"] = 117] = "wordWrapColumn";
+        EditorOption[EditorOption["wordWrapOverride1"] = 118] = "wordWrapOverride1";
+        EditorOption[EditorOption["wordWrapOverride2"] = 119] = "wordWrapOverride2";
+        EditorOption[EditorOption["wrappingIndent"] = 120] = "wrappingIndent";
+        EditorOption[EditorOption["wrappingStrategy"] = 121] = "wrappingStrategy";
+        EditorOption[EditorOption["showDeprecated"] = 122] = "showDeprecated";
+        EditorOption[EditorOption["inlineHints"] = 123] = "inlineHints";
+        EditorOption[EditorOption["editorClassName"] = 124] = "editorClassName";
+        EditorOption[EditorOption["pixelRatio"] = 125] = "pixelRatio";
+        EditorOption[EditorOption["tabFocusMode"] = 126] = "tabFocusMode";
+        EditorOption[EditorOption["layoutInfo"] = 127] = "layoutInfo";
+        EditorOption[EditorOption["wrappingInfo"] = 128] = "wrappingInfo";
     })(EditorOption = exports.EditorOption || (exports.EditorOption = {}));
     /**
      * End of line character preference.
@@ -10377,6 +10134,7 @@ define(__m[30/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/
      */
     var KeyCode;
     (function (KeyCode) {
+        KeyCode[KeyCode["DependsOnKbLayout"] = -1] = "DependsOnKbLayout";
         /**
          * Placed first to cover the 0 value of the enum.
          */
@@ -10841,13 +10599,13 @@ define(__m[30/*vs/editor/common/standalone/standaloneEnums*/], __M([0/*require*/
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[31/*vs/editor/common/standalone/standaloneBase*/], __M([0/*require*/,1/*exports*/,21/*vs/base/common/cancellation*/,9/*vs/base/common/event*/,17/*vs/base/common/keyCodes*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/,24/*vs/editor/common/core/selection*/,25/*vs/editor/common/core/token*/,30/*vs/editor/common/standalone/standaloneEnums*/]), function (require, exports, cancellation_1, event_1, keyCodes_1, uri_1, position_1, range_1, selection_1, token_1, standaloneEnums) {
+define(__m[30/*vs/editor/common/standalone/standaloneBase*/], __M([0/*require*/,1/*exports*/,20/*vs/base/common/cancellation*/,9/*vs/base/common/event*/,16/*vs/base/common/keyCodes*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/,23/*vs/editor/common/core/selection*/,24/*vs/editor/common/core/token*/,29/*vs/editor/common/standalone/standaloneEnums*/]), function (require, exports, cancellation_1, event_1, keyCodes_1, uri_1, position_1, range_1, selection_1, token_1, standaloneEnums) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createMonacoBaseAPI = exports.KeyMod = void 0;
     class KeyMod {
         static chord(firstPart, secondPart) {
-            return keyCodes_1.KeyChord(firstPart, secondPart);
+            return (0, keyCodes_1.KeyChord)(firstPart, secondPart);
         }
     }
     exports.KeyMod = KeyMod;
@@ -10880,7 +10638,7 @@ define(__m[31/*vs/editor/common/standalone/standaloneBase*/], __M([0/*require*/,
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*/,1/*exports*/,12/*vs/base/common/uint*/]), function (require, exports, uint_1) {
+define(__m[31/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*/,1/*exports*/,12/*vs/base/common/uint*/]), function (require, exports, uint_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.PrefixSumComputer = exports.PrefixSumIndexOfResult = void 0;
@@ -10899,7 +10657,7 @@ define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*
             this.prefixSumValidIndex[0] = -1;
         }
         insertValues(insertIndex, insertValues) {
-            insertIndex = uint_1.toUint32(insertIndex);
+            insertIndex = (0, uint_1.toUint32)(insertIndex);
             const oldValues = this.values;
             const oldPrefixSum = this.prefixSum;
             const insertValuesLen = insertValues.length;
@@ -10920,8 +10678,8 @@ define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*
             return true;
         }
         changeValue(index, value) {
-            index = uint_1.toUint32(index);
-            value = uint_1.toUint32(value);
+            index = (0, uint_1.toUint32)(index);
+            value = (0, uint_1.toUint32)(value);
             if (this.values[index] === value) {
                 return false;
             }
@@ -10932,8 +10690,8 @@ define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*
             return true;
         }
         removeValues(startIndex, cnt) {
-            startIndex = uint_1.toUint32(startIndex);
-            cnt = uint_1.toUint32(cnt);
+            startIndex = (0, uint_1.toUint32)(startIndex);
+            cnt = (0, uint_1.toUint32)(cnt);
             const oldValues = this.values;
             const oldPrefixSum = this.prefixSum;
             if (startIndex >= oldValues.length) {
@@ -10968,7 +10726,7 @@ define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*
             if (index < 0) {
                 return 0;
             }
-            index = uint_1.toUint32(index);
+            index = (0, uint_1.toUint32)(index);
             return this._getAccumulatedValue(index);
         }
         _getAccumulatedValue(index) {
@@ -11022,7 +10780,7 @@ define(__m[32/*vs/editor/common/viewModel/prefixSumComputer*/], __M([0/*require*
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
-define(__m[33/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,3/*vs/editor/common/core/position*/,32/*vs/editor/common/viewModel/prefixSumComputer*/]), function (require, exports, strings_1, position_1, prefixSumComputer_1) {
+define(__m[32/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*exports*/,5/*vs/base/common/strings*/,3/*vs/editor/common/core/position*/,31/*vs/editor/common/viewModel/prefixSumComputer*/]), function (require, exports, strings_1, position_1, prefixSumComputer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MirrorTextModel = void 0;
@@ -11037,6 +10795,9 @@ define(__m[33/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*e
         }
         dispose() {
             this._lines.length = 0;
+        }
+        get version() {
+            return this._versionId;
         }
         getText() {
             if (this._cachedTextValue === null) {
@@ -11105,7 +10866,7 @@ define(__m[33/*vs/editor/common/model/mirrorTextModel*/], __M([0/*require*/,1/*e
                 // Nothing to insert
                 return;
             }
-            let insertLines = strings_1.splitLines(insertText);
+            let insertLines = (0, strings_1.splitLines)(insertText);
             if (insertLines.length === 1) {
                 // Inserting text on one line
                 this._setLineText(position.lineNumber - 1, this._lines[position.lineNumber - 1].substring(0, position.column - 1)
@@ -11146,7 +10907,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*/,1/*exports*/,14/*vs/base/common/arrays*/,10/*vs/base/common/diff/diff*/,2/*vs/base/common/platform*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/,26/*vs/editor/common/diff/diffComputer*/,33/*vs/editor/common/model/mirrorTextModel*/,27/*vs/editor/common/model/wordHelper*/,28/*vs/editor/common/modes/linkComputer*/,29/*vs/editor/common/modes/supports/inplaceReplaceSupport*/,31/*vs/editor/common/standalone/standaloneBase*/,11/*vs/base/common/types*/,8/*vs/base/common/stopwatch*/]), function (require, exports, arrays_1, diff_1, platform_1, uri_1, position_1, range_1, diffComputer_1, mirrorTextModel_1, wordHelper_1, linkComputer_1, inplaceReplaceSupport_1, standaloneBase_1, types, stopwatch_1) {
+define(__m[34/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*/,1/*exports*/,10/*vs/base/common/diff/diff*/,2/*vs/base/common/platform*/,13/*vs/base/common/uri*/,3/*vs/editor/common/core/position*/,6/*vs/editor/common/core/range*/,25/*vs/editor/common/diff/diffComputer*/,32/*vs/editor/common/model/mirrorTextModel*/,26/*vs/editor/common/model/wordHelper*/,27/*vs/editor/common/modes/linkComputer*/,28/*vs/editor/common/modes/supports/inplaceReplaceSupport*/,30/*vs/editor/common/standalone/standaloneBase*/,11/*vs/base/common/types*/,8/*vs/base/common/stopwatch*/]), function (require, exports, diff_1, platform_1, uri_1, position_1, range_1, diffComputer_1, mirrorTextModel_1, wordHelper_1, linkComputer_1, inplaceReplaceSupport_1, standaloneBase_1, types, stopwatch_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.create = exports.EditorSimpleWorker = void 0;
@@ -11156,9 +10917,6 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
     class MirrorModel extends mirrorTextModel_1.MirrorTextModel {
         get uri() {
             return this._uri;
-        }
-        get version() {
-            return this._versionId;
         }
         get eol() {
             return this._eol;
@@ -11176,7 +10934,7 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
             return this._lines[lineNumber - 1];
         }
         getWordAtPosition(position, wordDefinition) {
-            let wordAtText = wordHelper_1.getWordAtText(position.column, wordHelper_1.ensureValidWordDefinition(wordDefinition), this._lines[position.lineNumber - 1], 0);
+            let wordAtText = (0, wordHelper_1.getWordAtText)(position.column, (0, wordHelper_1.ensureValidWordDefinition)(wordDefinition), this._lines[position.lineNumber - 1], 0);
             if (wordAtText) {
                 return new range_1.Range(position.lineNumber, wordAtText.startColumn, position.lineNumber, wordAtText.endColumn);
             }
@@ -11408,7 +11166,7 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
                 }
                 const result = [];
                 let lastEol = undefined;
-                edits = arrays_1.mergeSort(edits, (a, b) => {
+                edits = edits.slice(0).sort((a, b) => {
                     if (a.range && b.range) {
                         return range_1.Range.compareRangesUsingStarts(a.range, b.range);
                     }
@@ -11437,7 +11195,7 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
                         continue;
                     }
                     // compute diff between original and edit.text
-                    const changes = diff_1.stringDiff(original, text, false);
+                    const changes = (0, diff_1.stringDiff)(original, text, false);
                     const editOffset = model.offsetAt(range_1.Range.lift(range).getStartPosition());
                     for (const change of changes) {
                         const start = model.positionAt(editOffset + change.originalStart);
@@ -11464,7 +11222,7 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
                 if (!model) {
                     return null;
                 }
-                return linkComputer_1.computeLinks(model);
+                return (0, linkComputer_1.computeLinks)(model);
             });
         }
         textualSuggest(modelUrls, leadingWord, wordDef, wordDefFlags) {
@@ -11606,7 +11364,7 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
     exports.create = create;
     if (typeof importScripts === 'function') {
         // Running in a web worker
-        platform_1.globals.monaco = standaloneBase_1.createMonacoBaseAPI();
+        platform_1.globals.monaco = (0, standaloneBase_1.createMonacoBaseAPI)();
     }
 });
 
@@ -11620,31 +11378,70 @@ define(__m[35/*vs/editor/common/services/editorSimpleWorker*/], __M([0/*require*
     const MonacoEnvironment = self.MonacoEnvironment;
     const monacoBaseUrl = MonacoEnvironment && MonacoEnvironment.baseUrl ? MonacoEnvironment.baseUrl : '../../../';
     const trustedTypesPolicy = (typeof ((_a = self.trustedTypes) === null || _a === void 0 ? void 0 : _a.createPolicy) === 'function'
-        ? (_b = self.trustedTypes) === null || _b === void 0 ? void 0 : _b.createPolicy('amdLoader', { createScriptURL: value => value })
+        ? (_b = self.trustedTypes) === null || _b === void 0 ? void 0 : _b.createPolicy('amdLoader', {
+            createScriptURL: value => value,
+            createScript: (_, ...args) => {
+                // workaround a chrome issue not allowing to create new functions
+                // see https://github.com/w3c/webappsec-trusted-types/wiki/Trusted-Types-for-function-constructor
+                const fnArgs = args.slice(0, -1).join(',');
+                const fnBody = args.pop().toString();
+                const body = `(function anonymous(${fnArgs}) {\n${fnBody}\n})`;
+                return body;
+            }
+        })
         : undefined);
-    if (typeof self.define !== 'function' || !self.define.amd) {
-        let loaderSrc = monacoBaseUrl + 'vs/loader.js';
-        if (trustedTypesPolicy) {
-            loaderSrc = trustedTypesPolicy.createScriptURL(loaderSrc);
-        }
-        importScripts(loaderSrc);
+    function loadAMDLoader() {
+        return new Promise((resolve, reject) => {
+            if (typeof self.define === 'function' && self.define.amd) {
+                return resolve();
+            }
+            const loaderSrc = monacoBaseUrl + 'vs/loader.js';
+            const isCrossOrigin = (/^((http:)|(https:)|(file:))/.test(loaderSrc) && loaderSrc.substring(0, self.origin.length) !== self.origin);
+            if (!isCrossOrigin) {
+                // use `fetch` if possible because `importScripts`
+                // is synchronous and can lead to deadlocks on Safari
+                fetch(loaderSrc).then((response) => {
+                    if (response.status !== 200) {
+                        throw new Error(response.statusText);
+                    }
+                    return response.text();
+                }).then((text) => {
+                    text = `${text}\n//# sourceURL=${loaderSrc}`;
+                    const func = (trustedTypesPolicy
+                        ? self.eval(trustedTypesPolicy.createScript('', text))
+                        : new Function(text));
+                    func.call(self);
+                    resolve();
+                }).then(undefined, reject);
+                return;
+            }
+            if (trustedTypesPolicy) {
+                importScripts(trustedTypesPolicy.createScriptURL(loaderSrc));
+            }
+            else {
+                importScripts(loaderSrc);
+            }
+            resolve();
+        });
     }
-    require.config({
-        baseUrl: monacoBaseUrl,
-        catchError: true,
-        trustedTypesPolicy,
-    });
-    let loadCode = function (moduleId) {
-        require([moduleId], function (ws) {
-            setTimeout(function () {
-                let messageHandler = ws.create((msg, transfer) => {
-                    self.postMessage(msg, transfer);
-                }, null);
-                self.onmessage = (e) => messageHandler.onmessage(e.data);
-                while (beforeReadyMessages.length > 0) {
-                    self.onmessage(beforeReadyMessages.shift());
-                }
-            }, 0);
+    const loadCode = function (moduleId) {
+        loadAMDLoader().then(() => {
+            require.config({
+                baseUrl: monacoBaseUrl,
+                catchError: true,
+                trustedTypesPolicy,
+            });
+            require([moduleId], function (ws) {
+                setTimeout(function () {
+                    let messageHandler = ws.create((msg, transfer) => {
+                        self.postMessage(msg, transfer);
+                    }, null);
+                    self.onmessage = (e) => messageHandler.onmessage(e.data);
+                    while (beforeReadyMessages.length > 0) {
+                        self.onmessage(beforeReadyMessages.shift());
+                    }
+                }, 0);
+            });
         });
     };
     let isFirstMessage = true;

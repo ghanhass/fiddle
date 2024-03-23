@@ -22,10 +22,13 @@ export var OrthogonalEdge;
 })(OrthogonalEdge || (OrthogonalEdge = {}));
 let globalSize = 4;
 const onDidChangeGlobalSize = new Emitter();
+let globalHoverDelay = 300;
+const onDidChangeHoverDelay = new Emitter();
 export class Sash extends Disposable {
     constructor(container, layoutProvider, options) {
         super();
-        this.hoverDelayer = this._register(new Delayer(300));
+        this.hoverDelay = globalHoverDelay;
+        this.hoverDelayer = this._register(new Delayer(this.hoverDelay));
         this._state = 3 /* Enabled */;
         this._onDidEnablementChange = this._register(new Emitter());
         this.onDidEnablementChange = this._onDidEnablementChange.event;
@@ -54,7 +57,7 @@ export class Sash extends Disposable {
         this._register(domEvent(this.el, 'mouseenter')(() => Sash.onMouseEnter(this)));
         this._register(domEvent(this.el, 'mouseleave')(() => Sash.onMouseLeave(this)));
         this._register(Gesture.addTarget(this.el));
-        this._register(domEvent(this.el, EventType.Start)(this.onTouchStart, this));
+        this._register(domEvent(this.el, EventType.Start)(e => this.onTouchStart(e), this));
         if (typeof options.size === 'number') {
             this.size = options.size;
             if (options.orientation === 0 /* VERTICAL */) {
@@ -71,6 +74,7 @@ export class Sash extends Disposable {
                 this.layout();
             }));
         }
+        this._register(onDidChangeHoverDelay.event(delay => this.hoverDelay = delay));
         this.hidden = false;
         this.layoutProvider = layoutProvider;
         this.orthogonalStartSash = options.orthogonalStartSash;
@@ -270,7 +274,7 @@ export class Sash extends Disposable {
             sash.el.classList.add('hover');
         }
         else {
-            sash.hoverDelayer.trigger(() => sash.el.classList.add('hover'));
+            sash.hoverDelayer.trigger(() => sash.el.classList.add('hover'), sash.hoverDelay).then(undefined, () => { });
         }
         if (!fromLinkedSash && sash.linkedSash) {
             Sash.onMouseEnter(sash.linkedSash, true);
@@ -282,6 +286,9 @@ export class Sash extends Disposable {
         if (!fromLinkedSash && sash.linkedSash) {
             Sash.onMouseLeave(sash.linkedSash, true);
         }
+    }
+    clearSashHoverState() {
+        Sash.onMouseLeave(this);
     }
     layout() {
         if (this.orientation === 0 /* VERTICAL */) {

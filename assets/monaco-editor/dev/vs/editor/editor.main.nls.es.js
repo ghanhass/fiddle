@@ -1,6 +1,6 @@
 /*!-----------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
- * Version: 0.23.0(82e8ea39fc101d639262435542c7d43bc20d8aa2)
+ * Version: 0.24.0(89cdf8577cdd4881a366f9f7ef6abaa78453fd4b)
  * Released under the MIT license
  * https://github.com/microsoft/vscode/blob/main/LICENSE.txt
  *-----------------------------------------------------------*/
@@ -77,6 +77,7 @@ define("vs/editor/editor.main.nls.es", {
 	],
 	"vs/base/parts/quickinput/browser/quickInput": [
 		"Atrás",
+		"Presione \"Entrar\" para confirmar su entrada o \"Esc\" para cancelar",
 		"{0}/{1}",
 		"Escriba para restringir los resultados.",
 		"{0} resultados",
@@ -92,6 +93,7 @@ define("vs/editor/editor.main.nls.es", {
 	"vs/editor/browser/controller/coreCommands": [
 		"Anclar al final incluso cuando se vayan a líneas más largas",
 		"Anclar al final incluso cuando se vayan a líneas más largas",
+		"Cursores secundarios quitados",
 	],
 	"vs/editor/browser/controller/textAreaHandler": [
 		"editor",
@@ -177,8 +179,8 @@ define("vs/editor/editor.main.nls.es", {
 		"Controla si al copiar sin selección se copia la línea actual.",
 		"Controla si el cursor debe saltar para buscar coincidencias mientras se escribe.",
 		"Controla si la cadena de búsqueda del widget de búsqueda se inicializa desde la selección del editor.",
-		"No activar nunca Buscar en la selección automáticamente (predeterminado)",
-		"Activar siempre automáticamente Buscar en la selección",
+		"No activa nunca Buscar en selección automáticamente (predeterminado).",
+		"Activa siempre Buscar en selección automáticamente.",
 		"Active Buscar en la selección automáticamente cuando se seleccionen varias líneas de contenido.",
 		"Controla la condición para activar la búsqueda en la selección de forma automática.",
 		"Controla si el widget de búsqueda debe leer o modificar el Portapapeles de búsqueda compartido en macOS.",
@@ -242,7 +244,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Inserte la sugerencia y sobrescriba el texto a la derecha del cursor.",
 		"Controla si las palabras se sobrescriben al aceptar la finalización. Tenga en cuenta que esto depende de las extensiones que participan en esta característica.",
 		"Controla si el filtrado y la ordenación de sugerencias se tienen en cuenta para los errores ortográficos pequeños.",
-		"Controla si la ordenación de palabras mejora lo que aparece cerca del cursor.",
+		"Controla si la ordenación mejora las palabras que aparecen cerca del cursor.",
 		"Controla si las selecciones de sugerencias recordadas se comparten entre múltiples áreas de trabajo y ventanas (necesita \"#editor.suggestSelection#\").",
 		"Controla si un fragmento de código activo impide sugerencias rápidas.",
 		"Controla si mostrar u ocultar iconos en sugerencias.",
@@ -282,11 +284,13 @@ define("vs/editor/editor.main.nls.es", {
 		"Controla si se deben aceptar sugerencias en los caracteres de confirmación. Por ejemplo, en Javascript, el punto y coma (\";\") puede ser un carácter de confirmación que acepta una sugerencia y escribe ese carácter.",
 		"Aceptar solo una sugerencia con \"Entrar\" cuando realiza un cambio textual.",
 		"Controla si las sugerencias deben aceptarse con \"Entrar\", además de \"TAB\". Ayuda a evitar la ambigüedad entre insertar nuevas líneas o aceptar sugerencias.",
-		"Controla el número de líneas en el editor que puede leer un lector de pantalla. Advertencia: Esto puede afectar al rendimiento de números superiores al predeterminado.",
+		"Controla el número de líneas del editor que puede leer a la vez un lector de pantalla. Cuando se detecta un lector de pantalla, se establece 2000 automáticamente como valor predeterminado. Advertencia: En valores superiores al predeterminado, esto afecta al rendimiento.",
 		"Contenido del editor",
 		"Utilizar las configuraciones del lenguaje para determinar cuándo cerrar los corchetes automáticamente.",
 		"Cerrar automáticamente los corchetes cuando el cursor esté a la izquierda de un espacio en blanco.",
 		"Controla si el editor debe cerrar automáticamente los corchetes después de que el usuario agregue un corchete de apertura.",
+		"Quite los corchetes o las comillas de cierre adyacentes solo si se insertaron automáticamente.",
+		"Controla si el editor debe quitar los corchetes o las comillas de cierre adyacentes al eliminar.",
 		"Escriba en las comillas o los corchetes solo si se insertaron automáticamente.",
 		"Controla si el editor debe escribir entre comillas o corchetes.",
 		"Utilizar las configuraciones del lenguaje para determinar cuándo cerrar las comillas automáticamente. ",
@@ -302,7 +306,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Envolver con comillas, pero no con corchetes.",
 		"Envolver con corchetes, pero no con comillas.",
 		"Controla si el editor debe rodear automáticamente las selecciones al escribir comillas o corchetes.",
-		"Emule el comportamiento de selección de los caracteres de tabulación al usar espacios para la sangría. La selección se aplicará a las tabulaciones.",
+		"Emula el comportamiento de selección de los caracteres de tabulación al usar espacios para la sangría. La selección se aplicará a las tabulaciones.",
 		"Controla si el editor muestra CodeLens.",
 		"Controla la familia de fuentes para CodeLens.",
 		"Controla el tamaño de fuente de CodeLens en píxeles. Cuando se establece en \"0\", se usa el 90 % de \"#editor.fontSize#\".",
@@ -358,10 +362,10 @@ define("vs/editor/editor.main.nls.es", {
 		"Representar el número de la última línea cuando el archivo termina con un salto de línea.",
 		"Resalta el medianil y la línea actual.",
 		"Controla cómo debe representar el editor el resaltado de línea actual.",
-		"Controla si el editor debe representar el resaltado de la línea actual solo cuando el editor está enfocado",
+		"Controla si el editor debe representar el resaltado de la línea actual solo cuando el editor está enfocado.",
 		"Representa caracteres de espacio en blanco, excepto los espacios individuales entre palabras.",
 		"Represente los caracteres de espacio en blanco solo en el texto seleccionado.",
-		"Representar solo los caracteres de espacio en blanco al final",
+		"Representa solo los caracteres de espacio en blanco al final.",
 		"Controla la forma en que el editor debe representar los caracteres de espacio en blanco.",
 		"Controla si las selecciones deberían tener las esquinas redondeadas.",
 		"Controla el número de caracteres adicionales a partir del cual el editor se desplazará horizontalmente.",
@@ -544,6 +548,8 @@ define("vs/editor/editor.main.nls.es", {
 		"&&Copiar",
 		"Copiar",
 		"Copiar",
+		"Copiar como",
+		"Copiar como",
 		"&&Pegar",
 		"Pegar",
 		"Pegar",
@@ -653,6 +659,8 @@ define("vs/editor/editor.main.nls.es", {
 		"Cerrar todos los comentarios de bloque",
 		"Plegar todas las regiones",
 		"Desplegar Todas las Regiones",
+		"Plegar todas las regiones excepto las seleccionadas",
+		"Desplegar todas las regiones excepto las seleccionadas",
 		"Plegar todo",
 		"Desplegar todo",
 		"Nivel de plegamiento {0}",
@@ -746,6 +754,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Haga clic para mostrar {0} definiciones.",
 	],
 	"vs/editor/contrib/gotoSymbol/peek/referencesController": [
+		"Indica si está visible la inspección de referencias, como \"Inspección de referencias\" o \"Ver la definición sin salir\".",
 		"Cargando...",
 		"{0} ({1})",
 	],
@@ -770,6 +779,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Encontró {0} símbolos en {1} archivos",
 	],
 	"vs/editor/contrib/gotoSymbol/symbolNavigation": [
+		"Indica si hay ubicaciones de símbolos a las que se pueda navegar solo con el teclado.",
 		"Símbolo {0} de {1}, {2} para el siguiente",
 		"Símbolo {0} de {1}",
 	],
@@ -851,6 +861,8 @@ define("vs/editor/editor.main.nls.es", {
 		"No se puede editar en un editor de sólo lectura",
 	],
 	"vs/editor/contrib/multicursor/multicursor": [
+		"Cursor agregado: {0}",
+		"Cursores agregados: {0}",
 		"Agregar cursor arriba",
 		"&&Agregar cursor arriba",
 		"Agregar cursor debajo",
@@ -878,6 +890,7 @@ define("vs/editor/editor.main.nls.es", {
 		"{0}, sugerencia",
 	],
 	"vs/editor/contrib/peekView/peekView": [
+		"Indica si el editor de código actual está incrustado en la inspección.",
 		"Cerrar",
 		"Color de fondo del área de título de la vista de inspección.",
 		"Color del título de la vista de inpección.",
@@ -896,7 +909,7 @@ define("vs/editor/editor.main.nls.es", {
 	],
 	"vs/editor/contrib/quickAccess/gotoLineQuickAccess": [
 		"Abra primero un editor de texto para ir a una línea.",
-		"Vaya a la línea {0} y a la columna {1}.",
+		"Vaya a la línea {0} y al carácter {1}.",
 		"Ir a la línea {0}.",
 		"Línea actual: {0}, Carácter: {1}. Escriba un número de línea entre 1 y {2} a los que navegar.",
 		"Línea actual: {0}, Carácter: {1}. Escriba un número de línea al que navegar.",
@@ -948,6 +961,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Activar/desactivar la capacidad de previsualizar los cambios antes de cambiar el nombre",
 	],
 	"vs/editor/contrib/rename/renameInputField": [
+		"Indica si el widget de cambio de nombre de entrada está visible.",
 		"Cambie el nombre de la entrada. Escriba el nuevo nombre y presione Entrar para confirmar.",
 		"{0} para cambiar de nombre, {1} para obtener una vista previa",
 	],
@@ -956,6 +970,11 @@ define("vs/editor/editor.main.nls.es", {
 		"&&Expandir selección",
 		"Reducir la selección",
 		"&&Reducir selección",
+	],
+	"vs/editor/contrib/snippet/snippetController2": [
+		"Indica si el editor actual está en modo de fragmentos de código.",
+		"Indica si hay una tabulación siguiente cuando se está en modo de fragmentos de código.",
+		"Si hay una tabulación anterior cuando se está en modo de fragmentos de código.",
 	],
 	"vs/editor/contrib/snippet/snippetVariables": [
 		"Domingo",
@@ -996,6 +1015,16 @@ define("vs/editor/editor.main.nls.es", {
 		"Oct",
 		"Nov",
 		"Dic",
+	],
+	"vs/editor/contrib/suggest/suggest": [
+		"Indica si las sugerencias están visibles.",
+		"Indica si los detalles de las sugerencias están visibles.",
+		"Indica si hay varias sugerencias para elegir.",
+		"Indica si la inserción de la sugerencia actual genera un cambio o si ya se ha escrito todo.",
+		"Indica si se insertan sugerencias al presionar Entrar.",
+		"Indica si la sugerencia actual tiene el comportamiento de inserción y reemplazo.",
+		"Indica si el comportamiento predeterminado es insertar o reemplazar.",
+		"Indica si la sugerencia actual admite la resolución de más detalles.",
 	],
 	"vs/editor/contrib/suggest/suggestController": [
 		"Aceptando \"{0}\" ediciones adicionales de {1} realizadas",
@@ -1096,6 +1125,7 @@ define("vs/editor/editor.main.nls.es", {
 		"Eliminar palabra",
 	],
 	"vs/platform/actions/browser/menuEntryActionViewItem": [
+		"{0} ({1})",
 		"{0} ({1})",
 	],
 	"vs/platform/configuration/common/configurationRegistry": [
@@ -1206,9 +1236,12 @@ define("vs/editor/editor.main.nls.es", {
 		"Color de fondo del selector rápido. El widget del selector rápido es el contenedor para selectores como la paleta de comandos.",
 		"Color de primer plano del selector rápido. El widget del selector rápido es el contenedor para selectores como la paleta de comandos.",
 		"Color de fondo del título del selector rápido. El widget del selector rápido es el contenedor para selectores como la paleta de comandos.",
-		"Color de fondo del selector rápido para el elemento con el foco.",
 		"Selector de color rápido para la agrupación de etiquetas.",
 		"Selector de color rápido para la agrupación de bordes.",
+		"Keybinding label background color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label foreground color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border color. The keybinding label is used to represent a keyboard shortcut.",
+		"Keybinding label border bottom color. The keybinding label is used to represent a keyboard shortcut.",
 		"Color de la selección del editor.",
 		"Color del texto seleccionado para alto contraste.",
 		"Color de la selección en un editor inactivo. El color no debe ser opaco para no ocultar decoraciones subyacentes.",
@@ -1254,6 +1287,8 @@ define("vs/editor/editor.main.nls.es", {
 		"Color de contorno del widget de filtro de tipo en listas y árboles, cuando no hay coincidencias.",
 		"Color de trazo de árbol para las guías de sangría.",
 		"Color de trazo de árbol para las guías de sangría.",
+		"Use quickInputList.focusBackground en su lugar.",
+		"Color de fondo del selector rápido para el elemento con el foco.",
 		"Color del borde de los menús.",
 		"Color de primer plano de los elementos de menú.",
 		"Color de fondo de los elementos de menú.",

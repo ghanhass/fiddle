@@ -175,7 +175,7 @@ export class ListView {
         this.domNode.appendChild(this.scrollableElement.getDomNode());
         container.appendChild(this.domNode);
         this.scrollableElement.onScroll(this.onScroll, this, this.disposables);
-        domEvent(this.rowsContainer, TouchEventType.Change)(this.onTouchChange, this, this.disposables);
+        domEvent(this.rowsContainer, TouchEventType.Change)(e => this.onTouchChange(e), this, this.disposables);
         // Prevent the monaco-scrollable-element from scrolling
         // https://github.com/microsoft/vscode/issues/44181
         domEvent(this.scrollableElement.getDomNode(), 'scroll')(e => e.target.scrollTop = 0, null, this.disposables);
@@ -217,6 +217,7 @@ export class ListView {
     updateOptions(options) {
         if (options.additionalScrollHeight !== undefined) {
             this.additionalScrollHeight = options.additionalScrollHeight;
+            this.scrollableElement.setScrollDimensions({ scrollHeight: this.scrollHeight });
         }
         if (options.smoothScrolling !== undefined) {
             this.scrollable.setSmoothScrollDuration(options.smoothScrolling ? 125 : 0);
@@ -406,11 +407,11 @@ export class ListView {
             if (this.supportDynamicHeights) {
                 this._rerender(this.scrollTop, this.renderHeight);
             }
-            if (this.horizontalScrolling) {
-                this.scrollableElement.setScrollDimensions({
-                    width: typeof width === 'number' ? width : getContentWidth(this.domNode)
-                });
-            }
+        }
+        if (this.horizontalScrolling) {
+            this.scrollableElement.setScrollDimensions({
+                width: typeof width === 'number' ? width : getContentWidth(this.domNode)
+            });
         }
     }
     // Render

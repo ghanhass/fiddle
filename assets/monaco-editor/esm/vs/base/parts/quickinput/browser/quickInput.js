@@ -12,7 +12,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import './media/quickInput.css';
-import { NO_KEY_MODS, ItemActivation } from '../common/quickInput.js';
+import { NO_KEY_MODS, ItemActivation, QuickInputHideReason } from '../common/quickInput.js';
 import * as dom from '../../../browser/dom.js';
 import { CancellationToken } from '../../../common/cancellation.js';
 import { QuickInputList, QuickInputListFocus } from './quickInputList.js';
@@ -49,6 +49,8 @@ class QuickInput extends Disposable {
         this._busy = false;
         this._ignoreFocusOut = false;
         this._buttons = [];
+        this.noValidationMessage = QuickInput.noPromptMessage;
+        this._severity = Severity.Ignore;
         this.buttonsUpdated = false;
         this.onDidTriggerButtonEmitter = this._register(new Emitter());
         this.onDidHideEmitter = this._register(new Emitter());
@@ -120,6 +122,20 @@ class QuickInput extends Disposable {
         this.buttonsUpdated = true;
         this.update();
     }
+    get validationMessage() {
+        return this._validationMessage;
+    }
+    set validationMessage(validationMessage) {
+        this._validationMessage = validationMessage;
+        this.update();
+    }
+    get severity() {
+        return this._severity;
+    }
+    set severity(severity) {
+        this._severity = severity;
+        this.update();
+    }
     show() {
         if (this.visible) {
             return;
@@ -139,10 +155,10 @@ class QuickInput extends Disposable {
         }
         this.ui.hide();
     }
-    didHide() {
+    didHide(reason = QuickInputHideReason.Other) {
         this.visible = false;
         this.visibleDisposables.clear();
-        this.onDidHideEmitter.fire();
+        this.onDidHideEmitter.fire({ reason });
     }
     update() {
         if (!this.visible) {
@@ -199,6 +215,15 @@ class QuickInput extends Disposable {
         this.ui.ignoreFocusOut = this.ignoreFocusOut;
         this.ui.setEnabled(this.enabled);
         this.ui.setContextKey(this.contextKey);
+        const validationMessage = this.validationMessage || this.noValidationMessage;
+        if (this._lastValidationMessage !== validationMessage) {
+            this._lastValidationMessage = validationMessage;
+            dom.reset(this.ui.message, ...renderLabelWithIcons(escape(validationMessage)));
+        }
+        if (this._lastSeverity !== this.severity) {
+            this._lastSeverity = this.severity;
+            this.showMessageDecoration(this.severity);
+        }
     }
     getTitle() {
         if (this.title && this.step) {
@@ -226,7 +251,7 @@ class QuickInput extends Disposable {
     }
     showMessageDecoration(severity) {
         this.ui.inputBox.showDecoration(severity);
-        if (severity === Severity.Error) {
+        if (severity !== Severity.Ignore) {
             const styles = this.ui.inputBox.stylesForType(severity);
             this.ui.message.style.color = styles.foreground ? `${styles.foreground}` : '';
             this.ui.message.style.backgroundColor = styles.background ? `${styles.background}` : '';
@@ -246,6 +271,7 @@ class QuickInput extends Disposable {
         super.dispose();
     }
 }
+QuickInput.noPromptMessage = localize('inputModeEntry', "Press 'Enter' to confirm your input or 'Escape' to cancel");
 class QuickPick extends QuickInput {
     constructor() {
         super(...arguments);
@@ -401,13 +427,6 @@ class QuickPick extends QuickInput {
     set valueSelection(valueSelection) {
         this._valueSelection = valueSelection;
         this.valueSelectionUpdated = true;
-        this.update();
-    }
-    get validationMessage() {
-        return this._validationMessage;
-    }
-    set validationMessage(validationMessage) {
-        this._validationMessage = validationMessage;
         this.update();
     }
     get customButton() {
@@ -632,17 +651,7 @@ class QuickPick extends QuickInput {
         if (!this.visible) {
             return;
         }
-        let hideInput = false;
-        let inputShownJustForScreenReader = false;
-        if (!!this._hideInput && this._items.length > 0) {
-            if (this.ui.isScreenReaderOptimized()) {
-                // Always show input if screen reader attached https://github.com/microsoft/vscode/issues/94360
-                inputShownJustForScreenReader = true;
-            }
-            else {
-                hideInput = true;
-            }
-        }
+        const hideInput = !!this._hideInput && this._items.length > 0;
         this.ui.container.classList.toggle('hidden-input', hideInput && !this.description);
         const visibilities = {
             title: !!this.title || !!this.step || !!this.buttons.length,
@@ -670,14 +679,9 @@ class QuickPick extends QuickInput {
         if (this.ui.inputBox.placeholder !== (this.placeholder || '')) {
             this.ui.inputBox.placeholder = (this.placeholder || '');
         }
-        if (inputShownJustForScreenReader) {
-            this.ui.inputBox.ariaLabel = '';
-        }
-        else {
-            const ariaLabel = this.ariaLabel || this.placeholder || QuickPick.DEFAULT_ARIA_LABEL;
-            if (this.ui.inputBox.ariaLabel !== ariaLabel) {
-                this.ui.inputBox.ariaLabel = ariaLabel;
-            }
+        const ariaLabel = this.ariaLabel || this.placeholder || QuickPick.DEFAULT_ARIA_LABEL;
+        if (this.ui.inputBox.ariaLabel !== ariaLabel) {
+            this.ui.inputBox.ariaLabel = ariaLabel;
         }
         this.ui.list.matchOnDescription = this.matchOnDescription;
         this.ui.list.matchOnDetail = this.matchOnDetail;
@@ -735,12 +739,6 @@ class QuickPick extends QuickInput {
             if (this.selectedItemsToConfirm === this._selectedItems) {
                 this.selectedItemsToConfirm = null;
             }
-        }
-        const validationMessage = this.validationMessage || '';
-        if (this._lastValidationMessage !== validationMessage) {
-            this._lastValidationMessage = validationMessage;
-            dom.reset(this.ui.message, ...renderLabelWithIcons(escape(validationMessage)));
-            this.showMessageDecoration(this.validationMessage ? Severity.Error : Severity.Ignore);
         }
         this.ui.customButton.label = this.customLabel || '';
         this.ui.customButton.element.title = this.customHover || '';
@@ -838,8 +836,6 @@ export class QuickInputController extends Disposable {
             this.onDidCustomEmitter.fire();
         }));
         const message = dom.append(extraContainer, $(`#${this.idPrefix}message.quick-input-message`));
-        const progressBar = new ProgressBar(container);
-        progressBar.getContainer().classList.add('quick-input-progress');
         const list = this._register(new QuickInputList(container, this.idPrefix + 'list', this.options));
         this._register(list.onChangedAllVisibleChecked(checked => {
             checkAll.checked = checked;
@@ -864,6 +860,8 @@ export class QuickInputController extends Disposable {
                 this.getUI().inputBox.setAttribute('aria-activedescendant', this.getUI().list.getActiveDescendant() || '');
             }
         }));
+        const progressBar = new ProgressBar(container);
+        progressBar.getContainer().classList.add('quick-input-progress');
         const focusTracker = dom.trackFocus(container);
         this._register(focusTracker);
         this._register(dom.addDisposableListener(container, dom.EventType.FOCUS, e => {
@@ -871,7 +869,7 @@ export class QuickInputController extends Disposable {
         }, true));
         this._register(focusTracker.onDidBlur(() => {
             if (!this.getUI().ignoreFocusOut && !this.options.ignoreFocusOut()) {
-                this.hide();
+                this.hide(QuickInputHideReason.Blur);
             }
             this.previousFocusElement = undefined;
         }));
@@ -887,7 +885,7 @@ export class QuickInputController extends Disposable {
                     break;
                 case 9 /* Escape */:
                     dom.EventHelper.stop(e, true);
-                    this.hide();
+                    this.hide(QuickInputHideReason.Gesture);
                     break;
                 case 2 /* Tab */:
                     if (!event.altKey && !event.ctrlKey && !event.metaKey) {
@@ -935,8 +933,8 @@ export class QuickInputController extends Disposable {
             message,
             customButtonContainer,
             customButton,
-            progressBar,
             list,
+            progressBar,
             onDidAccept: this.onDidAcceptEmitter.event,
             onDidCustom: this.onDidCustomEmitter.event,
             onDidTriggerButton: this.onDidTriggerButtonEmitter.event,
@@ -1002,8 +1000,12 @@ export class QuickInputController extends Disposable {
                         const index = input.items.indexOf(event.item);
                         if (index !== -1) {
                             const items = input.items.slice();
-                            items.splice(index, 1);
+                            const removed = items.splice(index, 1);
+                            const activeItems = input.activeItems.filter((ai) => ai !== removed[0]);
                             input.items = items;
+                            if (activeItems) {
+                                input.activeItems = activeItems;
+                            }
                         }
                     } }))),
                 input.onDidChangeValue(value => {
@@ -1019,6 +1021,7 @@ export class QuickInputController extends Disposable {
                     resolve(undefined);
                 }),
             ];
+            input.title = options.title;
             input.canSelectMany = !!options.canPickMany;
             input.placeholder = options.placeHolder;
             input.ignoreFocusOut = !!options.ignoreFocusLost;
@@ -1139,7 +1142,7 @@ export class QuickInputController extends Disposable {
             this.getUI().list.enabled = enabled;
         }
     }
-    hide() {
+    hide(reason) {
         var _a;
         const controller = this.controller;
         if (controller) {
@@ -1156,7 +1159,7 @@ export class QuickInputController extends Disposable {
                     this.options.returnFocus();
                 }
             }
-            controller.didHide();
+            controller.didHide(reason);
         }
     }
     layout(dimension, titleBarOffset) {
@@ -1199,6 +1202,30 @@ export class QuickInputController extends Disposable {
             }
             if (this.styles.list.pickerGroupForeground) {
                 content.push(`.quick-input-list .quick-input-list-separator { color:  ${this.styles.list.pickerGroupForeground}; }`);
+            }
+            if (this.styles.keybindingLabel.keybindingLabelBackground ||
+                this.styles.keybindingLabel.keybindingLabelBorder ||
+                this.styles.keybindingLabel.keybindingLabelBottomBorder ||
+                this.styles.keybindingLabel.keybindingLabelShadow ||
+                this.styles.keybindingLabel.keybindingLabelForeground) {
+                content.push('.quick-input-list .monaco-keybinding > .monaco-keybinding-key {');
+                if (this.styles.keybindingLabel.keybindingLabelBackground) {
+                    content.push(`background-color: ${this.styles.keybindingLabel.keybindingLabelBackground};`);
+                }
+                if (this.styles.keybindingLabel.keybindingLabelBorder) {
+                    // Order matters here. `border-color` must come before `border-bottom-color`.
+                    content.push(`border-color: ${this.styles.keybindingLabel.keybindingLabelBorder};`);
+                }
+                if (this.styles.keybindingLabel.keybindingLabelBottomBorder) {
+                    content.push(`border-bottom-color: ${this.styles.keybindingLabel.keybindingLabelBottomBorder};`);
+                }
+                if (this.styles.keybindingLabel.keybindingLabelShadow) {
+                    content.push(`box-shadow: inset 0 -1px 0 ${this.styles.keybindingLabel.keybindingLabelShadow};`);
+                }
+                if (this.styles.keybindingLabel.keybindingLabelForeground) {
+                    content.push(`color: ${this.styles.keybindingLabel.keybindingLabelForeground};`);
+                }
+                content.push('}');
             }
             const newStyles = content.join('\n');
             if (newStyles !== this.ui.styleSheet.textContent) {

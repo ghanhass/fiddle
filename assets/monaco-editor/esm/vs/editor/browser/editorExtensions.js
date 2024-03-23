@@ -15,6 +15,7 @@ import { KeybindingsRegistry } from '../../platform/keybinding/common/keybinding
 import { Registry } from '../../platform/registry/common/platform.js';
 import { ITelemetryService } from '../../platform/telemetry/common/telemetry.js';
 import { withNullAsUndefined, assertType } from '../../base/common/types.js';
+import { ILogService } from '../../platform/log/common/log.js';
 export class Command {
     constructor(opts) {
         this.id = opts.id;
@@ -84,13 +85,13 @@ export class MultiCommand extends Command {
     /**
      * A higher priority gets to be looked at first
      */
-    addImplementation(priority, implementation) {
-        this._implementations.push([priority, implementation]);
-        this._implementations.sort((a, b) => b[0] - a[0]);
+    addImplementation(priority, name, implementation) {
+        this._implementations.push({ priority, name, implementation });
+        this._implementations.sort((a, b) => b.priority - a.priority);
         return {
             dispose: () => {
                 for (let i = 0; i < this._implementations.length; i++) {
-                    if (this._implementations[i][1] === implementation) {
+                    if (this._implementations[i].implementation === implementation) {
                         this._implementations.splice(i, 1);
                         return;
                     }
@@ -99,9 +100,11 @@ export class MultiCommand extends Command {
         };
     }
     runCommand(accessor, args) {
+        const logService = accessor.get(ILogService);
         for (const impl of this._implementations) {
-            const result = impl[1](accessor, args);
+            const result = impl.implementation(accessor, args);
             if (result) {
+                logService.trace(`Command '${this.id}' was handled by '${impl.name}'.`);
                 if (typeof result === 'boolean') {
                     return;
                 }
@@ -229,7 +232,7 @@ export class MultiEditorAction extends EditorAction {
     }
     run(accessor, editor, args) {
         for (const impl of this._implementations) {
-            const result = impl[1](accessor, args);
+            const result = impl[1](accessor, editor, args);
             if (result) {
                 if (typeof result === 'boolean') {
                     return;

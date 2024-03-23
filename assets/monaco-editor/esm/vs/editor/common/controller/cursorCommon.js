@@ -16,25 +16,26 @@ export class CursorConfiguration {
     constructor(languageIdentifier, modelOptions, configuration) {
         this._languageIdentifier = languageIdentifier;
         const options = configuration.options;
-        const layoutInfo = options.get(124 /* layoutInfo */);
-        this.readOnly = options.get(75 /* readOnly */);
+        const layoutInfo = options.get(127 /* layoutInfo */);
+        this.readOnly = options.get(77 /* readOnly */);
         this.tabSize = modelOptions.tabSize;
         this.indentSize = modelOptions.indentSize;
         this.insertSpaces = modelOptions.insertSpaces;
-        this.stickyTabStops = options.get(99 /* stickyTabStops */);
-        this.lineHeight = options.get(53 /* lineHeight */);
+        this.stickyTabStops = options.get(101 /* stickyTabStops */);
+        this.lineHeight = options.get(55 /* lineHeight */);
         this.pageSize = Math.max(1, Math.floor(layoutInfo.height / this.lineHeight) - 2);
-        this.useTabStops = options.get(109 /* useTabStops */);
-        this.wordSeparators = options.get(110 /* wordSeparators */);
-        this.emptySelectionClipboard = options.get(28 /* emptySelectionClipboard */);
-        this.copyWithSyntaxHighlighting = options.get(18 /* copyWithSyntaxHighlighting */);
-        this.multiCursorMergeOverlapping = options.get(63 /* multiCursorMergeOverlapping */);
-        this.multiCursorPaste = options.get(65 /* multiCursorPaste */);
+        this.useTabStops = options.get(112 /* useTabStops */);
+        this.wordSeparators = options.get(113 /* wordSeparators */);
+        this.emptySelectionClipboard = options.get(30 /* emptySelectionClipboard */);
+        this.copyWithSyntaxHighlighting = options.get(19 /* copyWithSyntaxHighlighting */);
+        this.multiCursorMergeOverlapping = options.get(65 /* multiCursorMergeOverlapping */);
+        this.multiCursorPaste = options.get(67 /* multiCursorPaste */);
         this.autoClosingBrackets = options.get(5 /* autoClosingBrackets */);
-        this.autoClosingQuotes = options.get(7 /* autoClosingQuotes */);
-        this.autoClosingOvertype = options.get(6 /* autoClosingOvertype */);
-        this.autoSurround = options.get(10 /* autoSurround */);
-        this.autoIndent = options.get(8 /* autoIndent */);
+        this.autoClosingQuotes = options.get(8 /* autoClosingQuotes */);
+        this.autoClosingDelete = options.get(6 /* autoClosingDelete */);
+        this.autoClosingOvertype = options.get(7 /* autoClosingOvertype */);
+        this.autoSurround = options.get(11 /* autoSurround */);
+        this.autoIndent = options.get(9 /* autoIndent */);
         this.surroundingPairs = {};
         this._electricChars = null;
         this.shouldAutoCloseBefore = {
@@ -50,18 +51,19 @@ export class CursorConfiguration {
         }
     }
     static shouldRecreate(e) {
-        return (e.hasChanged(124 /* layoutInfo */)
-            || e.hasChanged(110 /* wordSeparators */)
-            || e.hasChanged(28 /* emptySelectionClipboard */)
-            || e.hasChanged(63 /* multiCursorMergeOverlapping */)
-            || e.hasChanged(65 /* multiCursorPaste */)
+        return (e.hasChanged(127 /* layoutInfo */)
+            || e.hasChanged(113 /* wordSeparators */)
+            || e.hasChanged(30 /* emptySelectionClipboard */)
+            || e.hasChanged(65 /* multiCursorMergeOverlapping */)
+            || e.hasChanged(67 /* multiCursorPaste */)
             || e.hasChanged(5 /* autoClosingBrackets */)
-            || e.hasChanged(7 /* autoClosingQuotes */)
-            || e.hasChanged(6 /* autoClosingOvertype */)
-            || e.hasChanged(10 /* autoSurround */)
-            || e.hasChanged(109 /* useTabStops */)
-            || e.hasChanged(53 /* lineHeight */)
-            || e.hasChanged(75 /* readOnly */));
+            || e.hasChanged(8 /* autoClosingQuotes */)
+            || e.hasChanged(6 /* autoClosingDelete */)
+            || e.hasChanged(7 /* autoClosingOvertype */)
+            || e.hasChanged(11 /* autoSurround */)
+            || e.hasChanged(112 /* useTabStops */)
+            || e.hasChanged(55 /* lineHeight */)
+            || e.hasChanged(77 /* readOnly */));
     }
     get electricChars() {
         if (!this._electricChars) {
@@ -348,13 +350,13 @@ export class CursorColumns {
      * ATTENTION: This works with 0-based columns (as opposed to the regular 1-based columns)
      */
     static prevRenderTabStop(column, tabSize) {
-        return column - 1 - (column - 1) % tabSize;
+        return Math.max(0, column - 1 - (column - 1) % tabSize);
     }
     /**
      * ATTENTION: This works with 0-based columns (as opposed to the regular 1-based columns)
      */
     static prevIndentTabStop(column, indentSize) {
-        return column - 1 - (column - 1) % indentSize;
+        return Math.max(0, column - 1 - (column - 1) % indentSize);
     }
 }
 export function isQuote(ch) {

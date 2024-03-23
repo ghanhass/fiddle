@@ -14,7 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 import { ILayoutService } from '../../layout/browser/layoutService.js';
 import { IInstantiationService } from '../../instantiation/common/instantiation.js';
 import { IThemeService, Themable } from '../../theme/common/themeService.js';
-import { inputBackground, inputForeground, inputBorder, inputValidationInfoBackground, inputValidationInfoForeground, inputValidationInfoBorder, inputValidationWarningBackground, inputValidationWarningForeground, inputValidationWarningBorder, inputValidationErrorBackground, inputValidationErrorForeground, inputValidationErrorBorder, badgeBackground, badgeForeground, contrastBorder, buttonForeground, buttonBackground, buttonHoverBackground, progressBarBackground, widgetShadow, listFocusForeground, activeContrastBorder, pickerGroupBorder, pickerGroupForeground, quickInputForeground, quickInputBackground, quickInputTitleBackground, quickInputListFocusBackground } from '../../theme/common/colorRegistry.js';
+import { inputBackground, inputForeground, inputBorder, inputValidationInfoBackground, inputValidationInfoForeground, inputValidationInfoBorder, inputValidationWarningBackground, inputValidationWarningForeground, inputValidationWarningBorder, inputValidationErrorBackground, inputValidationErrorForeground, inputValidationErrorBorder, badgeBackground, badgeForeground, contrastBorder, buttonForeground, buttonBackground, buttonHoverBackground, progressBarBackground, widgetShadow, listFocusForeground, activeContrastBorder, pickerGroupBorder, pickerGroupForeground, quickInputForeground, quickInputBackground, quickInputTitleBackground, quickInputListFocusBackground, keybindingLabelBackground, keybindingLabelForeground, keybindingLabelBorder, keybindingLabelBottomBorder } from '../../theme/common/colorRegistry.js';
 import { CancellationToken } from '../../../base/common/cancellation.js';
 import { computeStyles } from '../../theme/common/styler.js';
 import { IContextKeyService, RawContextKey } from '../../contextkey/common/contextkey.js';
@@ -135,6 +135,13 @@ let QuickInputService = class QuickInputService extends Themable {
             }),
             progressBar: computeStyles(this.theme, {
                 progressBarBackground
+            }),
+            keybindingLabel: computeStyles(this.theme, {
+                keybindingLabelBackground,
+                keybindingLabelForeground,
+                keybindingLabelBorder,
+                keybindingLabelBottomBorder,
+                keybindingLabelShadow: widgetShadow
             }),
             list: computeStyles(this.theme, {
                 listBackground: quickInputBackground,
