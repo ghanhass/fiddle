@@ -94,3 +94,5 @@ body{
     color: #d4d4d4;
 }
 /*END hassoon's css library*/
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

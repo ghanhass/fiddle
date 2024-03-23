@@ -143,6 +143,16 @@ export class MainComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    (window as any).PayPal.Donation.Button({
+      env:'production',
+      hosted_button_id:'V8U6U69Y6BLQ6',
+      image: {
+      src:'https://pics.paypal.com/00/s/ZGFkMWU1YzMtOGFiOS00OGFhLWFjMjEtMDkzMWU4YWE4M2Vm/file.PNG',
+      alt:'Donate with PayPal button',
+      title:'PayPal - The safer, easier way to pay online!',
+      }
+      }).render('#donate-button');
+    //////////
     let self = this;
     this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;

@@ -49,21 +49,9 @@
       </div>
   
       <div class="paypal-btn-container">
-        <ul class="donations-menu" [ngClass]="{'shown': isDonationsListShown}">
-          <li (click)="selectDonation(0)">
-            <div><span>5</span><span>€</span></div>
-          </li>
-          <li (click)="selectDonation(1)">
-            <div><span>10</span><span>€</span></div>
-          </li>
-          <li (click)="selectDonation(2)">
-            <div><span>20</span><span>€</span></div>
-          </li>
-          <li (click)="selectDonation(3)">
-            <div><span>50</span><span>€</span></div>
-          </li>
-        </ul>
-        <button class="btn paypal-btn" (click)="toggleDonationMenu()" [ngClass]="{'on': isDonationsListShown, 'off': !isDonationsListShown}"><img class="paypal-icon" src="assets/paypal-icon.png"><i class="fa fa-sort-desc" *ngIf="!isDonationsListShown" aria-hidden="true"></i><i *ngIf="isDonationsListShown" class="fa fa-sort-asc" aria-hidden="true"></i></button>
+        <div id="donate-button-container">
+          <div id="donate-button" class="btn"></div>
+        </div>       
       </div>
   
       <button class="ressources-code-btn btn" (click)="ressouresBtnClick()">

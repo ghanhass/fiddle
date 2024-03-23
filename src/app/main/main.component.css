@@ -359,13 +359,15 @@ as-split-area.as-split-area-iframe.is-horizontal {
     position: relative;
 }
 
-.paypal-btn-container .btn.paypal-btn {
+.paypal-btn-container {
+    height: 30px;
+}
+
+.paypal-btn-container #donate-button {
     position: relative;
-    padding-left: 30px;
-    min-height: 30px;
-    padding-left: 25px;
     font-size: 14px;
-    padding-right:4px;
+    width: 35px;
+    height: 28px;
 }
 
 i.fa.fa-sort-desc {
@@ -385,14 +387,12 @@ i.fa.fa-sort-asc {
     bottom: 0px;
 }
 
-.paypal-btn-container .btn.paypal-btn img.paypal-icon {
+::ng-deep .paypal-btn-container #donate-button img {
     position: absolute;
-    left: 1px;
-    width: 22px;
-    max-height: 100%;
-    display: block;
-    top: 50%;
-    transform: translateY(-50%);
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    top: 0;
 }
 
 .paypal-btn-container .btn.paypal-btn button.layouts-btn {
