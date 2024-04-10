@@ -541,20 +541,20 @@ export class MainComponent implements AfterViewInit {
 
     //console.log("savedMainContainerSize = ", savedMainContainerSize);
 
-    if(savedIframeResizeValue > currentMainContainerSize - 12 || savedIframeResizeValue == (savedMainContainerSize - 12)){
+    if(savedIframeResizeValue > currentMainContainerSize - 10 || savedIframeResizeValue == (savedMainContainerSize - 10)){
       //console.log("aaa");
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }
     else if(savedIframeResizeValue < 0){
       //console.log("bbb");
-      this.emptyArea_1_Size = (currentMainContainerSize / 2) - 6;
-      this.emptyArea_2_Size = (currentMainContainerSize / 2) - 6;
+      this.emptyArea_1_Size = (currentMainContainerSize / 2) - 5;
+      this.emptyArea_2_Size = (currentMainContainerSize / 2) - 5;
     }
     else{
       //console.log("ccc");
-      this.emptyArea_1_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
-      this.emptyArea_2_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 6;
+      this.emptyArea_1_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 5;
+      this.emptyArea_2_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 5;
     }
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
@@ -855,7 +855,7 @@ export class MainComponent implements AfterViewInit {
     if(this.layout == 1 || this.layout == 3){
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
-      this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
+      this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
     }
     else if(this.layout == 2){
       this.splitComponentOuter.setVisibleAreaSizes([300, "*"]);
@@ -881,7 +881,7 @@ export class MainComponent implements AfterViewInit {
     else{
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
-      this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
+      this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
     }
     this.calculateIframeSize();
   }
@@ -1227,7 +1227,7 @@ export class MainComponent implements AfterViewInit {
    */
   reAdaptIframeResizeValue(oldMainContainerWidthOrHeight: number, newMainContainerWidthOrHeight: number, iframeSize: number){
     //console.log("oldMainContainerWidthOrHeight = ", oldMainContainerWidthOrHeight);
-    //console.log("iframeSize with gutters = ", iframeSize + 12);
+    //console.log("iframeSize with gutters = ", iframeSize + 10);
     //console.log("_____________________________");
     let sizeDiff = newMainContainerWidthOrHeight - oldMainContainerWidthOrHeight;
     let newEmptyAreaSize = this.emptyArea_1_Size + (sizeDiff / 2);
@@ -1237,9 +1237,9 @@ export class MainComponent implements AfterViewInit {
           this.emptyArea_1_Size = 0;
           this.emptyArea_2_Size = 0;
         }
-        else if (newEmptyAreaSize > newMainContainerWidthOrHeight / 2 - 6){
-          this.emptyArea_1_Size = newMainContainerWidthOrHeight / 2 - 6;
-          this.emptyArea_2_Size = newMainContainerWidthOrHeight / 2 - 6;
+        else if (newEmptyAreaSize > newMainContainerWidthOrHeight / 2 - 5){
+          this.emptyArea_1_Size = newMainContainerWidthOrHeight / 2 - 5;
+          this.emptyArea_2_Size = newMainContainerWidthOrHeight / 2 - 5;
         }
         else{
           this.emptyArea_1_Size = newEmptyAreaSize;
@@ -1313,10 +1313,10 @@ export class MainComponent implements AfterViewInit {
     if(param == "save"){//save ?
       if(window.innerWidth <= 767 || window.innerHeight <= 580 || this.mainService.iframeResizeValue === undefined){
         if(this.layout == 1 || this.layout == 3){
-          this.mainService.iframeResizeValue = this.mainContainerHeight - 12;
+          this.mainService.iframeResizeValue = this.mainContainerHeight - 10;
         }
         else if(this.layout == 2 || this.layout == 4){
-          this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
+          this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
         } 
       }
       this.mainService.scheduledRunFiddle = true;
@@ -1438,7 +1438,7 @@ export class MainComponent implements AfterViewInit {
       else if(this.layout == 2 || this.layout == 4){
         size = this.mainContainerWidth;
       }
-      return size - this.emptyArea_2_Size * 2 - 12 + 'px';
+      return size - this.emptyArea_2_Size * 2 - 10 + 'px';
         
     }
     else return "0px";
@@ -1508,8 +1508,8 @@ export class MainComponent implements AfterViewInit {
             if(emptyArea1_height < 0){
               emptyArea1_height = 0;
             }
-            else if(emptyArea1_height > mainContainer.offsetHeight / 2 - 6){
-              emptyArea1_height = mainContainer.offsetHeight / 2 - 6;
+            else if(emptyArea1_height > mainContainer.offsetHeight / 2 - 5){
+              emptyArea1_height = mainContainer.offsetHeight / 2 - 5;
             }
             this.emptyArea_1_Size = emptyArea1_height;
             this.emptyArea_2_Size = emptyArea1_height;
@@ -1520,8 +1520,8 @@ export class MainComponent implements AfterViewInit {
             if(emptyArea1_width < 0){
               emptyArea1_width = 0;
             }
-            else if(emptyArea1_width > mainContainer.offsetWidth / 2 - 6){
-              emptyArea1_width = mainContainer.offsetWidth / 2 - 6;
+            else if(emptyArea1_width > mainContainer.offsetWidth / 2 - 5){
+              emptyArea1_width = mainContainer.offsetWidth / 2 - 5;
             }
             this.emptyArea_1_Size = emptyArea1_width;
             this.emptyArea_2_Size = emptyArea1_width;
@@ -1545,8 +1545,8 @@ export class MainComponent implements AfterViewInit {
               if(emptyArea2_height < 0){
                 emptyArea2_height = 0;
               }
-              else if(emptyArea2_height > mainContainer.offsetHeight / 2 - 6){
-                emptyArea2_height = mainContainer.offsetHeight / 2 - 6;
+              else if(emptyArea2_height > mainContainer.offsetHeight / 2 - 5){
+                emptyArea2_height = mainContainer.offsetHeight / 2 - 5;
               }
               this.emptyArea_2_Size = emptyArea2_height;
               this.emptyArea_1_Size = emptyArea2_height;
@@ -1560,8 +1560,8 @@ export class MainComponent implements AfterViewInit {
               if(emptyArea2_width < 0){
                 emptyArea2_width = 0;
               }
-              else if(emptyArea2_width > mainContainer.offsetWidth / 2 - 6){
-                emptyArea2_width = mainContainer.offsetWidth / 2 - 6;
+              else if(emptyArea2_width > mainContainer.offsetWidth / 2 - 5){
+                emptyArea2_width = mainContainer.offsetWidth / 2 - 5;
               }
               this.emptyArea_2_Size = emptyArea2_width;
               this.emptyArea_1_Size = emptyArea2_width;
@@ -1592,22 +1592,22 @@ export class MainComponent implements AfterViewInit {
 
       case 2:
 
-        if(newFiddleWidth > (this.mainContainerWidth - 6)){
+        if(newFiddleWidth > (this.mainContainerWidth - 5)){
           this.calculateIframeSize();
         }
         else if(newFiddleWidth < 0){
           this.calculateIframeSize();
         }
 
-        if(newFiddleWidth > (this.mainContainerWidth - 12)){
+        if(newFiddleWidth > (this.mainContainerWidth - 10)){
           this.calculateIframeSize();
         }
         else if(newFiddleWidth < 0){
           this.calculateIframeSize();
         }
         else{
-          this.emptyArea_1_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
-          this.emptyArea_2_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
+          this.emptyArea_1_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 5;
+          this.emptyArea_2_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 5;
         }
 
       break;
@@ -1627,15 +1627,15 @@ export class MainComponent implements AfterViewInit {
 
       case 4:
 
-      if(newFiddleWidth > (this.mainContainerWidth - 12)){
+      if(newFiddleWidth > (this.mainContainerWidth - 10)){
         this.calculateIframeSize();
       }
       else if(newFiddleWidth < 0){
         this.calculateIframeSize();
       }
       else{
-        this.emptyArea_1_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
-        this.emptyArea_2_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 6;
+        this.emptyArea_1_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 5;
+        this.emptyArea_2_Size = (this.mainContainerWidth - newFiddleWidth) / 2 - 5;
       }
 
       break;
@@ -1650,15 +1650,15 @@ export class MainComponent implements AfterViewInit {
     switch(this.layout){
       case 1:
       
-      if(newFiddleHeight > (this.mainContainerHeight - 12)){
+      if(newFiddleHeight > (this.mainContainerHeight - 10)){
         this.calculateIframeSize();
       }
       else if(newFiddleHeight < 0){
         this.calculateIframeSize();
       }
       else{
-        this.emptyArea_1_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 6;
-        this.emptyArea_2_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 6;
+        this.emptyArea_1_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 5;
+        this.emptyArea_2_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 5;
       }
 
       break;
@@ -1678,15 +1678,15 @@ export class MainComponent implements AfterViewInit {
 
       case 3:
 
-      if(newFiddleHeight > (this.mainContainerHeight - 12)){
+      if(newFiddleHeight > (this.mainContainerHeight - 10)){
         this.calculateIframeSize();
       }
       else if(newFiddleHeight < 0){
         this.calculateIframeSize();
       }
       else{
-        this.emptyArea_1_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 6;
-        this.emptyArea_2_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 6;
+        this.emptyArea_1_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 5;
+        this.emptyArea_2_Size = (this.mainContainerHeight - newFiddleHeight) / 2 - 5;
       }
 
       break;

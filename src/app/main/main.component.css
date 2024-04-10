@@ -832,7 +832,7 @@ i.fa.fa-sort-asc {
 }
 
 .as-split-gutter-custom{
-    flex:0 0 6px;
+    flex:0 0 5px;
 }
 
 .as-split-gutter-custom.is-horizontal{
@@ -852,7 +852,6 @@ i.fa.fa-sort-asc {
     width: 100%;
     height: 100%;
     z-index: 1;
-    /*background: #ff000073;*/
     background: transparent;
 }
 
