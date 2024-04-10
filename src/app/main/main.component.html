@@ -7,9 +7,9 @@
       <div class="fiddle-title">
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title" />
         <div class="fiddle-size">
-          <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthDisabled" (change)="onFiddleWidthChange($event.target.value)" />
+          <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthInputDisabled" (change)="onFiddleWidthChange($event.target.value)" />
           <span class="x">x</span>
-          <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightDisabled" (change)="onFiddeHeightChange($event.target.value)" />
+          <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightInputDisabled" (change)="onFiddeHeightChange($event.target.value)" />
         </div>
         <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Turn on fullscreen view'">
           <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
@@ -221,8 +221,7 @@
                   <a class="js-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(3, $event)" [title]="'Stretch JS to half'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
                     <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"><span>/2</span></i>
                     <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('js')" class="fa fa-arrows-h" aria-hidden="true"><span>/2</span></i>
-                    <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('js')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
-                                                  <span></span>
+                    <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('js')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true"><span></span>
                     <span>2</span>
                     </span>
                   </a>

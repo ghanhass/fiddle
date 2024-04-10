@@ -630,12 +630,26 @@ export class MainService {
         }
       
         100%{
-            background:${theme.data.colors['editor.background']};;
+            background:${theme.data.colors['editor.background']};
             box-shadow:none;
             opacity:1;
         }
       
     }
+
+    @keyframes cling{
+      0%{
+          box-shadow: 0 0 0px 0px ${theme.data.colors['editor.foreground']};
+      }
+  
+      50%{
+          box-shadow: 0 0 4px 4px ${theme.data.colors['editor.foreground']};
+      }
+  
+      100%{
+          box-shadow: 0 0 0px 0px ${theme.data.colors['editor.foreground']};
+      }
+  }
     `;
 
     return str;

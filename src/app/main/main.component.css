@@ -1234,3 +1234,11 @@ app-modal .modal-header .modal-validate-btn{
     /*color: #FFFFFF;*/
     text-decoration: underline;
 }
+
+.clinging{
+    animation-name: cling;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    z-index: 1;
+    position: relative;
+}

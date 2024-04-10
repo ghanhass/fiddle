@@ -98,49 +98,6 @@ export class RessourcesService {
 
       return newRessources;
 
-      /*
-      let ind = this.cachedRessourcesData.results.findIndex((cachedLibraryData)=>{
-        return cachedLibraryData.name.toUpperCase().indexOf(searchString.trim().toUpperCase()) > -1
-      });
-
-      if(ind > -1){//searched library/ressource is present in the cached search result ?
-        return  of(this.cachedRessourcesData).pipe(
-          map((res)=>{
-            let res2 = res;
-
-            res2.results = res2.results.filter((libraryData)=>{
-              if(libraryData.name.toUpperCase().indexOf(searchString.trim().toUpperCase()) > -1){
-                return true;
-              }
-              return false;
-            });
-
-            res2.results.sort((a, b)=>{
-
-                if(a.name.toUpperCase() > b.name.toUpperCase()){
-                  return 1;
-                }
-                else if(a.name.toUpperCase() == b.name.toUpperCase()){
-                  return 0;
-                }
-                else{
-                  return -1
-                }
-            });
-
-            console.log("res2.results = ", res2.results);
-            console.log("------------------------");
-
-            res2.results.slice(0, 21);
-
-            return res2;
-          })
-        );
-      }
-      else{
-        return newRessources;
-      } 
-      */
   }
 
   getRessources():Observable<CdnjsLibrariesSearchResult>{

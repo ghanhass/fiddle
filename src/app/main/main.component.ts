@@ -84,7 +84,7 @@ export class MainComponent implements AfterViewInit {
   jsCodePartTitle: HTMLElement;
 
   isLayoutsListShown: boolean = false;
-  isDonationsListShown: boolean = false;
+
   isThemesListShown: boolean = false;
   layout: number = 1;
   fiddleTitle: string = "";
@@ -115,7 +115,6 @@ export class MainComponent implements AfterViewInit {
 
   isCustomGutter1_dragging: boolean = false;
   isCustomGutter2_dragging: boolean = false;
-  isConsoleGutter_dragging: boolean = false;
 
   isIframeFullScreen:boolean = false;
 
@@ -126,8 +125,8 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("emptyArea1")emptyArea1:ElementRef;
   @ViewChild("emptyArea2")emptyArea2:ElementRef;
 
-  isFiddleWidthDisabled:boolean = false;
-  isFiddleHeightDisabled: boolean = false;
+  isFiddleWidthInputDisabled:boolean = false;
+  isFiddleHeightInputDisabled: boolean = false;
 
 
   firstCodePartHalfStretch: number = 0;
@@ -147,11 +146,11 @@ export class MainComponent implements AfterViewInit {
       env:'production',
       hosted_button_id:'V8U6U69Y6BLQ6',
       image: {
-      src:'https://pics.paypal.com/00/s/ZGFkMWU1YzMtOGFiOS00OGFhLWFjMjEtMDkzMWU4YWE4M2Vm/file.PNG',
-      alt:'Donate with PayPal button',
-      title:'PayPal - The safer, easier way to pay online!',
+        src:'https://pics.paypal.com/00/s/ZGFkMWU1YzMtOGFiOS00OGFhLWFjMjEtMDkzMWU4YWE4M2Vm/file.PNG',
+        alt:'Donate with PayPal button',
+        title:'Donate to MyFiddle',
       }
-      }).render('#donate-button');
+    }).render('#donate-button');
     //////////
     let self = this;
     this.IsAfterViewInitReached = true;
@@ -355,7 +354,7 @@ export class MainComponent implements AfterViewInit {
   prettifyCode(type): void{
     switch(type){
       case 'html':
-      let prettifiedHtml = this.ngxPrettifyService.prettify(this.mainService.htmlCode);
+      let prettifiedHtml = this.ngxPrettifyService.prettify(this.mainService.htmlCode.trim());
       this.htmlPart.code = prettifiedHtml;
       break;
 
@@ -813,35 +812,16 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  toggleLayoutsList(resizeMode?: boolean){
-    if(window.innerWidth > 767 && window.innerHeight > 580){
+  toggleLayoutsList(){
       let layout1Element: HTMLElement = this.layout1.nativeElement;
       if(layout1Element){
         let layout1Height = layout1Element.offsetHeight;
         let layoutsListElement: HTMLElement = this.layoutsList.nativeElement;
         if(layoutsListElement){
-          if(!resizeMode){
-            this.isLayoutsListShown = !this.isLayoutsListShown;
-          }
-          if(this.isLayoutsListShown){
-            if(window.innerWidth > 550){
-              layoutsListElement.style.height = layout1Height + "px";
-            }
-            else{
-              layoutsListElement.style.height = (layout1Height * 2)+ 15 + "px";
-            }
-          }
-          else{
-            layoutsListElement.style.height = "";
-          }
+          this.isLayoutsListShown = !this.isLayoutsListShown;
         }
         //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
       }
-    }
-  }
-
-  toggleDonationMenu(){
-    this.isDonationsListShown = !this.isDonationsListShown;
   }
 
   changeTheme(){
@@ -849,20 +829,6 @@ export class MainComponent implements AfterViewInit {
    let ind = isLightTeme ? 1 : 0;
    this.selectTheme(this.mainService.themesList[ind]);
    this.iframePart.changeConsoleTheme();
-  }
-
-  selectDonation(newIndex){
-    let form = document.querySelector("#lhazlgkemjk");
-    if(form){
-      let select: HTMLSelectElement = form.querySelector("select[name='os0']");
-      let submitBtn: HTMLButtonElement = form.querySelector("input[name='submit']")
-      if(select && submitBtn){
-        select.selectedIndex = newIndex;
-        //console.log("select.value = ", select.value);
-        submitBtn.click();
-      }
-    }
-
   }
 
   toggleFullScreenMode(mode: string){
@@ -889,12 +855,15 @@ export class MainComponent implements AfterViewInit {
     if(this.layout == 1 || this.layout == 3){
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
+      this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
     }
     else if(this.layout == 2){
       this.splitComponentOuter.setVisibleAreaSizes([300, "*"]);
+      this.mainService.codePartsSize = 300;
     }
     else if(this.layout == 4){
       this.splitComponentOuter.setVisibleAreaSizes(["*", 300]);
+      this.mainService.codePartsSize = 300;
     }
     this.calculateIframeSize();
   }
@@ -902,14 +871,17 @@ export class MainComponent implements AfterViewInit {
   stretchHorizontally(){
     if(this.layout == 1){
       this.splitComponentOuter.setVisibleAreaSizes([350, "*"]);
+      this.mainService.codePartsSize = 350;
     }
 
     else if(this.layout == 3){
-      this.splitComponentOuter.setVisibleAreaSizes(["*", 300]);
+      this.splitComponentOuter.setVisibleAreaSizes(["*", 350]);
+      this.mainService.codePartsSize = 350;
     }
     else{
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
+      this.mainService.iframeResizeValue = this.mainContainerWidth - 12;
     }
     this.calculateIframeSize();
   }
@@ -943,6 +915,10 @@ export class MainComponent implements AfterViewInit {
   halfStretchCodePart(index: number, event:MouseEvent){
     let currentCodePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
 
+    document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
+      el.classList.add("clinging");
+    })
+
     if(!this.firstCodePartHalfStretch){//first marking ? stretch
       this.firstCodePartHalfStretch = index;
       currentCodePartTitle.classList.add("half-stretch-mark");
@@ -951,6 +927,9 @@ export class MainComponent implements AfterViewInit {
       this.firstCodePartHalfStretch = undefined;
       currentCodePartTitle.classList.remove("half-stretch-mark");
 
+      document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
+        el.classList.remove("clinging");
+      });
     }
     else{//second codePart is the one marked? proceed with resizing the first and second marked codeParts
       let mainContainerSize = (this.layout == 1 || this.layout == 3) ? this.mainContainerHeight : this.mainContainerWidth;
@@ -990,6 +969,10 @@ export class MainComponent implements AfterViewInit {
         firstMarkedCodePart.classList.remove("marking-half-stretched-code-part");
         currentCodePartTitle.classList.remove("marking-half-stretched-code-part");
       },510);
+
+      document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
+        el.classList.remove("clinging");
+      });
     }
   }
 
@@ -1076,7 +1059,7 @@ export class MainComponent implements AfterViewInit {
   
   @HostListener("document:mouseup", ["$event"])
   onDocumentMouseup(event: MouseEvent ){
-    if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging || this.isConsoleGutter_dragging){
+    if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging){
       event.preventDefault();
       this.showIframeOverlay = false;
     }
@@ -1085,8 +1068,8 @@ export class MainComponent implements AfterViewInit {
       //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
 
-      this.isFiddleHeightDisabled = false;
-      this.isFiddleWidthDisabled = false;
+      this.isFiddleHeightInputDisabled = false;
+      this.isFiddleWidthInputDisabled = false;
     }
     else if(this.isCustomGutter2_dragging){
       this.isCustomGutter2_dragging = false;
@@ -1094,11 +1077,8 @@ export class MainComponent implements AfterViewInit {
       //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
 
-      this.isFiddleHeightDisabled = false;
-      this.isFiddleWidthDisabled = false;
-    }
-    else if(this.isConsoleGutter_dragging){
-
+      this.isFiddleHeightInputDisabled = false;
+      this.isFiddleWidthInputDisabled = false;
     }
   }
 
@@ -1107,15 +1087,9 @@ export class MainComponent implements AfterViewInit {
     let evTarget = event.target as HTMLElement;
     if (evTarget.parentElement){
 
-      let bool2 = !evTarget.classList.contains("donations-menu") && !evTarget.classList.contains("paypal-btn") && !evTarget.parentElement.classList.contains("paypal-btn");
+      let bool = !this.getDOMClosest(evTarget, ".layouts-list-container");
 
-      let bool3 = !this.getDOMClosest(evTarget, ".layouts-list-container");
-
-      if(bool2){
-        this.isDonationsListShown = false;
-      }
-
-      if(bool3){
+      if(bool){
         this.isLayoutsListShown = false;
       }
     }
@@ -1129,19 +1103,16 @@ export class MainComponent implements AfterViewInit {
   @HostListener("document:mousemove", ["$event"])
   onDocumentMousemove(event: any){
     this.onAsSplitAreaIframeMousemove(event);
-    this.onGutterConsoleMousemove(event);
   }
 
   @HostListener("document:touchmove", ["$event"])
   onDocumentTouchmove(event: any){
     this.onAsSplitAreaIframeMousemove(event);
-    this.onGutterConsoleMousemove(event);
   }
 
   @HostListener("window:resize", ["$event"])
   onWindowResize(event){
     let self = this;
-    this.toggleLayoutsList(true);
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     let newWindowWidth = window.innerWidth;
     let newWindowHeight = window.innerHeight;
@@ -1161,7 +1132,6 @@ export class MainComponent implements AfterViewInit {
 
       //console.log("newMainContainerWidth: ", newMainContainerWidth);
       //console.log("this.mainContainerWidth: ", this.mainContainerWidth);
-      let bool:boolean;
       let oldMainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight2;
@@ -1179,7 +1149,6 @@ export class MainComponent implements AfterViewInit {
         newMainContainerWidthOrHeight2 = newMainContainerHeight;
         iframeSize = this.iframeWidth;
       }
-      //this.reAdaptIframeResizeValue(mainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);
       /*START readapt code parts sizes*/
       let sizes: Array<any> = this.splitComponentInner.getVisibleAreaSizes();
       let sizesOuter: Array<any> = this.splitComponentOuter.getVisibleAreaSizes();
@@ -1197,9 +1166,6 @@ export class MainComponent implements AfterViewInit {
         sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
       }
       /*END readapt code parts sizes*/
-
-      //self.reAdaptIframeResizeValue(oldMainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);
-
        
       //console.log("this.canCallReAdaptCodePartsSizes = ", this.canCallReAdaptCodePartsSizes);
       if(this.canCallReAdaptCodePartsSizes){
@@ -1484,8 +1450,8 @@ export class MainComponent implements AfterViewInit {
       this.isCustomGutter1_dragging = true;
       this.isCustomGutter2_dragging = false;
     
-      this.isFiddleHeightDisabled = true;
-      this.isFiddleWidthDisabled = true;
+      this.isFiddleHeightInputDisabled = true;
+      this.isFiddleWidthInputDisabled = true;
 
       //console.log("mousedown event.type = " + event.type);
       //console.log("--------------------------");
@@ -1494,21 +1460,12 @@ export class MainComponent implements AfterViewInit {
       this.isCustomGutter2_dragging = true;
       this.isCustomGutter1_dragging = false;
 
-      this.isFiddleHeightDisabled = true;
-      this.isFiddleWidthDisabled = true;
+      this.isFiddleHeightInputDisabled = true;
+      this.isFiddleWidthInputDisabled = true;
 
       //console.log("mousedown event.type = " + event.type);
       //console.log("--------------------------");
     }
-  }
-
-  onGutterConsoleMousedown(event: any){
-    event.preventDefault();
-    this.isConsoleGutter_dragging = true;
-  }
-
-  onGutterConsoleMousemove(event: any){
-    let evTarget = event.target as HTMLElement;
   }
 
   onAsSplitAreaIframeMousemove(event: any ){
@@ -1516,6 +1473,7 @@ export class MainComponent implements AfterViewInit {
 
       if(this.IsAfterViewInitReached){
         let eventClientXOrY;
+        
         if(event.type == "touchmove"){
           if(this.layout == 1 || this.layout == 3){
             eventClientXOrY = event.touches[0].clientY;
@@ -1532,6 +1490,7 @@ export class MainComponent implements AfterViewInit {
             eventClientXOrY = event.clientX;
           }
         }
+
         let emptyArea1 = this.emptyArea1.nativeElement as HTMLElement;
         let emptyArea2 = this.emptyArea2.nativeElement as HTMLElement;
 
@@ -1610,9 +1569,6 @@ export class MainComponent implements AfterViewInit {
           
           this.calculateIframeSize(mainContainer);
           this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
-        }
-        else if(this.isConsoleGutter_dragging){
-
         }
       } 
   }
@@ -1774,16 +1730,16 @@ export class MainComponent implements AfterViewInit {
     //console.log("splitComponentOuterDragEnd event = ", event);
     this.showIframeOverlay = false;
 
-    this.isFiddleHeightDisabled = false;
-    this.isFiddleWidthDisabled = false;
+    this.isFiddleHeightInputDisabled = false;
+    this.isFiddleWidthInputDisabled = false;
   }
 
   splitComponentOuterDragStart(event){
     //console.log("splitComponentOuterDragStart event = ", event);
     this.showIframeOverlay = true;
 
-    this.isFiddleHeightDisabled = true;
-    this.isFiddleWidthDisabled = true;
+    this.isFiddleHeightInputDisabled = true;
+    this.isFiddleWidthInputDisabled = true;
   }
 
   validateRessources(){
