@@ -540,22 +540,23 @@ export class MainComponent implements AfterViewInit {
     }
 
     //console.log("savedMainContainerSize = ", savedMainContainerSize);
-
-    if(savedIframeResizeValue > currentMainContainerSize - 10 || savedIframeResizeValue == (savedMainContainerSize - 10)){
+    
+    if(savedIframeResizeValue > currentMainContainerSize - 10 || savedIframeResizeValue == (savedMainContainerSize - 10)){ //custom glutters stretched ?
       //console.log("aaa");
       this.emptyArea_1_Size = 0;
       this.emptyArea_2_Size = 0;
     }
-    else if(savedIframeResizeValue < 0){
+    else if(savedIframeResizeValue < 0){ //custom glutters in contact ?
       //console.log("bbb");
       this.emptyArea_1_Size = (currentMainContainerSize / 2) - 5;
       this.emptyArea_2_Size = (currentMainContainerSize / 2) - 5;
     }
-    else{
+    else{//retrieve custom glutter positions
       //console.log("ccc");
       this.emptyArea_1_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 5;
       this.emptyArea_2_Size = (currentMainContainerSize - savedIframeResizeValue) / 2 - 5;
     }
+
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
     //console.log("param.data = ", param.data);
@@ -564,6 +565,7 @@ export class MainComponent implements AfterViewInit {
     this.initialCssCodePartSize = Math.floor(sizes[2]);
     this.initialJsCodePartSize = Math.floor(sizes[3]);
     /****************************************/
+    /*START readapt saved sizes to new window size*/
     let ind;
     if(savedLayout == 1 || savedLayout == 2){
       sizes = [savedCodePartsSize, "*"];
@@ -574,17 +576,17 @@ export class MainComponent implements AfterViewInit {
       ind = 1;
     }
 
-    if(savedMainContainerSize > currentMainContainerSize2){
+    if(savedMainContainerSize > currentMainContainerSize2){//main container size is shrinked ?
       let coef = savedMainContainerSize2 / currentMainContainerSize2;
       sizes[ind] = (sizes[ind] / coef) > codePartsMinLimit ? (sizes[ind] / coef) : codePartsMinLimit;
     }
-    else if(savedMainContainerSize2 < currentMainContainerSize2){
+    else if(savedMainContainerSize2 < currentMainContainerSize2){//main container size got bigger ?
       let coef = currentMainContainerSize2 / savedMainContainerSize2;
       sizes[ind] = sizes[ind] * coef;
     }
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 5, "outer", savedMainContainerSize2);
     this.initialCodePartSize = Math.floor(sizes[ind]);
-
+    /*END readapt saved sizes to new window size*/
   }
 
   getLayoutInfos(name){
@@ -1292,9 +1294,7 @@ export class MainComponent implements AfterViewInit {
       }
 
       let total = sizes[ind];
-      //let coef = newMainContainerWidthOrHeight / total;
       
-      //sizes[ind] = sizes[ind]*coef;
       if(total > newMainContainerWidthOrHeight){
         sizes[ind] = newMainContainerWidthOrHeight;
       }
@@ -1428,7 +1428,7 @@ export class MainComponent implements AfterViewInit {
     }
   }
 
-  getIframeAreaSize(){
+  getIframeAreaSize(): string{
     if(this.IsAfterViewInitReached){
       let size = 0;
       let mainContainer = this.mainContainer.nativeElement;
