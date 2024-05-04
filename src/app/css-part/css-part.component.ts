@@ -17,13 +17,9 @@ export class CssPartComponent implements OnInit {
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
+  canRetrievePositionsAfterLoad: boolean = false;
 
   editor: MonacoStandaloneCodeEditor;
-
-  /*codeModel: any = {
-    language: 'css',
-    value: ""
-  };*/
 
   options = {
     language:"css",
@@ -40,38 +36,32 @@ export class CssPartComponent implements OnInit {
   constructor(private mainService: MainService) { }
 
 
-  onCodeChanged(value) {
-    ////console.log('CODE', value);
-    this.mainService.cssCode = value;
-    this.mainService.setCheckBeforeUnloadListener();
-  }
-
   ngOnInit(): void {
     this.code = this.mainService.cssCode;
-    //console.log("ngOnInit");
-  }
-
-  ngOnChanges(data: SimpleChanges){
-    ////console.log("SimpleChanges data = ", data);
+    //console.log("CssPartComponent ngOnInit");
   }
 
   onEditorLoad(editor: MonacoStandaloneCodeEditor){
-    //console.log("onEditorLoad !");
     this.editor = editor;
-    let self = this;
+    //console.log("CssPartComponent loaded editor  = ", this.editor);
 
-    //console.log("editor = ", this.editor);
-    //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
+    let self = this;
 
     this.mainService.retrieveCodePartsCursors(this);
 
+    this.canRetrievePositionsAfterLoad = true;
+
+    //console.log("editor = ", this.editor);
+
     this.editor.onDidFocusEditorText(()=>{
+      //console.log("onDidFocusEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.cssCodePositionData.focus = true;
       }
     });
     
     this.editor.onDidBlurEditorText(()=>{
+      //console.log("onDidBlurEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.cssCodePositionData.focus = false;
       }
@@ -104,13 +94,21 @@ export class CssPartComponent implements OnInit {
         }
       }
     })
-
-    this.editor.onDidChangeCursorPosition(() => {
-        this.mainService.cssCodePositionData.column = this.editor.getPosition().column;
-        this.mainService.cssCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
-        ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-    });   
     
+  }
+
+  onCodeChanged(value) {
+    ////console.log('CODE', value);
+    this.mainService.cssCode = value;
+    this.mainService.setCheckBeforeUnloadListener();
+
+    if(this.canRetrievePositionsAfterLoad){
+      this.mainService.retrieveCodePartsCursors(this);
+
+      //console.log("called retrieveCodePartsCursors() from CssPartComponent !");
+
+      this.canRetrievePositionsAfterLoad = false;
+    }
   }
 
 

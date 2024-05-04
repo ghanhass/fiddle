@@ -20,4 +20,5 @@ export interface FiddleData {
     css_code_position_data: CodePositionData,
     html_code_position_data: CodePositionData,
     js_code_position_data: CodePositionData,
+    is_mobile_mode: boolean
 }

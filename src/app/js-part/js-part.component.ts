@@ -14,6 +14,7 @@ export class JsPartComponent implements OnInit {
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
+  canRetrievePositionsAfterLoad: boolean = false;
 
   editor:MonacoStandaloneCodeEditor;
 
@@ -30,40 +31,40 @@ export class JsPartComponent implements OnInit {
   };
   constructor(private mainService:MainService) {  }
 
-  onCodeChanged(value) {
-    ////console.log('CODE', value);
-    this.mainService.jsCode = value;
-    this.mainService.setCheckBeforeUnloadListener();
-  }
-
   ngOnInit(): void {
     this.code = this.mainService.jsCode;
+    ////console.log("JsPartComponent ngOnInit");
   }
 
   onEditorLoad(editor: MonacoStandaloneCodeEditor){
     this.editor = editor;
-    let self = this;
-    ////console.log("editor = ", this.editor);
+    //console.log("JsPartComponent loaded editor  = ", this.editor);
 
-    //console.log("editor = ", this.editor);
-    //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
+    let self = this;
 
     this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
 
+    this.canRetrievePositionsAfterLoad = true;
+
+    ////console.log("editor = ", this.editor);
+    ////console.log("this.mainService.jsCodePositionData = ", this.mainService.jsCodePositionData);
+
     this.editor.onDidFocusEditorText(()=>{
+      ////console.log("onDidFocusEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.jsCodePositionData.focus = true;
       }
     });
     
     this.editor.onDidBlurEditorText(()=>{
+      ////console.log("onDidBlurEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.jsCodePositionData.focus = false;
       }
     });
 
     this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
-      //console.log("IKeyboardEvent keydown !");
+      ////console.log("IKeyboardEvent keydown !");
       
       let evDate = new Date();
 
@@ -72,7 +73,7 @@ export class JsPartComponent implements OnInit {
         event.preventDefault();
         event.stopPropagation();
 
-        ////console.log("self.runcodemsg.emit()");
+        //////console.log("self.runcodemsg.emit()");
 
         self.runcodemsg.emit();
       }
@@ -82,19 +83,28 @@ export class JsPartComponent implements OnInit {
         event.stopPropagation();
 
         if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
-          ////console.log("self.savecodemsg.emit()");
+          //////console.log("self.savecodemsg.emit()");
           self.mainService.codeSavingDate = evDate;
           
           self.savecodemsg.emit();
         }
       }
     })
+    
+  }
 
-    this.editor.onDidChangeCursorPosition(() => {
-        this.mainService.jsCodePositionData.column = this.editor.getPosition().column;
-        this.mainService.jsCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
-        ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-    });
+  onCodeChanged(value) {
+    //////console.log('CODE', value);
+    this.mainService.jsCode = value;
+    this.mainService.setCheckBeforeUnloadListener();
+
+    if(this.canRetrievePositionsAfterLoad){
+      this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
+
+      //console.log("called retrieveCodePartsCursors() from JsPartComponent !");
+
+      this.canRetrievePositionsAfterLoad = false; 
+    }
   }
 
 }

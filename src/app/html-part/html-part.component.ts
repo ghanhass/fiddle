@@ -18,6 +18,7 @@ export class HtmlPartComponent implements OnInit {
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
   @Output()monacoeditorloaded: EventEmitter<string> = new EventEmitter();
+  canRetrievePositionsAfterLoad: boolean = false;
 
   editor: MonacoStandaloneCodeEditor;
 
@@ -39,37 +40,39 @@ export class HtmlPartComponent implements OnInit {
 
   ngOnInit(): void {
     this.code = this.mainService.htmlCode;
+    //console.log("HtmlPartComponent ngOnInit");
   }
 
   onEditorLoad(editor: MonacoStandaloneCodeEditor){
     this.editor = editor;
-    ////console.log("editor = ", this.editor);
+    //console.log("HtmlPartComponent loaded editor  = ", this.editor);
 
     let self = this;
 
     this.monacoeditorloaded.emit();
-
-    //console.log("editor = ", this.editor);
-    //console.log("this.mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-
     this.mainService.retrieveCodePartsCursors(undefined, this);
 
+    this.canRetrievePositionsAfterLoad = true;
+
+    ////console.log("editor = ", this.editor);
+    ////console.log("this.mainService.htmlCodePositionData = ", this.mainService.htmlCodePositionData);
+
     this.editor.onDidFocusEditorText(()=>{
-      console.log("onDidFocusEditorText");
+      ////console.log("onDidFocusEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.htmlCodePositionData.focus = true;
       }
     });
     
     this.editor.onDidBlurEditorText(()=>{
-      console.log("onDidBlurEditorText");
+      ////console.log("onDidBlurEditorText");
       if(this.mainService.canSaveCodeEditorsPostition){
         this.mainService.htmlCodePositionData.focus = false;
       }
     });
 
     this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
-      //console.log("IKeyboardEvent keydown !");
+      ////console.log("IKeyboardEvent keydown !");
       
       let evDate = new Date();
 
@@ -78,7 +81,7 @@ export class HtmlPartComponent implements OnInit {
         event.preventDefault();
         event.stopPropagation();
 
-        ////console.log("self.runcodemsg.emit()");
+        //////console.log("self.runcodemsg.emit()");
 
         self.runcodemsg.emit();
       }
@@ -88,7 +91,7 @@ export class HtmlPartComponent implements OnInit {
         event.stopPropagation();
 
         if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
-          ////console.log("self.savecodemsg.emit()");
+          //////console.log("self.savecodemsg.emit()");
           self.mainService.codeSavingDate = evDate;
           
           self.savecodemsg.emit();
@@ -96,26 +99,21 @@ export class HtmlPartComponent implements OnInit {
       }
     })
 
-    this.editor.onDidChangeCursorPosition(() => {
-      if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.htmlCodePositionData.column = this.editor.getPosition().column;
-        this.mainService.htmlCodePositionData.lineNumber = this.editor.getPosition().lineNumber; 
-        ////console.log("onDidChangeCursorPosition: mainService.cssCodePositionData = ", this.mainService.cssCodePositionData);
-      }
-    });
-
-    this.editor.onDidChangeCursorSelection((event) => {
-      if(this.mainService.canSaveCodeEditorsPostition){
-        console.log("onDidChangeCursorSelection = ", event);
-      }
-    });
     this.mainService.resumeFiddleTheme();
   }
 
   onCodeChanged(value) {
-    ////console.log('CODE', value);
+    //////console.log('CODE', value);
     this.mainService.htmlCode = value;
     this.mainService.setCheckBeforeUnloadListener();
+
+    if(this.canRetrievePositionsAfterLoad){
+      this.mainService.retrieveCodePartsCursors(undefined, this);
+
+      //console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
+
+      this.canRetrievePositionsAfterLoad = false; 
+    }
   }
 
 }

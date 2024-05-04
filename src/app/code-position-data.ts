@@ -4,5 +4,6 @@ export interface CodePositionData {
     lineNumber: number, 
     column: number,
     focus: boolean,
-    focusSubject$?: Subject<number>
+    scrollHeight?: number,
+    scrollTop?: number
 }

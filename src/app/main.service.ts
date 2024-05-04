@@ -36,6 +36,8 @@ export class MainService {
   htmlCode:string;
   isConsoleOn: boolean;
 
+  isFirstTimeFiddle: boolean = true;
+
   jsCodeSinceSave:string = "";
   cssCodeSinceSave:string = "";
   htmlCodeSinceSave:string = "";
@@ -60,6 +62,7 @@ export class MainService {
   showCss: boolean = false;
   showJs: boolean = false;
   showResult: boolean = true;
+  isMobileMode: boolean = false;
 
   scheduledRunFiddle: boolean = false;
 
@@ -84,6 +87,7 @@ export class MainService {
   }
 
   canSaveCodeEditorsPostition: boolean = true;
+  canRetrievePositionsAfterLoad: boolean = false;
 
   selectedTheme: FiddleTheme = {
       name: "VS",
@@ -736,34 +740,56 @@ export class MainService {
 
   retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
     if(cssPart && this.cssCodePositionData.focus){
-      //retrieve html code part focus and cursor position
-      console.log("called cssPart.editor.focus()");
+      //retrieve css code part focus and cursor position
       cssPart.editor.focus();
       //
       cssPart.editor.setPosition({
         column: this.cssCodePositionData.column,
         lineNumber: this.cssCodePositionData.lineNumber
       });
+
+      console.log("cssCodePositionData = ", this.cssCodePositionData);
+      
+      let newTop = cssPart.editor.getTopForPosition(this.cssCodePositionData.lineNumber, this.cssCodePositionData.column);
+
+      //console.log("newTop = ", newTop);
+
+      cssPart.editor.setScrollTop(newTop);
     }
-    else if(jsPart && this.jsCodePositionData.focus){
+    if(jsPart && this.jsCodePositionData.focus){
       //retrieve js code part focus and cursor position
-      console.log("called jsPart.editor.focus()");
       jsPart.editor.focus();
       //
       jsPart.editor.setPosition({
         column: this.jsCodePositionData.column,
         lineNumber: this.jsCodePositionData.lineNumber
       });
+
+      //console.log("jsCodePositionData = ", this.jsCodePositionData);
+      
+      let newTop = jsPart.editor.getTopForPosition(this.jsCodePositionData.lineNumber, this.jsCodePositionData.column);
+
+      //console.log("newTop = ", newTop);
+
+      jsPart.editor.setScrollTop(newTop);
     }
-    else if(htmlPart && this.htmlCodePositionData.focus){
+     if(htmlPart && this.htmlCodePositionData.focus){
       //retrieve html code part focus and cursor position
-      console.log("called htmlPart.editor.focus()");
+      //console.log("called htmlPart.editor.focus()");
       htmlPart.editor.focus();
       //
       htmlPart.editor.setPosition({
         column: this.htmlCodePositionData.column,
         lineNumber: this.htmlCodePositionData.lineNumber
       });
+
+      console.log("htmlCodePositionData = ", this.htmlCodePositionData);
+
+      let newTop = htmlPart.editor.getTopForPosition(this.htmlCodePositionData.lineNumber, this.htmlCodePositionData.column);
+
+      //console.log("newTop = ", newTop);
+
+      htmlPart.editor.setScrollTop(newTop);
     }
   }
 

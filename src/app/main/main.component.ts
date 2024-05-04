@@ -142,15 +142,17 @@ export class MainComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    (window as any).PayPal.Donation.Button({
-      env:'production',
-      hosted_button_id:'V8U6U69Y6BLQ6',
-      image: {
-        src:'https://pics.paypal.com/00/s/ZGFkMWU1YzMtOGFiOS00OGFhLWFjMjEtMDkzMWU4YWE4M2Vm/file.PNG',
-        alt:'Donate with PayPal button',
-        title:'Donate to MyFiddle',
-      }
-    }).render('#donate-button');
+    if((window as any).PayPal && (window as any).PayPal.Donation){
+      (window as any).PayPal.Donation.Button({
+        env:'production',
+        hosted_button_id:'V8U6U69Y6BLQ6',
+        image: {
+          src:'https://pics.paypal.com/00/s/ZGFkMWU1YzMtOGFiOS00OGFhLWFjMjEtMDkzMWU4YWE4M2Vm/file.PNG',
+          alt:'Donate with PayPal button',
+          title:'Donate to MyFiddle',
+        }
+      }).render('#donate-button');
+    }
     //////////
     let self = this;
     this.IsAfterViewInitReached = true;
@@ -163,15 +165,13 @@ export class MainComponent implements AfterViewInit {
       
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
-        if(self.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
+        if(this.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
+
           //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
           this.fiddleTitle = this.mainService.fiddleTitle;
-
-          this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
-          this.mainService.canSaveCodeEditorsPostition = true;
           
           this.showHtml = this.mainService.showHtml;
           this.showCss = this.mainService.showCss;
@@ -188,20 +188,27 @@ export class MainComponent implements AfterViewInit {
             layout: this.mainService.layout,
             iframe_resize_value: this.mainService.iframeResizeValue,
             css_code_position_data: this.mainService.cssCodePositionData,
-            html_code_position_data: this.mainService.cssCodePositionData,
-            js_code_position_data: this.mainService.cssCodePositionData,
+            html_code_position_data: this.mainService.htmlCodePositionData,
+            js_code_position_data: this.mainService.jsCodePositionData,
+            is_mobile_mode: this.mainService.isMobileMode
           }
           this.changeLayout(this.mainService.layout, obj);
+          
           self.mainService.redirectAfterSaveMode = false;
+          
+          this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
+
           //console.log("after router path change");
           if(this.mainService.scheduledRunFiddle){
             this.runCode();
           }
+
+          this.mainService.isFirstTimeFiddle = false;
         }
         else{//retrieve data from backend ?
           this.loader.showLoader();
           this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-            console.log("getFiddle res = ", res);
+            //console.log("getFiddle res = ", res);
             if(res.status == "ok"){
               let fiddleData: FiddleData = res.fiddleData;
               //console.log("getFiddle obj = ", obj);
@@ -218,53 +225,62 @@ export class MainComponent implements AfterViewInit {
               this.mainService.cssCodePositionData = fiddleData.css_code_position_data;
               this.mainService.htmlCodePositionData = fiddleData.html_code_position_data;
               this.mainService.jsCodePositionData = fiddleData.js_code_position_data;
+              this.mainService.isMobileMode = fiddleData.is_mobile_mode;
 
 
-              //mobile layout retrieval
-              let mobileLayoutArr = fiddleData.mobile_layout.split(':');
-              let mobileCodePart = mobileLayoutArr[0];
-              let mobileResult = mobileLayoutArr[1];
-              switch (true){
-                case mobileCodePart == '0':
-                  this.showHtml = false;
-                  this.showCss = false;
-                  this.showJs = false;
-                break;
+              if(this.mainService.isMobileMode){
+                this.changeLayout(1);
 
-                case mobileCodePart == '1':
-                  this.showHtml = true;
-                  this.showCss = false;
-                  this.showJs = false;
-                break;
+                //START mobile layout retrieval
+                let mobileLayoutArr = fiddleData.mobile_layout.split(':');
+                let mobileCodePart = mobileLayoutArr[0];
+                let mobileResult = mobileLayoutArr[1];
+                switch (true){
+                  case mobileCodePart == '0':
+                    this.showHtml = false;
+                    this.showCss = false;
+                    this.showJs = false;
+                  break;
 
-                case mobileCodePart == '2':
-                  this.showHtml = false;
-                  this.showCss = true;
-                  this.showJs = false;
-                break;
+                  case mobileCodePart == '1':
+                    this.showHtml = true;
+                    this.showCss = false;
+                    this.showJs = false;
+                  break;
 
-                case mobileCodePart == '3':
-                  this.showHtml = false;
-                  this.showCss = false;
-                  this.showJs = true;
-                break;
+                  case mobileCodePart == '2':
+                    this.showHtml = false;
+                    this.showCss = true;
+                    this.showJs = false;
+                  break;
+
+                  case mobileCodePart == '3':
+                    this.showHtml = false;
+                    this.showCss = false;
+                    this.showJs = true;
+                  break;
+                }
+
+                if(mobileResult == "0"){
+                  this.showResult = false;
+                }
+                else if(mobileResult == "1"){
+                  this.showResult = true;
+                }
+
+                this.mainService.showHtml = this.showHtml;
+                this.mainService.showCss = this.showCss;
+                this.mainService.showJs = this.showJs;
+                this.mainService.showResult = this.showResult;
+                //END mobile layout retrieval
               }
-
-              if(mobileResult == "0"){
-                this.showResult = false;
+              else{
+                this.changeLayout(fiddleData.layout, fiddleData);
               }
-              else if(mobileResult == "1"){
-                this.showResult = true;
-              }
-
-              this.mainService.showHtml = this.showHtml;
-              this.mainService.showCss = this.showCss;
-              this.mainService.showJs = this.showJs;
-              this.mainService.showResult = this.showResult;
-
-              this.changeLayout(fiddleData.layout, fiddleData);
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
+
+              this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
@@ -272,6 +288,7 @@ export class MainComponent implements AfterViewInit {
               this.loader.hideLoader();
             }
           });
+          this.mainService.isFirstTimeFiddle = false;
         }
       }
       else{
@@ -1311,7 +1328,8 @@ export class MainComponent implements AfterViewInit {
   runCode(param?){
     this.loader.showLoader();
     if(param == "save"){//save ?
-      if(window.innerWidth <= 767 || window.innerHeight <= 580 || this.mainService.iframeResizeValue === undefined){
+      if(window.innerWidth <= 767 || window.innerHeight <= 580 || this.mainService.iframeResizeValue === undefined){//mobile mode ? stretch iframeResizeValue
+        this.mainService.isMobileMode = true;
         if(this.layout == 1 || this.layout == 3){
           this.mainService.iframeResizeValue = this.mainContainerHeight - 10;
         }
@@ -1319,7 +1337,21 @@ export class MainComponent implements AfterViewInit {
           this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
         } 
       }
+      else{
+        this.mainService.isMobileMode = false;
+      }
       this.mainService.scheduledRunFiddle = true;
+      //START save codePositionData objects in MainService
+      this.mainService.cssCodePositionData.column = this.cssPart.editor?.getPosition().column;
+      this.mainService.cssCodePositionData.lineNumber = this.cssPart.editor?.getPosition().lineNumber; 
+
+      this.mainService.htmlCodePositionData.column = this.htmlPart.editor?.getPosition().column;
+      this.mainService.htmlCodePositionData.lineNumber = this.htmlPart.editor?.getPosition().lineNumber; 
+
+      this.mainService.jsCodePositionData.column = this.jsPart.editor?.getPosition().column;
+      this.mainService.jsCodePositionData.lineNumber = this.jsPart.editor?.getPosition().lineNumber; 
+      //END save codePositionData objects in MainService
+
       this.iframePart.saveFiddle();
     }
     else{//run

@@ -126,6 +126,7 @@ export class IframePartComponent implements OnInit {
       css_code_position_data: this.mainService.cssCodePositionData,
       html_code_position_data: this.mainService.htmlCodePositionData,
       js_code_position_data: this.mainService.jsCodePositionData,
+      is_mobile_mode: this.mainService.isMobileMode
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);
@@ -159,6 +160,8 @@ export class IframePartComponent implements OnInit {
         
         this.mainService.removeBeforeUnloadListener();
         this.mainService.resetCodeSinceSave();
+
+
         this.mainService.redirectAfterSaveMode = true;
         //console.log("gonna navigate now !");
         this.router.navigate(["/"+fiddleId]);
