@@ -5,6 +5,10 @@ import {
   MonacoStandaloneCodeEditor
 } from '@materia-ui/ngx-monaco-editor';
 
+import "brace";
+import "brace/mode/text";
+import "brace/theme/github";
+
 @Component({
   selector: 'app-html-part',
   templateUrl: './html-part.component.html',
