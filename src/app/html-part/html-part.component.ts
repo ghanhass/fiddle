@@ -5,10 +5,6 @@ import {
   MonacoStandaloneCodeEditor
 } from '@materia-ui/ngx-monaco-editor';
 
-import "brace";
-import "brace/mode/text";
-import "brace/theme/github";
-
 @Component({
   selector: 'app-html-part',
   templateUrl: './html-part.component.html',
@@ -35,7 +31,8 @@ export class HtmlPartComponent implements OnInit {
     lineDecorationsWidth:"1px",
     lineNumbersMinChars: 1,
     wordWrap:"on",
-    baseUrl: "/"
+    baseUrl: "/",
+    contextmenu: false
   };
 
   constructor(private mainService:MainService,
