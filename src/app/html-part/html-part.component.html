@@ -1,5 +1,10 @@
-<ngx-monaco-editor #monaco  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>
+<!--<ngx-monaco-editor #monaco  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>-->
 <!--<ace [config]="config" [mode]="'text'" [theme]="'github'" [(value)]="code"></ace>-->
 
 
 <!--<ace-editor [(text)]="text" #editorr style="height:100%;width:100%;"></ace-editor>-->
+
+<ace-editor 
+[(text)]="code" 
+style="height:100%;width:100%"
+[theme]="theme" (textChanged)="onCodeChanged($event)" mode="html" #aceeditor></ace-editor>

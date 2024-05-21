@@ -1,6 +1,8 @@
-import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
 import { MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
+import { AceEditorComponent } from 'ng2-ace-editor';
+import { Ace } from 'ace-builds';
 
 @Component({
   selector: 'app-js-part',
@@ -9,7 +11,7 @@ import { MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 })
 export class JsPartComponent implements OnInit {
   code: string = "";
-  theme = 'vs-light';
+  theme: string = "cloud9_day";
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
@@ -17,6 +19,8 @@ export class JsPartComponent implements OnInit {
   canRetrievePositionsAfterLoad: boolean = false;
 
   editor:MonacoStandaloneCodeEditor;
+  @ViewChild("aceeditor") aceeditor: AceEditorComponent;
+  aceEditor: Ace.Editor;
 
   options = {
     language:"javascript",
@@ -36,36 +40,52 @@ export class JsPartComponent implements OnInit {
     ////console.log("JsPartComponent ngOnInit");
   }
 
-  onEditorLoad(editor: MonacoStandaloneCodeEditor){
-    this.editor = editor;
-    //console.log("JsPartComponent loaded editor  = ", this.editor);
+  ngAfterViewInit(){
+    console.log("JsPartComponent ngAfterViewInit");
 
+    this.aceEditor = this.aceeditor.getEditor() ;
+    this.aceEditor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+    //console.log("called retrieveCodePartsCursors() from JsPartComponent !");
+    //this.mainService.retrieveCodePartsCursors(undefined, this);
+    
+    /*let x: Ace.Range[] = [];
+    this.aceEditor.on("copy", (ev)=>{
+      //x = this.aceEditor.getSelection().getAllRanges();
+      console.log("ace copy event  this.aceEditor.getCursorPosition() = ", this.aceEditor.getCursorPosition());
+    });*/
+
+    /*
+    this.aceEditor.on("click", (ev)=>{
+      
+      x.forEach((el)=>{
+        this.aceEditor.selection.addRange(el);
+      })
+      console.log("ace click event = ", ev)
+      
+    });
+    */
+
+    this.aceEditor.setFontSize(14);
+    
+    this.aceEditor.on("focus", (ev)=>{
+      //if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.jsCodePositionData.focus = true;
+      //}
+    })
+
+    this.aceEditor.on("blur", (ev)=>{
+      //if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.jsCodePositionData.focus = false;
+      //}
+    })
     let self = this;
 
-    this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
-
-    this.canRetrievePositionsAfterLoad = true;
-
-    ////console.log("editor = ", this.editor);
-    ////console.log("this.mainService.jsCodePositionData = ", this.mainService.jsCodePositionData);
-
-    this.editor.onDidFocusEditorText(()=>{
-      ////console.log("onDidFocusEditorText");
-      if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.jsCodePositionData.focus = true;
-      }
-    });
-    
-    this.editor.onDidBlurEditorText(()=>{
-      ////console.log("onDidBlurEditorText");
-      if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.jsCodePositionData.focus = false;
-      }
-    });
-
-    this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
-      ////console.log("IKeyboardEvent keydown !");
-      
+    this.aceEditor.addEventListener("keydown", (event: KeyboardEvent)=>{
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
@@ -89,8 +109,9 @@ export class JsPartComponent implements OnInit {
           self.savecodemsg.emit();
         }
       }
-    })
-    
+    });
+
+    //this.mainService.resumeFiddleTheme(this);
   }
 
   onCodeChanged(value) {

@@ -70,7 +70,8 @@ export class MainService {
 
   htmlCodePositionData: CodePositionData = {
     lineNumber: 1, 
-    column: 1,
+    row:0,
+    column: 0,
     focus: false,
   }
 
@@ -243,7 +244,7 @@ export class MainService {
     this.htmlCodeSinceSave = this.htmlCode;
   }
 
-  resumeFiddleTheme(){
+  resumeFiddleTheme(htmlPartComp?: HtmlPartComponent, cssPartComp?: CssPartComponent, jsPartComp?: JsPartComponent){
     //console.log("param = ", param);
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     let savedThemeId = localStorage.getItem("myfiddle-theme");
@@ -256,6 +257,17 @@ export class MainService {
     this.addThemeStylesheet(this.selectedTheme);
     this.registerMonacoCustomTheme(this.selectedTheme);
     
+    if(htmlPartComp){
+      htmlPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+    }
+
+    if(cssPartComp){
+      cssPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+    }
+
+    if(jsPartComp){
+      jsPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+    }
   }
 
   prepareThemeStyleSheet(theme: FiddleTheme){
@@ -776,12 +788,20 @@ export class MainService {
      if(htmlPart && this.htmlCodePositionData.focus){
       //retrieve html code part focus and cursor position
       //console.log("called htmlPart.editor.focus()");
-      htmlPart.editor.focus();
+      //htmlPart.editor.focus();
+      htmlPart.aceEditor.focus();
       //
+      
+      /*
       htmlPart.editor.setPosition({
         column: this.htmlCodePositionData.column,
         lineNumber: this.htmlCodePositionData.lineNumber
       });
+      */
+      htmlPart.aceEditor.moveCursorToPosition({
+        column: this.htmlCodePositionData.column,
+        row: this.htmlCodePositionData.row
+      })
 
       console.log("htmlCodePositionData = ", this.htmlCodePositionData);
 

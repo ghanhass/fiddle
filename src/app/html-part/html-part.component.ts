@@ -4,6 +4,9 @@ import {
   MonacoEditorLoaderService,
   MonacoStandaloneCodeEditor
 } from '@materia-ui/ngx-monaco-editor';
+import { AceEditorComponent } from 'ng2-ace-editor';
+
+import {Ace} from 'ace-builds/ace';
 
 @Component({
   selector: 'app-html-part',
@@ -12,6 +15,7 @@ import {
 })
 export class HtmlPartComponent implements OnInit {
   code: string = "";
+  theme: string = "cloud9_day";
   
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
@@ -21,6 +25,8 @@ export class HtmlPartComponent implements OnInit {
   canRetrievePositionsAfterLoad: boolean = false;
 
   editor: MonacoStandaloneCodeEditor;
+ @ViewChild("aceeditor") aceeditor: AceEditorComponent;
+ aceEditor: Ace.Editor;
 
   options = {
     language:"html",
@@ -40,41 +46,58 @@ export class HtmlPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.canRetrievePositionsAfterLoad = true;
+    
     this.code = this.mainService.htmlCode;
-    //console.log("HtmlPartComponent ngOnInit");
+    console.log("HtmlPartComponent ngOnInit");
   }
 
-  onEditorLoad(editor: MonacoStandaloneCodeEditor){
-    this.editor = editor;
-    //console.log("HtmlPartComponent loaded editor  = ", this.editor);
+  ngAfterViewInit(){
+    console.log("HtmlPartComponent ngAfterViewInit");
 
+    this.aceEditor = this.aceeditor.getEditor() ;
+    this.aceEditor.setOptions({
+      enableBasicAutocompletion: true,
+      enableSnippets: true,
+      enableLiveAutocompletion: true
+    });
+
+    //console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
+    //this.mainService.retrieveCodePartsCursors(undefined, this);
+    
+    /*let x: Ace.Range[] = [];
+    this.aceEditor.on("copy", (ev)=>{
+      //x = this.aceEditor.getSelection().getAllRanges();
+      console.log("ace copy event  this.aceEditor.getCursorPosition() = ", this.aceEditor.getCursorPosition());
+    });*/
+
+    /*
+    this.aceEditor.on("click", (ev)=>{
+      
+      x.forEach((el)=>{
+        this.aceEditor.selection.addRange(el);
+      })
+      console.log("ace click event = ", ev)
+      
+    });
+    */
+
+    this.aceEditor.setFontSize(14);
+    
+    this.aceEditor.on("focus", (ev)=>{
+      //if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.focus = true;
+      //}
+    })
+
+    this.aceEditor.on("blur", (ev)=>{
+      //if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.focus = false;
+      //}
+    })
     let self = this;
 
-    this.monacoeditorloaded.emit();
-    this.mainService.retrieveCodePartsCursors(undefined, this);
-
-    this.canRetrievePositionsAfterLoad = true;
-
-    ////console.log("editor = ", this.editor);
-    ////console.log("this.mainService.htmlCodePositionData = ", this.mainService.htmlCodePositionData);
-
-    this.editor.onDidFocusEditorText(()=>{
-      ////console.log("onDidFocusEditorText");
-      if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.htmlCodePositionData.focus = true;
-      }
-    });
-    
-    this.editor.onDidBlurEditorText(()=>{
-      ////console.log("onDidBlurEditorText");
-      if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.htmlCodePositionData.focus = false;
-      }
-    });
-
-    this.editor.onKeyDown((event: monaco.IKeyboardEvent) => {
-      ////console.log("IKeyboardEvent keydown !");
-      
+    this.aceEditor.addEventListener("keydown", (event: KeyboardEvent)=>{
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){
@@ -98,23 +121,25 @@ export class HtmlPartComponent implements OnInit {
           self.savecodemsg.emit();
         }
       }
-    })
+    });
 
-    this.mainService.resumeFiddleTheme();
+    //this.mainService.resumeFiddleTheme(this);
   }
 
   onCodeChanged(value) {
-    //////console.log('CODE', value);
+    //console.log('HTML onCodeChanged CODE', value);
     this.mainService.htmlCode = value;
     this.mainService.setCheckBeforeUnloadListener();
 
+    /*
+    console.log("this.canRetrievePositionsAfterLoad = ", this.canRetrievePositionsAfterLoad);
     if(this.canRetrievePositionsAfterLoad){
+      console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
       this.mainService.retrieveCodePartsCursors(undefined, this);
-
-      //console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
 
       this.canRetrievePositionsAfterLoad = false; 
     }
+    */
   }
 
 }

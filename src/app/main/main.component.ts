@@ -295,7 +295,7 @@ export class MainComponent implements AfterViewInit {
         this.changeLayout(1);
       }
 
-      this.mainService.resumeFiddleTheme();
+      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, this.jsPart);
 
     });
 
@@ -846,6 +846,18 @@ export class MainComponent implements AfterViewInit {
   changeTheme(){
    let isLightTeme = !this.isFiddleThemeDark()
    let ind = isLightTeme ? 1 : 0;
+
+   if(ind === 0){
+    this.htmlPart.theme = "cloud9_day";
+    this.cssPart.theme = "cloud9_day";
+    this.jsPart.theme = "cloud9_day";
+   }
+   else{
+    this.htmlPart.theme = "cloud9_night";
+    this.cssPart.theme = "cloud9_night";
+    this.jsPart.theme = "cloud9_night";
+   }
+
    this.selectTheme(this.mainService.themesList[ind]);
    this.iframePart.changeConsoleTheme();
   }
@@ -1345,8 +1357,8 @@ export class MainComponent implements AfterViewInit {
       this.mainService.cssCodePositionData.column = this.cssPart.editor?.getPosition().column;
       this.mainService.cssCodePositionData.lineNumber = this.cssPart.editor?.getPosition().lineNumber; 
 
-      this.mainService.htmlCodePositionData.column = this.htmlPart.editor?.getPosition().column;
-      this.mainService.htmlCodePositionData.lineNumber = this.htmlPart.editor?.getPosition().lineNumber; 
+      this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
+      this.mainService.htmlCodePositionData.row = this.htmlPart.aceEditor?.getCursorPosition().row; 
 
       this.mainService.jsCodePositionData.column = this.jsPart.editor?.getPosition().column;
       this.mainService.jsCodePositionData.lineNumber = this.jsPart.editor?.getPosition().lineNumber; 

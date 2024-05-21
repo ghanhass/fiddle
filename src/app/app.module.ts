@@ -19,6 +19,17 @@ import { RessourcesComponent } from './ressources/ressources.component';
 import { AngularSplitModule } from "angular-split";
 import { MainService } from './main.service';
 import { SafePipe } from './safe.pipe';
+import { AceEditorModule } from 'ng2-ace-editor';
+
+import 'brace';
+import 'brace/mode/text';
+import 'brace/mode/html';
+import 'brace/mode/javascript';
+import 'brace/mode/css';
+import 'brace/theme/github';
+import 'brace/theme/clouds';
+
+//import { AceModule } from 'ngx-ace-wrapper';
 
 export function loadConfigs(mainService: MainService){
   return ():Promise<any> => {
@@ -47,7 +58,9 @@ export function loadConfigs(mainService: MainService){
     MonacoEditorModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    AngularSplitModule
+    AngularSplitModule,
+    AceEditorModule,
+    //AceModule
   ],
   providers: [{
     provide: APP_INITIALIZER, useFactory:loadConfigs, deps:[MainService], multi:true

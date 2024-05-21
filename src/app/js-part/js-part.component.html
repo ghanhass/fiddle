@@ -1,1 +1,5 @@
-<ngx-monaco-editor  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>
+<!--<ngx-monaco-editor  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>-->
+<ace-editor 
+[(text)]="code" 
+style="height:100%;width:100%"
+[theme]="theme" (textChanged)="onCodeChanged($event)" mode="javascript" #aceeditor></ace-editor>
