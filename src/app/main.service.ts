@@ -12,6 +12,7 @@ import { CodePositionData } from './code-position-data';
 import { CssPartComponent } from './css-part/css-part.component';
 import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
+import { Ace, Range } from 'ace-builds';
 
 
 
@@ -98,18 +99,18 @@ export class MainService {
           "inherit": true,
           "rules": [
             {
-                "foreground": "202020",
+                "foreground": "333333",
                 "background": "ffffff",
                 "token": ""
             }
           ],
           "colors": {
-              "editor.foreground": "#202020",
+              "editor.foreground": "#333333",
               "editor.background": "#FFFFFF",
               "editor.selectionBackground": "#d2d2d2",
               "editor.lineHighlightBackground": "#FFFFFF",
-              "editorCursor.foreground": "#202020",
-              "editorWhitespace.foreground": "#202020"
+              "editorCursor.foreground": "#333333",
+              "editorWhitespace.foreground": "#333333"
           }
       }
   }
@@ -124,18 +125,18 @@ export class MainService {
               "inherit": true,
               "rules": [
                   {
-                      "foreground": "202020",
+                      "foreground": "333333",
                       "background": "ffffff",
                       "token": ""
                   }
               ],
               "colors": {
-                  "editor.foreground": "#202020",
+                  "editor.foreground": "#333333",
                   "editor.background": "#FFFFFF",
                   "editor.selectionBackground": "#d2d2d2",
                   "editor.lineHighlightBackground": "#FFFFFF",
-                  "editorCursor.foreground": "#202020",
-                  "editorWhitespace.foreground": "#202020"
+                  "editorCursor.foreground": "#333333",
+                  "editorWhitespace.foreground": "#333333"
               }
           }
       },
@@ -381,10 +382,6 @@ export class MainService {
     
     .ressources-choice .ressource-choice-description[class] {
         color: ${theme.data.colors['editor.foreground']};
-    }
-    
-    .ressources-container > hr {
-        border: 2px solid ${theme.data.colors['editor.foreground']} !important;
     }
     
     .paypal-btn-container,
@@ -751,65 +748,83 @@ export class MainService {
   }
 
   retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
-    if(cssPart && this.cssCodePositionData.focus){
+    if(cssPart){
       //retrieve css code part focus and cursor position
-      cssPart.editor.focus();
-      //
-      cssPart.editor.setPosition({
-        column: this.cssCodePositionData.column,
-        lineNumber: this.cssCodePositionData.lineNumber
-      });
+      console.log("called cssPart.aceEditor.focus()");
+
+      let noSelection: boolean = this.cssCodePositionData.aceRanges.length == this.cssCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+        return el.start.column == el.end.column && el.start.row == el.start.row
+      }).length
+        //cssPart.aceEditor.selection.setRange(this.cssCodePositionData.aceRanges[0]);
+        let upMostSelection = this.cssCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
+        let upMostRow = upMostSelection.start.row;
+        this.cssCodePositionData.aceRanges.forEach((el)=>{
+          cssPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+        })
+        //cssPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
+      
+        if(noSelection){
+          console.log("azeazeaze");
+          if(this.cssCodePositionData.focus){
+            cssPart.aceEditor.focus();
+          }
+          cssPart.aceEditor.moveCursorTo(this.cssCodePositionData.row, this.cssCodePositionData.column);
+        }
+        cssPart.aceEditor.scrollToRow(upMostRow);
 
       console.log("cssCodePositionData = ", this.cssCodePositionData);
-      
-      let newTop = cssPart.editor.getTopForPosition(this.cssCodePositionData.lineNumber, this.cssCodePositionData.column);
-
-      //console.log("newTop = ", newTop);
-
-      cssPart.editor.setScrollTop(newTop);
     }
-    if(jsPart && this.jsCodePositionData.focus){
+    if(jsPart){
       //retrieve js code part focus and cursor position
-      jsPart.editor.focus();
-      //
-      jsPart.editor.setPosition({
-        column: this.jsCodePositionData.column,
-        lineNumber: this.jsCodePositionData.lineNumber
-      });
+      console.log("called jsPart.aceEditor.focus()");
 
-      //console.log("jsCodePositionData = ", this.jsCodePositionData);
+      let noSelection: boolean = this.jsCodePositionData.aceRanges.length == this.jsCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+        return el.start.column == el.end.column && el.start.row == el.start.row
+      }).length
+        //jsPart.aceEditor.selection.setRange(this.jsCodePositionData.aceRanges[0]);
+        let upMostSelection = this.jsCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
+        let upMostRow = upMostSelection.start.row;
+        this.jsCodePositionData.aceRanges.forEach((el)=>{
+          jsPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+        })
+        //jsPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
-      let newTop = jsPart.editor.getTopForPosition(this.jsCodePositionData.lineNumber, this.jsCodePositionData.column);
+        if(noSelection){
+          console.log("azeazeaze");
+          if(this.jsCodePositionData.focus){
+            jsPart.aceEditor.focus();
+          }
+          jsPart.aceEditor.moveCursorTo(this.jsCodePositionData.row, this.jsCodePositionData.column);
+        }
+        jsPart.aceEditor.scrollToRow(upMostRow);
 
-      //console.log("newTop = ", newTop);
-
-      jsPart.editor.setScrollTop(newTop);
+      console.log("jsCodePositionData = ", this.jsCodePositionData);
     }
-     if(htmlPart && this.htmlCodePositionData.focus){
+     if(htmlPart){
       //retrieve html code part focus and cursor position
-      //console.log("called htmlPart.editor.focus()");
-      //htmlPart.editor.focus();
-      htmlPart.aceEditor.focus();
-      //
+      console.log("called htmlPart.aceEditor.focus()");
+
+      let noSelection: boolean = this.htmlCodePositionData.aceRanges.length == this.htmlCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+        return el.start.column == el.end.column && el.start.row == el.start.row
+      }).length
+        //htmlPart.aceEditor.selection.setRange(this.htmlCodePositionData.aceRanges[0]);
+        let upMostSelection = this.htmlCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
+        let upMostRow = upMostSelection.start.row;
+        this.htmlCodePositionData.aceRanges.forEach((el)=>{
+          htmlPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+        })
+        //htmlPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
-      /*
-      htmlPart.editor.setPosition({
-        column: this.htmlCodePositionData.column,
-        lineNumber: this.htmlCodePositionData.lineNumber
-      });
-      */
-      htmlPart.aceEditor.moveCursorToPosition({
-        column: this.htmlCodePositionData.column,
-        row: this.htmlCodePositionData.row
-      })
+        if(noSelection){
+          console.log("azeazeaze");
+          if(this.htmlCodePositionData.focus){
+            htmlPart.aceEditor.focus();
+          }
+          htmlPart.aceEditor.moveCursorTo(this.htmlCodePositionData.row, this.htmlCodePositionData.column);
+        }
+        htmlPart.aceEditor.scrollToRow(upMostRow);
 
       console.log("htmlCodePositionData = ", this.htmlCodePositionData);
-
-      let newTop = htmlPart.editor.getTopForPosition(this.htmlCodePositionData.lineNumber, this.htmlCodePositionData.column);
-
-      //console.log("newTop = ", newTop);
-
-      htmlPart.editor.setScrollTop(newTop);
     }
   }
 

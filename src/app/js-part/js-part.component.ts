@@ -36,6 +36,7 @@ export class JsPartComponent implements OnInit {
   constructor(private mainService:MainService) {  }
 
   ngOnInit(): void {
+    this.canRetrievePositionsAfterLoad = true;
     this.code = this.mainService.jsCode;
     ////console.log("JsPartComponent ngOnInit");
   }
@@ -47,42 +48,20 @@ export class JsPartComponent implements OnInit {
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
       enableSnippets: true,
-      enableLiveAutocompletion: true
+      enableLiveAutocompletion: true,
+      wrap: true
     });
 
-    //console.log("called retrieveCodePartsCursors() from JsPartComponent !");
-    //this.mainService.retrieveCodePartsCursors(undefined, this);
-    
-    /*let x: Ace.Range[] = [];
-    this.aceEditor.on("copy", (ev)=>{
-      //x = this.aceEditor.getSelection().getAllRanges();
-      console.log("ace copy event  this.aceEditor.getCursorPosition() = ", this.aceEditor.getCursorPosition());
-    });*/
-
-    /*
-    this.aceEditor.on("click", (ev)=>{
-      
-      x.forEach((el)=>{
-        this.aceEditor.selection.addRange(el);
-      })
-      console.log("ace click event = ", ev)
-      
-    });
-    */
+    this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
 
     this.aceEditor.setFontSize(14);
     
     this.aceEditor.on("focus", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.jsCodePositionData.focus = true;
-      //}
+      this.mainService.htmlCodePositionData.focus = false;
+      this.mainService.cssCodePositionData.focus = false;
+      this.mainService.jsCodePositionData.focus = true;
     })
 
-    this.aceEditor.on("blur", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.jsCodePositionData.focus = false;
-      //}
-    })
     let self = this;
 
     this.aceEditor.addEventListener("keydown", (event: KeyboardEvent)=>{
@@ -116,15 +95,17 @@ export class JsPartComponent implements OnInit {
 
   onCodeChanged(value) {
     //////console.log('CODE', value);
+    let self = this;
     this.mainService.jsCode = value;
     this.mainService.setCheckBeforeUnloadListener();
 
     if(this.canRetrievePositionsAfterLoad){
-      this.mainService.retrieveCodePartsCursors(undefined, undefined, this);
+      setTimeout(()=>{
+        console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
+        self.mainService.retrieveCodePartsCursors(undefined, undefined, self);
 
-      //console.log("called retrieveCodePartsCursors() from JsPartComponent !");
-
-      this.canRetrievePositionsAfterLoad = false; 
+        self.canRetrievePositionsAfterLoad = false; 
+      }, 1);
     }
   }
 

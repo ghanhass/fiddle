@@ -43,6 +43,7 @@ export class CssPartComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.canRetrievePositionsAfterLoad = true;
     this.code = this.mainService.cssCode;
     //console.log("CssPartComponent ngOnInit");
   }
@@ -52,21 +53,18 @@ export class CssPartComponent implements OnInit {
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
       enableSnippets: true,
-      enableLiveAutocompletion: true
+      enableLiveAutocompletion: true,
+      wrap: true
     });
+
+    this.mainService.retrieveCodePartsCursors(this);
 
     this.aceEditor.setFontSize(14);
     
     this.aceEditor.on("focus", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
+        this.mainService.htmlCodePositionData.focus = false;
         this.mainService.cssCodePositionData.focus = true;
-      //}
-    })
-
-    this.aceEditor.on("blur", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.cssCodePositionData.focus = false;
-      //}
+        this.mainService.jsCodePositionData.focus = false;
     })
     let self = this;
 
@@ -99,18 +97,18 @@ export class CssPartComponent implements OnInit {
 
   onCodeChanged(value) {
     ////console.log('CODE', value);
+    let self = this;
     this.mainService.cssCode = value;
     this.mainService.setCheckBeforeUnloadListener();
 
-    /*
     if(this.canRetrievePositionsAfterLoad){
-      this.mainService.retrieveCodePartsCursors(this);
+      setTimeout(()=>{
+        console.log("called retrieveCodePartsCursors() from CssPartComponent !");
+        self.mainService.retrieveCodePartsCursors(self);
 
-      //console.log("called retrieveCodePartsCursors() from CssPartComponent !");
-
-      this.canRetrievePositionsAfterLoad = false;
+        self.canRetrievePositionsAfterLoad = false; 
+      }, 1);
     }
-    */
   }
 
 

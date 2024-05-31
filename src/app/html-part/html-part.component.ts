@@ -54,46 +54,25 @@ export class HtmlPartComponent implements OnInit {
 
   ngAfterViewInit(){
     console.log("HtmlPartComponent ngAfterViewInit");
-
     this.aceEditor = this.aceeditor.getEditor() ;
+    
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
       enableSnippets: true,
-      enableLiveAutocompletion: true
+      enableLiveAutocompletion: true,
+      wrap: true
     });
 
-    //console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
-    //this.mainService.retrieveCodePartsCursors(undefined, this);
+    console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
     
-    /*let x: Ace.Range[] = [];
-    this.aceEditor.on("copy", (ev)=>{
-      //x = this.aceEditor.getSelection().getAllRanges();
-      console.log("ace copy event  this.aceEditor.getCursorPosition() = ", this.aceEditor.getCursorPosition());
-    });*/
-
-    /*
-    this.aceEditor.on("click", (ev)=>{
-      
-      x.forEach((el)=>{
-        this.aceEditor.selection.addRange(el);
-      })
-      console.log("ace click event = ", ev)
-      
-    });
-    */
+    this.mainService.retrieveCodePartsCursors(undefined, this);
 
     this.aceEditor.setFontSize(14);
     
     this.aceEditor.on("focus", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.htmlCodePositionData.focus = true;
-      //}
-    })
-
-    this.aceEditor.on("blur", (ev)=>{
-      //if(this.mainService.canSaveCodeEditorsPostition){
-        this.mainService.htmlCodePositionData.focus = false;
-      //}
+      this.mainService.htmlCodePositionData.focus = true;
+      this.mainService.cssCodePositionData.focus = false;
+      this.mainService.jsCodePositionData.focus = false;
     })
     let self = this;
 
@@ -127,19 +106,22 @@ export class HtmlPartComponent implements OnInit {
   }
 
   onCodeChanged(value) {
-    //console.log('HTML onCodeChanged CODE', value);
+    let self = this;
+    console.log('HTML onCodeChanged CODE', value);
     this.mainService.htmlCode = value;
     this.mainService.setCheckBeforeUnloadListener();
 
-    /*
+    
     console.log("this.canRetrievePositionsAfterLoad = ", this.canRetrievePositionsAfterLoad);
     if(this.canRetrievePositionsAfterLoad){
-      console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
-      this.mainService.retrieveCodePartsCursors(undefined, this);
+      setTimeout(()=>{
+        console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
+        self.mainService.retrieveCodePartsCursors(undefined, self);
 
-      this.canRetrievePositionsAfterLoad = false; 
+        self.canRetrievePositionsAfterLoad = false; 
+      }, 1);
     }
-    */
+    
   }
 
 }

@@ -196,7 +196,9 @@ export class MainComponent implements AfterViewInit {
           
           self.mainService.redirectAfterSaveMode = false;
           
-          this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
+          setTimeout(()=>{
+            self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart);        
+          }, 1);
 
           //console.log("after router path change");
           if(this.mainService.scheduledRunFiddle){
@@ -279,8 +281,9 @@ export class MainComponent implements AfterViewInit {
               }
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
-
-              this.mainService.retrieveCodePartsCursors(this.cssPart, this.htmlPart, this.jsPart);
+              setTimeout(()=>{
+                self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart);        
+              }, 1);
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
@@ -1356,12 +1359,15 @@ export class MainComponent implements AfterViewInit {
       //START save codePositionData objects in MainService
       this.mainService.cssCodePositionData.column = this.cssPart.editor?.getPosition().column;
       this.mainService.cssCodePositionData.lineNumber = this.cssPart.editor?.getPosition().lineNumber; 
+      this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
 
       this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
       this.mainService.htmlCodePositionData.row = this.htmlPart.aceEditor?.getCursorPosition().row; 
+      this.mainService.htmlCodePositionData.aceRanges = this.htmlPart.aceEditor?.getSelection().getAllRanges();
 
       this.mainService.jsCodePositionData.column = this.jsPart.editor?.getPosition().column;
       this.mainService.jsCodePositionData.lineNumber = this.jsPart.editor?.getPosition().lineNumber; 
+      this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
       //END save codePositionData objects in MainService
 
       this.iframePart.saveFiddle();
