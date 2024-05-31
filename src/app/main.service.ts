@@ -70,21 +70,20 @@ export class MainService {
   isBeforeUnloadEvHandlerSet: boolean = false;
 
   htmlCodePositionData: CodePositionData = {
-    lineNumber: 1, 
     row:0,
     column: 0,
     focus: false,
   }
 
   cssCodePositionData: CodePositionData = {
-    lineNumber: 1, 
-    column: 1,
+    row:0,
+    column: 0,
     focus: false,
   }
 
   jsCodePositionData: CodePositionData = {
-    lineNumber: 1, 
-    column: 1,
+    row:0,
+    column: 0,
     focus: false,
   }
 

@@ -1358,7 +1358,7 @@ export class MainComponent implements AfterViewInit {
       this.mainService.scheduledRunFiddle = true;
       //START save codePositionData objects in MainService
       this.mainService.cssCodePositionData.column = this.cssPart.aceEditor?.getCursorPosition().column;
-      this.mainService.cssCodePositionData.lineNumber = this.cssPart.aceEditor?.getCursorPosition().row;
+      this.mainService.cssCodePositionData.row = this.cssPart.aceEditor?.getCursorPosition().row;
       this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
 
       this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
@@ -1366,7 +1366,7 @@ export class MainComponent implements AfterViewInit {
       this.mainService.htmlCodePositionData.aceRanges = this.htmlPart.aceEditor?.getSelection().getAllRanges();
 
       this.mainService.jsCodePositionData.column = this.jsPart.aceEditor?.getCursorPosition().column;
-      this.mainService.jsCodePositionData.lineNumber = this.jsPart.aceEditor?.getCursorPosition().row;
+      this.mainService.jsCodePositionData.row = this.jsPart.aceEditor?.getCursorPosition().row;
       this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
       //END save codePositionData objects in MainService
 
