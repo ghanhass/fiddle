@@ -9,7 +9,6 @@ import { CssPartComponent } from './css-part/css-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { IframePartComponent } from './iframe-part/iframe-part.component';
 import { FormsModule } from "@angular/forms";
-import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { HttpClientModule } from "@angular/common/http";
 import { LoaderComponent } from './loader/loader.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -55,7 +54,6 @@ export function loadConfigs(mainService: MainService){
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    MonacoEditorModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     AngularSplitModule,

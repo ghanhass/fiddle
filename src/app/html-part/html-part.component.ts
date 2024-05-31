@@ -1,9 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output,EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
-import {
-  MonacoEditorLoaderService,
-  MonacoStandaloneCodeEditor
-} from '@materia-ui/ngx-monaco-editor';
 import { AceEditorComponent } from 'ng2-ace-editor';
 
 import {Ace} from 'ace-builds/ace';
@@ -21,10 +17,8 @@ export class HtmlPartComponent implements OnInit {
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
-  @Output()monacoeditorloaded: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
 
-  editor: MonacoStandaloneCodeEditor;
  @ViewChild("aceeditor") aceeditor: AceEditorComponent;
  aceEditor: Ace.Editor;
 
@@ -41,8 +35,7 @@ export class HtmlPartComponent implements OnInit {
     contextmenu: false
   };
 
-  constructor(private mainService:MainService,
-  private monacoLoaderService: MonacoEditorLoaderService) {
+  constructor(private mainService:MainService ) {
   }
 
   ngOnInit(): void {
@@ -58,7 +51,6 @@ export class HtmlPartComponent implements OnInit {
     
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
-      enableSnippets: true,
       enableLiveAutocompletion: true,
       wrap: true
     });

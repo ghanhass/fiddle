@@ -748,7 +748,7 @@ export class MainService {
   }
 
   retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
-    if(cssPart){
+    if(cssPart && this.cssCodePositionData.aceRanges){
       //retrieve css code part focus and cursor position
       console.log("called cssPart.aceEditor.focus()");
 
@@ -774,7 +774,7 @@ export class MainService {
 
       console.log("cssCodePositionData = ", this.cssCodePositionData);
     }
-    if(jsPart){
+    if(jsPart && this.jsCodePositionData.aceRanges){
       //retrieve js code part focus and cursor position
       console.log("called jsPart.aceEditor.focus()");
 
@@ -800,7 +800,7 @@ export class MainService {
 
       console.log("jsCodePositionData = ", this.jsCodePositionData);
     }
-     if(htmlPart){
+     if(htmlPart && this.htmlCodePositionData.aceRanges){
       //retrieve html code part focus and cursor position
       console.log("called htmlPart.aceEditor.focus()");
 

@@ -1357,16 +1357,16 @@ export class MainComponent implements AfterViewInit {
       }
       this.mainService.scheduledRunFiddle = true;
       //START save codePositionData objects in MainService
-      this.mainService.cssCodePositionData.column = this.cssPart.editor?.getPosition().column;
-      this.mainService.cssCodePositionData.lineNumber = this.cssPart.editor?.getPosition().lineNumber; 
+      this.mainService.cssCodePositionData.column = this.cssPart.aceEditor?.getCursorPosition().column;
+      this.mainService.cssCodePositionData.lineNumber = this.cssPart.aceEditor?.getCursorPosition().row;
       this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
 
       this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
       this.mainService.htmlCodePositionData.row = this.htmlPart.aceEditor?.getCursorPosition().row; 
       this.mainService.htmlCodePositionData.aceRanges = this.htmlPart.aceEditor?.getSelection().getAllRanges();
 
-      this.mainService.jsCodePositionData.column = this.jsPart.editor?.getPosition().column;
-      this.mainService.jsCodePositionData.lineNumber = this.jsPart.editor?.getPosition().lineNumber; 
+      this.mainService.jsCodePositionData.column = this.jsPart.aceEditor?.getCursorPosition().column;
+      this.mainService.jsCodePositionData.lineNumber = this.jsPart.aceEditor?.getCursorPosition().row;
       this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
       //END save codePositionData objects in MainService
 

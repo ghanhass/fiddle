@@ -1,6 +1,5 @@
 import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
-import { MonacoStandaloneCodeEditor } from '@materia-ui/ngx-monaco-editor';
 import { AceEditorComponent } from 'ng2-ace-editor';
 import { Ace } from 'ace-builds';
 
@@ -18,7 +17,6 @@ export class JsPartComponent implements OnInit {
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
 
-  editor:MonacoStandaloneCodeEditor;
   @ViewChild("aceeditor") aceeditor: AceEditorComponent;
   aceEditor: Ace.Editor;
 
@@ -47,7 +45,6 @@ export class JsPartComponent implements OnInit {
     this.aceEditor = this.aceeditor.getEditor() ;
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
-      enableSnippets: true,
       enableLiveAutocompletion: true,
       wrap: true
     });
