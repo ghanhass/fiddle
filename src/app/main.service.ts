@@ -73,18 +73,21 @@ export class MainService {
     row:0,
     column: 0,
     focus: false,
+    aceRanges: []
   }
 
   cssCodePositionData: CodePositionData = {
     row:0,
     column: 0,
     focus: false,
+    aceRanges: []
   }
 
   jsCodePositionData: CodePositionData = {
     row:0,
     column: 0,
     focus: false,
+    aceRanges: []
   }
 
   canSaveCodeEditorsPostition: boolean = true;
@@ -747,7 +750,7 @@ export class MainService {
   }
 
   retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
-    if(cssPart && this.cssCodePositionData.aceRanges){
+    if(cssPart){
       //retrieve css code part focus and cursor position
       console.log("called cssPart.aceEditor.focus()");
 
@@ -763,7 +766,6 @@ export class MainService {
         //cssPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
-          console.log("azeazeaze");
           if(this.cssCodePositionData.focus){
             cssPart.aceEditor.focus();
           }
@@ -771,9 +773,8 @@ export class MainService {
         }
         cssPart.aceEditor.scrollToRow(upMostRow);
 
-      console.log("cssCodePositionData = ", this.cssCodePositionData);
     }
-    if(jsPart && this.jsCodePositionData.aceRanges){
+    if(jsPart){
       //retrieve js code part focus and cursor position
       console.log("called jsPart.aceEditor.focus()");
 
@@ -789,7 +790,6 @@ export class MainService {
         //jsPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
-          console.log("azeazeaze");
           if(this.jsCodePositionData.focus){
             jsPart.aceEditor.focus();
           }
@@ -797,9 +797,8 @@ export class MainService {
         }
         jsPart.aceEditor.scrollToRow(upMostRow);
 
-      console.log("jsCodePositionData = ", this.jsCodePositionData);
     }
-     if(htmlPart && this.htmlCodePositionData.aceRanges){
+     if(htmlPart){
       //retrieve html code part focus and cursor position
       console.log("called htmlPart.aceEditor.focus()");
 
@@ -815,7 +814,7 @@ export class MainService {
         //htmlPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
-          console.log("azeazeaze");
+          console.log("NO SELECTION !");
           if(this.htmlCodePositionData.focus){
             htmlPart.aceEditor.focus();
           }

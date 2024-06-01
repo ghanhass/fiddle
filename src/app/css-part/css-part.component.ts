@@ -52,8 +52,6 @@ export class CssPartComponent implements OnInit {
       wrap: true
     });
 
-    this.mainService.retrieveCodePartsCursors(this);
-
     this.aceEditor.setFontSize(14);
     
     this.aceEditor.on("focus", (ev)=>{
@@ -98,7 +96,7 @@ export class CssPartComponent implements OnInit {
 
     if(this.canRetrievePositionsAfterLoad){
       setTimeout(()=>{
-        console.log("called retrieveCodePartsCursors() from CssPartComponent !");
+        //console.log("called retrieveCodePartsCursors() from CssPartComponent !");
         self.mainService.retrieveCodePartsCursors(self);
 
         self.canRetrievePositionsAfterLoad = false; 

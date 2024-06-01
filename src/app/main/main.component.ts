@@ -342,14 +342,15 @@ export class MainComponent implements AfterViewInit {
       
         if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){        
           event.preventDefault();
-          event.stopPropagation();
+          //event.stopPropagation();
           self.runCode();
         }
         else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
           event.preventDefault();
-          event.stopPropagation();
+          //event.stopPropagation();
           if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
-            self.runCode("save");
+            //self.runCode("save");
+            (document.querySelector(".share-code-btn.btn") as HTMLElement).click();//meh a workaround for calling runCode("save")
             self.mainService.codeSavingDate = evDate;
           }
         }
@@ -1361,10 +1362,14 @@ export class MainComponent implements AfterViewInit {
       this.mainService.cssCodePositionData.row = this.cssPart.aceEditor?.getCursorPosition().row;
       this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
 
+      this.htmlPart.canRetrievePositionsAfterLoad = true;
       this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
       this.mainService.htmlCodePositionData.row = this.htmlPart.aceEditor?.getCursorPosition().row; 
       this.mainService.htmlCodePositionData.aceRanges = this.htmlPart.aceEditor?.getSelection().getAllRanges();
-
+      
+      console.log("this.mainService.htmlCodePositionData = ", this.mainService.htmlCodePositionData);
+      console.log("getAllRanges() = ", this.htmlPart.aceEditor?.getSelection().getAllRanges());
+      
       this.mainService.jsCodePositionData.column = this.jsPart.aceEditor?.getCursorPosition().column;
       this.mainService.jsCodePositionData.row = this.jsPart.aceEditor?.getCursorPosition().row;
       this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();

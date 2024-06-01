@@ -39,7 +39,6 @@ export class HtmlPartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.canRetrievePositionsAfterLoad = true;
     
     this.code = this.mainService.htmlCode;
     console.log("HtmlPartComponent ngOnInit");
@@ -48,16 +47,14 @@ export class HtmlPartComponent implements OnInit {
   ngAfterViewInit(){
     console.log("HtmlPartComponent ngAfterViewInit");
     this.aceEditor = this.aceeditor.getEditor() ;
+    this.aceEditor.on("changeSession", (e)=>{console.log("html aceEditor changeSession ev = ", e)});
     
     this.aceEditor.setOptions({
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
       wrap: true
     });
-
-    console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
     
-    this.mainService.retrieveCodePartsCursors(undefined, this);
 
     this.aceEditor.setFontSize(14);
     
@@ -106,11 +103,11 @@ export class HtmlPartComponent implements OnInit {
     
     console.log("this.canRetrievePositionsAfterLoad = ", this.canRetrievePositionsAfterLoad);
     if(this.canRetrievePositionsAfterLoad){
+      self.canRetrievePositionsAfterLoad = false; 
+
       setTimeout(()=>{
         console.log("called retrieveCodePartsCursors() from HtmlPartComponent !");
         self.mainService.retrieveCodePartsCursors(undefined, self);
-
-        self.canRetrievePositionsAfterLoad = false; 
       }, 1);
     }
     
