@@ -1,8 +1,8 @@
 <header id="main-header">
     <div class="logo-title-container">
       <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img [ngStyle]="{display: isFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo.png'">
-        <img [ngStyle]="{display: !isFiddleThemeDark() ? 'none' : ''}" [src]="'assets/logo_dark.png'">
+        <img [ngStyle]="{display: isFiddleThemeDark() ? 'none' : 'block'}" [src]="'assets/logo.png'">
+        <img [ngStyle]="{display: !isFiddleThemeDark() ? 'none' : 'block'}" [src]="'assets/logo_dark.png'">
       </a>
       <div class="fiddle-title">
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title" />
@@ -35,17 +35,21 @@
       <button class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
         <span>Prettify</span>
       </button>
-  
+      
       <div class="themes-btn-container">
         <button class="themes-btn btn" (click)="changeTheme()" [title]="isFiddleThemeDark() ? 'Daylight theme' : 'Night theme' ">
           <i *ngIf="isFiddleThemeDark()" class="fa fa-sun-o" aria-hidden="true"></i>
           <i *ngIf="!isFiddleThemeDark()" class="fa fa-moon-o" aria-hidden="true"></i>
         </button>
       </div>
-  
+      
+      <button class="history-btn btn" [title]="'History'">
+        <i [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/'+( isFiddleThemeDark() ? 'history-dark.png' : 'history.png' )+')' }"></i>
+      </button>
+
       <div class="paypal-btn-container">
         <div id="donate-button-container">
-          <div id="donate-button" class="btn"></div>
+          <div id="donate-button" class="btn" [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/paypal-icon.png)'}"></div>
         </div>       
       </div>
   

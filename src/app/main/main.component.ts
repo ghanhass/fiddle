@@ -282,7 +282,7 @@ export class MainComponent implements AfterViewInit {
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
               setTimeout(()=>{
-                self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart);        
+                self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart, true);        
               }, 1);
             }
             else if(res.status == "not found"){

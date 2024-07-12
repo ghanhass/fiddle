@@ -169,6 +169,7 @@
     flex-grow: 1;
     /*display: flex;
     flex-direction: column;*/
+    position: relative;
 } 
 
 .main-container{
@@ -298,13 +299,14 @@ as-split-area.as-split-area-iframe.is-horizontal {
     font-weight: bold;
 }
 
-.share-code-btn:active,
+/*.share-code-btn:active,
 .ressources-code-btn:active,
 .themes-btn:active,
 .fullscreen-iframe-btn:not(.fullscreen-iframe-btn-secondary):active,
 .console-btn:active,
 .stretch-v-iframe-btn:active,
-.stretch-h-iframe-btn:active{
+.stretch-h-iframe-btn:active*/
+.btn:active{
     padding-top: 4px !important;
 }
 .share-code-btn:hover,
@@ -355,7 +357,6 @@ as-split-area.as-split-area-iframe.is-horizontal {
 }
 
 .themes-btn-container{
-    margin-right: 3px;
     position: relative;
 }
 
@@ -363,11 +364,19 @@ as-split-area.as-split-area-iframe.is-horizontal {
     height: 30px;
 }
 
-.paypal-btn-container #donate-button {
+.paypal-btn-container div#donate-button {
     position: relative;
     font-size: 14px;
     width: 35px;
     height: 28px;
+
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto 100%;
+}
+
+::ng-deep div#donate-button img{
+    opacity: 0;
 }
 
 i.fa.fa-sort-desc {
@@ -1259,4 +1268,17 @@ app-modal .modal-header .modal-validate-btn{
     animation-iteration-count: infinite;
     z-index: 1;
     position: relative;
+}
+
+button.history-btn.btn i{
+    width: 30px;
+}
+
+button.history-btn.btn i{
+    width: 30px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: calc(100% - 4px);
+    height: 100%;
+    display:inline-block;
 }
