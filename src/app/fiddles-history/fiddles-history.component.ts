@@ -1,0 +1,93 @@
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MainService } from '../main.service';
+import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+import { LoaderComponent } from '../loader/loader.component';
+
+@Component({
+  selector: 'app-fiddles-history',
+  templateUrl: './fiddles-history.component.html',
+  styleUrls: ['./fiddles-history.component.css']
+})
+export class FiddlesHistoryComponent implements OnInit {
+  searchText: string = "";
+  fiddlesList: any[] = [];
+  pageNumber: number = 1;
+  canChangePage: boolean = true;
+  @ViewChild("historyLoader")historyLoader: LoaderComponent;
+
+  constructor(private mainService: MainService, private router: Router){
+  }
+
+  getFiddlesList(){
+    this.canChangePage = false;
+    this.historyLoader.showLoader();
+    this.mainService.getFiddlesList(this.pageNumber).subscribe({
+      next: (res)=>{
+        console.log("getFiddlesList res = ", res);
+        this.fiddlesList = res;
+
+        this.historyLoader.hideLoader();
+        this.canChangePage = true;
+      }
+    })
+  }
+
+  goToFiddle(fiddle){
+    if(this.canChangePage){
+      let id = fiddle.id;
+      if(id){
+        this.router.navigate(["/"+id]);
+      }
+    }
+    console.log("goToFiddle fiddle = ", fiddle);
+  }
+
+  ngOnInit(){
+  }
+
+  nextPage(){
+    if(this.fiddlesList.length){
+      this.pageNumber++;
+      this.getFiddlesList();
+    }
+  }
+
+  prevPage(){
+    if(this.pageNumber > 1){
+      this.pageNumber--;
+      this.getFiddlesList();
+    }
+  }
+
+  generateFiddlesList(){
+    
+    return this.fiddlesList.filter((el)=>{
+      let arr = (new Date(el.created_at)).toDateString().split(" ");
+      arr.splice(0, 1);
+      arr[1]+=","
+      let str = arr.join(" ");
+
+      if(this.searchText){
+        return (el.title as string).toUpperCase().includes(this.searchText.toUpperCase()) || str.toUpperCase().includes(this.searchText.toUpperCase());
+      }
+
+      return el;
+    });
+  }
+
+  getLoaderStyle(){
+    let obj : any = {
+      position: "absolute",
+      "z-index": 1,
+      left: "50%",
+      top: "50%",
+      transform: "translate(-50%, -50%)",
+      width: "500px",
+      height: "500px",
+      display: this.canChangePage ? 'none': 'block'
+    }
+
+    return obj;
+  }
+}

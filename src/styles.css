@@ -25,6 +25,10 @@ ngs-code-editor .margin-view-overlays .line-numbers {
     user-select: none;
 }*/
 
+.code-component{
+    position: relative;
+}
+
 .monaco-editor .margin-view-overlays .line-numbers {
     opacity: 0.7;
     user-select: none;
@@ -96,3 +100,44 @@ body{
 /*END hassoon's css library*/
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-layer-marker {
+    display:none;
+}
+
+.custom-layer-marker.show {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    animation-name: blink;
+    animation-duration: 0.8s;
+    animation-iteration-count: infinite;
+    z-index: 9999;
+}
+
+button.tools-btn.btn {
+    width: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 4px !important;
+}
+
+button.tools-btn.btn span {
+    /*border: 2px solid #222222;*/
+    width: 100%;
+}
+
+* {
+    transition-property: background-color, color, display, background-image;
+    transition-duration: 0.3s !important;
+}
+
+ace-editor > :not(.ace_gutter) {
+    transition: none
+}
