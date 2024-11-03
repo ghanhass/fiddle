@@ -22,19 +22,6 @@ export class HtmlPartComponent implements OnInit {
  @ViewChild("aceeditor") aceeditor: AceEditorComponent;
  aceEditor: Ace.Editor;
 
-  options = {
-    language:"html",
-    //contextmenu: false,
-    minimap: {
-      enabled: false,
-    },
-    lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1,
-    wordWrap:"on",
-    baseUrl: "/",
-    contextmenu: false
-  };
-
   constructor(private mainService:MainService ) {
   }
 

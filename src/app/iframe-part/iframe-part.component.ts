@@ -83,7 +83,7 @@ export class IframePartComponent implements OnInit {
     }
   }
 
-  saveFiddle(){
+  saveFiddle(appMode){
     this.isFiddleLoadComplete = false;
 
     //console.log("saving Code");
@@ -109,6 +109,7 @@ export class IframePartComponent implements OnInit {
       js:this.mainService.jsCode,
       html:this.mainService.htmlCode,
       css:this.mainService.cssCode,
+      pastebintext: this.mainService.pastebinText,
       
       js_part_size: this.mainService.jsCodePartSize,
       css_part_size: this.mainService.cssCodePartSize,
@@ -126,7 +127,9 @@ export class IframePartComponent implements OnInit {
       css_code_position_data: this.mainService.cssCodePositionData,
       html_code_position_data: this.mainService.htmlCodePositionData,
       js_code_position_data: this.mainService.jsCodePositionData,
-      is_mobile_mode: this.mainService.isMobileMode
+      is_mobile_mode: this.mainService.isMobileMode,
+      created_at: new Date().getTime(),
+      appmode: appMode
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);

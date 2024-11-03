@@ -20,17 +20,6 @@ export class JsPartComponent implements OnInit {
   @ViewChild("aceeditor") aceeditor: AceEditorComponent;
   aceEditor: Ace.Editor;
 
-  options = {
-    language:"javascript",
-    //contextmenu: false,
-    minimap: {
-      enabled: false,
-    },
-    lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1,
-    wordWrap:"on",
-    baseUrl: "/"
-  };
   constructor(private mainService:MainService) {  }
 
   ngOnInit(): void {

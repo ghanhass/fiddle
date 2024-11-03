@@ -6,20 +6,20 @@
       </a>
       <div class="fiddle-title">
         <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title" />
-        <div class="fiddle-size">
+        <div class="fiddle-size" *ngIf="appMode == 'fiddle'">
           <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthInputDisabled" (change)="onFiddleWidthChange($event.target.value)" />
           <span class="x">x</span>
           <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightInputDisabled" (change)="onFiddeHeightChange($event.target.value)" />
         </div>
-        <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Turn on fullscreen view'">
+        <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Turn on fullscreen view'" *ngIf="appMode == 'fiddle'">
           <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
         </button>
   
-        <button class="stretch-v-iframe-btn btn" (click)="stretchVertically()" [title]="'Stretch view vertically'">
+        <button class="stretch-v-iframe-btn btn" (click)="stretchVertically()" [title]="'Stretch view vertically'" *ngIf="appMode == 'fiddle'">
           <span><i class="fa fa-arrows-v" aria-hidden="true"></i></span>
         </button>
   
-        <button class="stretch-h-iframe-btn btn" (click)="stretchHorizontally()" [title]="'Stretch view horizontally'">
+        <button class="stretch-h-iframe-btn btn" (click)="stretchHorizontally()" [title]="'Stretch view horizontally'" *ngIf="appMode == 'fiddle'">
           <span><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
         </button>
       </div>
@@ -32,7 +32,7 @@
         <span>Console</span>
       </button>-->
   
-      <button class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
+      <button *ngIf="appMode == 'fiddle'" class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
         <span>Prettify</span>
       </button>
       
@@ -43,7 +43,7 @@
         </button>
       </div>
       
-      <button class="history-btn btn" [title]="'History'">
+      <button class="history-btn btn" [title]="'History'" (click)="showHistoryModal()">
         <i [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/'+( isFiddleThemeDark() ? 'history-dark.png' : 'history.png' )+')' }"></i>
       </button>
 
@@ -52,11 +52,11 @@
           <div id="donate-button" class="btn" [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/paypal-icon.png)'}"></div>
         </div>       
       </div>
-  
-      <button class="ressources-code-btn btn" (click)="ressouresBtnClick()">
+
+      <button class="ressources-code-btn btn" *ngIf="appMode == 'fiddle'" (click)="ressouresBtnClick()">
         <span>Resources</span>
       </button>
-      <div class="layouts-list-container" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
+      <div class="layouts-list-container" *ngIf="appMode == 'fiddle'" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
         <button class="layouts-btn btn"><span>Layouts</span> <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
         </button>
         <div class="layouts-list" #layoutsList>
@@ -116,13 +116,21 @@
       <button class="share-code-btn btn" (click)="runCode('save')">
         <span>Share</span>
       </button>
-      <button class="share-code-btn btn" (click)="runCode()">
+      <button class="share-code-btn btn" (click)="runCode()" *ngIf="appMode == 'fiddle'">
         <span>Run</span>
       </button>
+
+      <button style="width:65px;" class="app-mode-btn btn" (click)="onAppModeClick()">
+        <span>{{appMode == 'pastebin' ? 'Fiddle' : appMode == 'fiddle' ? 'Pastebin' : ''}}</span>
+      </button>
     </div>
-  
   </header>
-  <div class="main-container" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen}">
+  <div class="main-container main-container-pastebin" [ngClass]="{'off':appMode == 'fiddle'}">
+    <div class="pastebin-component-container">
+      <app-pastebin (savecodemsg)="runCode('save')" #pastebinPart class="code-component"></app-pastebin>
+    </div>
+  </div>
+  <div class="main-container main-container-fiddle" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen, 'off':appMode == 'pastebin'}">
     <div id="code-parts-title-mobile">
       <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
       <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
@@ -280,6 +288,18 @@
     </div>
     <div class="modal-body">
       <app-ressources #ressources (hidemodal)="hideModal()" (validate)="onRessourcesValidate($event)"></app-ressources>
+    </div>
+    <div class="modal-footer" style="padding:0px;">
+    </div>
+  </app-modal>
+
+  <app-modal #modalHistory>
+    <div class="modal-header">
+      <h3>Fiddles history</h3>
+      <button class="modal-close-btn" (click)="hideHistoryModal()"><span>X</span></button>
+    </div>
+    <div class="modal-body">
+      <app-fiddles-history #appFiddlesHistory></app-fiddles-history>
     </div>
     <div class="modal-footer" style="padding:0px;">
     </div>

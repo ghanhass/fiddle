@@ -14,6 +14,8 @@ import { NgxPrettifyService } from '@smartcodelab/ngx-prettify';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
+import { FiddlesHistoryComponent } from '../fiddles-history/fiddles-history.component';
+import { PastebinComponent } from '../pastebin/pastebin.component';
 
 
 interface PreviousLayout{
@@ -36,6 +38,11 @@ interface CodePartStretchState{
 })
 export class MainComponent implements AfterViewInit {
 
+onAppModeClick() {
+  this.appMode = (this.appMode == 'pastebin') ? 'fiddle' : 'pastebin';
+  this.mainService.appMode = this.appMode;
+}
+
   showHtml: boolean = true;
   showCss: boolean = false;
   showJs: boolean = false;
@@ -56,6 +63,8 @@ export class MainComponent implements AfterViewInit {
     index: -1
   }
 
+  appMode: string;
+
   @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
 
   @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
@@ -68,6 +77,7 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("htmlPart") htmlPart:HtmlPartComponent;
   @ViewChild("cssPart") cssPart:CssPartComponent;
   @ViewChild("jsPart") jsPart:JsPartComponent;
+  @ViewChild("pastebinPart") pastebinPart:PastebinComponent;
 
 
   @ViewChild("iframePart") iframePart:IframePartComponent;
@@ -77,6 +87,8 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("layoutsList") layoutsList: ElementRef;
 
   @ViewChild("modal") modal: ModalComponent;
+  @ViewChild("modalHistory") modalHistory: ModalComponent;
+  
   @ViewChild("ressources") ressourcesComponent: RessourcesComponent;
   @ViewChild("loader")loader:LoaderComponent;
 
@@ -131,11 +143,13 @@ export class MainComponent implements AfterViewInit {
 
   firstCodePartHalfStretch: number = 0;
   isConsoleOn: boolean = false;
+  @ViewChild("appFiddlesHistory") appFiddlesHistory: FiddlesHistoryComponent;
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
     private toastrService: ToastrService,
     private ngxPrettifyService: NgxPrettifyService) { 
+      this.appMode = this.mainService.appMode;
   }
 
   ngOnInit(): void{
@@ -162,7 +176,9 @@ export class MainComponent implements AfterViewInit {
      
     this.activatedRoute.paramMap.subscribe((params)=>{
       let currentFiddleId = +params.get("id");
-      
+      if(this.modalHistory.isShown){
+        this.hideHistoryModal();
+      }
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(this.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
@@ -171,6 +187,9 @@ export class MainComponent implements AfterViewInit {
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
           this.jsPart.code = this.mainService.jsCode;
+          this.pastebinPart.text = this.mainService.pastebinText;
+          this.appMode = this.mainService.appMode
+          
           this.fiddleTitle = this.mainService.fiddleTitle;
           
           this.showHtml = this.mainService.showHtml;
@@ -190,7 +209,8 @@ export class MainComponent implements AfterViewInit {
             css_code_position_data: this.mainService.cssCodePositionData,
             html_code_position_data: this.mainService.htmlCodePositionData,
             js_code_position_data: this.mainService.jsCodePositionData,
-            is_mobile_mode: this.mainService.isMobileMode
+            is_mobile_mode: this.mainService.isMobileMode,
+            created_at: this.mainService.fiddleCreatedAt
           }
           this.changeLayout(this.mainService.layout, obj);
           
@@ -217,6 +237,8 @@ export class MainComponent implements AfterViewInit {
               this.htmlPart.code = fiddleData.html;
               this.cssPart.code = fiddleData.css;
               this.jsPart.code = fiddleData.js;
+              this.pastebinPart.text = fiddleData.pastebintext;
+
               this.fiddleTitle = fiddleData.title;
               //
               this.mainService.jsCode = fiddleData.js;
@@ -228,6 +250,8 @@ export class MainComponent implements AfterViewInit {
               this.mainService.htmlCodePositionData = fiddleData.html_code_position_data;
               this.mainService.jsCodePositionData = fiddleData.js_code_position_data;
               this.mainService.isMobileMode = fiddleData.is_mobile_mode;
+              
+              this.appMode = fiddleData.appmode;
 
 
               if(this.mainService.isMobileMode){
@@ -298,7 +322,7 @@ export class MainComponent implements AfterViewInit {
         this.changeLayout(1);
       }
 
-      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, this.jsPart);
+      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, this.jsPart, this.pastebinPart);
 
     });
 
@@ -358,6 +382,14 @@ export class MainComponent implements AfterViewInit {
     });
   }
 
+  switchToPastebin(){
+
+  }
+
+  switchToFiddle(){
+
+  }
+
   isConsoleOnUpdate(newValue: boolean){
     this.isConsoleOn = newValue;
   }
@@ -402,7 +434,6 @@ export class MainComponent implements AfterViewInit {
       this.mainService.selectedTheme = theme;
       localStorage.setItem("myfiddle-theme",theme.id);
       this.mainService.addThemeStylesheet(theme);
-      this.mainService.registerMonacoCustomTheme(theme);
       this.isThemesListShown = false;
     }
   }
@@ -855,11 +886,13 @@ export class MainComponent implements AfterViewInit {
     this.htmlPart.theme = "cloud9_day";
     this.cssPart.theme = "cloud9_day";
     this.jsPart.theme = "cloud9_day";
+    this.pastebinPart.theme = "cloud9_day";
    }
    else{
     this.htmlPart.theme = "cloud9_night";
     this.cssPart.theme = "cloud9_night";
     this.jsPart.theme = "cloud9_night";
+    this.pastebinPart.theme = "cloud9_night";
    }
 
    this.selectTheme(this.mainService.themesList[ind]);
@@ -1258,7 +1291,7 @@ export class MainComponent implements AfterViewInit {
   
   /**
    * Re-adapts the iframeResizeValue on window resize or after fiddle retrieval by id
-   * @param mainContainerWidthOrHeight .main-container's width or height depending on the layout
+   * @param mainContainerWidthOrHeight .main-container-fiddle's width or height depending on the layout
    */
   reAdaptIframeResizeValue(oldMainContainerWidthOrHeight: number, newMainContainerWidthOrHeight: number, iframeSize: number){
     //console.log("oldMainContainerWidthOrHeight = ", oldMainContainerWidthOrHeight);
@@ -1288,7 +1321,7 @@ export class MainComponent implements AfterViewInit {
   /**
    * Corrects the width/height of each code part area when total size of code parts is not equal to newMainContainerWidthOrHeight.
    * @param sizes Split Component areas sizes array
-   * @param newMainContainerWidthOrHeight offsetWidth or offsetHeight of .main-container
+   * @param newMainContainerWidthOrHeight offsetWidth or offsetHeight of .main-container-fiddle
    */
   reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number, type: string, oldMainContainerWidthOrHeight ? : number){
     if(type == "inner"){
@@ -1377,7 +1410,10 @@ export class MainComponent implements AfterViewInit {
       this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
       //END save codePositionData objects in MainService
 
-      this.iframePart.saveFiddle();
+      if(this.appMode == "pastebin"){
+        this.changeLayout(1);
+      }
+      this.iframePart.saveFiddle(this.appMode);
     }
     else{//run
       //console.log("inside mainComponent.runCode()");
@@ -1769,8 +1805,17 @@ export class MainComponent implements AfterViewInit {
     this.modal.hide();
   }
 
+  hideHistoryModal(){
+    this.modalHistory.hide();
+  }
+
   ressouresBtnClick(){
     this.modal.show();
+  }
+
+  showHistoryModal(){
+    this.modalHistory.show();
+    this.appFiddlesHistory.getFiddlesList();
   }
 
   splitComponentInnerDragEnd(event){

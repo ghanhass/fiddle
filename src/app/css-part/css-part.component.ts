@@ -23,18 +23,6 @@ export class CssPartComponent implements OnInit {
   @ViewChild("aceeditor") aceeditor: AceEditorComponent;
   aceEditor: Ace.Editor;
 
-  options = {
-    language:"css",
-    //contextmenu: false,
-    minimap: {
-      enabled: false,
-    },
-    lineDecorationsWidth:"1px",
-    lineNumbersMinChars: 1,
-    wordWrap:"on",
-    baseUrl: "/",
-    theme : 'vs-light'
-  };
   constructor(private mainService: MainService) { }
 
 
