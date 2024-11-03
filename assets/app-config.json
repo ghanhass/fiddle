@@ -8,18 +8,18 @@
             "inherit": true,
             "rules": [
                 {
-                    "foreground": "202020",
+                    "foreground": "333333",
                     "background": "ffffff",
                     "token": ""
                 }
             ],
             "colors": {
-                "editor.foreground": "#202020",
+                "editor.foreground": "#333333",
                 "editor.background": "#FFFFFF",
                 "editor.selectionBackground": "#d2d2d2",
                 "editor.lineHighlightBackground": "#FFFFFF",
-                "editorCursor.foreground": "#202020",
-                "editorWhitespace.foreground": "#202020"
+                "editorCursor.foreground": "#333333",
+                "editorWhitespace.foreground": "#333333"
             }
         }
     },
