@@ -27,6 +27,8 @@ import 'brace/mode/javascript';
 import 'brace/mode/css';
 import 'brace/theme/github';
 import 'brace/theme/clouds';
+import { FiddlesHistoryComponent } from './fiddles-history/fiddles-history.component';
+import { PastebinComponent } from './pastebin/pastebin.component';
 
 //import { AceModule } from 'ngx-ace-wrapper';
 
@@ -48,6 +50,8 @@ export function loadConfigs(mainService: MainService){
     ModalComponent,
     RessourcesComponent,
     SafePipe,
+    FiddlesHistoryComponent,
+    PastebinComponent,
   ],
   imports: [
     BrowserModule,

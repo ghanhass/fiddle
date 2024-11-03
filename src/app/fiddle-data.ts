@@ -5,6 +5,7 @@ export interface FiddleData {
     js?:string,
     html?:string,
     css?:string,
+    pastebintext?: string,
     user_id?:string,
     title?:string,
     layout?:number,
@@ -20,5 +21,7 @@ export interface FiddleData {
     css_code_position_data: CodePositionData,
     html_code_position_data: CodePositionData,
     js_code_position_data: CodePositionData,
-    is_mobile_mode: boolean
+    is_mobile_mode: boolean,
+    created_at?: number;
+    appmode?: string
 }

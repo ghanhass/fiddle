@@ -4,15 +4,14 @@ import { concat, forkJoin, from, merge, Observable, of, Subject, zip } from 'rxj
 import { environment} from "../environments/environment";
 import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
-import { GistData } from './gist-data';
 import { FiddleData } from './fiddle-data'; 
-import { GistFiddle } from './gist-fiddle';
-import { catchError, map, mergeMap, tap } from 'rxjs/operators';
+import { catchError, map, mergeMap, tap, timestamp } from 'rxjs/operators';
 import { CodePositionData } from './code-position-data';
 import { CssPartComponent } from './css-part/css-part.component';
 import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { Ace, Range } from 'ace-builds';
+import { PastebinComponent } from './pastebin/pastebin.component';
 
 
 
@@ -27,21 +26,22 @@ const gitlabJsonDbId = "3621546";
   providedIn: 'root'
 })
 export class MainService {
-  httpOptions = {
-    headers: new HttpHeaders({"Content-Type":"application/json"}),
-    responseType: 'text' as 'text'
-  }
+
   url: string = environment.url;
   jsCode:string;
   cssCode:string;
   htmlCode:string;
   isConsoleOn: boolean;
+  pastebinText: string;
+
+  appMode: string = "fiddle";
 
   isFirstTimeFiddle: boolean = true;
 
   jsCodeSinceSave:string = "";
   cssCodeSinceSave:string = "";
   htmlCodeSinceSave:string = "";
+  pastebinTextSinceSave:string = "";
 
   layout:number = 1;
 
@@ -53,6 +53,7 @@ export class MainService {
   codePartsSize: number;
   iframeResizeValue: number;
   fiddleThemeId: string = '';
+  fiddleCreatedAt: number;
 
   fiddleTitle:string = "";
   redirectAfterSaveMode: boolean = false;
@@ -112,7 +113,8 @@ export class MainService {
               "editor.selectionBackground": "#d2d2d2",
               "editor.lineHighlightBackground": "#FFFFFF",
               "editorCursor.foreground": "#333333",
-              "editorWhitespace.foreground": "#333333"
+              "editorWhitespace.foreground": "#333333",
+              "editor.cursorBlinkShadow": "#000f867a"
           }
       }
   }
@@ -138,7 +140,8 @@ export class MainService {
                   "editor.selectionBackground": "#d2d2d2",
                   "editor.lineHighlightBackground": "#FFFFFF",
                   "editorCursor.foreground": "#333333",
-                  "editorWhitespace.foreground": "#333333"
+                  "editorWhitespace.foreground": "#333333",
+                  "editor.cursorBlinkShadow": "#000f867a"
               }
           }
       },
@@ -155,7 +158,8 @@ export class MainService {
                   "editor.selectionBackground": "#414141",
                   "editor.lineHighlightBackground": "#1e1e1e",
                   "editorCursor.foreground": "#d4d4d4",
-                  "editorWhitespace.foreground": "#d4d4d480"
+                  "editorWhitespace.foreground": "#d4d4d480",
+                  "editor.cursorBlinkShadow": "#ffffff7a"
               }
           }
       }
@@ -218,24 +222,13 @@ export class MainService {
     return this.appConfig[key];
   }
 
-  registerMonacoCustomTheme(fiddleTheme: FiddleTheme) {
-    let self = this;
-    //console.log("A!");
-    setTimeout(()=>{
-      if(window['monaco']){
-        //console.log("fiddleTheme = ", fiddleTheme);
-        window['monaco'].editor.defineTheme('myCustomTheme', fiddleTheme.data as any);
-        window['monaco'].editor.setTheme("myCustomTheme");
-      }
-    },1);
-  }
-
   /**
    * 
    * @returns boolean: Returns whether the code is changed or not since last save
    */
   isCodeChanged():boolean{
-    return this.jsCode !== this.jsCodeSinceSave || this.cssCode !== this.cssCodeSinceSave || this.htmlCode !== this.htmlCodeSinceSave
+    return this.jsCode !== this.jsCodeSinceSave || this.cssCode !== this.cssCodeSinceSave || 
+    this.htmlCode !== this.htmlCodeSinceSave || this.pastebinText !== this.pastebinTextSinceSave
   }
 
   /**
@@ -245,9 +238,10 @@ export class MainService {
     this.jsCodeSinceSave = this.jsCode;
     this.cssCodeSinceSave = this.cssCode;
     this.htmlCodeSinceSave = this.htmlCode;
+    this.pastebinTextSinceSave = this.pastebinText;
   }
 
-  resumeFiddleTheme(htmlPartComp?: HtmlPartComponent, cssPartComp?: CssPartComponent, jsPartComp?: JsPartComponent){
+  resumeFiddleTheme(htmlPartComp?: HtmlPartComponent, cssPartComp?: CssPartComponent, jsPartComp?: JsPartComponent, pastebinPart?: PastebinComponent){
     //console.log("param = ", param);
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
     let savedThemeId = localStorage.getItem("myfiddle-theme");
@@ -258,7 +252,6 @@ export class MainService {
     //console.log("selectedTheme = ", selectedTheme);
 
     this.addThemeStylesheet(this.selectedTheme);
-    this.registerMonacoCustomTheme(this.selectedTheme);
     
     if(htmlPartComp){
       htmlPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
@@ -270,6 +263,10 @@ export class MainService {
 
     if(jsPartComp){
       jsPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+    }
+
+    if(pastebinPart){
+      pastebinPart.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
     }
   }
 
@@ -622,6 +619,56 @@ export class MainService {
       color: ${theme.data.colors['editor.foreground']};
     }
 
+    button.tools-btn.btn span {
+      border: 2px solid ${theme.data.colors['editor.foreground']};
+    }
+
+    .fiddle-link {
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+      color:  ${theme.data.colors['editor.foreground']};
+    }
+
+    .history-container table thead{
+      box-shadow: 0px 0px 3px 1px ${theme.data.colors['editor.cursorBlinkShadow']};
+      background-color: ${theme.data.colors['editor.background']};
+    }
+
+    .history-container .pagination a{
+      border: 1px solid ${theme.data.colors['editor.cursorBlinkShadow']};
+    }
+
+    .history-container .table-container{
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+
+    .history-container table td, .history-container table th {
+      border: 1px solid ${theme.data.colors['editor.foreground']};
+    }
+
+    .history-container .search-table input {
+      color: ${theme.data.colors['editor.foreground']};
+      background-color: ${theme.data.colors['editor.background']};
+      border-color: ${theme.data.colors['editor.cursorBlinkShadow']};
+    }
+
+    .history-container .search-table input:focus-visible {
+      box-shadow: 0px 0px 3px 1px ${theme.data.colors['editor.foreground']};
+    }
+
+    @keyframes blink{
+      0%{
+        box-shadow: none;
+      }
+  
+      50%{
+        box-shadow: inset 0px 0px 6px 3px ${theme.data.colors['editor.cursorBlinkShadow']};
+      }
+  
+      100%{
+        box-shadow: none;
+      }
+    }
+
     @media (max-width:818px), (max-height:580px) {
       as-split-area.as-split-area-code-parts{
         border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
@@ -749,7 +796,7 @@ export class MainService {
     return html;
   }
 
-  retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent){
+  retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent, blink?: boolean){
     if(cssPart){
       //retrieve css code part focus and cursor position
       console.log("called cssPart.aceEditor.focus()");
@@ -770,6 +817,12 @@ export class MainService {
             cssPart.aceEditor.focus();
           }
           cssPart.aceEditor.moveCursorTo(this.cssCodePositionData.row, this.cssCodePositionData.column);
+        }
+        else if(blink){
+          document.querySelector("app-css-part .custom-layer-marker").classList.add("show");
+          setTimeout(()=>{
+            document.querySelector("app-css-part .custom-layer-marker").classList.remove("show");
+          }, 1500)
         }
         cssPart.aceEditor.scrollToRow(upMostRow);
 
@@ -794,6 +847,12 @@ export class MainService {
             jsPart.aceEditor.focus();
           }
           jsPart.aceEditor.moveCursorTo(this.jsCodePositionData.row, this.jsCodePositionData.column);
+        }
+        else if(blink){
+          document.querySelector("app-js-part .custom-layer-marker").classList.add("show");
+          setTimeout(()=>{
+            document.querySelector("app-js-part .custom-layer-marker").classList.remove("show");
+          }, 1500)
         }
         jsPart.aceEditor.scrollToRow(upMostRow);
 
@@ -820,11 +879,47 @@ export class MainService {
           }
           htmlPart.aceEditor.moveCursorTo(this.htmlCodePositionData.row, this.htmlCodePositionData.column);
         }
+        else if(blink){
+          document.querySelector("app-html-part .custom-layer-marker").classList.add("show");
+          setTimeout(()=>{
+            document.querySelector("app-html-part .custom-layer-marker").classList.remove("show");
+          }, 1500)
+        }
         htmlPart.aceEditor.scrollToRow(upMostRow);
 
       console.log("htmlCodePositionData = ", this.htmlCodePositionData);
     }
   }
+
+  getFiddlesList(page?: number): Observable<any>{
+    //console.log("getFiddle fiddleId = ",fiddleId);
+    let self = this;
+    let str;
+    if(environment.production){
+      str = page ? ("&page="+page) : "";
+      let promise = new Promise((resolve, reject)=>{
+
+        let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=30`+str;
+            this.http.get<any>(gitlabRawSnippetUrl, {headers: headers}).subscribe({//get seeked fiddle content from gitlab
+              next: (res2: FiddleData)=>{
+                let result = res2;
+                resolve(result);
+              },
+              error: (error2)=>{
+                resolve({
+                  status:"not found"
+                })
+              }
+            });
+      });
+      return from(promise);
+    }
+    else{
+      str = page ? ("&_page="+page) : "";
+      return this.http.get<Array<FiddleData>>("http://localhost:3000/gists?per_page=30"+str);
+    }
+  }
+
 
   getFiddle(fiddleId): Observable<any>{
     //console.log("getFiddle fiddleId = ",fiddleId);
@@ -883,14 +978,13 @@ export class MainService {
     if(environment.production){
       let timeStamp = (new Date()).getTime();
       let body = {
-        file_name: timeStamp,
-        title: timeStamp,
+        file_name: fiddleData.appmode+"_"+timeStamp,
+        title: fiddleData.title ? fiddleData.title : "Noname",
         visibility: "public",
         "content": JSON.stringify(fiddleData),
         "file_path": timeStamp,
       }
       let newSnippetRawUrl;
-      let body2;
       let newFiddleId;
 
       let promise = new Promise((resolve, reject)=>{
