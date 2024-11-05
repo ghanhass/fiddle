@@ -3,6 +3,8 @@ import { MainService } from '../main.service';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import { LoaderComponent } from '../loader/loader.component';
+import { FiddleData } from '../fiddle-data';
+import { GistFiddle } from '../gist-fiddle';
 
 @Component({
   selector: 'app-fiddles-history',
@@ -89,5 +91,17 @@ export class FiddlesHistoryComponent implements OnInit {
     }
 
     return obj;
+  }
+
+  getFiddleType(fiddle:FiddleData | any){
+    let str;
+    let appMode;
+    if(environment.production){
+      str = fiddle.file_name.split("_")[0] || 'fiddle';
+    }
+    else{
+      str = fiddle.appmode || 'fiddle';
+    }
+    return str;
   }
 }

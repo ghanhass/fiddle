@@ -182,7 +182,7 @@ onAppModeClick() {
       //data retrieval
       if(currentFiddleId && !isNaN(currentFiddleId)){
         if(this.mainService.redirectAfterSaveMode){//re-retrieve data after recent save ?
-
+          console.log("//re-retrieve data after recent save");
           //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
           this.cssPart.code = this.mainService.cssCode;
@@ -228,6 +228,7 @@ onAppModeClick() {
           this.mainService.isFirstTimeFiddle = false;
         }
         else{//retrieve data from backend ?
+          console.log("//retrieve data from backend");
           this.loader.showLoader();
           this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
             //console.log("getFiddle res = ", res);
@@ -251,7 +252,7 @@ onAppModeClick() {
               this.mainService.jsCodePositionData = fiddleData.js_code_position_data;
               this.mainService.isMobileMode = fiddleData.is_mobile_mode;
               
-              this.appMode = fiddleData.appmode;
+              this.appMode = fiddleData.appmode || 'fiddle';
 
 
               if(this.mainService.isMobileMode){

@@ -10,6 +10,7 @@
             <th>Title</th>
             <th>Date</th>
             <th>Go to fiddle</th>
+            <th>Type</th>
           </tr>
         </thead>
   
@@ -18,6 +19,7 @@
             <td>{{fiddle.title}}</td>
             <td>{{fiddle.created_at | date}}</td>
             <td><a class="fiddle-link" [ngClass]="{'disabled': !canChangePage}" [routerLink]="['/'+fiddle.id]">Go</a></td>
+            <td>{{getFiddleType(fiddle)}}</td>
           </tr>
         </tbody>
       </table>
