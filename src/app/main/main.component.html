@@ -33,7 +33,7 @@
       </button>-->
   
       <button *ngIf="appMode == 'fiddle'" class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
-        <span>Prettify</span>
+        <span><i class="fa fa-indent" aria-hidden="true"></i></span>
       </button>
       
       <div class="themes-btn-container">
@@ -121,7 +121,7 @@
       </button>
 
       <button style="width:65px;" class="app-mode-btn btn" (click)="onAppModeClick()">
-        <span>{{appMode == 'pastebin' ? 'Fiddle' : appMode == 'fiddle' ? 'Pastebin' : ''}}</span>
+        <span>{{appMode == 'pastebin' ? 'Fiddle' : appMode == 'fiddle' ? 'Paste' : ''}}</span>
       </button>
     </div>
   </header>

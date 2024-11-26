@@ -97,7 +97,7 @@ export class FiddlesHistoryComponent implements OnInit {
     let str;
     let appMode;
     if(environment.production){
-      str = fiddle.file_name.split("_")[0] || 'fiddle';
+      str = fiddle.file_name.indexOf("_") > -1 ? fiddle.file_name.split("_")[0] : 'fiddle';
     }
     else{
       str = fiddle.appmode || 'fiddle';
