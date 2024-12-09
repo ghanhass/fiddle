@@ -16,7 +16,7 @@ import { PastebinComponent } from './pastebin/pastebin.component';
 
 
 let headers = new HttpHeaders();
-headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQtWXpveENtODZNUXAxT21WM2RuSnZuSFN0SHN3TGdDOU9KYjQ2eXNoRHp4QS4xNzBveXloZ2U="));
+headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQtWXpveENtODZNUXAxT21WM2VHSnBDUkF3ZkVQSEdfMk1rWmZNNldhQUxoQS4xNzF4MDd2aDg="));
 headers = headers.set("Content-Type", "application/json");
 
 const gitlabProjectId = "52190204";
