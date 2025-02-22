@@ -99,18 +99,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fiddle:build"
+            "buildTarget": "fiddle:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fiddle:build:production"
+              "buildTarget": "fiddle:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fiddle:build"
+            "buildTarget": "fiddle:build"
           }
         },
         "test": {
