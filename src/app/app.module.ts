@@ -18,7 +18,6 @@ import { RessourcesComponent } from './ressources/ressources.component';
 import { AngularSplitModule } from "angular-split";
 import { MainService } from './main.service';
 import { SafePipe } from './safe.pipe';
-import { AceEditorModule } from 'ng2-ace-editor';
 
 import 'brace';
 import 'brace/mode/text';
@@ -29,8 +28,7 @@ import 'brace/theme/github';
 import 'brace/theme/clouds';
 import { FiddlesHistoryComponent } from './fiddles-history/fiddles-history.component';
 import { PastebinComponent } from './pastebin/pastebin.component';
-
-//import { AceModule } from 'ngx-ace-wrapper';
+import { AceEditorModule } from 'ace-editor-ng';
 
 export function loadConfigs(mainService: MainService){
   return ():Promise<any> => {

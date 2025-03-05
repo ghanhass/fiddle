@@ -328,7 +328,7 @@ onAppModeClick() {
     });
 
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
-      let sizes = this.splitComponentInner.getVisibleAreaSizes();
+      let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
@@ -341,7 +341,7 @@ onAppModeClick() {
     });
 
     this.splitComponentOuter.dragProgress$.subscribe((res)=>{
-      let sizes = this.splitComponentOuter.getVisibleAreaSizes();
+      let sizes = this.splitComponentOuter._alignedVisibleAreasSizes();
       if(this.layout == 1 || this.layout == 2){
         this.newCodePartSize = sizes[0] as number;
       }
@@ -544,7 +544,7 @@ onAppModeClick() {
           self.newJsCodePartSize = self.initialJsCodePartSize;
           self.newCodePartSize = self.initialCodePartSize;
           
-          self.splitComponentInner.setVisibleAreaSizes(["*", self.newHtmlCodePartSize , self.newCssCodePartSize , self.newJsCodePartSize]);
+          self.splitComponentInner._alignedVisibleAreasSizes.apply(self.splitComponentInner, ["*", self.newHtmlCodePartSize , self.newCssCodePartSize , self.newJsCodePartSize])
           
           self.calculateIframeSize(mainContainerEl);
           self.setMainServiceCodepartSizes();
@@ -927,11 +927,11 @@ onAppModeClick() {
       this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
     }
     else if(this.layout == 2){
-      this.splitComponentOuter.setVisibleAreaSizes([300, "*"]);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [300, "*"]);
       this.mainService.codePartsSize = 300;
     }
     else if(this.layout == 4){
-      this.splitComponentOuter.setVisibleAreaSizes(["*", 300]);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", 300]);
       this.mainService.codePartsSize = 300;
     }
     this.calculateIframeSize();
@@ -939,12 +939,12 @@ onAppModeClick() {
 
   stretchHorizontally(){
     if(this.layout == 1){
-      this.splitComponentOuter.setVisibleAreaSizes([350, "*"]);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [350, "*"]),
       this.mainService.codePartsSize = 350;
     }
 
     else if(this.layout == 3){
-      this.splitComponentOuter.setVisibleAreaSizes(["*", 350]);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", 350]);
       this.mainService.codePartsSize = 350;
     }
     else{
@@ -977,7 +977,7 @@ onAppModeClick() {
       this.newJsCodePartSize = this.initialJsCodePartSize;
 
       let sizesArr: any = ["*", this.newHtmlCodePartSize,this.newCssCodePartSize, this.newJsCodePartSize];
-      this.splitComponentInner.setVisibleAreaSizes(sizesArr);
+      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, sizesArr);
     }
   }
 
@@ -1009,7 +1009,7 @@ onAppModeClick() {
       arr[this.firstCodePartHalfStretch] = mainContainerSize/2 - 5 - minCodePartSize/2;
       arr[index] = mainContainerSize/2 - 5 - minCodePartSize/2;
 
-      this.splitComponentInner.setVisibleAreaSizes(arr);
+      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, arr);
 
       this.initialHtmlCodePartSize = arr[1];
       this.initialCssCodePartSize = arr[2];
@@ -1064,14 +1064,14 @@ onAppModeClick() {
           this.newHtmlCodePartSize = sizes[1];
           this.newCssCodePartSize = sizes[2];
           this.newJsCodePartSize = sizes[3];
-          this.splitComponentInner.setVisibleAreaSizes(sizes);
+          this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, sizes);
       }
       else{//code part not stretched ?
         this.previousLayout = {
           layout: this.layout,
-          htmlSize: this.splitComponentInner.getVisibleAreaSizes()[1] as number,
-          cssSize: this.splitComponentInner.getVisibleAreaSizes()[2] as number,
-          jsSize: this.splitComponentInner.getVisibleAreaSizes()[3] as number,
+          htmlSize: this.splitComponentInner._alignedVisibleAreasSizes()[1] as number,
+          cssSize: this.splitComponentInner._alignedVisibleAreasSizes()[2] as number,
+          jsSize: this.splitComponentInner._alignedVisibleAreasSizes()[3] as number,
           mainContainerSize: mainContainerSize
         }
         this.codePartStretchState.state = true;
@@ -1082,13 +1082,13 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 48), 24, 24]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 48), 24, 24]);
             break;
             case("css"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", 24, (totalSize - 48), 24]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, (totalSize - 48), 24]);
             break;
             case("js"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", 24, 24, (totalSize - 48)]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, 24, (totalSize - 48)]);
             break;
           }
         }
@@ -1097,18 +1097,18 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", (totalSize - 50), 25, 25]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", 25, (totalSize - 50), 25]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
-            this.splitComponentInner.setVisibleAreaSizes(["*", 25, 25, (totalSize - 50)]);
+            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
         }
 
-        let sizes = this.splitComponentInner.getVisibleAreaSizes();
+        let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
         this.initialHtmlCodePartSize = sizes[1] as number;
         this.initialCssCodePartSize = sizes[2] as number;
         this.initialJsCodePartSize = sizes[3] as number;
@@ -1219,8 +1219,8 @@ onAppModeClick() {
         iframeSize = this.iframeWidth;
       }
       /*START readapt code parts sizes*/
-      let sizes: Array<any> = this.splitComponentInner.getVisibleAreaSizes();
-      let sizesOuter: Array<any> = this.splitComponentOuter.getVisibleAreaSizes();
+      let sizes: Array<any> = this.splitComponentInner._alignedVisibleAreasSizes();
+      let sizesOuter: Array<any> = this.splitComponentOuter._alignedVisibleAreasSizes();
       if(newMainContainerWidthOrHeight > oldMainContainerWidthOrHeight){
         let coef = newMainContainerWidthOrHeight / oldMainContainerWidthOrHeight;
         
@@ -1282,7 +1282,7 @@ onAppModeClick() {
         outerSplitterSizes = ['*', this.newCodePartSize]; 
       }
 
-      this.splitComponentOuter.setVisibleAreaSizes(outerSplitterSizes);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, outerSplitterSizes);
 
       this.setMainServiceCodepartSizes();
 
@@ -1336,7 +1336,7 @@ onAppModeClick() {
       sizes[3] = sizes[3]*coef;
       
       //console.log("sizes inner = ", sizes);
-      this.splitComponentInner.setVisibleAreaSizes(sizes);
+      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner,  sizes );
       this.newHtmlCodePartSize = sizes[1] as number;
       this.newCssCodePartSize = sizes[2] as number;
       this.newJsCodePartSize = sizes[3] as number;
@@ -1371,7 +1371,7 @@ onAppModeClick() {
       
       //console.log("sizes outer = ", sizes);
       this.newCodePartSize = sizes[ind] as number;
-      this.splitComponentOuter.setVisibleAreaSizes(sizes);
+      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  sizes );
     }
   }
 
@@ -1674,7 +1674,7 @@ onAppModeClick() {
       case 1:
       
       if(newFiddleWidth <= (this.mainContainerWidth - 350 - 5)){
-        this.splitComponentOuter.setVisibleAreaSizes([this.mainContainerWidth - newFiddleWidth - 5, "*"]);
+        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [this.mainContainerWidth - newFiddleWidth - 5, "*"]);
         this.newCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
         this.mainService.codePartsSize = this.newCodePartSize;
       }
@@ -1709,7 +1709,7 @@ onAppModeClick() {
       case 3:
 
       if(newFiddleWidth <= (this.mainContainerWidth - 350 - 5)){
-        this.splitComponentOuter.setVisibleAreaSizes(["*", this.mainContainerWidth - newFiddleWidth - 5]);
+        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerWidth - newFiddleWidth - 5]  );
         this.newCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
         this.mainService.codePartsSize = this.newCodePartSize;
       }
@@ -1760,7 +1760,7 @@ onAppModeClick() {
       case 2:
 
       if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
-        this.splitComponentOuter.setVisibleAreaSizes([this.mainContainerHeight - newFiddleHeight - 5, "*"]);
+        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  [this.mainContainerHeight - newFiddleHeight - 5, "*"]);
         this.newCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.newCodePartSize;
       }
@@ -1788,7 +1788,7 @@ onAppModeClick() {
       case 4:
 
       if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
-        this.splitComponentOuter.setVisibleAreaSizes(["*", this.mainContainerHeight - newFiddleHeight - 5]);
+        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerHeight - newFiddleHeight - 5]  );
         this.newCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.newCodePartSize;
       }

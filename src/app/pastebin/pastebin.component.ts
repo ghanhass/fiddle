@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
-import { AceEditorComponent } from 'ng2-ace-editor';
+import { AceEditorComponent } from 'ace-editor-ng';
 import { Ace } from 'ace-builds';
 
 @Component({
@@ -36,7 +36,7 @@ export class PastebinComponent {
     
     let self = this;
 
-    this.aceEditor.addEventListener("keydown", (event: KeyboardEvent)=>{
+    this.aceEditor.addEventListener("keyboardActivity", (event: KeyboardEvent)=>{
       let evDate = new Date();
 
       if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
