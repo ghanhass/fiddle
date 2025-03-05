@@ -329,9 +329,11 @@ onAppModeClick() {
 
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
       let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
-      this.newHtmlCodePartSize = sizes[1] as number;
-      this.newCssCodePartSize = sizes[2] as number;
-      this.newJsCodePartSize = sizes[3] as number;
+      //console.log('drag sizes = ', sizes);
+      //console.log('drag res.sizes = ', res.sizes);
+      this.newHtmlCodePartSize = res.sizes[1] as number;
+      this.newCssCodePartSize = res.sizes[2] as number;
+      this.newJsCodePartSize = res.sizes[3] as number;
 
       this.setMainServiceCodepartSizes();
       //console.log("splitComponentInner sizes = ", sizes);
@@ -1049,10 +1051,12 @@ onAppModeClick() {
     if(this.IsAfterViewInitReached){
       let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
       let mainContainerSize = this.layout == 1 || this.layout == 3 ? mainContainerEl.offsetHeight : mainContainerEl.offsetWidth;
+      let sizes: any[] = [];
+
       if(this.codePartStretchState.state && index == this.codePartStretchState.index){//codepart already stretched ? resume last codepart size
           this.codePartStretchState.state = false;
           this.codePartStretchState.index = -1;
-          let sizes: any = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
+          sizes = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
           //console.log("sizes before = ", sizes);
           this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
           //console.log("sizes after = ", sizes);
@@ -1076,19 +1080,22 @@ onAppModeClick() {
         }
         this.codePartStretchState.state = true;
         this.codePartStretchState.index = index;
-
+        
         if(this.layout == 1 || this.layout == 3){
           let totalSize = this.mainContainerHeight - 10;
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 48), 24, 24]);
+            sizes = ["*", (totalSize - 48), 24, 24];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 48), 24, 24]);
             break;
             case("css"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, (totalSize - 48), 24]);
+            sizes = ["*", 24, (totalSize - 48), 24];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, (totalSize - 48), 24]);
             break;
             case("js"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, 24, (totalSize - 48)]);
+            sizes = ["*", 24, 24, (totalSize - 48)];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, 24, (totalSize - 48)]);
             break;
           }
         }
@@ -1097,18 +1104,21 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
+            sizes = ["*", (totalSize - 50), 25, 25];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
+            sizes = ["*", 25, (totalSize - 50), 25];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
-            this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
+            sizes = ["*", 25, 25, (totalSize - 50)];
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
         }
 
-        let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
+        //let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
         this.initialHtmlCodePartSize = sizes[1] as number;
         this.initialCssCodePartSize = sizes[2] as number;
         this.initialJsCodePartSize = sizes[3] as number;
