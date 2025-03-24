@@ -130,6 +130,8 @@
       <app-pastebin (savecodemsg)="runCode('save')" #pastebinPart class="code-component"></app-pastebin>
     </div>
   </div>
+  
+
   <div class="main-container main-container-fiddle" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen, 'off':appMode == 'pastebin'}">
     <div id="code-parts-title-mobile">
       <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
@@ -138,13 +140,11 @@
       <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
   
-    <as-split [direction]="getLayoutInfos('outerAsSplitDirection')" [unit]="getLayoutInfos('outerAsSplitUnit')" #splitComponentOuter (dragEnd)="splitComponentOuterDragEnd($event)" (dragStart)="splitComponentOuterDragStart($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}" [gutterSize]="5">
+    <div [attr.data-layout]="layout" (mouseup)="onSplitOuterMouseup($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
 
-      <as-split-area [order]="getLayoutInfos('codePartsAsSplitAreaOrder')" [minSize]="getLayoutInfos('codePartsAsSplitAreaMinSize')" [size]="getLayoutInfos('codePartsAsSplitAreaSize')" class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
-        <div id="code-parts" #codeParts>
-          <as-split [direction]="getLayoutInfos('innerAsSplitDirection')" [unit]="getLayoutInfos('innerAsSplitUnit')" #splitComponentInner (dragEnd)="splitComponentInnerDragEnd($event)" (dragStart)="splitComponentInnerDragStart($event)" [gutterSize]="5">
-            <as-split-area [minSize]="getLayoutInfos('emptyAsSplitAreaMinSize')" [size]="getLayoutInfos('emptyAsSplitAreaSize')" [maxSize]="getLayoutInfos('emptyAsSplitAreaMaxSize')" style="display: none"></as-split-area>
-            <as-split-area [minSize]="getLayoutInfos('htmlAsSplitAreaMinSize')" [size]="getLayoutInfos('htmlAsSplitAreaSize')" class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
+      <div [ngStyle]="{'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize')}" #codePartsArea class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
+
+            <div [ngStyle]="{'flex-basis': getLayoutInfos('htmlAsSplitAreaSize')}" class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
               <div class="code-part-title">
                 <span>HTML</span>
                 <div class="code-part-title-btns-container">
@@ -177,8 +177,10 @@
                 </div>
               </div>
               <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component"></app-html-part>
-            </as-split-area>
-            <as-split-area [minSize]="getLayoutInfos('cssAsSplitAreaMinSize')" [size]="getLayoutInfos('cssAsSplitAreaSize')" class="code-component-container code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
+            </div>
+            <div class="code-part-gutter" [ngStyle]="getCodePartGutterStyle('html-css')" ></div>
+            
+            <div [ngStyle]="{'flex-basis': getLayoutInfos('cssAsSplitAreaSize')}" class="code-component-container code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
               <div class="code-part-title">
                 <span>CSS</span>
                 <div class="code-part-title-btns-container">
@@ -211,8 +213,10 @@
                 </div>
               </div>
               <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>
-            </as-split-area>
-            <as-split-area [minSize]="getLayoutInfos('jsAsSplitAreaMinSize')" [size]="getLayoutInfos('jsAsSplitAreaSize')" class="code-component-container code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
+            </div>
+            <div class="code-part-gutter" [ngStyle]="getCodePartGutterStyle('css-js')"></div>
+            
+            <div [ngStyle]="{'flex-basis': getLayoutInfos('jsAsSplitAreaSize')}" class="code-component-container code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
               <div class="code-part-title">
                 <span>JAVASCRIPT</span>
                 <div class="code-part-title-btns-container">
@@ -244,11 +248,10 @@
                 </div>
               </div>
               <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>
-            </as-split-area>
-          </as-split>
-        </div>
-      </as-split-area>
-      <as-split-area [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
+            </div>
+      </div>
+      <div class="main-container-gutter" [ngStyle]="getCodePartGutterStyle('main-container')" ></div>
+      <div [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
         <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
         </div>
         <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)">
@@ -275,11 +278,13 @@
         </div>
         <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
         </div>
-      </as-split-area>
+      </div>
 
-    </as-split>
+    </div>
   
   </div>
+
+
   <app-modal #modal>
     <div class="modal-header">
       <button class="modal-validate-btn btn" (click)="validateRessources()"><i class="fa fa-check" aria-hidden="true"></i></button>

@@ -65,15 +65,17 @@ onAppModeClick() {
 
   appMode: string;
 
-  @ViewChild("splitComponentInner") splitComponentInner: SplitComponent;
+  splitComponentInner: SplitComponent = new SplitComponent();
 
-  @ViewChild("splitComponentOuter") splitComponentOuter: SplitComponent;
+  splitComponentOuter: SplitComponent = new SplitComponent();;
 
   @ViewChild("splitComponentIframeResize") splitComponentIframeResize: SplitComponent;
 
 
   @ViewChild("mainContainer") mainContainer:ElementRef;
-  @ViewChild("codeParts") codeParts:ElementRef;
+
+  @ViewChild("codePartsArea") codePartsArea:ElementRef;
+
   @ViewChild("htmlPart") htmlPart:HtmlPartComponent;
   @ViewChild("cssPart") cssPart:CssPartComponent;
   @ViewChild("jsPart") jsPart:JsPartComponent;
@@ -100,6 +102,12 @@ onAppModeClick() {
   isThemesListShown: boolean = false;
   layout: number = 1;
   fiddleTitle: string = "";
+
+  finalHtmlCodePartSize: string = "0";
+  finalCssCodePartSize: string = "0";
+  finalJsCodePartSize: string = "0";
+  finalCodePartSize: string = "0";
+
 
   initialHtmlCodePartSize: number = 0;
   initialCssCodePartSize: number = 0;
@@ -167,7 +175,7 @@ onAppModeClick() {
         }
       }).render('#donate-button');
     }
-    //////////
+    //
     let self = this;
     this.IsAfterViewInitReached = true;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
@@ -327,6 +335,7 @@ onAppModeClick() {
 
     });
 
+    /*
     this.splitComponentInner.dragProgress$.subscribe((res)=>{
       let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
       //console.log('drag sizes = ', sizes);
@@ -355,6 +364,7 @@ onAppModeClick() {
       //console.log("splitComponentOuter sizes = ", sizes);
       this.calculateIframeSize(mainContainerEl);
     });
+    */
 
     this.setMainServiceCodepartSizes();
 
@@ -510,10 +520,10 @@ onAppModeClick() {
             self.mainService.iframeResizeValue = parseInt(self.getIframeAreaSize());
             switch(self.layout){
               case 1:
-              self.initialCssCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialHtmlCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialJsCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialCodePartSize = 350;
+                this.finalHtmlCodePartSize = "calc(100% / 3)";
+                this.finalCssCodePartSize = "calc(100% / 3)";
+                this.finalJsCodePartSize = "calc(100% / 3)";
+                this.finalCodePartSize = "300px";
               //console.log("self.mainContainerHeight = ", self.mainContainerHeight);
               
               break;
@@ -647,17 +657,18 @@ onAppModeClick() {
   getLayoutInfos(name){
     switch(name){
       case "htmlAsSplitAreaSize":
-      return this.initialHtmlCodePartSize;
+      return this.finalHtmlCodePartSize;
 
       case "cssAsSplitAreaSize":
-      return this.initialCssCodePartSize
+      return this.finalCssCodePartSize
 
       case "jsAsSplitAreaSize":
-      return this.initialJsCodePartSize;
+      return this.finalJsCodePartSize;
 
       case "codePartsAsSplitAreaSize":
-      return this.initialCodePartSize;
+      return this.finalCodePartSize;
     }
+    
     switch(this.layout){
       case 1:
       switch(name){
@@ -1031,7 +1042,7 @@ onAppModeClick() {
       this.codePartStretchState.state = false;
       this.codePartStretchState.index = -1;
 
-      let firstMarkedCodePart: HTMLElement = (this.codeParts.nativeElement as HTMLElement).querySelector(".half-stretch-mark");
+      let firstMarkedCodePart: HTMLElement = (this.codePartsArea.nativeElement as HTMLElement).querySelector(".half-stretch-mark");
       firstMarkedCodePart.classList.remove("half-stretch-mark");
       firstMarkedCodePart.classList.add("marking-half-stretched-code-part");
       currentCodePartTitle.classList.add("marking-half-stretched-code-part");
@@ -1071,13 +1082,13 @@ onAppModeClick() {
           this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, sizes);
       }
       else{//code part not stretched ?
-        this.previousLayout = {
+        /*this.previousLayout = {
           layout: this.layout,
           htmlSize: this.splitComponentInner._alignedVisibleAreasSizes()[1] as number,
           cssSize: this.splitComponentInner._alignedVisibleAreasSizes()[2] as number,
           jsSize: this.splitComponentInner._alignedVisibleAreasSizes()[3] as number,
           mainContainerSize: mainContainerSize
-        }
+        }*/
         this.codePartStretchState.state = true;
         this.codePartStretchState.index = index;
         
@@ -1483,21 +1494,21 @@ onAppModeClick() {
     let self = this;
       //console.log("inside custom interval");
       if (!this.showCss){
-        if(this.codeParts.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
+        if(this.codePartsArea.nativeElement.querySelector(".code-component-container-css").classList.contains("hide-mobile")){
           //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
           //clearInterval(editorLayoutFixInterval);
         }
       }
 
       if (!this.showHtml){
-        if(this.codeParts.nativeElement.querySelector(".code-component-container-html").classList.contains("hide-mobile")){
+        if(this.codePartsArea.nativeElement.querySelector(".code-component-container-html").classList.contains("hide-mobile")){
           //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
           //clearInterval(editorLayoutFixInterval);
         }
       }
 
       if (!this.showJs){
-        if(this.codeParts.nativeElement.querySelector(".code-component-container-js").classList.contains("hide-mobile")){
+        if(this.codePartsArea.nativeElement.querySelector(".code-component-container-js").classList.contains("hide-mobile")){
           //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
           //clearInterval(editorLayoutFixInterval);
         }
@@ -1853,6 +1864,27 @@ onAppModeClick() {
 
     this.isFiddleHeightInputDisabled = true;
     this.isFiddleWidthInputDisabled = true;
+  }
+
+  onCodePartGutterMousedown(event){
+    console.log("onCustomGutterOuterMousedown ev = ", event);
+  }
+
+  onSplitOuterMousemove(event){
+    console.log("onSplitOuterMousemove ev = ", event);
+  }
+
+  onSplitOuterMouseup(event){
+    console.log("onSplitOuterMouseup ev = ", event);
+  }
+
+  getCodePartGutterStyle(type: string){
+    let obj = {
+      "background-color": "red",
+      "flex-basis": "5px",
+      "cursor": (this.layout == 1 || this.layout == 3) && type == 'main-container' ? "col-resize" : "row-resize"
+    }
+    return obj;
   }
 
   validateRessources(){
