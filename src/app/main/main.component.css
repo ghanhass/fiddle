@@ -4,11 +4,6 @@
     height: calc(100vh - 38px);
     box-shadow: 0 0 0 1px #bbb;   
     position: relative; 
-
-    /*opacity:1;
-    transition-property: opacity, width, height;
-    transition-timing-function: linear;
-    transition-duration: 1s;*/
 }
 
 .main-container.off {
@@ -203,11 +198,6 @@
     cursor: col-resize;
     height:100%;
 }
-
-/*#main-resizer.resize-mode.layout-type-1,
-#main-resizer.resize-mode.layout-type-3{
-    background-image:repeating-linear-gradient(#bbb, #bbb 15px, #FFFFFF 15px, #FFFFFF 20px);
-}*/
 
 #main-resizer:hover {
     background-color: #afafaf;
@@ -1048,7 +1038,109 @@ as-split-area.code-component-container > app-html-part{
     z-index: 103 !important;
     left: 0px !important;
 }
+/******/
+.as-split-area-code-parts {
+    flex-basis: 300px;
+    display: flex;
+    flex-direction: column;
+}
 
+.as-split-outer {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.as-split-area-iframe.is-vertical {
+    flex-grow: 1;
+}
+
+.code-part-gutter,
+.main-container-gutter{
+    background-color: red;
+    flex-basis: 5px;
+    cursor: grab;
+}
+
+.code-component-container {
+    flex-basis: calc(100%/3);
+    overflow: hidden;
+}
+/****/
+
+.as-split-area-code-parts {
+    flex-basis: 300px;
+    display: flex;
+    flex-direction: column;
+}
+
+.as-split-outer {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.as-split-area-iframe.is-vertical {
+    flex-grow: 1;
+}
+
+.code-part-gutter,
+.main-container-gutter{
+    background-color: red;
+    flex-basis: 5px;
+    cursor: grab;
+    z-index: 1;
+}
+
+.code-component-container {
+    overflow: hidden;
+}
+
+ 
+
+.as-split-area-iframe {
+    display: flex;
+    flex-grow: 1;
+}
+
+.as-split-area-iframe.is-vertical {
+    flex-direction: column;
+}
+
+.as-split-outer[data-layout='2'] {
+    flex-direction: column;
+}
+
+
+.as-split-outer[data-layout='3'] {
+    flex-direction: row-reverse;
+}
+
+.as-split-outer[data-layout='4'] {
+    flex-direction: column-reverse;
+}
+
+.as-split-outer[data-layout='2'] .as-split-area-code-parts[class] {
+    flex-direction: row;
+}
+
+.as-split-outer[data-layout='4'] .as-split-area-code-parts[class] {
+    flex-direction: row;
+}
+
+.code-component-container{
+    display: flex;
+    
+}
+
+:where(.as-split-outer[data-layout='1'], .as-split-outer[data-layout='3']) .code-component-container {
+    flex-direction: column;
+}
+
+.code-component-container .code-component {
+    flex-grow: 1;
+}
+/******/
 @media (min-width:890px) {
     #code-parts .code-component-container.fullscreen {
         position: fixed !important;

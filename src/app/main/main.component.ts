@@ -103,10 +103,10 @@ onAppModeClick() {
   layout: number = 1;
   fiddleTitle: string = "";
 
-  finalHtmlCodePartSize: string = "0";
-  finalCssCodePartSize: string = "0";
-  finalJsCodePartSize: string = "0";
-  finalCodePartSize: string = "0";
+  finalHtmlCodePartSize: number = 0;
+  finalCssCodePartSize: number = 0;
+  finalJsCodePartSize: number = 0;
+  finalCodePartSize: number = 0;
 
 
   initialHtmlCodePartSize: number = 0;
@@ -520,32 +520,36 @@ onAppModeClick() {
             self.mainService.iframeResizeValue = parseInt(self.getIframeAreaSize());
             switch(self.layout){
               case 1:
-                this.finalHtmlCodePartSize = "calc(100% / 3)";
-                this.finalCssCodePartSize = "calc(100% / 3)";
-                this.finalJsCodePartSize = "calc(100% / 3)";
-                this.finalCodePartSize = "300px";
+                this.finalCodePartSize = 300;
+
+                this.finalHtmlCodePartSize = this.mainContainerHeight/3;
+                this.finalCssCodePartSize = this.mainContainerHeight/3
+                this.finalJsCodePartSize = this.mainContainerHeight/3;
               //console.log("self.mainContainerHeight = ", self.mainContainerHeight);
               
               break;
               case 2:
-              self.initialCssCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialHtmlCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialJsCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialCodePartSize = 300;
+                this.finalCodePartSize = 300;
+
+                this.finalHtmlCodePartSize = this.mainContainerWidth/3;
+                this.finalCssCodePartSize = this.mainContainerWidth/3;
+                this.finalJsCodePartSize = this.mainContainerWidth/3;
               
               break;
               case 3:
-              self.initialCssCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialHtmlCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialJsCodePartSize = (self.mainContainerHeight - 10) / 3;
-              self.initialCodePartSize = 350;
+                this.finalCodePartSize = 300;
+
+                this.finalHtmlCodePartSize = this.mainContainerHeight/3;
+                this.finalCssCodePartSize = this.mainContainerHeight/3
+                this.finalJsCodePartSize = this.mainContainerHeight/3;
               
               break;
               case 4:
-              self.initialCssCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialHtmlCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialJsCodePartSize = (self.mainContainerWidth - 10) / 3;
-              self.initialCodePartSize = 300;
+                this.finalCodePartSize = 300;
+
+                this.finalHtmlCodePartSize = this.mainContainerWidth/3;
+                this.finalCssCodePartSize = this.mainContainerWidth/3;
+                this.finalJsCodePartSize = this.mainContainerWidth/3;
               
               break;
             }
@@ -657,16 +661,16 @@ onAppModeClick() {
   getLayoutInfos(name){
     switch(name){
       case "htmlAsSplitAreaSize":
-      return this.finalHtmlCodePartSize;
+      return this.finalHtmlCodePartSize+"px";;
 
       case "cssAsSplitAreaSize":
-      return this.finalCssCodePartSize
+      return this.finalCssCodePartSize+"px";
 
       case "jsAsSplitAreaSize":
-      return this.finalJsCodePartSize;
+      return this.finalJsCodePartSize+"px";;
 
       case "codePartsAsSplitAreaSize":
-      return this.finalCodePartSize;
+      return this.finalCodePartSize+"px";;
     }
     
     switch(this.layout){
