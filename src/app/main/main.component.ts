@@ -149,7 +149,7 @@ onAppModeClick() {
   isFiddleHeightInputDisabled: boolean = false;
 
 
-  firstCodePartHalfStretch: number = 0;
+  codeParthHalfStretchFirstIndex: number = 0;
   isConsoleOn: boolean = false;
   @ViewChild("appFiddlesHistory") appFiddlesHistory: FiddlesHistoryComponent;
 
@@ -485,9 +485,9 @@ onAppModeClick() {
   }
 
   setMainServiceCodepartSizes(){
-    this.mainService.htmlCodePartSize = this.newHtmlCodePartSize;
-    this.mainService.cssCodePartSize = this.newCssCodePartSize;
-    this.mainService.jsCodePartSize = this.newJsCodePartSize;
+    this.mainService.htmlCodePartSize = this.finalHtmlCodePartSize;
+    this.mainService.cssCodePartSize = this.finalCssCodePartSize;
+    this.mainService.jsCodePartSize = this.finalJsCodePartSize;
 
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     
@@ -498,7 +498,7 @@ onAppModeClick() {
 
     this.mainService.layout = this.layout;
     
-    this.mainService.codePartsSize = this.newCodePartSize;
+    this.mainService.codePartsSize = this.finalCodePartSize;
   }
 
   changeLayout(newLayout: number, param?: FiddleData){
@@ -998,19 +998,19 @@ onAppModeClick() {
     }
   }
 
-  halfStretchCodePart(index: number, event:MouseEvent){
+  halfStretchCodePart(newIndex: number, event:MouseEvent){
     let currentCodePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
 
     document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
       el.classList.add("clinging");
-    })
+    });
 
-    if(!this.firstCodePartHalfStretch){//first marking ? stretch
-      this.firstCodePartHalfStretch = index;
+    if(!this.codeParthHalfStretchFirstIndex){//first marking ? stretch
+      this.codeParthHalfStretchFirstIndex = newIndex;
       currentCodePartTitle.classList.add("half-stretch-mark");
     }
-    else if(this.firstCodePartHalfStretch == index){//first marked codePart is marked again ? remove stretch
-      this.firstCodePartHalfStretch = undefined;
+    else if(this.codeParthHalfStretchFirstIndex == newIndex){//first marked codePart is marked again ? remove stretch
+      this.codeParthHalfStretchFirstIndex = undefined;
       currentCodePartTitle.classList.remove("half-stretch-mark");
 
       document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
@@ -1023,24 +1023,19 @@ onAppModeClick() {
       
       let arr:any = ["*", minCodePartSize, minCodePartSize, minCodePartSize];
 
-      arr[this.firstCodePartHalfStretch] = mainContainerSize/2 - 5 - minCodePartSize/2;
-      arr[index] = mainContainerSize/2 - 5 - minCodePartSize/2;
+      arr[this.codeParthHalfStretchFirstIndex] = mainContainerSize/2 - 5 - minCodePartSize/2;
+      arr[newIndex] = mainContainerSize/2 - 5 - minCodePartSize/2;
 
-      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, arr);
 
-      this.initialHtmlCodePartSize = arr[1];
-      this.initialCssCodePartSize = arr[2];
-      this.initialJsCodePartSize = arr[3];
-
-      this.newHtmlCodePartSize = arr[1] as number;
-      this.newCssCodePartSize = arr[2] as number;
-      this.newJsCodePartSize = arr[3] as number;
+      this.finalHtmlCodePartSize = arr[1];
+      this.finalCssCodePartSize = arr[2];
+      this.finalJsCodePartSize = arr[3];
 
       this.setMainServiceCodepartSizes();
 
       //console.log("arr = ", arr);
 
-      this.firstCodePartHalfStretch = undefined; //firstCodePartHalfStretch not needed anymore
+      this.codeParthHalfStretchFirstIndex = undefined; //codeParthHalfStretchFirstIndex not needed anymore
 
       //reset stretched codepart state as well
       this.codePartStretchState.state = false;
@@ -1076,23 +1071,18 @@ onAppModeClick() {
           this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
           //console.log("sizes after = ", sizes);
 
-          this.initialHtmlCodePartSize = sizes[1];
-          this.initialCssCodePartSize = sizes[2];
-          this.initialJsCodePartSize = sizes[3];
-
-          this.newHtmlCodePartSize = sizes[1];
-          this.newCssCodePartSize = sizes[2];
-          this.newJsCodePartSize = sizes[3];
-          this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, sizes);
+          this.finalHtmlCodePartSize = sizes[1];
+          this.finalCssCodePartSize = sizes[2];
+          this.finalJsCodePartSize = sizes[3];
       }
-      else{//code part not stretched ?
-        /*this.previousLayout = {
+      else{//code part not stretched ? stretch it
+        this.previousLayout = {
           layout: this.layout,
-          htmlSize: this.splitComponentInner._alignedVisibleAreasSizes()[1] as number,
-          cssSize: this.splitComponentInner._alignedVisibleAreasSizes()[2] as number,
-          jsSize: this.splitComponentInner._alignedVisibleAreasSizes()[3] as number,
+          htmlSize: this.finalHtmlCodePartSize,
+          cssSize: this.finalCssCodePartSize,
+          jsSize: this.finalJsCodePartSize,
           mainContainerSize: mainContainerSize
-        }*/
+        }
         this.codePartStretchState.state = true;
         this.codePartStretchState.index = index;
         
@@ -1101,15 +1091,21 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            sizes = ["*", (totalSize - 48), 24, 24];
+            this.finalHtmlCodePartSize = totalSize - 48;
+            this.finalJsCodePartSize = 24;
+            this.finalCssCodePartSize = 24;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 48), 24, 24]);
             break;
             case("css"):
-            sizes = ["*", 24, (totalSize - 48), 24];
+            this.finalHtmlCodePartSize = 24;
+            this.finalJsCodePartSize = 24;
+            this.finalCssCodePartSize = totalSize - 48;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, (totalSize - 48), 24]);
             break;
             case("js"):
-            sizes = ["*", 24, 24, (totalSize - 48)];
+            this.finalHtmlCodePartSize = 24;
+            this.finalJsCodePartSize = totalSize - 48;
+            this.finalCssCodePartSize = 24;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, 24, (totalSize - 48)]);
             break;
           }
@@ -1119,15 +1115,21 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            sizes = ["*", (totalSize - 50), 25, 25];
+            this.finalHtmlCodePartSize = totalSize - 50;
+            this.finalJsCodePartSize = 25;
+            this.finalCssCodePartSize = 25;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
-            sizes = ["*", 25, (totalSize - 50), 25];
+            this.finalHtmlCodePartSize = 25;
+            this.finalJsCodePartSize = 25;
+            this.finalCssCodePartSize = totalSize - 50;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
-            sizes = ["*", 25, 25, (totalSize - 50)];
+            this.finalHtmlCodePartSize = 25;
+            this.finalJsCodePartSize = totalSize - 50;
+            this.finalCssCodePartSize = 25;
             //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
@@ -1910,7 +1912,7 @@ onAppModeClick() {
     if(this.layout == 2 || this.layout == 4){
       switch(codePartType){
         case("html"):
-        if(this.newHtmlCodePartSize < 230){
+        if(this.finalHtmlCodePartSize < 230){
           return true
         }
         else{
@@ -1918,7 +1920,7 @@ onAppModeClick() {
         }
   
         case("js"):
-        if(this.newJsCodePartSize < 280){
+        if(this.finalJsCodePartSize < 280){
           return true
         }
         else{
@@ -1926,7 +1928,7 @@ onAppModeClick() {
         }
   
         case("css"):
-        if(this.newCssCodePartSize < 230){
+        if(this.finalCssCodePartSize < 230){
           return true
         }
         else{
