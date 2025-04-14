@@ -142,38 +142,6 @@
     }
 }
 
-#code-parts{
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    box-shadow: 0 0 0 1px #bbb;
-    position:relative;
-}
-
-#code-parts > .code-component-container{
-    width: 100%;
-    height: 33.3%;
-    display: flex;
-    flex-direction: column;
-    background-color: #FFF;
-    min-height: 32px;
-}
-
-#code-parts > .code-component-container.has-resizer{
-    padding-top:5px;
-}
-
-#code-parts > .code-component-container > .code-component{
-    /*height: calc(100% - 30px);*/
-    height:auto;
-    flex-grow: 1;
-    /*display: flex;
-    flex-direction: column;*/
-    position: relative;
-} 
-
 .main-container-fiddle.layout-type-3 {
     flex-direction: row-reverse;
 }
@@ -203,11 +171,6 @@
     background-color: #afafaf;
 }
 
-
-#code-parts > :not(:first-child) {
-    border-top:none;
-}
-
 app-iframe-part{
     display:flex;
     flex-direction:column;
@@ -215,18 +178,6 @@ app-iframe-part{
     height: 100%;
     width: 100%;
     /*box-shadow: 0 0 0 1px #bbb;*/
-}
-
-as-split-area.as-split-area-iframe.as-split-area {
-    display: flex;
-}
-
-as-split-area.as-split-area-iframe.is-vertical {
-    flex-direction: column;
-}
-
-as-split-area.as-split-area-iframe.is-horizontal {
-    flex-direction: row;
 }
 
 .iframe-area{
@@ -833,10 +784,6 @@ i.fa.fa-sort-asc {
     display: none;
 }
 
-:host ::ng-deep #code-parts .as-split-gutter:first-of-type:not(:last-of-type){
-    display: none !important;
-}
-
 .as-split-gutter-custom{
     flex:0 0 5px;
 }
@@ -945,10 +892,6 @@ as-split-area >  app-js-part{
     height: 100%;
 }
 
-.main-container-fiddle.layout-type-1 #code-parts {
-    border-right: 1px solid #bbb;
-}
-
 as-split-area.code-component-container {
     display: flex;
     flex-direction: column;
@@ -1055,12 +998,6 @@ as-split-area.code-component-container > app-html-part{
     flex-grow: 1;
 }
 
-.code-part-gutter,
-.main-container-gutter{
-    background-color: red;
-    flex-basis: 5px;
-    cursor: grab;
-}
 
 .code-component-container {
     flex-basis: calc(100%/3);
@@ -1086,7 +1023,7 @@ as-split-area.code-component-container > app-html-part{
 
 .code-part-gutter,
 .main-container-gutter{
-    background-color: red;
+    /*background-color: red;*/
     flex-basis: 5px;
     cursor: grab;
     z-index: 1;
@@ -1101,6 +1038,8 @@ as-split-area.code-component-container > app-html-part{
 .as-split-area-iframe {
     display: flex;
     flex-grow: 1;
+    flex-basis: 0px;
+    min-height: 0px;
 }
 
 .as-split-area-iframe.is-vertical {
@@ -1142,7 +1081,7 @@ as-split-area.code-component-container > app-html-part{
 }
 /******/
 @media (min-width:890px) {
-    #code-parts .code-component-container.fullscreen {
+    .code-component-container.fullscreen {
         position: fixed !important;
         left: 0 !important;
         top: 0 !important;
@@ -1151,7 +1090,7 @@ as-split-area.code-component-container > app-html-part{
         z-index: 125 !important;
         padding:0px;
     }
-    #code-parts  > .code-part-title{
+    .code-part-title{
         border-top: 1px solid #b5b5b5;
     }
 }

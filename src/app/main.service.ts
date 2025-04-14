@@ -276,9 +276,7 @@ export class MainService {
         color: ${theme.data.colors['editor.foreground']};
     }
     
-    .as-split-outer[class] > .as-split-gutter[class],
-    .as-split-gutter-custom,
-    #code-parts[id] .as-split-gutter[class]
+    .gutter[class]
     {
         background-color: ${theme.data.colors['editor.selectionBackground']};
     }
@@ -672,10 +670,6 @@ export class MainService {
     @media (max-width:818px), (max-height:580px) {
       as-split-area.as-split-area-code-parts{
         border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
-      }
-
-      as-split-area.as-split-area-iframe{
-        border-top: 1px solid ${theme.data.colors['editor.foreground']};
       }
 
       as-split-area.as-split-area-console{

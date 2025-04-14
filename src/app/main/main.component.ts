@@ -136,6 +136,11 @@ onAppModeClick() {
   isCustomGutter1_dragging: boolean = false;
   isCustomGutter2_dragging: boolean = false;
 
+  isMainContainerGutter_dragging: boolean = false;
+
+  isGutter1_dragging: boolean = false;
+  isGutter2_dragging: boolean = false;
+
   isIframeFullScreen:boolean = false;
 
 
@@ -522,8 +527,8 @@ onAppModeClick() {
               case 1:
                 this.finalCodePartSize = 300;
 
-                this.finalHtmlCodePartSize = this.mainContainerHeight/3;
-                this.finalCssCodePartSize = this.mainContainerHeight/3
+                this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
+                this.finalCssCodePartSize = this.mainContainerHeight/3 + 5
                 this.finalJsCodePartSize = this.mainContainerHeight/3;
               //console.log("self.mainContainerHeight = ", self.mainContainerHeight);
               
@@ -531,24 +536,24 @@ onAppModeClick() {
               case 2:
                 this.finalCodePartSize = 300;
 
-                this.finalHtmlCodePartSize = this.mainContainerWidth/3;
-                this.finalCssCodePartSize = this.mainContainerWidth/3;
+                this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
+                this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
                 this.finalJsCodePartSize = this.mainContainerWidth/3;
               
               break;
               case 3:
                 this.finalCodePartSize = 300;
 
-                this.finalHtmlCodePartSize = this.mainContainerHeight/3;
-                this.finalCssCodePartSize = this.mainContainerHeight/3
+                this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
+                this.finalCssCodePartSize = this.mainContainerHeight/3 + 5;
                 this.finalJsCodePartSize = this.mainContainerHeight/3;
               
               break;
               case 4:
                 this.finalCodePartSize = 300;
 
-                this.finalHtmlCodePartSize = this.mainContainerWidth/3;
-                this.finalCssCodePartSize = this.mainContainerWidth/3;
+                this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
+                this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
                 this.finalJsCodePartSize = this.mainContainerWidth/3;
               
               break;
@@ -1155,27 +1160,37 @@ onAppModeClick() {
   
   @HostListener("document:mouseup", ["$event"])
   onDocumentMouseup(event: MouseEvent ){
-    if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging){
+    if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging || this.isMainContainerGutter_dragging){
       event.preventDefault();
       this.showIframeOverlay = false;
     }
-    if(this.isCustomGutter1_dragging){
+    if(this.isMainContainerGutter_dragging){
+      this.isMainContainerGutter_dragging = false;
+    }
+    else if(this.isCustomGutter1_dragging){
       this.isCustomGutter1_dragging = false;
       //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
-
-      this.isFiddleHeightInputDisabled = false;
-      this.isFiddleWidthInputDisabled = false;
     }
     else if(this.isCustomGutter2_dragging){
       this.isCustomGutter2_dragging = false;
-
       //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
-
-      this.isFiddleHeightInputDisabled = false;
-      this.isFiddleWidthInputDisabled = false;
     }
+
+    else if(this.isGutter1_dragging){
+      this.isGutter1_dragging = false;
+      //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("--------------------------");
+    }
+    else if(this.isCustomGutter2_dragging){
+      this.isCustomGutter2_dragging = false;
+      //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("--------------------------");
+    }
+
+    this.isFiddleHeightInputDisabled = false;
+      this.isFiddleWidthInputDisabled = false;
   }
 
   @HostListener("document:click", ["$event"])
@@ -1565,67 +1580,97 @@ onAppModeClick() {
     else return "0px";
   }
 
+  /**
+   * 
+   * @param event MouseEvent (mousedown) or TouchEvent (touchstart)
+   * @param customGutterNum gutter mumber: 1 || 2 || 3 || 4 || 5
+   */
   onGutterCustomMousedown(event: any, customGutterNum){
+    console.log('onGutterCustomMousedown ev = ', event);
     event.preventDefault();
-    if(customGutterNum == 1){
+    if(customGutterNum == 3){//Main container gutter ?
+      this.isMainContainerGutter_dragging = true;
+
+      //console.log("mousedown customGutterNum = " + customGutterNum);
+      //console.log("--------------------------");
+    }
+    else if(customGutterNum == 4){//iframe first gutter
       this.isCustomGutter1_dragging = true;
       this.isCustomGutter2_dragging = false;
-    
-      this.isFiddleHeightInputDisabled = true;
-      this.isFiddleWidthInputDisabled = true;
 
       //console.log("mousedown event.type = " + event.type);
       //console.log("--------------------------");
     }
-    else if(customGutterNum == 2){
+    else if(customGutterNum == 5){//iframe second gutter
       this.isCustomGutter2_dragging = true;
       this.isCustomGutter1_dragging = false;
 
-      this.isFiddleHeightInputDisabled = true;
-      this.isFiddleWidthInputDisabled = true;
-
       //console.log("mousedown event.type = " + event.type);
       //console.log("--------------------------");
     }
+    else if(customGutterNum == 1){
+      this.isGutter1_dragging = true;
+
+    }
+
+    else if(customGutterNum == 2){
+      this.isGutter2_dragging = true;
+
+    }
+
+    this.isFiddleHeightInputDisabled = true;
+    this.isFiddleWidthInputDisabled = true;
   }
 
   onAsSplitAreaIframeMousemove(event: any ){
+    let generateCoordinate = (gutterNumber: number)=>{
+      let eventClientXOrY;
+      let htmlCssGutter = 1;
+      let cssJsGutter = 2;
+      let codePartsGutter = 3;
+      let customGutter1 = 4;
+      let customGutter2 = 5;
+      console.log("move event.type = ", event.type);
+      if(event.type == "touchmove"){
+        if(this.layout == 1 || this.layout == 3){
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.touches[0].clientY : event.touches[0].clientX;
+        }
+        else if(this.layout == 2 || this.layout == 4){
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.touches[0].clientX : event.touches[0].clientY;
+        }
+      }
+      else{
+        if(this.layout == 1 || this.layout == 3){
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.clientY : event.clientX;
+        }
+        else if(this.layout == 2 || this.layout == 4){
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.clientX : event.clientY;
+        }
+      }
+      return eventClientXOrY;
+    }
+
     let evTarget = event.target as HTMLElement;
 
       if(this.IsAfterViewInitReached){
-        let eventClientXOrY;
         
-        if(event.type == "touchmove"){
-          if(this.layout == 1 || this.layout == 3){
-            eventClientXOrY = event.touches[0].clientY;
-          }
-          else if(this.layout == 2 || this.layout == 4){
-            eventClientXOrY = event.touches[0].clientX;
-          }
-        }
-        else{
-          if(this.layout == 1 || this.layout == 3){
-            eventClientXOrY = event.clientY;
-          }
-          else if(this.layout == 2 || this.layout == 4){
-            eventClientXOrY = event.clientX;
-          }
-        }
-
         let emptyArea1 = this.emptyArea1.nativeElement as HTMLElement;
         let emptyArea2 = this.emptyArea2.nativeElement as HTMLElement;
 
         let mainContainer = this.mainContainer.nativeElement as HTMLElement;
+        let codePartsArea = this.codePartsArea.nativeElement as HTMLElement;
         if(this.isCustomGutter1_dragging){
+          let eventClientXOrY = generateCoordinate(4);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
           event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           //console.log("isCustomGutter1_dragging is true");
-          if(this.layout == 1 || this.layout == 3){
+          if(this.layout == 1 || this.layout == 3){//layout 1 or 3 ?
             let emptyArea1_height = emptyArea1.offsetHeight;
-            emptyArea1_height = eventClientXOrY - mainContainer.getBoundingClientRect().top;
+            emptyArea1_height = eventClientXOrY - mainContainer.getBoundingClientRect().top; //calculate new emptyArea1_height value
+            //make sure emptyArea1_height is between 0 and mainContainer.offsetHeight / 2 - 5
             if(emptyArea1_height < 0){
               emptyArea1_height = 0;
             }
@@ -1635,9 +1680,10 @@ onAppModeClick() {
             this.emptyArea_1_Size = emptyArea1_height;
             this.emptyArea_2_Size = emptyArea1_height;
           }
-          else if(this.layout == 2 || this.layout == 4){
+          else if(this.layout == 2 || this.layout == 4){//layout 2 or 4
             let emptyArea1_width = emptyArea1.offsetWidth;
-            emptyArea1_width = eventClientXOrY - mainContainer.getBoundingClientRect().left;
+            emptyArea1_width = eventClientXOrY - mainContainer.getBoundingClientRect().left; //calculate new emptyArea1_width value
+            //make sure emptyArea1_width is between 0 and mainContainer.offsetWidth / 2 - 5
             if(emptyArea1_width < 0){
               emptyArea1_width = 0;
             }
@@ -1651,6 +1697,7 @@ onAppModeClick() {
           this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
         }
         else if(this.isCustomGutter2_dragging){
+          let eventClientXOrY = generateCoordinate(5);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
@@ -1691,6 +1738,98 @@ onAppModeClick() {
           this.calculateIframeSize(mainContainer);
           this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
         }
+        else if(this.isMainContainerGutter_dragging){
+          let eventClientXOrY = generateCoordinate(3);
+          if(!this.showIframeOverlay){
+            this.showIframeOverlay = true; 
+          }
+          event.preventDefault();
+          //console.log("mousemove evTarget = ", evTarget);
+          console.log("eventClientXOrY = ", eventClientXOrY);
+
+            if(this.layout == 1 || this.layout == 3){              
+              let codePartsWidth = (this.layout == 1) ? (eventClientXOrY - mainContainer.getBoundingClientRect().left) : Math.abs(eventClientXOrY - mainContainer.getBoundingClientRect().right);
+  
+              if(codePartsWidth < 300){
+                codePartsWidth = 300;
+              }
+              else if(codePartsWidth > mainContainer.offsetWidth - 5){
+                codePartsWidth = mainContainer.offsetWidth - 5;
+              }
+              this.finalCodePartSize = codePartsWidth;
+              console.log("codePartsWidth = ", codePartsWidth);
+            }
+            else if(this.layout == 2 || this.layout == 4){
+              let codePartsHeight = this.layout == 2 ? eventClientXOrY - mainContainer.getBoundingClientRect().top : Math.abs(eventClientXOrY - mainContainer.getBoundingClientRect().bottom );
+  
+              if(codePartsHeight < 300){
+                codePartsHeight = 300;
+              }
+              else if(codePartsHeight > mainContainer.getBoundingClientRect().height - 5){
+                codePartsHeight = mainContainer.getBoundingClientRect().height - 5;
+              }
+              this.finalCodePartSize = codePartsHeight;
+              console.log("codePartsHeight = ", codePartsHeight);
+            }
+          
+          this.calculateIframeSize(mainContainer);
+          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
+        }
+        else if(this.isGutter1_dragging){
+          let eventClientXOrY = generateCoordinate(1);
+          if(!this.showIframeOverlay){
+            this.showIframeOverlay = true; 
+          }
+          event.preventDefault();
+          //console.log("mousemove evTarget = ", evTarget);
+          console.log("eventClientXOrY = ", eventClientXOrY);
+
+            if(this.layout == 1 || this.layout == 3){      
+              //let htmlPartSize = this.finalHtmlCodePartSize;
+              let cssPartSize = this.finalCssCodePartSize;
+              let jsPartSize = this.finalJsCodePartSize;        
+
+              let htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().top;
+              console.log("htmlPartSize = ", htmlPartSize);
+
+
+              let newHtmlSize = htmlPartSize;
+              if(newHtmlSize < 24){
+                newHtmlSize = 24
+              }
+              let diff = newHtmlSize - this.finalHtmlCodePartSize;
+
+              this.finalHtmlCodePartSize = newHtmlSize;
+
+
+              let newCssSize = this.finalCssCodePartSize - diff;
+
+              if(newCssSize < 24){
+                newCssSize = 24;
+
+                ///
+                let newJsSize = this.finalJsCodePartSize - diff;
+                if(newJsSize < 24){
+                  newJsSize = 24;
+                }
+                this.finalJsCodePartSize = newJsSize;
+              }
+              this.finalCssCodePartSize = newCssSize;
+
+            }
+            else if(this.layout == 2 || this.layout == 4){
+              let htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().left;
+              console.log("htmlPartSize = ", htmlPartSize);
+              this.finalHtmlCodePartSize = htmlPartSize;
+            }
+          
+          this.calculateIframeSize(mainContainer);
+          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
+
+        }
+        else if(this.isGutter2_dragging){
+
+        }
       } 
   }
 
@@ -1701,9 +1840,8 @@ onAppModeClick() {
       case 1:
       
       if(newFiddleWidth <= (this.mainContainerWidth - 350 - 5)){
-        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [this.mainContainerWidth - newFiddleWidth - 5, "*"]);
-        this.newCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
-        this.mainService.codePartsSize = this.newCodePartSize;
+        this.finalCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
+        this.mainService.codePartsSize = this.finalCodePartSize;
       }
       else{
         this.calculateIframeSize();
@@ -1736,9 +1874,8 @@ onAppModeClick() {
       case 3:
 
       if(newFiddleWidth <= (this.mainContainerWidth - 350 - 5)){
-        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerWidth - newFiddleWidth - 5]  );
-        this.newCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
-        this.mainService.codePartsSize = this.newCodePartSize;
+        this.finalCodePartSize = this.mainContainerWidth - newFiddleWidth - 5;
+        this.mainService.codePartsSize = this.finalCodePartSize;
       }
       else{
         this.calculateIframeSize();
@@ -1788,8 +1925,8 @@ onAppModeClick() {
 
       if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
         this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  [this.mainContainerHeight - newFiddleHeight - 5, "*"]);
-        this.newCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
-        this.mainService.codePartsSize = this.newCodePartSize;
+        this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
+        this.mainService.codePartsSize = this.finalCodePartSize;
       }
       else{
         this.calculateIframeSize();
@@ -1816,8 +1953,8 @@ onAppModeClick() {
 
       if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
         this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerHeight - newFiddleHeight - 5]  );
-        this.newCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
-        this.mainService.codePartsSize = this.newCodePartSize;
+        this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
+        this.mainService.codePartsSize = this.finalCodePartSize;
       }
       else{
         this.calculateIframeSize();
@@ -1846,50 +1983,30 @@ onAppModeClick() {
     this.appFiddlesHistory.getFiddlesList();
   }
 
-  splitComponentInnerDragEnd(event){
-    //console.log("splitComponentInnerDragEnd event = ", event);
-    this.canChangeSplitSizes = true;
-  }
 
-  splitComponentInnerDragStart(event){
-    //console.log("splitComponentInnerDragStart event = ", event);
-    this.canChangeSplitSizes = false;
-  }
-
-  splitComponentOuterDragEnd(event){
-    //console.log("splitComponentOuterDragEnd event = ", event);
-    this.showIframeOverlay = false;
-
-    this.isFiddleHeightInputDisabled = false;
-    this.isFiddleWidthInputDisabled = false;
-  }
-
-  splitComponentOuterDragStart(event){
-    //console.log("splitComponentOuterDragStart event = ", event);
-    this.showIframeOverlay = true;
-
-    this.isFiddleHeightInputDisabled = true;
-    this.isFiddleWidthInputDisabled = true;
-  }
-
-  onCodePartGutterMousedown(event){
-    console.log("onCustomGutterOuterMousedown ev = ", event);
-  }
-
-  onSplitOuterMousemove(event){
-    console.log("onSplitOuterMousemove ev = ", event);
-  }
-
-  onSplitOuterMouseup(event){
-    console.log("onSplitOuterMouseup ev = ", event);
-  }
 
   getCodePartGutterStyle(type: string){
-    let obj = {
-      "background-color": "red",
+    let obj: any = {
       "flex-basis": "5px",
-      "cursor": (this.layout == 1 || this.layout == 3) && type == 'main-container' ? "col-resize" : "row-resize"
     }
+
+    if(this.layout == 1 || this.layout == 3) {
+      if(type == "main-container"){
+        obj.cursor = "col-resize";
+      }
+      else if (type == "html-css" || type == "css-js"){
+        obj.cursor = "row-resize";
+      }
+    }
+    else{
+      if(type == "main-container"){
+        obj.cursor = "row-resize";
+      }
+      else if (type == "html-css" || type == "css-js"){
+        obj.cursor = "col-resize";
+      }
+    }
+    
     return obj;
   }
 
@@ -1939,15 +2056,6 @@ onAppModeClick() {
     else{
       return false;
     }
-  }
-
-  getFiddleInputWidth(){
-    let width = 0;
-    for(let ind = 0; ind < this.fiddleTitle.length; ind++){
-      width += 10;
-    }
-    //console.log("width = ", width);
-    return width == 0 ? "" : width+"px";
   }
 
   onFiddeTitleChange(data){

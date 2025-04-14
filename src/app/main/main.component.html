@@ -140,7 +140,7 @@
       <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
   
-    <div [attr.data-layout]="layout" (mouseup)="onSplitOuterMouseup($event)" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
+    <div [attr.data-layout]="layout" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
 
       <div [ngStyle]="{'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize')}" #codePartsArea class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
 
@@ -178,7 +178,7 @@
               </div>
               <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component"></app-html-part>
             </div>
-            <div class="code-part-gutter" [ngStyle]="getCodePartGutterStyle('html-css')" ></div>
+            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('html-css')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
             
             <div [ngStyle]="{'flex-basis': getLayoutInfos('cssAsSplitAreaSize')}" class="code-component-container code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
               <div class="code-part-title">
@@ -214,7 +214,7 @@
               </div>
               <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>
             </div>
-            <div class="code-part-gutter" [ngStyle]="getCodePartGutterStyle('css-js')"></div>
+            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('css-js')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
             
             <div [ngStyle]="{'flex-basis': getLayoutInfos('jsAsSplitAreaSize')}" class="code-component-container code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
               <div class="code-part-title">
@@ -250,11 +250,11 @@
               <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>
             </div>
       </div>
-      <div class="main-container-gutter" [ngStyle]="getCodePartGutterStyle('main-container')" ></div>
+      <div class="main-container-gutter gutter" [ngStyle]="getCodePartGutterStyle('main-container')" (mousedown)="onGutterCustomMousedown($event, 3)" (touchstart)="onGutterCustomMousedown($event,3)"></div>
       <div [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
         <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
         </div>
-        <div #customGutter1 class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)">
+        <div #customGutter1 class="as-split-gutter-custom gutter" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,4)" (touchstart)="onGutterCustomMousedown($event,4)">
           <div class="as-split-gutter-icon-custom"></div>
         </div>
         <div class="iframe-overlay" [ngStyle]="{'display' : showIframeOverlay ? '' : 'none' }">
@@ -273,7 +273,7 @@
           <div class="iframe-overlay-for-drop" [ngStyle]="{'display': (isCustomGutter1_dragging || isCustomGutter2_dragging) ? 'block' : (isIframeFullScreen ? 'none':'')}"></div>
           <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()" (isConsoleOnUpdate)="isConsoleOnUpdate($event)"></app-iframe-part>
         </div>
-        <div class="as-split-gutter-custom" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)" #customGutter2>
+        <div class="as-split-gutter-custom gutter" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,5)" (touchstart)="onGutterCustomMousedown($event,5)" #customGutter2>
           <div class="as-split-gutter-icon-custom"></div>
         </div>
         <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">

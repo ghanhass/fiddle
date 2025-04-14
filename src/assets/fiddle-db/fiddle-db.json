@@ -1,3 +1,74 @@
 {
-  "gists": []
+  "gists": [
+    {
+      "js": "",
+      "html": "",
+      "css": "",
+      "js_part_size": 312.6666666666667,
+      "css_part_size": 317.6666666666667,
+      "html_part_size": 317.6666666666667,
+      "code_parts_size": 300,
+      "main_container_width": 957,
+      "main_container_height": 938,
+      "title": "",
+      "layout": 3,
+      "mobile_layout": "1:1",
+      "iframe_resize_value": 928,
+      "css_code_position_data": {
+        "row": 0,
+        "column": 0,
+        "focus": false,
+        "aceRanges": [
+          {
+            "start": {
+              "row": 0,
+              "column": 0
+            },
+            "end": {
+              "row": 0,
+              "column": 0
+            }
+          }
+        ]
+      },
+      "html_code_position_data": {
+        "row": 0,
+        "column": 0,
+        "focus": true,
+        "aceRanges": [
+          {
+            "start": {
+              "row": 0,
+              "column": 0
+            },
+            "end": {
+              "row": 0,
+              "column": 0
+            }
+          }
+        ]
+      },
+      "js_code_position_data": {
+        "row": 0,
+        "column": 0,
+        "focus": false,
+        "aceRanges": [
+          {
+            "start": {
+              "row": 0,
+              "column": 0
+            },
+            "end": {
+              "row": 0,
+              "column": 0
+            }
+          }
+        ]
+      },
+      "is_mobile_mode": false,
+      "created_at": 1743372670667,
+      "appmode": "fiddle",
+      "id": 1
+    }
+  ]
 }
