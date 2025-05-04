@@ -143,9 +143,13 @@ onAppModeClick() {
 
   isIframeFullScreen:boolean = false;
 
+  mouseDownXorY: number = 0;
+
 
   @ViewChild("customGutter1")customGutter1:ElementRef;
   @ViewChild("customGutter2")customGutter2:ElementRef;
+
+  @ViewChild("htmlCssGutter")htmlCssGutter:ElementRef;
 
   @ViewChild("emptyArea1")emptyArea1:ElementRef;
   @ViewChild("emptyArea2")emptyArea2:ElementRef;
@@ -712,13 +716,13 @@ onAppModeClick() {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         case "cssAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         case "jsAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         //case "iframeAsSplitAreaMinSize":
         //return 350;
@@ -816,13 +820,13 @@ onAppModeClick() {
         return 10;
 
         case "htmlAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         case "cssAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         case "jsAsSplitAreaMinSize":
-        return 24;
+        return 25;
 
         //case "iframeAsSplitAreaMinSize":
         //return 350;
@@ -1024,7 +1028,7 @@ onAppModeClick() {
     }
     else{//second codePart is the one marked? proceed with resizing the first and second marked codeParts
       let mainContainerSize = (this.layout == 1 || this.layout == 3) ? this.mainContainerHeight : this.mainContainerWidth;
-      let minCodePartSize = (this.layout == 1 || this.layout == 3) ? 24 : 25;
+      let minCodePartSize = (this.layout == 1 || this.layout == 3) ? 25 : 25;
       
       let arr:any = ["*", minCodePartSize, minCodePartSize, minCodePartSize];
 
@@ -1096,22 +1100,22 @@ onAppModeClick() {
           //console.log("totalSize = ", totalSize);
           switch(codePartType){
             case("html"):
-            this.finalHtmlCodePartSize = totalSize - 48;
-            this.finalJsCodePartSize = 24;
-            this.finalCssCodePartSize = 24;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 48), 24, 24]);
+            this.finalHtmlCodePartSize = totalSize - 50;
+            this.finalJsCodePartSize = 25;
+            this.finalCssCodePartSize = 25;
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
-            this.finalHtmlCodePartSize = 24;
-            this.finalJsCodePartSize = 24;
-            this.finalCssCodePartSize = totalSize - 48;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, (totalSize - 48), 24]);
+            this.finalHtmlCodePartSize = 25;
+            this.finalJsCodePartSize = 25;
+            this.finalCssCodePartSize = totalSize - 50;
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
-            this.finalHtmlCodePartSize = 24;
-            this.finalJsCodePartSize = totalSize - 48;
-            this.finalCssCodePartSize = 24;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 24, 24, (totalSize - 48)]);
+            this.finalHtmlCodePartSize = 25;
+            this.finalJsCodePartSize = totalSize - 50;
+            this.finalCssCodePartSize = 25;
+            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
         }
@@ -1160,10 +1164,7 @@ onAppModeClick() {
   
   @HostListener("document:mouseup", ["$event"])
   onDocumentMouseup(event: MouseEvent ){
-    if(this.isCustomGutter1_dragging || this.isCustomGutter2_dragging || this.isMainContainerGutter_dragging){
       event.preventDefault();
-      this.showIframeOverlay = false;
-    }
     if(this.isMainContainerGutter_dragging){
       this.isMainContainerGutter_dragging = false;
     }
@@ -1183,14 +1184,15 @@ onAppModeClick() {
       //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
-    else if(this.isCustomGutter2_dragging){
-      this.isCustomGutter2_dragging = false;
+    else if(this.isGutter2_dragging){
+      this.isGutter2_dragging = false;
       //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
 
     this.isFiddleHeightInputDisabled = false;
       this.isFiddleWidthInputDisabled = false;
+      this.showIframeOverlay = false;
   }
 
   @HostListener("document:click", ["$event"])
@@ -1585,7 +1587,7 @@ onAppModeClick() {
    * @param event MouseEvent (mousedown) or TouchEvent (touchstart)
    * @param customGutterNum gutter mumber: 1 || 2 || 3 || 4 || 5
    */
-  onGutterCustomMousedown(event: any, customGutterNum){
+  onGutterCustomMousedown(event: MouseEvent, customGutterNum){
     console.log('onGutterCustomMousedown ev = ', event);
     event.preventDefault();
     if(customGutterNum == 3){//Main container gutter ?
@@ -1608,14 +1610,14 @@ onAppModeClick() {
       //console.log("mousedown event.type = " + event.type);
       //console.log("--------------------------");
     }
-    else if(customGutterNum == 1){
+    else if(customGutterNum == 1){//html-css gutter
       this.isGutter1_dragging = true;
-
+      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? event.clientY : event.clientX;
     }
 
-    else if(customGutterNum == 2){
+    else if(customGutterNum == 2){//css-js gutter
       this.isGutter2_dragging = true;
-
+      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? event.clientY : event.clientX;
     }
 
     this.isFiddleHeightInputDisabled = true;
@@ -1623,6 +1625,10 @@ onAppModeClick() {
   }
 
   onAsSplitAreaIframeMousemove(event: any ){
+
+    /**
+     * get the event clientX or clientY according to the gutter type
+     */
     let generateCoordinate = (gutterNumber: number)=>{
       let eventClientXOrY;
       let htmlCssGutter = 1;
@@ -1693,8 +1699,7 @@ onAppModeClick() {
             this.emptyArea_1_Size = emptyArea1_width;
             this.emptyArea_2_Size = emptyArea1_width;
           }
-          this.calculateIframeSize(mainContainer);
-          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
+
         }
         else if(this.isCustomGutter2_dragging){
           let eventClientXOrY = generateCoordinate(5);
@@ -1734,9 +1739,7 @@ onAppModeClick() {
               this.emptyArea_2_Size = emptyArea2_width;
               this.emptyArea_1_Size = emptyArea2_width;
             }
-          
-          this.calculateIframeSize(mainContainer);
-          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
+        
         }
         else if(this.isMainContainerGutter_dragging){
           let eventClientXOrY = generateCoordinate(3);
@@ -1771,9 +1774,6 @@ onAppModeClick() {
               this.finalCodePartSize = codePartsHeight;
               console.log("codePartsHeight = ", codePartsHeight);
             }
-          
-          this.calculateIframeSize(mainContainer);
-          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
         }
         else if(this.isGutter1_dragging){
           let eventClientXOrY = generateCoordinate(1);
@@ -1785,51 +1785,168 @@ onAppModeClick() {
           console.log("eventClientXOrY = ", eventClientXOrY);
 
             if(this.layout == 1 || this.layout == 3){      
-              //let htmlPartSize = this.finalHtmlCodePartSize;
-              let cssPartSize = this.finalCssCodePartSize;
-              let jsPartSize = this.finalJsCodePartSize;        
+            
+              let htmlPartSize;
 
-              let htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().top;
-              console.log("htmlPartSize = ", htmlPartSize);
-
-
-              let newHtmlSize = htmlPartSize;
-              if(newHtmlSize < 24){
-                newHtmlSize = 24
+              if(eventClientXOrY > (codePartsArea.getBoundingClientRect().bottom - 50 - 5 )){
+                htmlPartSize = codePartsArea.getBoundingClientRect().height - 50 - 5 ;
               }
-              let diff = newHtmlSize - this.finalHtmlCodePartSize;
+              else if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 25){
+                htmlPartSize = 25;
+              }
+              else{
+                htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().top;
+              }
 
-              this.finalHtmlCodePartSize = newHtmlSize;
+              let sizeDiff = htmlPartSize - this.finalHtmlCodePartSize;
 
+              //let htmlPartSize = this.finalHtmlCodePartSize + sizeDiff;
+                console.log("htmlPartSize = ", htmlPartSize);
 
-              let newCssSize = this.finalCssCodePartSize - diff;
+              if(htmlPartSize < 25){
+                htmlPartSize = 25;
+              }
 
-              if(newCssSize < 24){
-                newCssSize = 24;
+              let newCssSize = this.finalCssCodePartSize - sizeDiff;
+              if(newCssSize < 25){
+                newCssSize = 25;
 
                 ///
-                let newJsSize = this.finalJsCodePartSize - diff;
-                if(newJsSize < 24){
-                  newJsSize = 24;
+                let newJsSize = this.finalJsCodePartSize - sizeDiff;
+                if(newJsSize < 25){
+                  newJsSize = 25;
                 }
                 this.finalJsCodePartSize = newJsSize;
               }
               this.finalCssCodePartSize = newCssSize;
 
+              this.finalHtmlCodePartSize = htmlPartSize;
+              
             }
             else if(this.layout == 2 || this.layout == 4){
-              let htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().left;
-              console.log("htmlPartSize = ", htmlPartSize);
+              let htmlPartSize;
+
+              if(eventClientXOrY > (codePartsArea.getBoundingClientRect().right - 50 - 10 )){
+                htmlPartSize = codePartsArea.getBoundingClientRect().width - 50 - 10 ;
+              }
+              else if(eventClientXOrY < codePartsArea.getBoundingClientRect().left + 25){
+                htmlPartSize = 25;
+              }
+              else{
+                htmlPartSize = eventClientXOrY - codePartsArea.getBoundingClientRect().left;
+              }
+
+              let sizeDiff = htmlPartSize - this.finalHtmlCodePartSize;
+
+              //let htmlPartSize = this.finalHtmlCodePartSize + sizeDiff;
+                console.log("htmlPartSize = ", htmlPartSize);
+
+              if(htmlPartSize < 25){
+                htmlPartSize = 25;
+              }
+
+              let newCssSize = this.finalCssCodePartSize - sizeDiff;
+              if(newCssSize < 25){
+                newCssSize = 25;
+
+                ///
+                let newJsSize = this.finalJsCodePartSize - sizeDiff;
+                if(newJsSize < 25){
+                  newJsSize = 25;
+                }
+                this.finalJsCodePartSize = newJsSize;
+              }
+              this.finalCssCodePartSize = newCssSize;
+
               this.finalHtmlCodePartSize = htmlPartSize;
             }
           
-          this.calculateIframeSize(mainContainer);
-          this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
 
         }
         else if(this.isGutter2_dragging){
+          let eventClientXOrY = generateCoordinate(2);
 
+          if(!this.showIframeOverlay){
+            this.showIframeOverlay = true; 
+          }
+          event.preventDefault();
+          //console.log("mousemove evTarget = ", evTarget);
+          console.log("eventClientXOrY = ", eventClientXOrY);
+
+            if(this.layout == 1 || this.layout == 3){      
+
+              let jsPartSize;
+              if(eventClientXOrY > (codePartsArea.getBoundingClientRect().bottom - 25)){
+                jsPartSize = 25 ;
+              }
+              else if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 50 + 5){
+                jsPartSize = codePartsArea.getBoundingClientRect().height - 50 - 5;
+              }
+              else{
+                jsPartSize = codePartsArea.getBoundingClientRect().bottom - eventClientXOrY;
+              }
+
+
+              let sizeDiff = jsPartSize - this.finalJsCodePartSize;
+
+              if(jsPartSize < 25){
+                jsPartSize = 25;
+              }
+
+              let newCssSize = this.finalCssCodePartSize - sizeDiff;
+              if(newCssSize < 25){
+                newCssSize = 25;
+
+                ///
+                let newHtmlSize = this.finalHtmlCodePartSize - sizeDiff;
+                if(newHtmlSize < 25){
+                  newHtmlSize = 25;
+                }
+                this.finalHtmlCodePartSize = newHtmlSize;
+              }
+              this.finalCssCodePartSize = newCssSize;
+              this.finalJsCodePartSize = jsPartSize;
+              }
+
+              else if(this.layout == 2 || this.layout == 4){      
+
+                let jsPartSize;
+                if(eventClientXOrY > (codePartsArea.getBoundingClientRect().right - 25)){
+                  jsPartSize = 25 ;
+                }
+                else if(eventClientXOrY < codePartsArea.getBoundingClientRect().left + 50 + 10){
+                  jsPartSize = codePartsArea.getBoundingClientRect().width - 50 - 5;
+                }
+                else{
+                  jsPartSize = codePartsArea.getBoundingClientRect().right - eventClientXOrY;
+                }
+  
+  
+                let sizeDiff = jsPartSize - this.finalJsCodePartSize;
+  
+                if(jsPartSize < 25){
+                  jsPartSize = 25;
+                }
+  
+                let newCssSize = this.finalCssCodePartSize - sizeDiff;
+                if(newCssSize < 25){
+                  newCssSize = 25;
+  
+                  ///
+                  let newHtmlSize = this.finalHtmlCodePartSize - sizeDiff;
+                  if(newHtmlSize < 25){
+                    newHtmlSize = 25;
+                  }
+                  this.finalHtmlCodePartSize = newHtmlSize;
+                }
+                this.finalCssCodePartSize = newCssSize;
+                this.finalJsCodePartSize = jsPartSize;
+              }
+            
         }
+
+        this.calculateIframeSize(mainContainer);
+        this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
       } 
   }
 

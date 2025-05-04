@@ -178,7 +178,7 @@
               </div>
               <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component"></app-html-part>
             </div>
-            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('html-css')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
+            <div #htmlCssGutter class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('html-css')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
             
             <div [ngStyle]="{'flex-basis': getLayoutInfos('cssAsSplitAreaSize')}" class="code-component-container code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
               <div class="code-part-title">
@@ -214,7 +214,7 @@
               </div>
               <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>
             </div>
-            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('css-js')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
+            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('css-js')" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)"></div>
             
             <div [ngStyle]="{'flex-basis': getLayoutInfos('jsAsSplitAreaSize')}" class="code-component-container code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
               <div class="code-part-title">

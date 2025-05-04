@@ -892,9 +892,13 @@ as-split-area >  app-js-part{
     height: 100%;
 }
 
-as-split-area.code-component-container {
+.code-component-container {
     display: flex;
     flex-direction: column;
+}
+
+.code-part-title {
+    transition: width, height 1s;
 }
 
 /*as-split-area.code-component-container > app-css-part,
@@ -1000,7 +1004,6 @@ as-split-area.code-component-container > app-html-part{
 
 
 .code-component-container {
-    flex-basis: calc(100%/3);
     overflow: hidden;
 }
 /****/
