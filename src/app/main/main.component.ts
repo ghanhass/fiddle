@@ -110,11 +110,6 @@ onAppModeClick() {
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
 
-  newHtmlCodePartSize: number = 0;
-  newCssCodePartSize: number = 0;
-  newJsCodePartSize: number = 0;
-  newCodePartSize: number = 0;
-
   iframeWidth: number;
   iframeHeight: number;
   IsAfterViewInitReached: boolean = false;
@@ -1271,30 +1266,30 @@ onAppModeClick() {
       let newCodePartSize;
       let outerSplitterSizes;
       if(this.layout == 1 || this.layout == 3){
-        if(this.newCodePartSize > this.mainContainerWidth - 5 ){
+        if(this.finalCodePartSize > this.mainContainerWidth - 5 ){
           newCodePartSize = this.mainContainerWidth - 13;
-          this.newCodePartSize = newCodePartSize;
+          this.finalCodePartSize = newCodePartSize;
         }
-        if(this.newCodePartSize < 350){
-          this.newCodePartSize = 350;
+        if(this.finalCodePartSize < 350){
+          this.finalCodePartSize = 350;
         }
         
       }
       else if(this.layout == 2 || this.layout == 4){
-        if(this.newCodePartSize > this.mainContainerHeight - 5 ){
+        if(this.finalCodePartSize > this.mainContainerHeight - 5 ){
           newCodePartSize = this.mainContainerHeight - 13;
-          this.newCodePartSize = newCodePartSize;
+          this.finalCodePartSize = newCodePartSize;
         }
-        if(this.newCodePartSize < 300){
-          this.newCodePartSize = 300;
+        if(this.finalCodePartSize < 300){
+          this.finalCodePartSize = 300;
         }
       }
 
       if(this.layout == 1 || this.layout == 2){
-        outerSplitterSizes = [this.newCodePartSize, "*"];
+        outerSplitterSizes = [this.finalCodePartSize, "*"];
       }
       else if(this.layout== 3 || this.layout == 4){
-        outerSplitterSizes = ['*', this.newCodePartSize]; 
+        outerSplitterSizes = ['*', this.finalCodePartSize]; 
       }
 
       this.setMainServiceCodepartSizes();
