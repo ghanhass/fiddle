@@ -107,12 +107,6 @@ onAppModeClick() {
   finalJsCodePartSize: number = 0;
   finalCodePartSize: number = 0;
 
-
-  initialHtmlCodePartSize: number = 0;
-  initialCssCodePartSize: number = 0;
-  initialJsCodePartSize: number = 0;
-  initialCodePartSize: number = 0;
-
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
 
@@ -562,13 +556,6 @@ onAppModeClick() {
               break;
             }
           }
-
-          self.newCssCodePartSize = self.initialCssCodePartSize;
-          self.newHtmlCodePartSize = self.initialHtmlCodePartSize;
-          self.newJsCodePartSize = self.initialJsCodePartSize;
-          self.newCodePartSize = self.initialCodePartSize;
-          
-          self.splitComponentInner._alignedVisibleAreasSizes.apply(self.splitComponentInner, ["*", self.newHtmlCodePartSize , self.newCssCodePartSize , self.newJsCodePartSize])
           
           self.calculateIframeSize(mainContainerEl);
           self.setMainServiceCodepartSizes();
@@ -638,9 +625,9 @@ onAppModeClick() {
     let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
     //console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner", savedMainContainerSize);
-    this.initialHtmlCodePartSize = Math.floor(sizes[1]);
-    this.initialCssCodePartSize = Math.floor(sizes[2]);
-    this.initialJsCodePartSize = Math.floor(sizes[3]);
+    this.finalHtmlCodePartSize = Math.floor(savedHtmlCodePartSize);
+    this.finalCssCodePartSize = Math.floor(savedCssCodePartSize);
+    this.finalJsCodePartSize = Math.floor(savedJsCodePartSize);
     /****************************************/
     /*START readapt saved sizes to new window size*/
     let ind;
@@ -662,7 +649,7 @@ onAppModeClick() {
       sizes[ind] = sizes[ind] * coef;
     }
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 5, "outer", savedMainContainerSize2);
-    this.initialCodePartSize = Math.floor(sizes[ind]);
+    this.finalCodePartSize = Math.floor(sizes[ind]);
     /*END readapt saved sizes to new window size*/
   }
 
@@ -1135,14 +1122,6 @@ onAppModeClick() {
             break;
           }
         }
-
-        //let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
-        this.initialHtmlCodePartSize = sizes[1] as number;
-        this.initialCssCodePartSize = sizes[2] as number;
-        this.initialJsCodePartSize = sizes[3] as number;
-        this.newHtmlCodePartSize = sizes[1] as number;
-        this.newCssCodePartSize = sizes[2] as number;
-        this.newJsCodePartSize = sizes[3] as number;
       }
 
       this.setMainServiceCodepartSizes();
@@ -1355,7 +1334,7 @@ onAppModeClick() {
 
   /**
    * Corrects the width/height of each code part area when total size of code parts is not equal to newMainContainerWidthOrHeight.
-   * @param sizes Split Component areas sizes array
+   * @param sizes code parts OR outer area sizes array
    * @param newMainContainerWidthOrHeight offsetWidth or offsetHeight of .main-container-fiddle
    */
   reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number, type: string, oldMainContainerWidthOrHeight ? : number){
@@ -1370,10 +1349,9 @@ onAppModeClick() {
       sizes[3] = sizes[3]*coef;
       
       //console.log("sizes inner = ", sizes);
-      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner,  sizes );
-      this.newHtmlCodePartSize = sizes[1] as number;
-      this.newCssCodePartSize = sizes[2] as number;
-      this.newJsCodePartSize = sizes[3] as number;
+      this.finalHtmlCodePartSize = sizes[1] as number;
+      this.finalCssCodePartSize = sizes[2] as number;
+      this.finalJsCodePartSize = sizes[3] as number;
     }
     else if(type == "outer"){
       let ind;
@@ -1405,7 +1383,6 @@ onAppModeClick() {
       
       //console.log("sizes outer = ", sizes);
       this.newCodePartSize = sizes[ind] as number;
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  sizes );
     }
   }
 
