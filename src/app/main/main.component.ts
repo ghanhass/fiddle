@@ -54,7 +54,6 @@ onAppModeClick() {
   isCssFullScreen: boolean = false;
   isJsFullScreen: boolean = false;
 
-  canChangeSplitSizes: boolean = true;
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
   previousLayout: PreviousLayout;
@@ -988,22 +987,15 @@ onAppModeClick() {
       this.previousLayout = undefined;
 
       if(this.layout == 1 || this.layout == 3){
-        this.initialCssCodePartSize = (this.mainContainerHeight - 10) / 3;
-        this.initialHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
-        this.initialJsCodePartSize = (this.mainContainerHeight - 10) / 3;
+        this.finalCssCodePartSize = (this.mainContainerHeight - 10) / 3;
+        this.finalHtmlCodePartSize = (this.mainContainerHeight - 10) / 3;
+        this.finalJsCodePartSize = (this.mainContainerHeight - 10) / 3;
       }
       else{
-        this.initialCssCodePartSize = (this.mainContainerWidth - 10) / 3;
-        this.initialHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
-        this.initialJsCodePartSize = (this.mainContainerWidth - 10) / 3;
+        this.finalCssCodePartSize = (this.mainContainerWidth - 10) / 3;
+        this.finalHtmlCodePartSize = (this.mainContainerWidth - 10) / 3;
+        this.finalJsCodePartSize = (this.mainContainerWidth - 10) / 3;
       }
-
-      this.newCssCodePartSize = this.initialCssCodePartSize;
-      this.newHtmlCodePartSize = this.initialHtmlCodePartSize;
-      this.newJsCodePartSize = this.initialJsCodePartSize;
-
-      let sizesArr: any = ["*", this.newHtmlCodePartSize,this.newCssCodePartSize, this.newJsCodePartSize];
-      this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, sizesArr);
     }
   }
 
@@ -1231,8 +1223,8 @@ onAppModeClick() {
     let newWindowHeight = window.innerHeight;
     this.iframePart.switchConsoleMobileMode();
     
-    //(new windowHeight or new windowWidth) and canChangeSplitSizes and mainContainerEl is truthy ?
-    if(mainContainerEl && this.canChangeSplitSizes && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
+    //(new windowHeight or new windowWidth) and mainContainerEl is truthy ?
+    if(mainContainerEl && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
       //console.log("/!\ window resize event: ", event);
 
       this.windowWidth = newWindowWidth;
@@ -1265,18 +1257,18 @@ onAppModeClick() {
       /*START readapt code parts sizes*/
       let sizes: Array<any> = this.splitComponentInner._alignedVisibleAreasSizes();
       let sizesOuter: Array<any> = this.splitComponentOuter._alignedVisibleAreasSizes();
-      if(newMainContainerWidthOrHeight > oldMainContainerWidthOrHeight){
+      if(newMainContainerWidthOrHeight > oldMainContainerWidthOrHeight){ //window got bigger OR window got zoomed out
         let coef = newMainContainerWidthOrHeight / oldMainContainerWidthOrHeight;
         
-        sizes[1] = sizes[1] * coef;
-        sizes[2] = sizes[2] * coef;
-        sizes[3] = sizes[3] * coef;
+        this.finalHtmlCodePartSize = this.finalHtmlCodePartSize * coef;
+        this.finalCssCodePartSize = this.finalCssCodePartSize * coef;
+        this.finalJsCodePartSize = this.finalJsCodePartSize * coef;
       }
-      else if(newMainContainerWidthOrHeight < oldMainContainerWidthOrHeight){
+      else if(newMainContainerWidthOrHeight < oldMainContainerWidthOrHeight){ //window got smaller OR window got zoomed in
         let coef = oldMainContainerWidthOrHeight / newMainContainerWidthOrHeight;
-        sizes[1] = (sizes[1] / coef) > 25 ? (sizes[1] / coef) : 25;
-        sizes[2] = (sizes[2] / coef) > 25 ? (sizes[2] / coef) : 25;
-        sizes[3] = (sizes[3] / coef) > 25 ? (sizes[3] / coef) : 25;
+        this.finalHtmlCodePartSize = (this.finalHtmlCodePartSize / coef) > 25 ? (this.finalHtmlCodePartSize / coef) : 25;
+        this.finalCssCodePartSize = (this.finalCssCodePartSize / coef) > 25 ? (this.finalCssCodePartSize / coef) : 25;
+        this.finalJsCodePartSize = (this.finalJsCodePartSize / coef) > 25 ? (this.finalJsCodePartSize / coef) : 25;
       }
       /*END readapt code parts sizes*/
        
@@ -1325,8 +1317,6 @@ onAppModeClick() {
       else if(this.layout== 3 || this.layout == 4){
         outerSplitterSizes = ['*', this.newCodePartSize]; 
       }
-
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, outerSplitterSizes);
 
       this.setMainServiceCodepartSizes();
 
@@ -1876,16 +1866,15 @@ onAppModeClick() {
             if(this.layout == 1 || this.layout == 3){      
 
               let jsPartSize;
-              if(eventClientXOrY > (codePartsArea.getBoundingClientRect().bottom - 25)){
+              if(eventClientXOrY > (codePartsArea.getBoundingClientRect().bottom - 25)){//drag is below codepPartsArea bottom point ?
                 jsPartSize = 25 ;
               }
-              else if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 50 + 5){
+              else if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 50 + 5){//drag is above codePartsArea top point ?
                 jsPartSize = codePartsArea.getBoundingClientRect().height - 50 - 5;
               }
               else{
                 jsPartSize = codePartsArea.getBoundingClientRect().bottom - eventClientXOrY;
               }
-
 
               let sizeDiff = jsPartSize - this.finalJsCodePartSize;
 
