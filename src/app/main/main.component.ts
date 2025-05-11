@@ -1377,7 +1377,7 @@ onAppModeClick() {
       }
       
       //console.log("sizes outer = ", sizes);
-      this.newCodePartSize = sizes[ind] as number;
+      this.finalCodePartSize = sizes[ind] as number;
     }
   }
 
