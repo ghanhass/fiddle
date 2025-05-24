@@ -332,37 +332,6 @@ onAppModeClick() {
 
     });
 
-    /*
-    this.splitComponentInner.dragProgress$.subscribe((res)=>{
-      let sizes = this.splitComponentInner._alignedVisibleAreasSizes();
-      //console.log('drag sizes = ', sizes);
-      //console.log('drag res.sizes = ', res.sizes);
-      this.newHtmlCodePartSize = res.sizes[1] as number;
-      this.newCssCodePartSize = res.sizes[2] as number;
-      this.newJsCodePartSize = res.sizes[3] as number;
-
-      this.setMainServiceCodepartSizes();
-      //console.log("splitComponentInner sizes = ", sizes);
-      this.codePartStretchState.state = false;
-      this.codePartStretchState.index = -1;
-      this.previousLayout = undefined;
-    });
-
-    this.splitComponentOuter.dragProgress$.subscribe((res)=>{
-      let sizes = this.splitComponentOuter._alignedVisibleAreasSizes();
-      if(this.layout == 1 || this.layout == 2){
-        this.newCodePartSize = sizes[0] as number;
-      }
-      else if(this.layout == 3 || this.layout == 4){
-        this.newCodePartSize = sizes[1] as number;
-      }
-
-      this.setMainServiceCodepartSizes();
-      //console.log("splitComponentOuter sizes = ", sizes);
-      this.calculateIframeSize(mainContainerEl);
-    });
-    */
-
     this.setMainServiceCodepartSizes();
 
     
@@ -510,6 +479,7 @@ onAppModeClick() {
           
           if (param !==undefined && param !== null) {//backend data retrieval
             self.getAndAdaptSavedCodePartsSizes(param);
+            this.onWindowResize();
           }
           else{//new fiddle
             self.emptyArea_1_Size = 0;
@@ -517,7 +487,7 @@ onAppModeClick() {
             self.mainService.iframeResizeValue = parseInt(self.getIframeAreaSize());
             switch(self.layout){
               case 1:
-                this.finalCodePartSize = 300;
+                this.finalCodePartSize = 350;
 
                 this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
                 this.finalCssCodePartSize = this.mainContainerHeight/3 + 5
@@ -526,7 +496,7 @@ onAppModeClick() {
               
               break;
               case 2:
-                this.finalCodePartSize = 300;
+                this.finalCodePartSize = 350;
 
                 this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
                 this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
@@ -534,7 +504,7 @@ onAppModeClick() {
               
               break;
               case 3:
-                this.finalCodePartSize = 300;
+                this.finalCodePartSize = 350;
 
                 this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
                 this.finalCssCodePartSize = this.mainContainerHeight/3 + 5;
@@ -542,7 +512,7 @@ onAppModeClick() {
               
               break;
               case 4:
-                this.finalCodePartSize = 300;
+                this.finalCodePartSize = 350;
 
                 this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
                 this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
@@ -595,7 +565,7 @@ onAppModeClick() {
       currentMainContainerSize2 = mainContainerEl.offsetHeight;
       savedMainContainerSize2 = savedMainContainerHeight;
 
-      codePartsMinLimit = 300;
+      codePartsMinLimit = 350;
     }
 
     //console.log("savedMainContainerSize = ", savedMainContainerSize);
@@ -617,12 +587,10 @@ onAppModeClick() {
     }
 
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
-    let sizes: Array<any> = ['*', savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
+    let sizes: Array<any> = [savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
     //console.log("param.data = ", param.data);
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner", savedMainContainerSize);
-    this.finalHtmlCodePartSize = Math.floor(savedHtmlCodePartSize);
-    this.finalCssCodePartSize = Math.floor(savedCssCodePartSize);
-    this.finalJsCodePartSize = Math.floor(savedJsCodePartSize);
+
     /****************************************/
     /*START readapt saved sizes to new window size*/
     let ind;
@@ -731,7 +699,7 @@ onAppModeClick() {
         return 2
 
         case "codePartsAsSplitAreaMinSize":
-        return 300;
+        return 350;
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -758,7 +726,7 @@ onAppModeClick() {
         return 25;
 
         //case "iframeAsSplitAreaMinSize":
-        //return 300;
+        //return 350;
 
         case "iframeAsSplitAreaSize":
         return "*";
@@ -835,7 +803,7 @@ onAppModeClick() {
         return 1
 
         case "codePartsAsSplitAreaMinSize":
-        return 300;
+        return 350;
 
         case "innerAsSplitDirection":
         return 'horizontal';
@@ -862,7 +830,7 @@ onAppModeClick() {
         return 25;
 
         //case "iframeAsSplitAreaMinSize":
-        //return 300;
+        //return 350;
 
         case "iframeAsSplitAreaSize":
         return "*";
@@ -933,25 +901,17 @@ onAppModeClick() {
       this.emptyArea_2_Size = 0;
       this.mainService.iframeResizeValue = this.mainContainerWidth - 10;
     }
-    else if(this.layout == 2){
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [300, "*"]);
-      this.mainService.codePartsSize = 300;
+    else {
+      this.finalCodePartSize = 350;
+      this.mainService.codePartsSize = 350;
     }
-    else if(this.layout == 4){
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", 300]);
-      this.mainService.codePartsSize = 300;
-    }
+
     this.calculateIframeSize();
   }
 
   stretchHorizontally(){
-    if(this.layout == 1){
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, [350, "*"]),
-      this.mainService.codePartsSize = 350;
-    }
-
-    else if(this.layout == 3){
-      this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", 350]);
+    if(this.layout == 1 || this.layout == 3){
+      this.finalCodePartSize = 350;
       this.mainService.codePartsSize = 350;
     }
     else{
@@ -1049,14 +1009,14 @@ onAppModeClick() {
       if(this.codePartStretchState.state && index == this.codePartStretchState.index){//codepart already stretched ? resume last codepart size
           this.codePartStretchState.state = false;
           this.codePartStretchState.index = -1;
-          sizes = ["*",this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
+          sizes = [this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
           //console.log("sizes before = ", sizes);
           this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
           //console.log("sizes after = ", sizes);
 
-          this.finalHtmlCodePartSize = sizes[1];
-          this.finalCssCodePartSize = sizes[2];
-          this.finalJsCodePartSize = sizes[3];
+          this.finalHtmlCodePartSize = sizes[0];
+          this.finalCssCodePartSize = sizes[1];
+          this.finalJsCodePartSize = sizes[2];
       }
       else{//code part not stretched ? stretch it
         this.previousLayout = {
@@ -1157,8 +1117,9 @@ onAppModeClick() {
     }
 
     this.isFiddleHeightInputDisabled = false;
-      this.isFiddleWidthInputDisabled = false;
-      this.showIframeOverlay = false;
+    this.isFiddleWidthInputDisabled = false;
+    this.showIframeOverlay = false;
+    this.setMainServiceCodepartSizes();
   }
 
   @HostListener("document:click", ["$event"])
@@ -1190,7 +1151,7 @@ onAppModeClick() {
   }
 
   @HostListener("window:resize", ["$event"])
-  onWindowResize(event){
+  onWindowResize(event?){
     let self = this;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     let newWindowWidth = window.innerWidth;
@@ -1213,24 +1174,20 @@ onAppModeClick() {
       //console.log("this.mainContainerWidth: ", this.mainContainerWidth);
       let oldMainContainerWidthOrHeight;
       let newMainContainerWidthOrHeight;
-      let newMainContainerWidthOrHeight2;
       let iframeSize;
-      
       if(this.layout == 1 || this.layout == 3){
         oldMainContainerWidthOrHeight = this.mainContainerHeight;
         newMainContainerWidthOrHeight = newMainContainerHeight;
-        newMainContainerWidthOrHeight2 = newMainContainerWidth;
         iframeSize = this.iframeHeight;
       }
       else{
         oldMainContainerWidthOrHeight = this.mainContainerWidth;
         newMainContainerWidthOrHeight = newMainContainerWidth;
-        newMainContainerWidthOrHeight2 = newMainContainerHeight;
         iframeSize = this.iframeWidth;
       }
+
       /*START readapt code parts sizes*/
-      let sizes: Array<any> = this.splitComponentInner._alignedVisibleAreasSizes();
-      let sizesOuter: Array<any> = this.splitComponentOuter._alignedVisibleAreasSizes();
+      let sizes: Array<any> = [this.finalHtmlCodePartSize, this.finalCssCodePartSize, this.finalJsCodePartSize];
       if(newMainContainerWidthOrHeight > oldMainContainerWidthOrHeight){ //window got bigger OR window got zoomed out
         let coef = newMainContainerWidthOrHeight / oldMainContainerWidthOrHeight;
         
@@ -1246,25 +1203,14 @@ onAppModeClick() {
       }
       /*END readapt code parts sizes*/
        
-      //console.log("this.canCallReAdaptCodePartsSizes = ", this.canCallReAdaptCodePartsSizes);
-      if(this.canCallReAdaptCodePartsSizes){
-        this.canCallReAdaptCodePartsSizes = false;
-        this.codePartsSizesFix = setTimeout(()=>{
-          self.reAdaptIframeResizeValue(oldMainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);   
-          
-          //self.codePartsSizesFix = undefined;
-          self.canCallReAdaptCodePartsSizes = true;
-        }, 50)
-      }
-
-      self.reAdaptCodePartsSizes(sizes, newMainContainerWidthOrHeight - 10, "inner", oldMainContainerWidthOrHeight);
-      self.reAdaptCodePartsSizes(sizesOuter, newMainContainerWidthOrHeight2 - 5 , "outer", oldMainContainerWidthOrHeight); 
+      self.reAdaptIframeResizeValue(oldMainContainerWidthOrHeight, newMainContainerWidthOrHeight, iframeSize);   
 
       this.mainContainerHeight = newMainContainerHeight;
       this.mainContainerWidth = newMainContainerWidth;
 
       let newCodePartSize;
       let outerSplitterSizes;
+
       if(this.layout == 1 || this.layout == 3){
         if(this.finalCodePartSize > this.mainContainerWidth - 5 ){
           newCodePartSize = this.mainContainerWidth - 13;
@@ -1273,15 +1219,14 @@ onAppModeClick() {
         if(this.finalCodePartSize < 350){
           this.finalCodePartSize = 350;
         }
-        
       }
       else if(this.layout == 2 || this.layout == 4){
         if(this.finalCodePartSize > this.mainContainerHeight - 5 ){
           newCodePartSize = this.mainContainerHeight - 13;
           this.finalCodePartSize = newCodePartSize;
         }
-        if(this.finalCodePartSize < 300){
-          this.finalCodePartSize = 300;
+        if(this.finalCodePartSize < 350){
+          this.finalCodePartSize = 350;
         }
       }
 
@@ -1291,6 +1236,8 @@ onAppModeClick() {
       else if(this.layout== 3 || this.layout == 4){
         outerSplitterSizes = ['*', this.finalCodePartSize]; 
       }
+
+      this.reAdaptCodePartsSizes(outerSplitterSizes, newMainContainerWidthOrHeight - 5, "outer");
 
       this.setMainServiceCodepartSizes();
 
@@ -1334,19 +1281,19 @@ onAppModeClick() {
    */
   reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number, type: string, oldMainContainerWidthOrHeight ? : number){
     if(type == "inner"){
-      let total = sizes[1] + sizes[2] + sizes[3];
+      let total = sizes[0] + sizes[1] + sizes[2];
       let coef;
       
       coef = newMainContainerWidthOrHeight / total;
       
+      sizes[0] = sizes[0]*coef;
       sizes[1] = sizes[1]*coef;
       sizes[2] = sizes[2]*coef;
-      sizes[3] = sizes[3]*coef;
       
       //console.log("sizes inner = ", sizes);
-      this.finalHtmlCodePartSize = sizes[1] as number;
-      this.finalCssCodePartSize = sizes[2] as number;
-      this.finalJsCodePartSize = sizes[3] as number;
+      this.finalHtmlCodePartSize = Math.floor(sizes[0]);
+      this.finalCssCodePartSize = Math.floor(sizes[1]);
+      this.finalJsCodePartSize = Math.floor(sizes[2]);
     }
     else if(type == "outer"){
       let ind;
@@ -1364,7 +1311,7 @@ onAppModeClick() {
         minLimit = 350;
       }
       else if(this.layout == 2 || this.layout == 4){
-        minLimit = 300;
+        minLimit = 350;
       }
 
       let total = sizes[ind];
@@ -1715,8 +1662,8 @@ onAppModeClick() {
             if(this.layout == 1 || this.layout == 3){              
               let codePartsWidth = (this.layout == 1) ? (eventClientXOrY - mainContainer.getBoundingClientRect().left) : Math.abs(eventClientXOrY - mainContainer.getBoundingClientRect().right);
   
-              if(codePartsWidth < 300){
-                codePartsWidth = 300;
+              if(codePartsWidth < 350){
+                codePartsWidth = 350;
               }
               else if(codePartsWidth > mainContainer.offsetWidth - 5){
                 codePartsWidth = mainContainer.offsetWidth - 5;
@@ -1727,8 +1674,8 @@ onAppModeClick() {
             else if(this.layout == 2 || this.layout == 4){
               let codePartsHeight = this.layout == 2 ? eventClientXOrY - mainContainer.getBoundingClientRect().top : Math.abs(eventClientXOrY - mainContainer.getBoundingClientRect().bottom );
   
-              if(codePartsHeight < 300){
-                codePartsHeight = 300;
+              if(codePartsHeight < 350){
+                codePartsHeight = 350;
               }
               else if(codePartsHeight > mainContainer.getBoundingClientRect().height - 5){
                 codePartsHeight = mainContainer.getBoundingClientRect().height - 5;
@@ -2001,7 +1948,7 @@ onAppModeClick() {
 
       case 2:
 
-      if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
+      if(newFiddleHeight <= (this.mainContainerHeight - 350 - 5)){
         this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  [this.mainContainerHeight - newFiddleHeight - 5, "*"]);
         this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.finalCodePartSize;
@@ -2029,7 +1976,7 @@ onAppModeClick() {
 
       case 4:
 
-      if(newFiddleHeight <= (this.mainContainerHeight - 300 - 5)){
+      if(newFiddleHeight <= (this.mainContainerHeight - 350 - 5)){
         this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerHeight - newFiddleHeight - 5]  );
         this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.finalCodePartSize;

@@ -250,8 +250,10 @@
               <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>
             </div>
       </div>
+
       <div class="main-container-gutter gutter" [ngStyle]="getCodePartGutterStyle('main-container')" (mousedown)="onGutterCustomMousedown($event, 3)" (touchstart)="onGutterCustomMousedown($event,3)"></div>
-      <div [order]="getLayoutInfos('iframeAsSplitAreaOrder')" [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
+      
+      <div [size]="getLayoutInfos('iframeAsSplitAreaSize')" style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
         <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
         </div>
         <div #customGutter1 class="as-split-gutter-custom gutter" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,4)" (touchstart)="onGutterCustomMousedown($event,4)">

@@ -18,10 +18,10 @@ export interface FiddleData {
     main_container_width?:number,
     mobile_layout?:string,
     iframe_resize_value?:number,
-    css_code_position_data: CodePositionData,
-    html_code_position_data: CodePositionData,
-    js_code_position_data: CodePositionData,
-    is_mobile_mode: boolean,
+    css_code_position_data?: CodePositionData,
+    html_code_position_data?: CodePositionData,
+    js_code_position_data?: CodePositionData,
+    is_mobile_mode?: boolean,
     created_at?: number;
     appmode?: string
 }
