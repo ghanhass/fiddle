@@ -1090,7 +1090,6 @@ onAppModeClick() {
   
   @HostListener("document:mouseup", ["$event"])
   onDocumentMouseup(event: MouseEvent ){
-      event.preventDefault();
     if(this.isMainContainerGutter_dragging){
       this.isMainContainerGutter_dragging = false;
     }
@@ -1498,7 +1497,6 @@ onAppModeClick() {
    */
   onGutterCustomMousedown(event: MouseEvent, customGutterNum){
     console.log('onGutterCustomMousedown ev = ', event);
-    event.preventDefault();
     if(customGutterNum == 3){//Main container gutter ?
       this.isMainContainerGutter_dragging = true;
 
@@ -1579,7 +1577,6 @@ onAppModeClick() {
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
-          event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           //console.log("isCustomGutter1_dragging is true");
           if(this.layout == 1 || this.layout == 3){//layout 1 or 3 ?
@@ -1615,7 +1612,6 @@ onAppModeClick() {
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
-          event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           //console.log("isCustomGutter2_dragging is true");
 
@@ -1655,7 +1651,6 @@ onAppModeClick() {
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
-          event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           console.log("eventClientXOrY = ", eventClientXOrY);
 
@@ -1689,7 +1684,6 @@ onAppModeClick() {
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
-          event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           console.log("eventClientXOrY = ", eventClientXOrY);
 
@@ -1778,7 +1772,6 @@ onAppModeClick() {
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
           }
-          event.preventDefault();
           //console.log("mousemove evTarget = ", evTarget);
           console.log("eventClientXOrY = ", eventClientXOrY);
 
