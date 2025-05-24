@@ -1100,6 +1100,15 @@ as-split-area.code-component-container > app-html-part{
 
 @media (max-width:889px), (max-height:580px) {  
 
+        .code-part-gutter.gutter{
+            display: none;
+        }
+    
+        .code-component-container{
+            flex-basis:auto;
+            flex-grow:1;
+        }
+
     .hide-mobile{
         display: none !important;
     }
