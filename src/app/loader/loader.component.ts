@@ -11,6 +11,8 @@ export class LoaderComponent implements OnInit {
   
   @Input() global: boolean = false;
 
+  @Input() subGlobal: boolean = false;
+
   @Input() width: string;
   @Input() height: string;
 
@@ -22,14 +24,6 @@ export class LoaderComponent implements OnInit {
 
   getWrapperInlineStyle(){
     let obj: any = {}
-
-    if(this.width){
-      obj.width = this.width;
-    }
-
-    if(this.height){
-      obj.height = this.height;
-    }
 
     return obj;
   }

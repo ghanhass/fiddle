@@ -15,7 +15,7 @@ table td, table th {
     overflow: auto;
     display: flex;
     flex-direction: column;
-    
+    position: relative;
 }
 
 .search-table {

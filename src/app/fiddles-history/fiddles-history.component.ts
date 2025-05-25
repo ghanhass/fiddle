@@ -24,6 +24,7 @@ export class FiddlesHistoryComponent implements OnInit {
   getFiddlesList(){
     this.canChangePage = false;
     this.historyLoader.showLoader();
+    this.historyLoader.subGlobal = true;
     this.mainService.getFiddlesList(this.pageNumber).subscribe({
       next: (res)=>{
         console.log("getFiddlesList res = ", res);
@@ -80,14 +81,6 @@ export class FiddlesHistoryComponent implements OnInit {
 
   getLoaderStyle(){
     let obj : any = {
-      position: "absolute",
-      "z-index": 1,
-      left: "50%",
-      top: "50%",
-      transform: "translate(-50%, -50%)",
-      width: "500px",
-      height: "500px",
-      display: this.canChangePage ? 'none': 'block'
     }
 
     return obj;
