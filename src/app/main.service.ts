@@ -653,6 +653,10 @@ export class MainService {
       box-shadow: 0px 0px 3px 1px ${theme.data.colors['editor.foreground']};
     }
 
+    .loader-wrapper{
+      background-color: ${theme.data.colors['editor.background']}
+    }
+
     @keyframes blink{
       0%{
         box-shadow: none;

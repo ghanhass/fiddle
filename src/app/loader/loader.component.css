@@ -1,4 +1,4 @@
-.wrapper{
+.loader-wrapper{
   position:relative;
   height:30px;
   width:30px;
@@ -8,7 +8,7 @@
       justify-content: center;
 }
 
-.wrapper .container{
+.loader-wrapper .loader-container{
     position:absolute;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -17,25 +17,24 @@
     width:30px;
 }
 
-.wrapper.global,
-.wrapper.sub-global{
+.loader-wrapper.global,
+.loader-wrapper.sub-global{
   height: 100%;
   width: 100%;
-  background: #FFFFFF;
   z-index: 9999;
   top: 0;
   left: 0;
 }
 
-.wrapper.global{
+.loader-wrapper.global{
   position: fixed;
 }
 
-.wrapper.sub-global{
+.loader-wrapper.sub-global{
   position: absolute;
 }
 
-.wrapper.global .container{
+.loader-wrapper.global .loader-container{
   position: fixed;
   top:50%;
   left:50%;
@@ -45,32 +44,32 @@
 }
 
 
-.container > div:nth-child(1){
+.loader-container > div:nth-child(1){
     border-top:3px solid #62ad4a;
     border-left:3px solid #62ad4a;
     border-top-left-radius: 100%;
 }
 
-.container > div:nth-child(3){
+.loader-container > div:nth-child(3){
     border-bottom:3px solid #62ad4a;
     border-left:3px solid #62ad4a;
     border-bottom-left-radius: 100%;
 }
 
-.container > div:nth-child(4){
+.loader-container > div:nth-child(4){
     border-bottom:3px solid #62ad4a;
     border-right:3px solid #62ad4a;
     border-bottom-right-radius: 100%;
 }
 
-.wrapper .container{
+.loader-wrapper .loader-container{
     animation-name:rotate-loader;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
     animation-duration: 0.5s;
 }
 
-.wrapper.wrapper.global .container{
+.loader-wrapper.loader-wrapper.global .loader-container{
   animation-name:rotate-loader-global;
   animation-timing-function: linear;
   animation-iteration-count: infinite;

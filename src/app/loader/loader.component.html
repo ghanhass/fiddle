@@ -1,5 +1,5 @@
-<div class="wrapper" *ngIf="isLoaderShow()" [ngClass]="{'global':global, 'sub-global':subGlobal}">
-    <div class="container" [ngStyle]="{'width': width, 'height': height}">
+<div class="loader-wrapper" *ngIf="isLoaderShow()" [ngClass]="{'global':global, 'sub-global':subGlobal}">
+    <div class="loader-container" [ngStyle]="{'width': width, 'height': height}">
         <div [ngStyle]="{'border-width':thickness ? (thickness+'px') : ''}">
 
         </div>
