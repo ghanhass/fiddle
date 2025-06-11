@@ -32,7 +32,6 @@
     "lowdb": "^3.0.0",
     "monaco-editor": "^0.24.0",
     "ngx-ace-wrapper": "17.0.0",
-    "ngx-monaco-editor": "^12.0.0",
     "ngx-toastr": "^16.2.0",
     "pretty": "^2.0.0",
     "rxjs": "~7.5.5",
