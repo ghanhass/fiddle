@@ -9,7 +9,7 @@ import { CssPartComponent } from './css-part/css-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { IframePartComponent } from './iframe-part/iframe-part.component';
 import { FormsModule } from "@angular/forms";
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient, withInterceptorsFromDi } from "@angular/common/http";
 import { LoaderComponent } from './loader/loader.component';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule} from "ngx-toastr";
@@ -36,36 +36,28 @@ export function loadConfigs(mainService: MainService){
   }
 }
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    MainComponent,
-    HtmlPartComponent,
-    CssPartComponent,
-    JsPartComponent,
-    IframePartComponent,
-    LoaderComponent,
-    ModalComponent,
-    RessourcesComponent,
-    SafePipe,
-    FiddlesHistoryComponent,
-    PastebinComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    FormsModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    ToastrModule.forRoot(),
-    AngularSplitModule,
-    AceEditorModule,
-    //AceModule
-  ],
-  providers: [{
-    provide: APP_INITIALIZER, useFactory:loadConfigs, deps:[MainService], multi:true
-  }],
-  bootstrap: [AppComponent],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        MainComponent,
+        HtmlPartComponent,
+        CssPartComponent,
+        JsPartComponent,
+        IframePartComponent,
+        LoaderComponent,
+        ModalComponent,
+        RessourcesComponent,
+        SafePipe,
+        FiddlesHistoryComponent,
+        PastebinComponent,
+    ],
+    bootstrap: [AppComponent],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA], imports: [BrowserModule,
+        AppRoutingModule,
+        FormsModule,
+        BrowserAnimationsModule,
+        ToastrModule.forRoot(),
+        AngularSplitModule,
+        AceEditorModule], providers: [{
+            provide: APP_INITIALIZER, useFactory: loadConfigs, deps: [MainService], multi: true
+        }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

@@ -3,14 +3,12 @@ import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
-import { SplitComponent } from "angular-split";
 import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
 import { FiddleTheme } from "src/app/fiddle-theme";
 import { FiddleData } from '../fiddle-data';
-import { NgxPrettifyService } from '@smartcodelab/ngx-prettify';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
@@ -64,11 +62,8 @@ onAppModeClick() {
 
   appMode: string;
 
-  splitComponentInner: SplitComponent = new SplitComponent();
 
-  splitComponentOuter: SplitComponent = new SplitComponent();;
 
-  @ViewChild("splitComponentIframeResize") splitComponentIframeResize: SplitComponent;
 
 
   @ViewChild("mainContainer") mainContainer:ElementRef;
@@ -152,8 +147,7 @@ onAppModeClick() {
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService,
-    private ngxPrettifyService: NgxPrettifyService) { 
+    private toastrService: ToastrService) { 
       this.appMode = this.mainService.appMode;
   }
 
@@ -384,6 +378,7 @@ onAppModeClick() {
   }
 
   prettifyCode(type): void{
+    /*
     switch(type){
       case 'html':
       let prettifiedHtml = this.ngxPrettifyService.prettify(this.mainService.htmlCode.trim());
@@ -406,7 +401,7 @@ onAppModeClick() {
         this.jsPart.code = prettifiedJs;
       break;
     }
-  }
+  */}
 
   selectTheme(theme: FiddleTheme){
     if(theme.id != this.mainService.selectedTheme.id){
@@ -1037,19 +1032,16 @@ onAppModeClick() {
             this.finalHtmlCodePartSize = totalSize - 50;
             this.finalJsCodePartSize = 25;
             this.finalCssCodePartSize = 25;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
             this.finalHtmlCodePartSize = 25;
             this.finalJsCodePartSize = 25;
             this.finalCssCodePartSize = totalSize - 50;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
             this.finalHtmlCodePartSize = 25;
             this.finalJsCodePartSize = totalSize - 50;
             this.finalCssCodePartSize = 25;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
         }
@@ -1061,19 +1053,16 @@ onAppModeClick() {
             this.finalHtmlCodePartSize = totalSize - 50;
             this.finalJsCodePartSize = 25;
             this.finalCssCodePartSize = 25;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", (totalSize - 50), 25, 25]);
             break;
             case("css"):
             this.finalHtmlCodePartSize = 25;
             this.finalJsCodePartSize = 25;
             this.finalCssCodePartSize = totalSize - 50;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, (totalSize - 50), 25]);
             break;
             case("js"):
             this.finalHtmlCodePartSize = 25;
             this.finalJsCodePartSize = totalSize - 50;
             this.finalCssCodePartSize = 25;
-            //this.splitComponentInner._alignedVisibleAreasSizes.apply(this.splitComponentInner, ["*", 25, 25, (totalSize - 50)]);
             break;
           }
         }
@@ -1942,7 +1931,6 @@ onAppModeClick() {
       case 2:
 
       if(newFiddleHeight <= (this.mainContainerHeight - 350 - 5)){
-        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter,  [this.mainContainerHeight - newFiddleHeight - 5, "*"]);
         this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.finalCodePartSize;
       }
@@ -1970,7 +1958,6 @@ onAppModeClick() {
       case 4:
 
       if(newFiddleHeight <= (this.mainContainerHeight - 350 - 5)){
-        this.splitComponentOuter._alignedVisibleAreasSizes.apply(this.splitComponentOuter, ["*", this.mainContainerHeight - newFiddleHeight - 5]  );
         this.finalCodePartSize = this.mainContainerHeight - newFiddleHeight - 5;
         this.mainService.codePartsSize = this.finalCodePartSize;
       }
