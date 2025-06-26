@@ -23,7 +23,8 @@ export class CssPartComponent implements OnInit {
     lineNumbers: true, 
     theme: 'xq-light',
     spellcheck:true,
-    autocorrect:true
+    autocorrect:true,
+    lineWrapping: true
   }
 
   //@ViewChild(AceComponent, {static: false}) aceeditor: AceComponent;

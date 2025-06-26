@@ -673,7 +673,7 @@ export class MainService {
     }
 
     @media (max-width:818px), (max-height:580px) {
-      as-split-area.as-split-area-code-parts{
+      as-split-area.codeparts-container{
         border-bottom: 1px solid ${theme.data.colors['editor.foreground']};
       }
 

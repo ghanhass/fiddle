@@ -147,7 +147,8 @@ onAppModeClick() {
 
   constructor(private mainService: MainService,
     private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService) { 
+    private toastrService: ToastrService,
+    private ref: ElementRef) { 
       this.appMode = this.mainService.appMode;
   }
 
@@ -215,10 +216,6 @@ onAppModeClick() {
           
           self.mainService.redirectAfterSaveMode = false;
           
-          /*setTimeout(()=>{
-            self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart);        
-          }, 1);*/
-
           //console.log("after router path change");
           if(this.mainService.scheduledRunFiddle){
             this.runCode();
@@ -305,9 +302,6 @@ onAppModeClick() {
               }
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
-              /*setTimeout(()=>{
-                self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart, true);        
-              }, 1);*/
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
@@ -1080,25 +1074,35 @@ onAppModeClick() {
   @HostListener("document:mouseup", ["$event"])
   onDocumentMouseup(event: MouseEvent ){
     if(this.isMainContainerGutter_dragging){
+      (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
+      
       this.isMainContainerGutter_dragging = false;
     }
     else if(this.isCustomGutter1_dragging){
+      (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
+
       this.isCustomGutter1_dragging = false;
       //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
     else if(this.isCustomGutter2_dragging){
+      (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
+
       this.isCustomGutter2_dragging = false;
       //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
 
     else if(this.isGutter1_dragging){
+      (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
+
       this.isGutter1_dragging = false;
       //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
     else if(this.isGutter2_dragging){
+      (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
+      
       this.isGutter2_dragging = false;
       //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
@@ -1566,7 +1570,10 @@ onAppModeClick() {
 
         let mainContainer = this.mainContainer.nativeElement as HTMLElement;
         let codePartsArea = this.codePartsArea.nativeElement as HTMLElement;
+
+        
         if(this.isCustomGutter1_dragging){
+          (this.ref.nativeElement as HTMLElement).classList.add("no-selection");
           let eventClientXOrY = generateCoordinate(4);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
@@ -1602,6 +1609,8 @@ onAppModeClick() {
 
         }
         else if(this.isCustomGutter2_dragging){
+          (this.ref.nativeElement as HTMLElement).classList.add("no-selection");
+
           let eventClientXOrY = generateCoordinate(5);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
@@ -1641,6 +1650,8 @@ onAppModeClick() {
         
         }
         else if(this.isMainContainerGutter_dragging){
+          (this.ref.nativeElement as HTMLElement).classList.add("no-selection");
+
           let eventClientXOrY = generateCoordinate(3);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
@@ -1674,6 +1685,8 @@ onAppModeClick() {
             }
         }
         else if(this.isGutter1_dragging){
+          (this.ref.nativeElement as HTMLElement).classList.add("no-selection");
+
           let eventClientXOrY = generateCoordinate(1);
           if(!this.showIframeOverlay){
             this.showIframeOverlay = true; 
@@ -1761,6 +1774,8 @@ onAppModeClick() {
 
         }
         else if(this.isGutter2_dragging){
+          (this.ref.nativeElement as HTMLElement).classList.add("no-selection");
+
           let eventClientXOrY = generateCoordinate(2);
 
           if(!this.showIframeOverlay){

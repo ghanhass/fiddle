@@ -22,7 +22,8 @@ export class JsPartComponent implements OnInit {
       lineNumbers: true, 
       theme: 'xq-light',
       spellcheck:true,
-      autocorrect:true
+      autocorrect:true,
+      lineWrapping: true
     }
     @ViewChild("codeMirrorEditor") codeMirrorEditor: CodemirrorComponent;
 

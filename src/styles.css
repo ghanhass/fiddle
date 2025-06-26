@@ -141,3 +141,7 @@ button.tools-btn.btn span {
 ace-editor > :not(.ace_gutter) {
     transition: none
 }
+
+.no-selection *{
+    user-select: none;
+}

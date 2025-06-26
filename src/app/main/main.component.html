@@ -140,18 +140,18 @@
       <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
     </div>
   
-    <div [attr.data-layout]="layout" class="as-split-outer" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
+    <div [attr.data-layout]="layout" class="codeparts-iframe-container" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
 
-      <div [ngStyle]="{'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize')}" #codePartsArea class="as-split-area-code-parts" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
+      <div [ngStyle]="{'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize')}" #codePartsArea class="codeparts-container" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
 
             <div [ngStyle]="{'flex-basis': getLayoutInfos('htmlAsSplitAreaSize')}" class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
               <div class="code-part-title">
                 <span>HTML</span>
                 <div class="code-part-title-btns-container">
   
-                  <a class="code-part-title-btn" (click)="prettifyCode('html')" [title]="'Prettify HTML code'">
+                  <!--<a class="code-part-title-btn" (click)="prettifyCode('html')" [title]="'Prettify HTML code'">
                     <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>
+                  </a>-->
   
                   <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}">
                     <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
@@ -185,9 +185,9 @@
                 <span>CSS</span>
                 <div class="code-part-title-btns-container">
   
-                  <a class="code-part-title-btn" (click)="prettifyCode('css')" [title]="'Prettify CSS code'">
+                  <!--<a class="code-part-title-btn" (click)="prettifyCode('css')" [title]="'Prettify CSS code'">
                     <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>
+                  </a>-->
   
                   <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}">
                     <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
@@ -221,9 +221,9 @@
                 <span>JAVASCRIPT</span>
                 <div class="code-part-title-btns-container">
   
-                  <a class="code-part-title-btn" (click)="prettifyCode('js')" [title]="'Prettify JavaScript code'">
+                  <!--<a class="code-part-title-btn" (click)="prettifyCode('js')" [title]="'Prettify JavaScript code'">
                     <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>
+                  </a>-->
   
                   <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}">
                     <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
