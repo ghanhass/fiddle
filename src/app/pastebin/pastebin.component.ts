@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
-import { AceEditorComponent } from 'ace-editor-ng';
-import { Ace } from 'ace-builds';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 @Component({
   selector: 'app-pastebin',
@@ -15,8 +14,14 @@ export class PastebinComponent {
 
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild("aceeditor") aceeditor: AceEditorComponent;
-  aceEditor: Ace.Editor;
+  codeMirrorOptions: any = {
+      mode: "htmlmixed",
+      lineNumbers: true, 
+      theme: 'xq-light',
+      spellcheck:true,
+      autocorrect:true
+    }
+    @ViewChild("codeMirrorEditor") codeMirrorEditor: CodemirrorComponent;
   
   constructor(private mainService:MainService) {  }
 
@@ -26,31 +31,6 @@ export class PastebinComponent {
   }
 
   ngAfterViewInit(){
-
-    this.aceEditor = this.aceeditor.getEditor() ;
-    this.aceEditor.setOptions({
-      wrap: true
-    });
-
-    this.aceEditor.setFontSize(14);
-    
-    let self = this;
-
-    this.aceEditor.addEventListener("keyboardActivity", (event: KeyboardEvent)=>{
-      let evDate = new Date();
-
-      if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
-        this.mainService.canSaveCodeEditorsPostition = false;
-        event.preventDefault();
-        event.stopPropagation();
-
-        if( self.mainService.codeSavingDate === undefined || evDate.getTime() - self.mainService.codeSavingDate.getTime() >= 1500){
-          //////console.log("self.savecodemsg.emit()");
-          self.mainService.codeSavingDate = evDate;
-          self.savecodemsg.emit();
-        }
-      }
-    });
 
   }
 

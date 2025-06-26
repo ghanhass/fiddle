@@ -3,8 +3,11 @@
 
 
 <!--<ace-editor [(text)]="text" #editorr style="height:100%;width:100%;"></ace-editor>-->
-<div class="custom-layer-marker"></div>
-<ace-editor 
+<!--<div class="custom-layer-marker"></div>-->
+<ngx-codemirror 
+[(ngModel)]="code"
+[options]="codeMirrorOptions" #codeMirrorEditor (ngModelChange)="onCodeChanged($event)"></ngx-codemirror>
+<!--<ace 
 [(text)]="code" 
 style="height:100%;width:100%"
-[theme]="theme" (textChanged)="onCodeChanged($event)" mode="html" #aceeditor></ace-editor>
+[theme]="theme" (textChanged)="onCodeChanged($event)" mode="html" #aceeditor></ace>-->

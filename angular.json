@@ -37,7 +37,12 @@
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/ngx-toastr/toastr.css"
+              "node_modules/ngx-toastr/toastr.css",
+              "node_modules/codemirror/lib/codemirror.css",
+              "node_modules/codemirror/theme/xq-light.css",
+              "node_modules/codemirror/theme/xq-dark.css",
+
+              "node_modules/codemirror/addon/hint/show-hint.css"
             ],
             "scripts": [
               "node_modules/ace-builds/src-min/ace.js",
@@ -99,18 +104,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "fiddle:build"
+            "buildTarget": "fiddle:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "fiddle:build:production"
+              "buildTarget": "fiddle:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "fiddle:build"
+            "buildTarget": "fiddle:build"
           }
         },
         "e2e": {

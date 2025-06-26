@@ -895,6 +895,8 @@ as-split-area >  app-js-part{
 .code-component-container {
     display: flex;
     flex-direction: column;
+
+    overflow: hidden;
 }
 
 .code-part-title {
@@ -1328,4 +1330,14 @@ button.history-btn.btn i{
     background-size: calc(100% - 4px);
     height: 100%;
     display:inline-block;
+}
+/**************/
+:host ::ng-deep .code-component-container ngx-codemirror {
+    height: 100%;
+    display: flex !important;
+    flex-direction: column;
+}
+
+:host ::ng-deep .code-component-container ngx-codemirror .CodeMirror {
+    flex-grow: 1;
 }

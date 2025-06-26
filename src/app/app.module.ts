@@ -15,20 +15,22 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ToastrModule} from "ngx-toastr";
 import { ModalComponent } from './modal/modal.component';
 import { RessourcesComponent } from './ressources/ressources.component';
-import { AngularSplitModule } from "angular-split";
 import { MainService } from './main.service';
 import { SafePipe } from './safe.pipe';
 
-import 'brace';
-import 'brace/mode/text';
-import 'brace/mode/html';
-import 'brace/mode/javascript';
-import 'brace/mode/css';
-import 'brace/theme/github';
-import 'brace/theme/clouds';
 import { FiddlesHistoryComponent } from './fiddles-history/fiddles-history.component';
 import { PastebinComponent } from './pastebin/pastebin.component';
-import { AceEditorModule } from 'ace-editor-ng';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+
+import "codemirror/mode/javascript/javascript";
+import "codemirror/mode/css/css";
+import "codemirror/mode/htmlmixed/htmlmixed";
+
+import "codemirror/addon/hint/show-hint";
+
+import "codemirror/addon/hint/html-hint";
+import "codemirror/addon/hint/css-hint";
+import "codemirror/addon/hint/javascript-hint";
 
 export function loadConfigs(mainService: MainService){
   return ():Promise<any> => {
@@ -56,8 +58,10 @@ export function loadConfigs(mainService: MainService){
         FormsModule,
         BrowserAnimationsModule,
         ToastrModule.forRoot(),
-        AngularSplitModule,
-        AceEditorModule], providers: [{
-            provide: APP_INITIALIZER, useFactory: loadConfigs, deps: [MainService], multi: true
+        CodemirrorModule
+      
+      ], providers: [{
+            provide: APP_INITIALIZER, useFactory: loadConfigs, 
+            deps: [MainService], multi: true
         }, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule { }

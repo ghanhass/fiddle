@@ -1,4 +1,5 @@
 import { Ace } from "ace-builds";
+import * as AceAjax from "brace";
 import { Subject } from "rxjs";
 
 export interface CodePositionData {
@@ -7,5 +8,5 @@ export interface CodePositionData {
     focus: boolean,
     scrollHeight?: number,
     scrollTop?: number,
-    aceRanges?: Ace.Range[]
+    aceRanges?: AceAjax.Range[]
 }

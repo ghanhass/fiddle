@@ -215,9 +215,9 @@ onAppModeClick() {
           
           self.mainService.redirectAfterSaveMode = false;
           
-          setTimeout(()=>{
+          /*setTimeout(()=>{
             self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart);        
-          }, 1);
+          }, 1);*/
 
           //console.log("after router path change");
           if(this.mainService.scheduledRunFiddle){
@@ -305,9 +305,9 @@ onAppModeClick() {
               }
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
-              setTimeout(()=>{
+              /*setTimeout(()=>{
                 self.mainService.retrieveCodePartsCursors(self.cssPart, self.htmlPart, self.jsPart, true);        
-              }, 1);
+              }, 1);*/
             }
             else if(res.status == "not found"){
               this.toastrService.warning("Fiddle not found.");
@@ -1334,6 +1334,9 @@ onAppModeClick() {
       this.mainService.scheduledRunFiddle = true;
       //START save codePositionData objects in MainService
       this.cssPart.canRetrievePositionsAfterLoad = true;
+
+      /*
+
       this.mainService.cssCodePositionData.column = this.cssPart.aceEditor?.getCursorPosition().column;
       this.mainService.cssCodePositionData.row = this.cssPart.aceEditor?.getCursorPosition().row;
       this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
@@ -1350,6 +1353,8 @@ onAppModeClick() {
       this.mainService.jsCodePositionData.column = this.jsPart.aceEditor?.getCursorPosition().column;
       this.mainService.jsCodePositionData.row = this.jsPart.aceEditor?.getCursorPosition().row;
       this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
+
+      */
       //END save codePositionData objects in MainService
 
       if(this.appMode == "pastebin"){

@@ -12,6 +12,7 @@ import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { Ace, Range } from 'ace-builds';
 import { PastebinComponent } from './pastebin/pastebin.component';
+import * as AceAjax from 'brace';
 
 
 
@@ -797,24 +798,24 @@ export class MainService {
   retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent, blink?: boolean){
     if(cssPart){
       //retrieve css code part focus and cursor position
-      console.log("called cssPart.aceEditor.focus()");
+      console.log("called //cssPart.aceEditor.focus()");
 
-      let noSelection: boolean = this.cssCodePositionData.aceRanges.length == this.cssCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+      let noSelection: boolean = this.cssCodePositionData.aceRanges.length == this.cssCodePositionData.aceRanges.filter((el:AceAjax.Range)=>{
         return el.start.column == el.end.column && el.start.row == el.start.row
       }).length
-        //cssPart.aceEditor.selection.setRange(this.cssCodePositionData.aceRanges[0]);
+        ////cssPart.aceEditor.selection.setRange(this.cssCodePositionData.aceRanges[0]);
         let upMostSelection = this.cssCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
         let upMostRow = upMostSelection.start.row;
         this.cssCodePositionData.aceRanges.forEach((el)=>{
-          cssPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+          //cssPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
         })
-        //cssPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
+        ////cssPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
           if(this.cssCodePositionData.focus){
-            cssPart.aceEditor.focus();
+            //cssPart.aceEditor.focus();
           }
-          cssPart.aceEditor.moveCursorTo(this.cssCodePositionData.row, this.cssCodePositionData.column);
+          //cssPart.aceEditor.moveCursorTo(this.cssCodePositionData.row, this.cssCodePositionData.column);
         }
         else if(blink){
           document.querySelector("app-css-part .custom-layer-marker").classList.add("show");
@@ -822,29 +823,29 @@ export class MainService {
             document.querySelector("app-css-part .custom-layer-marker").classList.remove("show");
           }, 1500)
         }
-        cssPart.aceEditor.scrollToRow(upMostRow);
+        //cssPart.aceEditor.scrollToRow();
 
     }
     if(jsPart){
       //retrieve js code part focus and cursor position
-      console.log("called jsPart.aceEditor.focus()");
+      console.log("called //jsPart.aceEditor.focus()");
 
-      let noSelection: boolean = this.jsCodePositionData.aceRanges.length == this.jsCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+      let noSelection: boolean = this.jsCodePositionData.aceRanges.length == this.jsCodePositionData.aceRanges.filter((el:AceAjax.Range)=>{
         return el.start.column == el.end.column && el.start.row == el.start.row
       }).length
-        //jsPart.aceEditor.selection.setRange(this.jsCodePositionData.aceRanges[0]);
+        ////jsPart.aceEditor.selection.setRange(this.jsCodePositionData.aceRanges[0]);
         let upMostSelection = this.jsCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
         let upMostRow = upMostSelection.start.row;
         this.jsCodePositionData.aceRanges.forEach((el)=>{
-          jsPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+          //jsPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
         })
-        //jsPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
+        ////jsPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
           if(this.jsCodePositionData.focus){
-            jsPart.aceEditor.focus();
+            //jsPart.aceEditor.focus();
           }
-          jsPart.aceEditor.moveCursorTo(this.jsCodePositionData.row, this.jsCodePositionData.column);
+          //jsPart.aceEditor.moveCursorTo(this.jsCodePositionData.row, this.jsCodePositionData.column);
         }
         else if(blink){
           document.querySelector("app-js-part .custom-layer-marker").classList.add("show");
@@ -852,30 +853,30 @@ export class MainService {
             document.querySelector("app-js-part .custom-layer-marker").classList.remove("show");
           }, 1500)
         }
-        jsPart.aceEditor.scrollToRow(upMostRow);
+        //jsPart.aceEditor.scrollToRow();
 
     }
      if(htmlPart){
       //retrieve html code part focus and cursor position
       console.log("called htmlPart.aceEditor.focus()");
 
-      let noSelection: boolean = this.htmlCodePositionData.aceRanges.length == this.htmlCodePositionData.aceRanges.filter((el:Ace.Range)=>{
+      let noSelection: boolean = this.htmlCodePositionData.aceRanges.length == this.htmlCodePositionData.aceRanges.filter((el:AceAjax.Range)=>{
         return el.start.column == el.end.column && el.start.row == el.start.row
       }).length
         //htmlPart.aceEditor.selection.setRange(this.htmlCodePositionData.aceRanges[0]);
         let upMostSelection = this.htmlCodePositionData.aceRanges.sort((el1, el2)=>{return el1.start.row - el2.start.row})[0];
         let upMostRow = upMostSelection.start.row;
         this.htmlCodePositionData.aceRanges.forEach((el)=>{
-          htmlPart.aceEditor.selection.addRange(new Range(el.start.row, el.start.column, el.end.row, el.end.column));
+          //htmlPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
         })
         //htmlPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
       
         if(noSelection){
           console.log("NO SELECTION !");
           if(this.htmlCodePositionData.focus){
-            htmlPart.aceEditor.focus();
+            //htmlPart.aceEditor.focus();
           }
-          htmlPart.aceEditor.moveCursorTo(this.htmlCodePositionData.row, this.htmlCodePositionData.column);
+          //htmlPart.aceEditor.moveCursorTo(this.htmlCodePositionData.row, this.htmlCodePositionData.column);
         }
         else if(blink){
           document.querySelector("app-html-part .custom-layer-marker").classList.add("show");
@@ -883,7 +884,7 @@ export class MainService {
             document.querySelector("app-html-part .custom-layer-marker").classList.remove("show");
           }, 1500)
         }
-        htmlPart.aceEditor.scrollToRow(upMostRow);
+        //htmlPart.aceEditor.scrollToRow();
 
       console.log("htmlCodePositionData = ", this.htmlCodePositionData);
     }
