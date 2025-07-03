@@ -255,19 +255,19 @@ export class MainService {
     this.addThemeStylesheet(this.selectedTheme);
     
     if(htmlPartComp){
-      htmlPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+      htmlPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light" ) : "xq-light" 
     }
 
     if(cssPartComp){
-      cssPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+      cssPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light" ) : "xq-light" 
     }
 
     if(jsPartComp){
-      jsPartComp.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+      jsPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light" ) : "xq-light" 
     }
 
     if(pastebinPart){
-      pastebinPart.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "cloud9_night" : "cloud9_day" ) : "cloud9_day" 
+      pastebinPart.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light" ) : "xq-light" 
     }
   }
 

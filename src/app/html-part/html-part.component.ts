@@ -10,7 +10,7 @@ import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 })
 export class HtmlPartComponent implements OnInit {
   code: string = "";
-  theme: string = "cloud9_day";
+  theme: string = "xq-light";
   
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();

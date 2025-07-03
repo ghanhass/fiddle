@@ -8,7 +8,7 @@ import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
   styleUrls: ['./pastebin.component.css']
 })
 export class PastebinComponent {
-  theme: string = "cloud9_day"; 
+  theme: string = "xq-light"; 
   text: string = "";
   canRetrievePositionsAfterLoad: boolean;
 

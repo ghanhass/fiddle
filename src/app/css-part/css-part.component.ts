@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 
 @Component({
@@ -10,7 +11,7 @@ import { MainService } from "../main.service";
 export class CssPartComponent implements OnInit {
   code: string = "";
 
-  theme: string = "cloud9_day";
+  theme: string = "xq-light";
 
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
@@ -27,7 +28,7 @@ export class CssPartComponent implements OnInit {
     lineWrapping: true
   }
 
-  //@ViewChild(AceComponent, {static: false}) aceeditor: AceComponent;
+@ViewChild('codeMirrorEditor') codeMirrorEditor: CodemirrorComponent;
   //aceEditor: AceAjax.Editor;
 
   constructor(private mainService: MainService) { }

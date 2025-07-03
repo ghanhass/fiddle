@@ -366,7 +366,6 @@ i.fa.fa-sort-asc {
     background-color: #FFFFFF;
     
     font-size: 20px;
-    /*transition: 0.2s all;*/
     overflow: hidden;
 
     height: 159px;
@@ -405,7 +404,6 @@ i.fa.fa-sort-asc {
 .themes-menu > li {
     padding: 8px 4px;
     cursor: pointer;
-    /*transition: 0.2s all;*/
 }
 
 .paypal-btn-container ul.donations-menu > li:hover {
@@ -576,7 +574,6 @@ i.fa.fa-sort-asc {
     height: 44px;
     padding:8px;
     overflow: hidden;
-    /*transition: all 0.2s;*/
     top: calc(100% + 8px);
     background-color: #FFFFFF;
     box-shadow: 0px 0px 4px 2px #8b8b8b;
@@ -905,7 +902,7 @@ as-split-area >  app-js-part{
 
 
 .code-part-title {
-    transition: width, height 1s;
+    transition: width 0.3s;
 }
 
 /*as-split-area.code-component-container > app-css-part,

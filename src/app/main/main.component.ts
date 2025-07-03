@@ -848,16 +848,16 @@ onAppModeClick() {
    let ind = isLightTeme ? 1 : 0;
 
    if(ind === 0){
-    this.htmlPart.theme = "cloud9_day";
-    this.cssPart.theme = "cloud9_day";
-    this.jsPart.theme = "cloud9_day";
-    this.pastebinPart.theme = "cloud9_day";
+    this.htmlPart.codeMirrorOptions.theme = "xq-light";
+    this.cssPart.codeMirrorOptions.theme = "xq-light";
+    this.jsPart.codeMirrorOptions.theme = "xq-light";
+    this.pastebinPart.codeMirrorOptions.theme = "xq-light";
    }
    else{
-    this.htmlPart.theme = "cloud9_night";
-    this.cssPart.theme = "cloud9_night";
-    this.jsPart.theme = "cloud9_night";
-    this.pastebinPart.theme = "cloud9_night";
+    this.htmlPart.codeMirrorOptions.theme = "material-darker";
+    this.cssPart.codeMirrorOptions.theme  = "material-darker";
+    this.jsPart.codeMirrorOptions.theme = "material-darker";
+    this.pastebinPart.codeMirrorOptions.theme = "material-darker";
    }
 
    this.selectTheme(this.mainService.themesList[ind]);
