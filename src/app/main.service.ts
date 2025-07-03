@@ -894,7 +894,7 @@ export class MainService {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
     let str;
-    if(environment.production){
+    if(location.origin == "https://ghanhass.github.io"){
       str = page ? ("&page="+page) : "";
       let promise = new Promise((resolve, reject)=>{
 
@@ -924,7 +924,7 @@ export class MainService {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
           
-    if(environment.production){
+    if(location.origin == "https://ghanhass.github.io"){
       let promise = new Promise((resolve, reject)=>{
 
         let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
@@ -974,7 +974,7 @@ export class MainService {
   saveFiddle(fiddleData: FiddleData): Observable<any>{
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
-    if(environment.production){
+    if(location.origin == "https://ghanhass.github.io"){
       let timeStamp = (new Date()).getTime();
       let body = {
         file_name: fiddleData.appmode+"_"+timeStamp,
