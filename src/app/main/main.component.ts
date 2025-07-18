@@ -185,9 +185,9 @@ onAppModeClick() {
           console.log("//re-retrieve data after recent save");
           //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
-          //this.cssPart.code = this.mainService.cssCode;
-          //this.jsPart.code = this.mainService.jsCode;
-          //this.pastebinPart.text = this.mainService.pastebinText;
+          this.cssPart.code = this.mainService.cssCode;
+          this.jsPart.code = this.mainService.jsCode;
+          this.pastebinPart.text = this.mainService.pastebinText;
           this.appMode = this.mainService.appMode
           
           this.fiddleTitle = this.mainService.fiddleTitle;
@@ -232,9 +232,9 @@ onAppModeClick() {
               let fiddleData: FiddleData = res.fiddleData;
               //console.log("getFiddle obj = ", obj);
               this.htmlPart.code = fiddleData.html;
-              //this.cssPart.code = fiddleData.css;
-              //this.jsPart.code = fiddleData.js;
-              //this.pastebinPart.text = fiddleData.pastebintext;
+              this.cssPart.code = fiddleData.css;
+              this.jsPart.code = fiddleData.js;
+              this.pastebinPart.text = fiddleData.pastebintext;
 
               this.fiddleTitle = fiddleData.title;
               //
@@ -851,14 +851,14 @@ onAppModeClick() {
    if(ind === 0){
     this.htmlPart.codeMirrorEditor.setTheme("light");
     this.cssPart.codeMirrorEditor.setTheme("light");
-    //this.jsPart.codeMirrorOptions.theme = "xq-light";
-    //this.pastebinPart.codeMirrorOptions.theme = "xq-light";
+    this.jsPart.codeMirrorEditor.setTheme("light");
+    this.pastebinPart.codeMirrorEditor.setTheme("light");
    }
    else{
     this.htmlPart.codeMirrorEditor.setTheme("dark");
     this.cssPart.codeMirrorEditor.setTheme("dark");
-    //this.jsPart.codeMirrorOptions.theme = "material-darker";
-    //this.pastebinPart.codeMirrorOptions.theme = "material-darker";
+    this.jsPart.codeMirrorEditor.setTheme("dark");
+    this.pastebinPart.codeMirrorEditor.setTheme("dark");
    }
 
    this.selectTheme(this.mainService.themesList[ind]);

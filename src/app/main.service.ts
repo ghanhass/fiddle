@@ -288,11 +288,11 @@ export class MainService {
     }
 
     if (jsPartComp) {
-      jsPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light") : "xq-light"
+      jsPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
     }
 
     if (pastebinPart) {
-      pastebinPart.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light") : "xq-light"
+      pastebinPart.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
     }
   }
 

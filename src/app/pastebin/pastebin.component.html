@@ -1,3 +1,1 @@
-<ngx-codemirror 
-[(ngModel)]="text"
-[options]="codeMirrorOptions" #codeMirrorEditor (ngModelChange)="onCodeChanged($event)"></ngx-codemirror>
+<code-editor [languages]="languages" #codeMirrorEditor (ngModelChange)="onCodeChanged($event)" [(ngModel)]="text"  />

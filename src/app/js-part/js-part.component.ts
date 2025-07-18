@@ -8,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MainService } from '../main.service';
+import { languages } from '@codemirror/language-data';
 //import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 @Component({
@@ -17,7 +18,7 @@ import { MainService } from '../main.service';
 })
 export class JsPartComponent implements OnInit {
   code: string = '';
-  theme: string = 'xq-light';
+  languages = languages;
 
   isFullScreenMode: boolean = false;
   @Output() toggleFullScreen: EventEmitter<string> = new EventEmitter();
@@ -25,18 +26,6 @@ export class JsPartComponent implements OnInit {
   @Output() savecodemsg: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
 
-  codeMirrorOptions: any = {
-    mode: 'javascript',
-    lineNumbers: true,
-    theme: 'xq-light',
-    spellcheck: true,
-    autocorrect: true,
-    lineWrapping: true,
-
-    autoCloseBrackets: true,
-    matchBrackets: true,
-    lint: true,
-  };
   @ViewChild('codeMirrorEditor') codeMirrorEditor: any;
 
   constructor(private mainService: MainService) {}
@@ -55,5 +44,13 @@ export class JsPartComponent implements OnInit {
     let self = this;
     this.mainService.jsCode = value;
     this.mainService.setCheckBeforeUnloadListener();
+  }
+
+  onEditorKeyDown(event) {
+    this.mainService.onEditorKeyDown(event, this);
+  }
+
+  onEditorKeyUp(event) {
+    this.mainService.onEditorKeyUp(event, this);
   }
 }
