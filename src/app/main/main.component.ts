@@ -850,13 +850,13 @@ onAppModeClick() {
 
    if(ind === 0){
     this.htmlPart.codeMirrorEditor.setTheme("light");
-    //this.cssPart.codeMirrorOptions.theme = "xq-light";
+    this.cssPart.codeMirrorEditor.setTheme("light");
     //this.jsPart.codeMirrorOptions.theme = "xq-light";
     //this.pastebinPart.codeMirrorOptions.theme = "xq-light";
    }
    else{
     this.htmlPart.codeMirrorEditor.setTheme("dark");
-    //this.cssPart.codeMirrorOptions.theme  = "material-darker";
+    this.cssPart.codeMirrorEditor.setTheme("dark");
     //this.jsPart.codeMirrorOptions.theme = "material-darker";
     //this.pastebinPart.codeMirrorOptions.theme = "material-darker";
    }
