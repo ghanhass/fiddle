@@ -280,11 +280,11 @@ export class MainService {
     this.addThemeStylesheet(this.selectedTheme);
 
     if (htmlPartComp) {
-      htmlPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light") : "xq-light"
+      htmlPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
     }
 
     if (cssPartComp) {
-      cssPartComp.codeMirrorOptions.theme = savedThemeId ? (savedThemeId == "vs-default-dark" ? "material-darker" : "xq-light") : "xq-light"
+      cssPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
     }
 
     if (jsPartComp) {

@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
-//import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { CodeEditor } from '@acrodata/code-editor';
+import { languages } from '@codemirror/language-data';
 
 
 @Component({
@@ -10,23 +11,13 @@ import { MainService } from "../main.service";
 })
 export class CssPartComponent implements OnInit {
   code: string = "";
-
-  theme: string = "xq-light";
+  languages = languages;
 
   isFullScreenMode: boolean = false;
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
-
-  codeMirrorOptions: any = {
-    mode: "css",
-    lineNumbers: true, 
-    theme: 'xq-light',
-    spellcheck:true,
-    autocorrect:true,
-    lineWrapping: true
-  }
 
 @ViewChild('codeMirrorEditor') codeMirrorEditor: any;
   //aceEditor: AceAjax.Editor;
@@ -36,10 +27,7 @@ export class CssPartComponent implements OnInit {
 
   ngOnInit(): void {
     this.code = this.mainService.cssCode;
-    console.log("CssPartComponent ngOnInit");
   }
-
-  ngAfterViewInit(){}
 
   onCodeChanged(value) {
     ////console.log('CODE', value);
@@ -47,7 +35,14 @@ export class CssPartComponent implements OnInit {
     console.log('HTML onCodeChanged CODE', value);
     this.mainService.cssCode = value;
     this.mainService.setCheckBeforeUnloadListener();
+  }
 
+  onEditorKeyDown(event) {
+    this.mainService.onEditorKeyDown(event, this);
+  }
+
+  onEditorKeyUp(event) {
+    this.mainService.onEditorKeyUp(event, this);
   }
 
 

@@ -9,8 +9,6 @@ import {
 } from '@angular/core';
 import { MainService } from '../main.service';
 import { CodeEditor } from '@acrodata/code-editor';
-//import * as CodeMirror from 'codemirror/addon/dialog/dialog';
-//import { Editor } from 'codemirror';
 import { languages } from '@codemirror/language-data';
 
 @Component({
@@ -20,7 +18,6 @@ import { languages } from '@codemirror/language-data';
 })
 export class HtmlPartComponent implements OnInit {
   code: string = '';
-  theme: string = 'xq-light';
   languages = languages;
 
   isFullScreenMode: boolean = false;
@@ -29,19 +26,6 @@ export class HtmlPartComponent implements OnInit {
   @Output() savecodemsg: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
 
-  codeMirrorOptions: any = {
-    mode: 'htmlmixed',
-    lineNumbers: true,
-    theme: 'xq-light',
-    spellcheck: true,
-    autocorrect: true,
-    lineWrapping: true,
-    autofocus: true,
-
-    autoCloseBrackets: true,
-    matchBrackets: true,
-    lint: true,
-  };
   @ViewChild('codeMirrorEditor') codeMirrorEditor: CodeEditor;
 
   constructor(private mainService: MainService) {}
@@ -49,21 +33,6 @@ export class HtmlPartComponent implements OnInit {
   ngOnInit(): void {
     this.code = this.mainService.htmlCode;
   }
-
-  /*onCodeMirrorLoaded(comp: CodemirrorComponent){
-     //console.log("this.codeMirrorEditor = ", this.codeMirrorEditor);
-     setTimeout(()=>{
-      this.codeMirrorEditor.codeMirror.focus();
-      this.codeMirrorEditor.ref.nativeElement.click();
-     },1);
-     console.log("this.codeMirrorEditor.isFocused; = ", this.codeMirrorEditor.isFocused);
-  }*/
-
-  ngAfterViewInit() {
-    //sconsole.log("HtmlPartComponent ngAfterViewInit");
-    //console.log("this.codeMirrorEditor = ", this.codeMirrorEditor);
-  }
-  //this.mainService.resumeFiddleTheme(this);
 
   onCodeChanged(value) {
     let self = this;
