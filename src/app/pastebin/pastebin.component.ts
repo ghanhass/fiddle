@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+//import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 @Component({
   selector: 'app-pastebin',
@@ -21,7 +21,7 @@ export class PastebinComponent {
       spellcheck:true,
       autocorrect:true
     }
-    @ViewChild("codeMirrorEditor") codeMirrorEditor: CodemirrorComponent;
+    @ViewChild("codeMirrorEditor") codeMirrorEditor: any;
   
   constructor(private mainService:MainService) {  }
 

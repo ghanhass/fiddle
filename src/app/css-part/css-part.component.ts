@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitter, ViewChild } from '@angular/core';
 import { MainService } from "../main.service";
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+//import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 
 @Component({
@@ -28,7 +28,7 @@ export class CssPartComponent implements OnInit {
     lineWrapping: true
   }
 
-@ViewChild('codeMirrorEditor') codeMirrorEditor: CodemirrorComponent;
+@ViewChild('codeMirrorEditor') codeMirrorEditor: any;
   //aceEditor: AceAjax.Editor;
 
   constructor(private mainService: MainService) { }

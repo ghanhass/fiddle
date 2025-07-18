@@ -131,7 +131,6 @@
     </div>
   </div>
   
-
   <div class="main-container main-container-fiddle" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen, 'off':appMode == 'pastebin'}">
     <div id="code-parts-title-mobile">
       <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
@@ -212,7 +211,7 @@
                   </a>
                 </div>
               </div>
-              <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>
+              <!--<app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>-->
             </div>
             <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('css-js')" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)"></div>
             
@@ -247,7 +246,7 @@
                   </a>
                 </div>
               </div>
-              <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>
+              <!--<app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>-->
             </div>
       </div>
 

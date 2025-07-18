@@ -1,41 +1,53 @@
-import { Component, OnInit, SimpleChanges, EventEmitter, Output, Input, ViewChild } from '@angular/core';
-import { MainService } from "../main.service";
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import {
+  Component,
+  OnInit,
+  SimpleChanges,
+  EventEmitter,
+  Output,
+  Input,
+  ViewChild,
+} from '@angular/core';
+import { MainService } from '../main.service';
+//import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 @Component({
   selector: 'app-js-part',
   templateUrl: './js-part.component.html',
-  styleUrls: ['./js-part.component.css']
+  styleUrls: ['./js-part.component.css'],
 })
 export class JsPartComponent implements OnInit {
-  code: string = "";
-  theme: string = "xq-light";
-  
+  code: string = '';
+  theme: string = 'xq-light';
+
   isFullScreenMode: boolean = false;
-  @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
-  @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
-  @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
+  @Output() toggleFullScreen: EventEmitter<string> = new EventEmitter();
+  @Output() runcodemsg: EventEmitter<string> = new EventEmitter();
+  @Output() savecodemsg: EventEmitter<string> = new EventEmitter();
   canRetrievePositionsAfterLoad: boolean = false;
 
   codeMirrorOptions: any = {
-      mode: "javascript",
-      lineNumbers: true, 
-      theme: 'xq-light',
-      spellcheck:true,
-      autocorrect:true,
-      lineWrapping: true
-    }
-    @ViewChild("codeMirrorEditor") codeMirrorEditor: CodemirrorComponent;
+    mode: 'javascript',
+    lineNumbers: true,
+    theme: 'xq-light',
+    spellcheck: true,
+    autocorrect: true,
+    lineWrapping: true,
 
-  constructor(private mainService:MainService) {  }
+    autoCloseBrackets: true,
+    matchBrackets: true,
+    lint: true,
+  };
+  @ViewChild('codeMirrorEditor') codeMirrorEditor: any;
+
+  constructor(private mainService: MainService) {}
 
   ngOnInit(): void {
     this.code = this.mainService.jsCode;
-    console.log("JsPartComponent ngOnInit");
+    console.log('JsPartComponent ngOnInit');
   }
 
-  ngAfterViewInit(){
-    console.log("JsPartComponent ngAfterViewInit");
+  ngAfterViewInit() {
+    console.log('JsPartComponent ngAfterViewInit');
   }
 
   onCodeChanged(value) {
@@ -44,5 +56,4 @@ export class JsPartComponent implements OnInit {
     this.mainService.jsCode = value;
     this.mainService.setCheckBeforeUnloadListener();
   }
-
 }

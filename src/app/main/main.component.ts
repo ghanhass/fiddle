@@ -185,9 +185,9 @@ onAppModeClick() {
           console.log("//re-retrieve data after recent save");
           //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
           this.htmlPart.code = this.mainService.htmlCode;
-          this.cssPart.code = this.mainService.cssCode;
-          this.jsPart.code = this.mainService.jsCode;
-          this.pastebinPart.text = this.mainService.pastebinText;
+          //this.cssPart.code = this.mainService.cssCode;
+          //this.jsPart.code = this.mainService.jsCode;
+          //this.pastebinPart.text = this.mainService.pastebinText;
           this.appMode = this.mainService.appMode
           
           this.fiddleTitle = this.mainService.fiddleTitle;
@@ -232,9 +232,9 @@ onAppModeClick() {
               let fiddleData: FiddleData = res.fiddleData;
               //console.log("getFiddle obj = ", obj);
               this.htmlPart.code = fiddleData.html;
-              this.cssPart.code = fiddleData.css;
-              this.jsPart.code = fiddleData.js;
-              this.pastebinPart.text = fiddleData.pastebintext;
+              //this.cssPart.code = fiddleData.css;
+              //this.jsPart.code = fiddleData.js;
+              //this.pastebinPart.text = fiddleData.pastebintext;
 
               this.fiddleTitle = fiddleData.title;
               //
@@ -316,7 +316,7 @@ onAppModeClick() {
         this.changeLayout(1);
       }
 
-      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, this.jsPart, this.pastebinPart);
+      this.mainService.resumeFiddleTheme(this.htmlPart, undefined, undefined, undefined);
 
     });
 
@@ -331,9 +331,10 @@ onAppModeClick() {
       }
       let evDate = new Date();
       
-        if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){        
+        if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code == "Enter" || event.code == "NumpadEnter")){    
+          console.log("ctrl + enter pressed !");    
           event.preventDefault();
-          //event.stopPropagation();
+          event.stopPropagation();
           self.runCode();
         }
         else if((window.navigator.platform.match("Mac") ? event.metaKey : event.ctrlKey) && (event.code  == "KeyS")){
@@ -384,7 +385,7 @@ onAppModeClick() {
         let prettifiedCss: string = this.ngxPrettifyService.prettify(alteredCss, "css");
         let indStyle = prettifiedCss.lastIndexOf("</style>");
         prettifiedCss = prettifiedCss.slice(7,indStyle).trim();
-        this.cssPart.code = prettifiedCss;
+        //this.cssPart.code = prettifiedCss;
       break;
 
       case 'js':
@@ -392,7 +393,7 @@ onAppModeClick() {
         let prettifiedJs: string = this.ngxPrettifyService.prettify(alternateJs, "javascript");
         let indScript = prettifiedJs.lastIndexOf("</script>");
         prettifiedJs = prettifiedJs.slice(8,indScript).trim();
-        this.jsPart.code = prettifiedJs;
+        //this.jsPart.code = prettifiedJs;
       break;
     }
   */}
@@ -849,15 +850,15 @@ onAppModeClick() {
 
    if(ind === 0){
     this.htmlPart.codeMirrorOptions.theme = "xq-light";
-    this.cssPart.codeMirrorOptions.theme = "xq-light";
-    this.jsPart.codeMirrorOptions.theme = "xq-light";
-    this.pastebinPart.codeMirrorOptions.theme = "xq-light";
+    //this.cssPart.codeMirrorOptions.theme = "xq-light";
+    //this.jsPart.codeMirrorOptions.theme = "xq-light";
+    //this.pastebinPart.codeMirrorOptions.theme = "xq-light";
    }
    else{
     this.htmlPart.codeMirrorOptions.theme = "material-darker";
-    this.cssPart.codeMirrorOptions.theme  = "material-darker";
-    this.jsPart.codeMirrorOptions.theme = "material-darker";
-    this.pastebinPart.codeMirrorOptions.theme = "material-darker";
+    //this.cssPart.codeMirrorOptions.theme  = "material-darker";
+    //this.jsPart.codeMirrorOptions.theme = "material-darker";
+    //this.pastebinPart.codeMirrorOptions.theme = "material-darker";
    }
 
    this.selectTheme(this.mainService.themesList[ind]);
@@ -1337,13 +1338,13 @@ onAppModeClick() {
       }
       this.mainService.scheduledRunFiddle = true;
       //START save codePositionData objects in MainService
-      this.cssPart.canRetrievePositionsAfterLoad = true;
+      //this.cssPart.canRetrievePositionsAfterLoad = true;
 
       /*
 
-      this.mainService.cssCodePositionData.column = this.cssPart.aceEditor?.getCursorPosition().column;
-      this.mainService.cssCodePositionData.row = this.cssPart.aceEditor?.getCursorPosition().row;
-      this.mainService.cssCodePositionData.aceRanges = this.cssPart.aceEditor?.getSelection().getAllRanges();
+      this.mainService.cssCodePositionData.column = //this.cssPart.aceEditor?.getCursorPosition().column;
+      this.mainService.cssCodePositionData.row = //this.cssPart.aceEditor?.getCursorPosition().row;
+      this.mainService.cssCodePositionData.aceRanges = //this.cssPart.aceEditor?.getSelection().getAllRanges();
 
       this.htmlPart.canRetrievePositionsAfterLoad = true;
       this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
@@ -1353,10 +1354,10 @@ onAppModeClick() {
       console.log("this.mainService.htmlCodePositionData = ", this.mainService.htmlCodePositionData);
       console.log("getAllRanges() = ", this.htmlPart.aceEditor?.getSelection().getAllRanges());
       
-      this.jsPart.canRetrievePositionsAfterLoad = true;
-      this.mainService.jsCodePositionData.column = this.jsPart.aceEditor?.getCursorPosition().column;
-      this.mainService.jsCodePositionData.row = this.jsPart.aceEditor?.getCursorPosition().row;
-      this.mainService.jsCodePositionData.aceRanges = this.jsPart.aceEditor?.getSelection().getAllRanges();
+      //this.jsPart.canRetrievePositionsAfterLoad = true;
+      this.mainService.jsCodePositionData.column = //this.jsPart.aceEditor?.getCursorPosition().column;
+      this.mainService.jsCodePositionData.row = //this.jsPart.aceEditor?.getCursorPosition().row;
+      this.mainService.jsCodePositionData.aceRanges = //this.jsPart.aceEditor?.getSelection().getAllRanges();
 
       */
       //END save codePositionData objects in MainService

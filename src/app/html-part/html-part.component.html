@@ -1,13 +1,1 @@
-<!--<ngx-monaco-editor #monaco  (ngModelChange)="onCodeChanged($event)" (init)="onEditorLoad($event)" [options]="options" [(ngModel)]="code"></ngx-monaco-editor>-->
-<!--<ace [config]="config" [mode]="'text'" [theme]="'github'" [(value)]="code"></ace>-->
-
-
-<!--<ace-editor [(text)]="text" #editorr style="height:100%;width:100%;"></ace-editor>-->
-<!--<div class="custom-layer-marker"></div>-->
-<ngx-codemirror 
-[(ngModel)]="code"
-[options]="codeMirrorOptions" #codeMirrorEditor (ngModelChange)="onCodeChanged($event)"></ngx-codemirror>
-<!--<ace 
-[(text)]="code" 
-style="height:100%;width:100%"
-[theme]="theme" (textChanged)="onCodeChanged($event)" mode="html" #aceeditor></ace>-->
+<code-editor [languages]="languages" (keyup)="onEditorKeyUp($event)" (keydown)="onEditorKeyDown($event)" #codeMirrorEditor (ngModelChange)="onCodeChanged($event)" [(ngModel)]="code" [autofocus]="true" [language]="'html'" />

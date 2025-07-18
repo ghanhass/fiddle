@@ -37,12 +37,7 @@
             "styles": [
               "src/styles.css",
               "node_modules/font-awesome/css/font-awesome.css",
-              "node_modules/ngx-toastr/toastr.css",
-              "node_modules/codemirror/lib/codemirror.css",
-              "node_modules/codemirror/theme/xq-light.css",
-              "node_modules/codemirror/theme/material-darker.css",
-
-              "node_modules/codemirror/addon/hint/show-hint.css"
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": [],
             "vendorChunk": true,

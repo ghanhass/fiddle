@@ -142,6 +142,29 @@
     }
 }
 
+:host ::ng-deep .code-component {
+    display: flex;
+}
+
+:host ::ng-deep .code-component code-editor {
+    flex-grow: 1;
+}
+
+:host ::ng-deep .codeparts-iframe-container[data-layout="2"] .code-component,
+:host ::ng-deep .codeparts-iframe-container[data-layout="4"] .code-component{
+    flex-direction: column;
+}
+
+:host ::ng-deep .codeparts-iframe-container[data-layout="1"] .code-component code-editor,
+:host ::ng-deep .codeparts-iframe-container[data-layout="3"] .code-component code-editor{
+    width: 0px;
+}
+
+:host ::ng-deep .codeparts-iframe-container[data-layout="2"] .code-component code-editor,
+:host ::ng-deep .codeparts-iframe-container[data-layout="4"] .code-component code-editor{
+    height:0px
+}
+
 .main-container-fiddle.layout-type-3 {
     flex-direction: row-reverse;
 }
