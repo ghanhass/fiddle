@@ -178,7 +178,7 @@ export class IframePartComponent implements OnInit {
   }
 
   getIframeSrc(){
-    return environment.url;
+    return location.origin == "https://ghanhass.github.io" ? "https://ghanhass.github.io/myfiddlepreview/index.html" : "http://localhost/myfiddlepreview/index.html";
   }
 
   ngOnInit(): void {

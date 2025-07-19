@@ -2098,7 +2098,7 @@ onAppModeClick() {
   }
 
   getHomeUrl(){
-    return environment.homeUrl;
+    return location.origin == "https://ghanhass.github.io" ? "https://ghanhass.github.io" : "http://localhost:4200";
   }
 
 
