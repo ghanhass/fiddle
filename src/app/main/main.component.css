@@ -1346,6 +1346,21 @@ button.history-btn.btn i{
     height: 100%;
     display:inline-block;
 }
+
+@media (max-width: 889px), (max-height: 580px) {
+    .main-container[class]{
+        height: calc(100vh - 70px);
+    }
+}
+
+:host ::ng-deep app-pastebin.code-component[class] {
+    height: 100%;
+}
+
+:host ::ng-deep app-pastebin.code-component[class] code-editor {
+    width: 0px;
+}
+
 /**************/
 :host ::ng-deep .code-component-container ngx-codemirror {
     height: 100%;

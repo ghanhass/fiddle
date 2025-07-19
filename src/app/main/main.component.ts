@@ -316,7 +316,7 @@ onAppModeClick() {
         this.changeLayout(1);
       }
 
-      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, undefined, undefined);
+      this.mainService.resumeFiddleTheme(this.htmlPart, this.cssPart, this.jsPart, this.pastebinPart);
 
     });
 
