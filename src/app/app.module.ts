@@ -36,6 +36,7 @@ export function loadConfigs(mainService: MainService) {
   };
 }
 
+
 @NgModule({
   declarations: [
     AppComponent,

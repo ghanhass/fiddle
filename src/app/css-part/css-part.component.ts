@@ -17,7 +17,6 @@ export class CssPartComponent implements OnInit {
   @Output()toggleFullScreen: EventEmitter<string> = new EventEmitter();
   @Output()runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
-  canRetrievePositionsAfterLoad: boolean = false;
 
 @ViewChild('codeMirrorEditor') codeMirrorEditor: any;
   //aceEditor: AceAjax.Editor;

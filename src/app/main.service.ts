@@ -1,7 +1,16 @@
 import { Injectable } from '@angular/core';
-import { HttpHeaders, HttpClient } from "@angular/common/http";
-import { concat, forkJoin, from, merge, Observable, of, Subject, zip } from 'rxjs';
-import { environment } from "../environments/environment";
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import {
+  concat,
+  forkJoin,
+  from,
+  merge,
+  Observable,
+  of,
+  Subject,
+  zip,
+} from 'rxjs';
+import { environment } from '../environments/environment';
 import { FiddleTheme } from './fiddle-theme';
 import { FiddleThemeDetails } from './fiddle-theme-details';
 import { FiddleData } from './fiddle-data';
@@ -14,35 +23,36 @@ import { Ace, Range } from 'ace-builds';
 import { PastebinComponent } from './pastebin/pastebin.component';
 import * as AceAjax from 'brace';
 
-
-
 let headers = new HttpHeaders();
-headers = headers.set("PRIVATE-TOKEN", window.atob("Z2xwYXQtWXpveENtODZNUXAxT21WM2VHSnBDUkF3ZkVQSEdfMk1rWmZNNldhQUxoQS4xNzF4MDd2aDg="));
-headers = headers.set("Content-Type", "application/json");
+headers = headers.set(
+  'PRIVATE-TOKEN',
+  window.atob(
+    'Z2xwYXQtWXpveENtODZNUXAxT21WM2VHSnBDUkF3ZkVQSEdfMk1rWmZNNldhQUxoQS4xNzF4MDd2aDg='
+  )
+);
+headers = headers.set('Content-Type', 'application/json');
 
-const gitlabProjectId = "52190204";
-const gitlabJsonDbId = "3621546";
+const gitlabProjectId = '52190204';
+const gitlabJsonDbId = '3621546';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MainService {
-
-  url: string = environment.url;
   jsCode: string;
   cssCode: string;
   htmlCode: string;
   isConsoleOn: boolean;
   pastebinText: string;
 
-  appMode: string = "fiddle";
+  appMode: string = 'fiddle';
 
   isFirstTimeFiddle: boolean = true;
 
-  jsCodeSinceSave: string = "";
-  cssCodeSinceSave: string = "";
-  htmlCodeSinceSave: string = "";
-  pastebinTextSinceSave: string = "";
+  jsCodeSinceSave: string = '';
+  cssCodeSinceSave: string = '';
+  htmlCodeSinceSave: string = '';
+  pastebinTextSinceSave: string = '';
 
   layout: number = 1;
 
@@ -56,7 +66,7 @@ export class MainService {
   fiddleThemeId: string = '';
   fiddleCreatedAt: number;
 
-  fiddleTitle: string = "";
+  fiddleTitle: string = '';
   redirectAfterSaveMode: boolean = false;
 
   codeSavingDate: Date = undefined;
@@ -71,144 +81,128 @@ export class MainService {
 
   isBeforeUnloadEvHandlerSet: boolean = false;
 
-  htmlCodePositionData: CodePositionData = {
-    row: 0,
-    column: 0,
-    focus: false,
-    aceRanges: []
-  }
-
-  cssCodePositionData: CodePositionData = {
-    row: 0,
-    column: 0,
-    focus: false,
-    aceRanges: []
-  }
-
-  jsCodePositionData: CodePositionData = {
-    row: 0,
-    column: 0,
-    focus: false,
-    aceRanges: []
-  }
-
-  canSaveCodeEditorsPostition: boolean = true;
-  canRetrievePositionsAfterLoad: boolean = false;
-
   selectedTheme: FiddleTheme = {
-    name: "VS",
-    id: "vs-default",
+    name: 'VS',
+    id: 'vs-default',
     data: {
-      "base": "vs",
-      "inherit": true,
-      "rules": [
+      base: 'vs',
+      inherit: true,
+      rules: [
         {
-          "foreground": "333333",
-          "background": "ffffff",
-          "token": ""
-        }
+          foreground: '333333',
+          background: 'ffffff',
+          token: '',
+        },
       ],
-      "colors": {
-        "editor.foreground": "#333333",
-        "editor.background": "#FFFFFF",
-        "editor.selectionBackground": "#d2d2d2",
-        "editor.lineHighlightBackground": "#FFFFFF",
-        "editorCursor.foreground": "#333333",
-        "editorWhitespace.foreground": "#333333",
-        "editor.cursorBlinkShadow": "#000f867a"
-      }
-    }
-  }
-
-  themesList: Array<FiddleTheme> =
-    [
-      {
-        "name": "VS",
-        "id": "vs-default",
-        "data": {
-          "base": "vs",
-          "inherit": true,
-          "rules": [
-            {
-              "foreground": "333333",
-              "background": "ffffff",
-              "token": ""
-            }
-          ],
-          "colors": {
-            "editor.foreground": "#333333",
-            "editor.background": "#FFFFFF",
-            "editor.selectionBackground": "#d2d2d2",
-            "editor.lineHighlightBackground": "#FFFFFF",
-            "editorCursor.foreground": "#333333",
-            "editorWhitespace.foreground": "#333333",
-            "editor.cursorBlinkShadow": "#000f867a"
-          }
-        }
+      colors: {
+        'editor.foreground': '#333333',
+        'editor.background': '#FFFFFF',
+        'editor.selectionBackground': '#d2d2d2',
+        'editor.lineHighlightBackground': '#FFFFFF',
+        'editorCursor.foreground': '#333333',
+        'editorWhitespace.foreground': '#333333',
+        'editor.cursorBlinkShadow': '#000f867a',
       },
-      {
-        "name": "VS Dark",
-        "id": "vs-default-dark",
-        "data": {
-          "base": "vs-dark",
-          "inherit": true,
-          "rules": [],
-          "colors": {
-            "editor.foreground": "#d4d4d4",
-            "editor.background": "#1e1e1e",
-            "editor.selectionBackground": "#414141",
-            "editor.lineHighlightBackground": "#1e1e1e",
-            "editorCursor.foreground": "#d4d4d4",
-            "editorWhitespace.foreground": "#d4d4d480",
-            "editor.cursorBlinkShadow": "#ffffff7a"
-          }
-        }
-      }
-    ]
+    },
+  };
+
+  themesList: Array<FiddleTheme> = [
+    {
+      name: 'VS',
+      id: 'vs-default',
+      data: {
+        base: 'vs',
+        inherit: true,
+        rules: [
+          {
+            foreground: '333333',
+            background: 'ffffff',
+            token: '',
+          },
+        ],
+        colors: {
+          'editor.foreground': '#333333',
+          'editor.background': '#FFFFFF',
+          'editor.selectionBackground': '#d2d2d2',
+          'editor.lineHighlightBackground': '#FFFFFF',
+          'editorCursor.foreground': '#333333',
+          'editorWhitespace.foreground': '#333333',
+          'editor.cursorBlinkShadow': '#000f867a',
+        },
+      },
+    },
+    {
+      name: 'VS Dark',
+      id: 'vs-default-dark',
+      data: {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [],
+        colors: {
+          'editor.foreground': '#d4d4d4',
+          'editor.background': '#1e1e1e',
+          'editor.selectionBackground': '#414141',
+          'editor.lineHighlightBackground': '#1e1e1e',
+          'editorCursor.foreground': '#d4d4d4',
+          'editorWhitespace.foreground': '#d4d4d480',
+          'editor.cursorBlinkShadow': '#ffffff7a',
+        },
+      },
+    },
+  ];
 
   private appConfig: any;
 
-  newFiddleIdSubject: Subject<number>
+  newFiddleIdSubject: Subject<number>;
 
   public beforeUnloadListener: any = (event: BeforeUnloadEvent) => {
     event.preventDefault();
     //console.log("beforeUnload event is set");
     if (this.isCodeChanged()) {
-      return event.returnValue = "Are you sure you want to exit?";
+      return (event.returnValue = 'Are you sure you want to exit?');
     }
   };
   ctrlEnterMode: boolean;
+  envVars: {production: boolean, url: string; appName: string; homeUrl: string; fiddleIframeOrigin: string; };
 
   constructor(private http: HttpClient) {
-    this.jsCode = "";
-    this.cssCode = "";
-    this.htmlCode = "";
+    this.initEnv();
+    this.jsCode = '';
+    this.cssCode = '';
+    this.htmlCode = '';
 
     //console.log("mainService constructor");
   }
 
   setCheckBeforeUnloadListener() {
     let self = this;
-    window.removeEventListener("beforeunload", self.beforeUnloadListener, { capture: true });
+    window.removeEventListener('beforeunload', self.beforeUnloadListener, {
+      capture: true,
+    });
 
     if (this.isCodeChanged()) {
       //console.log("isCodeChanged = true");
-      window.addEventListener("beforeunload", self.beforeUnloadListener, { capture: true });
-    }
-    else {
+      window.addEventListener('beforeunload', self.beforeUnloadListener, {
+        capture: true,
+      });
+    } else {
       //console.log("isCodeChanged = false");
-      window.removeEventListener("beforeunload", self.beforeUnloadListener, { capture: true });
+      window.removeEventListener('beforeunload', self.beforeUnloadListener, {
+        capture: true,
+      });
     }
   }
 
   removeBeforeUnloadListener() {
     let self = this;
-    window.removeEventListener("beforeunload", self.beforeUnloadListener, { capture: true });
+    window.removeEventListener('beforeunload', self.beforeUnloadListener, {
+      capture: true,
+    });
   }
 
   initConfig(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.get("assets/app-config.json").subscribe(
+      this.http.get('assets/app-config.json').subscribe(
         (res: any) => {
           this.appConfig = res;
           //console.log("startup this.appConfig = ", this.appConfig);
@@ -216,45 +210,67 @@ export class MainService {
         },
         (error: any) => {
           reject(error);
-        })
-    })
+        }
+      );
+    });
+  }
+
+  initEnv(): void {
+    let isProd = location.origin == "https://ghanhass.github.io";
+    this.envVars = {
+      production: isProd,
+      url: isProd ? 'https://hassoon-github.github.io/myfiddlepreview' : 'http://localhost/myfiddlepreview',
+      appName: isProd ? 'myfiddle' : "",
+      homeUrl: isProd ? 'https://ghanhass.github.io/myfiddle/' : "http://localhost:4200",
+      fiddleIframeOrigin: isProd ? 'https://hassoon-github.github.io' : "http://localhost",
+    };
   }
 
   getConfig(key: string) {
     return this.appConfig[key];
   }
 
-  onEditorKeyDown(event: KeyboardEvent, codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent) {
+  onEditorKeyDown(
+    event: KeyboardEvent,
+    codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent
+  ) {
     console.log('onEditorKeyDown event = ', event);
 
-    let isCtrlPressed = event.code == "ControlLeft";
+    let isCtrlPressed = event.code == 'ControlLeft';
 
     if (isCtrlPressed) {
       this.ctrlEnterMode = true;
       codePartComponent.codeMirrorEditor.setReadonly(true);
     }
 
-    console.log('this.mainService.ctrlEnterMode = ',this.ctrlEnterMode);
+    console.log('this.mainService.ctrlEnterMode = ', this.ctrlEnterMode);
   }
 
-  onEditorKeyUp(event: KeyboardEvent, codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent) {
-    let isCtrlReleased = event.code == "ControlLeft";
+  onEditorKeyUp(
+    event: KeyboardEvent,
+    codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent
+  ) {
+    let isCtrlReleased = event.code == 'ControlLeft';
 
     if (this.ctrlEnterMode && isCtrlReleased) {
       this.ctrlEnterMode = false;
       codePartComponent.codeMirrorEditor.setReadonly(false);
     }
 
-    console.log('this.mainService.ctrlEnterMode = ',this.ctrlEnterMode);
+    console.log('this.mainService.ctrlEnterMode = ', this.ctrlEnterMode);
   }
 
   /**
-   * 
+   *
    * @returns boolean: Returns whether the code is changed or not since last save
    */
   isCodeChanged(): boolean {
-    return this.jsCode !== this.jsCodeSinceSave || this.cssCode !== this.cssCodeSinceSave ||
-      this.htmlCode !== this.htmlCodeSinceSave || this.pastebinText !== this.pastebinTextSinceSave
+    return (
+      this.jsCode !== this.jsCodeSinceSave ||
+      this.cssCode !== this.cssCodeSinceSave ||
+      this.htmlCode !== this.htmlCodeSinceSave ||
+      this.pastebinText !== this.pastebinTextSinceSave
+    );
   }
 
   /**
@@ -267,32 +283,63 @@ export class MainService {
     this.pastebinTextSinceSave = this.pastebinText;
   }
 
-  resumeFiddleTheme(htmlPartComp?: HtmlPartComponent, cssPartComp?: CssPartComponent, jsPartComp?: JsPartComponent, pastebinPart?: PastebinComponent) {
+  resumeFiddleTheme(
+    htmlPartComp?: HtmlPartComponent,
+    cssPartComp?: CssPartComponent,
+    jsPartComp?: JsPartComponent,
+    pastebinPart?: PastebinComponent
+  ) {
     //console.log("param = ", param);
     //console.log("this.mainService.isFiddleThemeDark = ", this.isFiddleThemeDark);
-    let savedThemeId = localStorage.getItem("myfiddle-theme");
+    let savedThemeId = localStorage.getItem('myfiddle-theme');
 
     if (savedThemeId) {
-      this.selectedTheme = this.themesList.find((el) => { return el.id == savedThemeId });
+      this.selectedTheme = this.themesList.find((el) => {
+        return el.id == savedThemeId;
+      });
     }
     //console.log("selectedTheme = ", selectedTheme);
 
     this.addThemeStylesheet(this.selectedTheme);
 
     if (htmlPartComp) {
-      htmlPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
+      htmlPartComp.codeMirrorEditor.setTheme(
+        savedThemeId
+          ? savedThemeId == 'vs-default-dark'
+            ? 'dark'
+            : 'light'
+          : 'light'
+      );
     }
 
     if (cssPartComp) {
-      cssPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
+      cssPartComp.codeMirrorEditor.setTheme(
+        savedThemeId
+          ? savedThemeId == 'vs-default-dark'
+            ? 'dark'
+            : 'light'
+          : 'light'
+      );
     }
 
     if (jsPartComp) {
-      jsPartComp.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
+      jsPartComp.codeMirrorEditor.setTheme(
+        savedThemeId
+          ? savedThemeId == 'vs-default-dark'
+            ? 'dark'
+            : 'light'
+          : 'light'
+      );
     }
 
     if (pastebinPart) {
-      pastebinPart.codeMirrorEditor.setTheme(savedThemeId ? (savedThemeId == "vs-default-dark" ? "dark" : "light") : "light");
+      pastebinPart.codeMirrorEditor.setTheme(
+        savedThemeId
+          ? savedThemeId == 'vs-default-dark'
+            ? 'dark'
+            : 'light'
+          : 'light'
+      );
     }
   }
 
@@ -346,23 +393,33 @@ export class MainService {
     .layout {
         background-color: ${theme.data.colors['editor.background']} !important;
         border-color: ${theme.data.colors['editor.foreground']} !important;
-        box-shadow: 0 0 0px 1px ${theme.data.colors['editor.background']} !important;
+        box-shadow: 0 0 0px 1px ${
+          theme.data.colors['editor.background']
+        } !important;
     }
     
     .layout.active {
-        background-color: ${theme.data.colors['editor.selectionBackground']} !important;
+        background-color: ${
+          theme.data.colors['editor.selectionBackground']
+        } !important;
         border-color: ${theme.data.colors['editor.foreground']} !important;
-        box-shadow: 0 0 6px 2px ${theme.data.colors['editor.foreground']} !important;
+        box-shadow: 0 0 6px 2px ${
+          theme.data.colors['editor.foreground']
+        } !important;
     }
     
     .layouts-list {
         background-color: ${theme.data.colors['editor.background']} !important;
-        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']} !important;
+        box-shadow: 0px 0px 4px 2px ${
+          theme.data.colors['editor.foreground']
+        } !important;
     }
     
     ul.donations-menu.shown,
     .themes-menu.shown{
-        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']} !important;
+        box-shadow: 0px 0px 4px 2px ${
+          theme.data.colors['editor.foreground']
+        } !important;
         background-color: ${theme.data.colors['editor.background']} !important;
     }
     
@@ -373,7 +430,10 @@ export class MainService {
     
     .paypal-btn-container ul.donations-menu > li:hover,
     .themes-menu.shown > li:not(.selected):hover {
-        background-color: ${this.enhanceThemesMenuColoration(theme, "background-color")};
+        background-color: ${this.enhanceThemesMenuColoration(
+          theme,
+          'background-color'
+        )};
         color: ${theme.data.colors['editor.foreground']};
     }
     
@@ -436,12 +496,16 @@ export class MainService {
     }
     
     .paypal-btn-container ul.donations-menu > li:hover {
-        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+        background-color: ${
+          theme.data.colors['editor.lineHighlightBackground']
+        };
         font-weight: 600;
     }
     
     .themes-menu.shown > li:not(.selected):hover {
-        /*background-color: ${theme.data.colors['editor.lineHighlightBackground']};*/
+        /*background-color: ${
+          theme.data.colors['editor.lineHighlightBackground']
+        };*/
     }
     
     .themes-menu li.selected {
@@ -559,7 +623,9 @@ export class MainService {
     }
 
     .modal-close-btn:hover{
-        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+        background-color: ${
+          theme.data.colors['editor.lineHighlightBackground']
+        };
     }
 
     app-modal .modal-header .modal-validate-btn{
@@ -569,7 +635,9 @@ export class MainService {
     }
 
     app-modal .modal-header .modal-validate-btn:hover{
-        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+        background-color: ${
+          theme.data.colors['editor.lineHighlightBackground']
+        };
     }
 
     app-modal .modal-header .modal-validate-btn:active{
@@ -598,7 +666,9 @@ export class MainService {
     
     .layouts-list-container:hover{
         color: ${theme.data.colors['editor.foreground']};
-        background-color: ${theme.data.colors['editor.lineHighlightBackground']};
+        background-color: ${
+          theme.data.colors['editor.lineHighlightBackground']
+        };
     }
     
     body{
@@ -607,7 +677,9 @@ export class MainService {
     }
 
     .code-part-title.half-stretch-mark{
-      box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']};
+      box-shadow: 0 0 10000px 10000px ${
+        theme.data.colors['editor.selectionBackground']
+      };
       z-index: 1;
       background: ${theme.data.colors['editor.selectionBackground']};
       position: relative;
@@ -653,7 +725,9 @@ export class MainService {
     }
 
     .history-container table thead{
-      box-shadow: 0px 0px 3px 1px ${theme.data.colors['editor.cursorBlinkShadow']};
+      box-shadow: 0px 0px 3px 1px ${
+        theme.data.colors['editor.cursorBlinkShadow']
+      };
       background-color: ${theme.data.colors['editor.background']};
     }
 
@@ -689,7 +763,9 @@ export class MainService {
       }
   
       50%{
-        box-shadow: inset 0px 0px 6px 3px ${theme.data.colors['editor.cursorBlinkShadow']};
+        box-shadow: inset 0px 0px 6px 3px ${
+          theme.data.colors['editor.cursorBlinkShadow']
+        };
       }
   
       100%{
@@ -711,7 +787,9 @@ export class MainService {
         
         0%{
             background:${theme.data.colors['editor.selectionBackground']};
-            box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']};
+            box-shadow: 0 0 10000px 10000px ${
+              theme.data.colors['editor.selectionBackground']
+            };
             opacity:0.5;
         }
       
@@ -742,40 +820,39 @@ export class MainService {
   }
 
   addThemeStylesheet(theme: FiddleTheme) {
-    let themeStylesheet = document.querySelector("style#theme-stylesheet") as HTMLStyleElement;
+    let themeStylesheet = document.querySelector(
+      'style#theme-stylesheet'
+    ) as HTMLStyleElement;
     if (themeStylesheet) {
       themeStylesheet.remove();
     }
 
-    themeStylesheet = document.createElement("style");
-    themeStylesheet.id = "theme-stylesheet";
+    themeStylesheet = document.createElement('style');
+    themeStylesheet.id = 'theme-stylesheet';
     document.head.appendChild(themeStylesheet);
     themeStylesheet.textContent = this.prepareThemeStyleSheet(theme);
-
   }
 
   enhanceThemesMenuColoration(theme: FiddleTheme, cssProperty: string) {
-    if (theme.id == "vs-default") {
+    if (theme.id == 'vs-default') {
       switch (cssProperty) {
-        case "background-color":
-          return "rgba(128, 128, 128, 0.11)";
+        case 'background-color':
+          return 'rgba(128, 128, 128, 0.11)';
       }
-    }
-    else if (theme.id == "vs-default-dark") {
+    } else if (theme.id == 'vs-default-dark') {
       switch (cssProperty) {
-        case "background-color":
-          return "#333333";
+        case 'background-color':
+          return '#333333';
       }
-    }
-    else {
+    } else {
       return theme.data.colors['editor.lineHighlightBackground'];
     }
   }
 
   generateFiddleCode(data: any): string {
     //console.log("generateFiddleCode data.isConsoleOn: ", this.isConsoleOn);
-    let htmlCode = data.html ? data.html : "";
-    let cssCode = data.css ? data.css : "";
+    let htmlCode = data.html ? data.html : '';
+    let cssCode = data.css ? data.css : '';
     let jsCode = `
       <script id="fiddle-security">
       if(window.self === window.top){
@@ -820,200 +897,121 @@ export class MainService {
     return html;
   }
 
-  retrieveCodePartsCursors(cssPart?: CssPartComponent, htmlPart?: HtmlPartComponent, jsPart?: JsPartComponent, blink?: boolean) {
-    if (cssPart) {
-      //retrieve css code part focus and cursor position
-      console.log("called //cssPart.aceEditor.focus()");
-
-      let noSelection: boolean = this.cssCodePositionData.aceRanges.length == this.cssCodePositionData.aceRanges.filter((el: AceAjax.Range) => {
-        return el.start.column == el.end.column && el.start.row == el.start.row
-      }).length
-      ////cssPart.aceEditor.selection.setRange(this.cssCodePositionData.aceRanges[0]);
-      let upMostSelection = this.cssCodePositionData.aceRanges.sort((el1, el2) => { return el1.start.row - el2.start.row })[0];
-      let upMostRow = upMostSelection.start.row;
-      this.cssCodePositionData.aceRanges.forEach((el) => {
-        //cssPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
-      })
-      ////cssPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
-
-      if (noSelection) {
-        if (this.cssCodePositionData.focus) {
-          //cssPart.aceEditor.focus();
-        }
-        //cssPart.aceEditor.moveCursorTo(this.cssCodePositionData.row, this.cssCodePositionData.column);
-      }
-      else if (blink) {
-        document.querySelector("app-css-part .custom-layer-marker").classList.add("show");
-        setTimeout(() => {
-          document.querySelector("app-css-part .custom-layer-marker").classList.remove("show");
-        }, 1500)
-      }
-      //cssPart.aceEditor.scrollToRow();
-
-    }
-    if (jsPart) {
-      //retrieve js code part focus and cursor position
-      console.log("called //jsPart.aceEditor.focus()");
-
-      let noSelection: boolean = this.jsCodePositionData.aceRanges.length == this.jsCodePositionData.aceRanges.filter((el: AceAjax.Range) => {
-        return el.start.column == el.end.column && el.start.row == el.start.row
-      }).length
-      ////jsPart.aceEditor.selection.setRange(this.jsCodePositionData.aceRanges[0]);
-      let upMostSelection = this.jsCodePositionData.aceRanges.sort((el1, el2) => { return el1.start.row - el2.start.row })[0];
-      let upMostRow = upMostSelection.start.row;
-      this.jsCodePositionData.aceRanges.forEach((el) => {
-        //jsPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
-      })
-      ////jsPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
-
-      if (noSelection) {
-        if (this.jsCodePositionData.focus) {
-          //jsPart.aceEditor.focus();
-        }
-        //jsPart.aceEditor.moveCursorTo(this.jsCodePositionData.row, this.jsCodePositionData.column);
-      }
-      else if (blink) {
-        document.querySelector("app-js-part .custom-layer-marker").classList.add("show");
-        setTimeout(() => {
-          document.querySelector("app-js-part .custom-layer-marker").classList.remove("show");
-        }, 1500)
-      }
-      //jsPart.aceEditor.scrollToRow();
-
-    }
-    if (htmlPart) {
-      //retrieve html code part focus and cursor position
-      console.log("called htmlPart.aceEditor.focus()");
-
-      let noSelection: boolean = this.htmlCodePositionData.aceRanges.length == this.htmlCodePositionData.aceRanges.filter((el: AceAjax.Range) => {
-        return el.start.column == el.end.column && el.start.row == el.start.row
-      }).length
-      //htmlPart.aceEditor.selection.setRange(this.htmlCodePositionData.aceRanges[0]);
-      let upMostSelection = this.htmlCodePositionData.aceRanges.sort((el1, el2) => { return el1.start.row - el2.start.row })[0];
-      let upMostRow = upMostSelection.start.row;
-      this.htmlCodePositionData.aceRanges.forEach((el) => {
-        //htmlPart.aceEditor.selection.addRange(new AceAjax.Range(el.start.row, el.start.column, el.end.row, el.end.column));
-      })
-      //htmlPart.aceEditor.moveCursorTo(upMostSelection.start.row, upMostSelection.start.column);
-
-      if (noSelection) {
-        console.log("NO SELECTION !");
-        if (this.htmlCodePositionData.focus) {
-          //htmlPart.aceEditor.focus();
-        }
-        //htmlPart.aceEditor.moveCursorTo(this.htmlCodePositionData.row, this.htmlCodePositionData.column);
-      }
-      else if (blink) {
-        document.querySelector("app-html-part .custom-layer-marker").classList.add("show");
-        setTimeout(() => {
-          document.querySelector("app-html-part .custom-layer-marker").classList.remove("show");
-        }, 1500)
-      }
-      //htmlPart.aceEditor.scrollToRow();
-
-      console.log("htmlCodePositionData = ", this.htmlCodePositionData);
-    }
-  }
 
   getFiddlesList(page?: number): Observable<any> {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
     let str;
-    if (location.origin == "https://ghanhass.github.io") {
-      str = page ? ("&page=" + page) : "";
+    if (this.envVars.production) {
+      str = page ? '&page=' + page : '';
       let promise = new Promise((resolve, reject) => {
-
-        let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=30` + str;
-        this.http.get<any>(gitlabRawSnippetUrl, { headers: headers }).subscribe({//get seeked fiddle content from gitlab
-          next: (res2: FiddleData) => {
-            let result = res2;
-            resolve(result);
-          },
-          error: (error2) => {
-            resolve({
-              status: "not found"
-            })
-          }
-        });
+        let gitlabRawSnippetUrl =
+          `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=30` +
+          str;
+        this.http
+          .get<any>(gitlabRawSnippetUrl, { headers: headers })
+          .subscribe({
+            //get seeked fiddle content from gitlab
+            next: (res2: FiddleData) => {
+              let result = res2;
+              resolve(result);
+            },
+            error: (error2) => {
+              resolve({
+                status: 'not found',
+              });
+            },
+          });
       });
       return from(promise);
-    }
-    else {
-      str = page ? ("&_page=" + page) : "";
-      return this.http.get<Array<FiddleData>>("http://localhost:3000/gists?per_page=30" + str);
+    } else {
+      str = page ? '&_page=' + page : '';
+      return this.http.get<Array<FiddleData>>(
+        'http://localhost:3000/gists?per_page=30' + str
+      );
     }
   }
-
 
   getFiddle(fiddleId): Observable<any> {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
 
-    if (location.origin == "https://ghanhass.github.io") {
+    if (this.envVars.production) {
       let promise = new Promise((resolve, reject) => {
-
         let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
-        this.http.get<any>(gitlabRawSnippetUrl, { headers: headers }).subscribe({//get seeked fiddle content from gitlab
-          next: (res2: FiddleData) => {
-            let result;
-            if (res2.hasOwnProperty("css") && res2.hasOwnProperty("js") && res2.hasOwnProperty("html")) {
-              result = {
-                status: "ok",
-                fiddleData: res2
+        this.http
+          .get<any>(gitlabRawSnippetUrl, { headers: headers })
+          .subscribe({
+            //get seeked fiddle content from gitlab
+            next: (res2: FiddleData) => {
+              let result;
+              if (
+                res2.hasOwnProperty('css') &&
+                res2.hasOwnProperty('js') &&
+                res2.hasOwnProperty('html')
+              ) {
+                result = {
+                  status: 'ok',
+                  fiddleData: res2,
+                };
+              } else {
+                result = {
+                  status: 'not found',
+                };
               }
-            }
-            else {
-              result = {
-                status: "not found"
-              }
-            }
-            resolve(result);
-          },
-          error: (error2) => {
-            resolve({
-              status: "not found"
-            })
-          }
-        });
+              resolve(result);
+            },
+            error: (error2) => {
+              resolve({
+                status: 'not found',
+              });
+            },
+          });
       });
       return from(promise);
-    }
-    else {
-      return this.http.get<Array<FiddleData>>("http://localhost:3000/gists?id=" + fiddleId).pipe(
-        map((value: Array<FiddleData>) => {
-          if (value.length) {
-            return {
-              status: "ok",
-              fiddleData: value[0]
+    } else {
+      return this.http
+        .get<Array<FiddleData>>('http://localhost:3000/gists?id=' + fiddleId)
+        .pipe(
+          map((value: Array<FiddleData>) => {
+            if (value.length) {
+              return {
+                status: 'ok',
+                fiddleData: value[0],
+              };
+            } else {
+              return {
+                status: 'not found',
+              };
             }
-          }
-          else {
-            return {
-              status: "not found"
-            }
-          }
-        }));
+          })
+        );
     }
   }
 
   saveFiddle(fiddleData: FiddleData): Observable<any> {
     //let html = this.generateFiddleCode(fiddleData);
     let self = this;
-    if (location.origin == "https://ghanhass.github.io") {
-      let timeStamp = (new Date()).getTime();
+    if (this.envVars.production) {
+      let timeStamp = new Date().getTime();
       let body = {
-        file_name: fiddleData.appmode + "_" + timeStamp,
-        title: fiddleData.title ? fiddleData.title : "Noname",
-        visibility: "public",
-        "content": JSON.stringify(fiddleData),
-        "file_path": timeStamp,
-      }
+        file_name: fiddleData.appmode + '_' + timeStamp,
+        title: fiddleData.title ? fiddleData.title : 'Noname',
+        visibility: 'public',
+        content: JSON.stringify(fiddleData),
+        file_path: timeStamp,
+      };
       let newSnippetRawUrl;
       let newFiddleId;
 
       let promise = new Promise((resolve, reject) => {
-        this.http.post<any>("https://gitlab.com/api/v4/projects/52190204/snippets", body, { headers: headers }).subscribe(
-          {
+        this.http
+          .post<any>(
+            'https://gitlab.com/api/v4/projects/52190204/snippets',
+            body,
+            { headers: headers }
+          )
+          .subscribe({
             next: (res1) => {
               //console.log("res1 = ", res1);
               newSnippetRawUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${res1.id}/raw`;
@@ -1021,36 +1019,41 @@ export class MainService {
               resolve(newFiddleId);
             },
             error: (err1) => {
-              reject(err1)
-            }
-          }
-        );
+              reject(err1);
+            },
+          });
       });
       return from(promise);
+    } else {
+      return from(
+        new Promise((resolve, reject) => {
+          this.http
+            .get<Array<FiddleData>>(
+              'http://localhost:3000/gists?_sort=id&_order=desc&_limit=1'
+            )
+            .subscribe(
+              (res) => {
+                let newId;
+                if (res.length) {
+                  let lastId = res[0].id;
+                  newId = lastId + 1;
+                } else {
+                  newId = 1;
+                }
+                fiddleData.id = newId;
+                this.http
+                  .post('http://localhost:3000/gists', fiddleData)
+                  .subscribe((res2) => {
+                    resolve(newId);
+                  });
+              },
+              (error) => {
+                reject(-1);
+              }
+            );
+        })
+      );
     }
-
-    else {
-      return from(new Promise((resolve, reject) => {
-        this.http.get<Array<FiddleData>>("http://localhost:3000/gists?_sort=id&_order=desc&_limit=1").subscribe((res) => {
-          let newId;
-          if (res.length) {
-            let lastId = res[0].id;
-            newId = lastId + 1;
-          }
-          else {
-            newId = 1;
-          }
-          fiddleData.id = newId;
-          this.http.post("http://localhost:3000/gists", fiddleData).subscribe((res2) => {
-            resolve(newId);
-          })
-        },
-          (error) => {
-            reject(-1);
-          })
-      }))
-    }
-
   }
   /*deleteAllGists(){
     octokit.request('GET /gists?_='+(new Date).getTime(),{

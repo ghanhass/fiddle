@@ -26,8 +26,10 @@ export class IframePartComponent implements OnInit {
   @Output()isConsoleOnUpdate: EventEmitter<boolean> = new EventEmitter();
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
   cssPartComponent: CssPartComponent;
+
+  private iframeOrigin = this.mainService.envVars.fiddleIframeOrigin;
   
-  url: string = environment.url;
+  url: string = this.mainService.envVars.url;
   isIframeLoadComplete = true;
   isFiddleLoadComplete = true;
   isAfterViewInitReached = false;
@@ -75,7 +77,7 @@ export class IframePartComponent implements OnInit {
           html:fiddleCode,
           currentTheme: this.mainService.selectedTheme.data
         }
-        iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+        iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.mainService.envVars.fiddleIframeOrigin); 
       }
     }
     else{
@@ -124,9 +126,6 @@ export class IframePartComponent implements OnInit {
       layout:this.mainService.layout,
       mobile_layout: mobileCodePart+":"+mobileResult,
       iframe_resize_value: this.mainService.iframeResizeValue,
-      css_code_position_data: this.mainService.cssCodePositionData,
-      html_code_position_data: this.mainService.htmlCodePositionData,
-      js_code_position_data: this.mainService.jsCodePositionData,
       is_mobile_mode: this.mainService.isMobileMode,
       created_at: new Date().getTime(),
       appmode: appMode
@@ -147,7 +146,7 @@ export class IframePartComponent implements OnInit {
       if(this.isFiddleLoadComplete && this.isIframeLoadComplete){
         this.hideloader.emit();
       }
-
+      let appName = this.mainService.envVars.appName;
       if(fiddleId > 0){
         if(this.copyInput.nativeElement){
           let input = this.copyInput.nativeElement
@@ -155,7 +154,7 @@ export class IframePartComponent implements OnInit {
           if(hrefValue[hrefValue.length - 1] != "/"){
             hrefValue = hrefValue + "/";
           }
-          input.value = hrefValue + (environment.appName ? (environment.appName + "/"):"") + fiddleId
+          input.value = hrefValue + (appName ? (appName + "/"):"") + fiddleId
           input.select();
           input.setSelectionRange(0, 99999);
           let copyCommand = document.execCommand("copy");
@@ -178,7 +177,7 @@ export class IframePartComponent implements OnInit {
   }
 
   getIframeSrc(){
-    return location.origin == "https://ghanhass.github.io" ? "https://hassoon-github.github.io/myfiddlepreview" : "http://localhost/myfiddlepreview/index.html";
+    return this.mainService.envVars.url ;
   }
 
   ngOnInit(): void {
@@ -203,7 +202,7 @@ export class IframePartComponent implements OnInit {
         type:"console-show",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
     }
   }
 
@@ -215,7 +214,7 @@ export class IframePartComponent implements OnInit {
         type:"console-mobile-update",
         isFiddleMobileMode: isResponsiveModeOn
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
     }
   }
 
@@ -226,7 +225,7 @@ export class IframePartComponent implements OnInit {
         type:"change-console-theme",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
     }
   }
 
@@ -236,7 +235,7 @@ export class IframePartComponent implements OnInit {
       let obj = {
         type:"console-hide",
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),environment.fiddleIframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
     }
   }
 

@@ -89,7 +89,7 @@ export class FiddlesHistoryComponent implements OnInit {
   getFiddleType(fiddle:FiddleData | any){
     let str;
     let appMode;
-    if(location.origin == "https://ghanhass.github.io"){
+    if(this.mainService.envVars.production){
       str = fiddle.file_name.indexOf("_") > -1 ? fiddle.file_name.split("_")[0] : 'fiddle';
     }
     else{

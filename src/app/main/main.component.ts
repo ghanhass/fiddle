@@ -206,9 +206,6 @@ onAppModeClick() {
             code_parts_size: this.mainService.codePartsSize,
             layout: this.mainService.layout,
             iframe_resize_value: this.mainService.iframeResizeValue,
-            css_code_position_data: this.mainService.cssCodePositionData,
-            html_code_position_data: this.mainService.htmlCodePositionData,
-            js_code_position_data: this.mainService.jsCodePositionData,
             is_mobile_mode: this.mainService.isMobileMode,
             created_at: this.mainService.fiddleCreatedAt
           }
@@ -243,9 +240,6 @@ onAppModeClick() {
               this.mainService.cssCode = fiddleData.css;
               this.mainService.fiddleTitle = fiddleData.title;
               this.mainService.iframeResizeValue = fiddleData.iframe_resize_value;
-              this.mainService.cssCodePositionData = fiddleData.css_code_position_data;
-              this.mainService.htmlCodePositionData = fiddleData.html_code_position_data;
-              this.mainService.jsCodePositionData = fiddleData.js_code_position_data;
               this.mainService.isMobileMode = fiddleData.is_mobile_mode;
               
               this.appMode = fiddleData.appmode || 'fiddle';
@@ -349,15 +343,6 @@ onAppModeClick() {
       
     });
   }
-
-  switchToPastebin(){
-
-  }
-
-  switchToFiddle(){
-
-  }
-
   isConsoleOnUpdate(newValue: boolean){
     this.isConsoleOn = newValue;
   }
@@ -373,30 +358,8 @@ onAppModeClick() {
   }
 
   prettifyCode(type): void{
-    /*
-    switch(type){
-      case 'html':
-      let prettifiedHtml = this.ngxPrettifyService.prettify(this.mainService.htmlCode.trim());
-      this.htmlPart.code = prettifiedHtml;
-      break;
-
-      case 'css':
-        let alteredCss: string = "<style>"+this.mainService.cssCode+"</style>";
-        let prettifiedCss: string = this.ngxPrettifyService.prettify(alteredCss, "css");
-        let indStyle = prettifiedCss.lastIndexOf("</style>");
-        prettifiedCss = prettifiedCss.slice(7,indStyle).trim();
-        //this.cssPart.code = prettifiedCss;
-      break;
-
-      case 'js':
-        let alternateJs: string = "<script>"+this.mainService.jsCode+"</script>";
-        let prettifiedJs: string = this.ngxPrettifyService.prettify(alternateJs, "javascript");
-        let indScript = prettifiedJs.lastIndexOf("</script>");
-        prettifiedJs = prettifiedJs.slice(8,indScript).trim();
-        //this.jsPart.code = prettifiedJs;
-      break;
-    }
-  */}
+    
+  }
 
   selectTheme(theme: FiddleTheme){
     if(theme.id != this.mainService.selectedTheme.id){
@@ -607,228 +570,211 @@ onAppModeClick() {
   }
 
   getLayoutInfos(name){
-    switch(name){
-      case "htmlAsSplitAreaSize":
-      return this.finalHtmlCodePartSize+"px";;
+    let arr = ["htmlAsSplitAreaSize", "cssAsSplitAreaSize", "jsAsSplitAreaSize", "codePartsAsSplitAreaSize", "iframeAsSplitAreaSize"]
+    if(arr.includes(name)){
+      switch (true){
+        case name == arr[0]:
+        return this.finalHtmlCodePartSize+"px";;
 
-      case "cssAsSplitAreaSize":
-      return this.finalCssCodePartSize+"px";
+        case name == arr[1]:
+        return this.finalCssCodePartSize+"px";
 
-      case "jsAsSplitAreaSize":
-      return this.finalJsCodePartSize+"px";;
+        case name == arr[2]:
+        return this.finalJsCodePartSize+"px";
 
-      case "codePartsAsSplitAreaSize":
-      return this.finalCodePartSize+"px";;
+        case name == arr[3]:
+        return this.finalCodePartSize+"px";
+
+        case name == arr[4]:
+        return "*"
+      } 
     }
-    
-    switch(this.layout){
-      case 1:
-      switch(name){
-        case "outerAsSplitDirection":
-        return "horizontal";
+    else{
+      switch(this.layout){
+        case 1:
+        switch(name){
+          case "outerAsSplitDirection":
+          return "horizontal";
+          
+          case "outerAsSplitUnit":
+          return "pixel";
         
-        case "outerAsSplitUnit":
-        return "pixel";
-
-        case "codePartsAsSplitAreaOrder":
-        return 1;
-
-        case "iframeAsSplitAreaOrder":
-        return 2;
-
-        case "codePartsAsSplitAreaMinSize":
-        return 350;
-
-        case "innerAsSplitDirection":
-        return 'vertical';
-
-        case "innerAsSplitUnit":
-        return 'pixel';
-
-        case "emptyAsSplitAreaMinSize":
-        return 10;
-
-        case "emptyAsSplitAreaSize":
-        return 10;
-
-        case "emptyAsSplitAreaMaxSize":
-        return 10;
-
-        case "htmlAsSplitAreaMinSize":
-        return 25;
-
-        case "cssAsSplitAreaMinSize":
-        return 25;
-
-        case "jsAsSplitAreaMinSize":
-        return 25;
-
-        //case "iframeAsSplitAreaMinSize":
-        //return 350;
-
-        case "iframeAsSplitAreaSize":
-        return "*";
-
-        case "iframeResizer":
-        return "vertical";
+          case "codePartsAsSplitAreaOrder":
+          return 1;
+        
+          case "iframeAsSplitAreaOrder":
+          return 2;
+        
+          case "codePartsAsSplitAreaMinSize":
+          return 350;
+        
+          case "innerAsSplitDirection":
+          return 'vertical';
+        
+          case "innerAsSplitUnit":
+          return 'pixel';
+        
+          case "emptyAsSplitAreaMinSize":
+          return 10;
+        
+          case "emptyAsSplitAreaSize":
+          return 10;
+        
+          case "emptyAsSplitAreaMaxSize":
+          return 10;
+        
+          case "htmlAsSplitAreaMinSize":
+          return 25;
+        
+          case "cssAsSplitAreaMinSize":
+          return 25;
+        
+          case "jsAsSplitAreaMinSize":
+          return 25;
+        
+          case "iframeResizer":
+          return "vertical";
+        }
+        break;
+      
+        case 2:
+        switch(name){
+          case "outerAsSplitDirection":
+          return "vertical";
+          
+          case "outerAsSplitUnit":
+          return "pixel";
+        
+          case "codePartsAsSplitAreaOrder":
+          return 1;
+          
+          case "iframeAsSplitAreaOrder":
+          return 2
+        
+          case "codePartsAsSplitAreaMinSize":
+          return 350;
+        
+          case "innerAsSplitDirection":
+          return 'horizontal';
+        
+          case "innerAsSplitUnit":
+          return 'pixel';
+        
+          case "emptyAsSplitAreaMinSize":
+          return 10;
+        
+          case "emptyAsSplitAreaSize":
+          return 10;
+        
+          case "emptyAsSplitAreaMaxSize":
+          return 10;
+        
+          case "htmlAsSplitAreaMinSize":
+          return 25;
+        
+          case "cssAsSplitAreaMinSize":
+          return 25;
+        
+          case "jsAsSplitAreaMinSize":
+          return 25;
+        
+          case "iframeResizer":
+          return "horizontal";
+        }
+        break;
+      
+        case 3:
+        switch(name){
+          case "outerAsSplitDirection":
+          return "horizontal";
+          
+          case "outerAsSplitUnit":
+          return "pixel";
+        
+          case "codePartsAsSplitAreaOrder":
+          return 2;
+        
+          case "iframeAsSplitAreaOrder":
+          return 1;
+        
+          case "codePartsAsSplitAreaMinSize":
+          return 350;
+        
+          case "innerAsSplitDirection":
+          return 'vertical';
+        
+          case "innerAsSplitUnit":
+          return 'pixel';
+        
+          case "emptyAsSplitAreaMinSize":
+          return 10;
+        
+          case "emptyAsSplitAreaSize":
+          return 10;
+        
+          case "emptyAsSplitAreaMaxSize":
+          return 10;
+        
+          case "htmlAsSplitAreaMinSize":
+          return 25;
+        
+          case "cssAsSplitAreaMinSize":
+          return 25;
+        
+          case "jsAsSplitAreaMinSize":
+          return 25;
+        
+          case "iframeResizer":
+          return "vertical";
+        }
+        break;
+      
+        case 4:
+        switch(name){
+          case "outerAsSplitDirection":
+          return "vertical";
+          
+          case "outerAsSplitUnit":
+          return "pixel";
+        
+          case "codePartsAsSplitAreaOrder":
+          return 2;
+        
+          case "iframeAsSplitAreaOrder":
+          return 1
+        
+          case "codePartsAsSplitAreaMinSize":
+          return 350;
+        
+          case "innerAsSplitDirection":
+          return 'horizontal';
+        
+          case "innerAsSplitUnit":
+          return 'pixel';
+        
+          case "emptyAsSplitAreaMinSize":
+          return 10;
+        
+          case "emptyAsSplitAreaSize":
+          return 10;
+        
+          case "emptyAsSplitAreaMaxSize":
+          return 10;
+        
+          case "htmlAsSplitAreaMinSize":
+          return 25;
+        
+          case "cssAsSplitAreaMinSize":
+          return 25;
+        
+          case "jsAsSplitAreaMinSize":
+          return 25;
+        
+          case "iframeResizer":
+          return "horizontal";
+        }
+        break;
       }
-      break;
-
-      case 2:
-      switch(name){
-        case "outerAsSplitDirection":
-        return "vertical";
-        
-        case "outerAsSplitUnit":
-        return "pixel";
-
-        case "codePartsAsSplitAreaOrder":
-        return 1;
-        
-        case "iframeAsSplitAreaOrder":
-        return 2
-
-        case "codePartsAsSplitAreaMinSize":
-        return 350;
-
-        case "innerAsSplitDirection":
-        return 'horizontal';
-
-        case "innerAsSplitUnit":
-        return 'pixel';
-
-        case "emptyAsSplitAreaMinSize":
-        return 10;
-
-        case "emptyAsSplitAreaSize":
-        return 10;
-
-        case "emptyAsSplitAreaMaxSize":
-        return 10;
-
-        case "htmlAsSplitAreaMinSize":
-        return 25;
-
-        case "cssAsSplitAreaMinSize":
-        return 25;
-
-        case "jsAsSplitAreaMinSize":
-        return 25;
-
-        //case "iframeAsSplitAreaMinSize":
-        //return 350;
-
-        case "iframeAsSplitAreaSize":
-        return "*";
-
-        case "iframeResizer":
-        return "horizontal";
-      }
-      break;
-
-      case 3:
-      switch(name){
-        case "outerAsSplitDirection":
-        return "horizontal";
-        
-        case "outerAsSplitUnit":
-        return "pixel";
-
-        case "codePartsAsSplitAreaOrder":
-        return 2;
-
-        case "iframeAsSplitAreaOrder":
-        return 1;
-
-        case "codePartsAsSplitAreaMinSize":
-        return 350;
-
-        case "innerAsSplitDirection":
-        return 'vertical';
-
-        case "innerAsSplitUnit":
-        return 'pixel';
-
-        case "emptyAsSplitAreaMinSize":
-        return 10;
-
-        case "emptyAsSplitAreaSize":
-        return 10;
-
-        case "emptyAsSplitAreaMaxSize":
-        return 10;
-
-        case "htmlAsSplitAreaMinSize":
-        return 25;
-
-        case "cssAsSplitAreaMinSize":
-        return 25;
-
-        case "jsAsSplitAreaMinSize":
-        return 25;
-
-        //case "iframeAsSplitAreaMinSize":
-        //return 350;
-
-        case "iframeAsSplitAreaSize":
-        return "*";
-
-        case "iframeResizer":
-        return "vertical";
-      }
-      break;
-
-      case 4:
-      switch(name){
-        case "outerAsSplitDirection":
-        return "vertical";
-        
-        case "outerAsSplitUnit":
-        return "pixel";
-
-        case "codePartsAsSplitAreaOrder":
-        return 2;
-
-        case "iframeAsSplitAreaOrder":
-        return 1
-
-        case "codePartsAsSplitAreaMinSize":
-        return 350;
-
-        case "innerAsSplitDirection":
-        return 'horizontal';
-
-        case "innerAsSplitUnit":
-        return 'pixel';
-
-        case "emptyAsSplitAreaMinSize":
-        return 10;
-
-        case "emptyAsSplitAreaSize":
-        return 10;
-
-        case "emptyAsSplitAreaMaxSize":
-        return 10;
-
-        case "htmlAsSplitAreaMinSize":
-        return 25;
-
-        case "cssAsSplitAreaMinSize":
-        return 25;
-
-        case "jsAsSplitAreaMinSize":
-        return 25;
-
-        //case "iframeAsSplitAreaMinSize":
-        //return 350;
-
-        case "iframeAsSplitAreaSize":
-        return "*";
-
-        case "iframeResizer":
-        return "horizontal";
-      }
-      break;
     }
   }
 
@@ -1337,30 +1283,7 @@ onAppModeClick() {
         this.mainService.isMobileMode = false;
       }
       this.mainService.scheduledRunFiddle = true;
-      //START save codePositionData objects in MainService
-      //this.cssPart.canRetrievePositionsAfterLoad = true;
 
-      /*
-
-      this.mainService.cssCodePositionData.column = //this.cssPart.aceEditor?.getCursorPosition().column;
-      this.mainService.cssCodePositionData.row = //this.cssPart.aceEditor?.getCursorPosition().row;
-      this.mainService.cssCodePositionData.aceRanges = //this.cssPart.aceEditor?.getSelection().getAllRanges();
-
-      this.htmlPart.canRetrievePositionsAfterLoad = true;
-      this.mainService.htmlCodePositionData.column = this.htmlPart.aceEditor?.getCursorPosition().column;
-      this.mainService.htmlCodePositionData.row = this.htmlPart.aceEditor?.getCursorPosition().row; 
-      this.mainService.htmlCodePositionData.aceRanges = this.htmlPart.aceEditor?.getSelection().getAllRanges();
-      
-      console.log("this.mainService.htmlCodePositionData = ", this.mainService.htmlCodePositionData);
-      console.log("getAllRanges() = ", this.htmlPart.aceEditor?.getSelection().getAllRanges());
-      
-      //this.jsPart.canRetrievePositionsAfterLoad = true;
-      this.mainService.jsCodePositionData.column = //this.jsPart.aceEditor?.getCursorPosition().column;
-      this.mainService.jsCodePositionData.row = //this.jsPart.aceEditor?.getCursorPosition().row;
-      this.mainService.jsCodePositionData.aceRanges = //this.jsPart.aceEditor?.getSelection().getAllRanges();
-
-      */
-      //END save codePositionData objects in MainService
 
       if(this.appMode == "pastebin"){
         this.changeLayout(1);
@@ -2098,7 +2021,7 @@ onAppModeClick() {
   }
 
   getHomeUrl(){
-    return location.origin == "https://ghanhass.github.io" ? "https://ghanhass.github.io" : "http://localhost:4200";
+    return this.mainService.envVars.homeUrl;
   }
 
 
