@@ -10,11 +10,15 @@ import {
 import { MainService } from '../main.service';
 import { CodeEditor } from '@acrodata/code-editor';
 import { languages } from '@codemirror/language-data';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone:true,
   selector: 'app-html-part',
   templateUrl: './html-part.component.html',
   styleUrls: ['./html-part.component.css'],
+  imports: [CodeEditor, FormsModule]
+  
 })
 export class HtmlPartComponent implements OnInit {
   code: string = '';

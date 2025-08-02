@@ -9,12 +9,16 @@ import {
 } from '@angular/core';
 import { MainService } from '../main.service';
 import { languages } from '@codemirror/language-data';
+import { CodeEditor } from '@acrodata/code-editor';
+import { FormsModule } from '@angular/forms';
 //import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 
 @Component({
+  standalone: true,
   selector: 'app-js-part',
   templateUrl: './js-part.component.html',
   styleUrls: ['./js-part.component.css'],
+  imports: [CodeEditor, FormsModule]
 })
 export class JsPartComponent implements OnInit {
   code: string = '';

@@ -5,11 +5,15 @@ import { environment } from 'src/environments/environment';
 import { LoaderComponent } from '../loader/loader.component';
 import { FiddleData } from '../fiddle-data';
 import { GistFiddle } from '../gist-fiddle';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-fiddles-history',
   templateUrl: './fiddles-history.component.html',
-  styleUrls: ['./fiddles-history.component.css']
+  styleUrls: ['./fiddles-history.component.css'],
+  imports: [LoaderComponent, FormsModule, CommonModule]
 })
 export class FiddlesHistoryComponent implements OnInit {
   searchText: string = "";

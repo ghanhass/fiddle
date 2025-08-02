@@ -4,7 +4,7 @@ import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
 import { RessourcesComponent } from '../ressources/ressources.component';
-import { ToastrService } from 'ngx-toastr';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
 import { FiddleTheme } from "src/app/fiddle-theme";
@@ -14,6 +14,8 @@ import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
 import { FiddlesHistoryComponent } from '../fiddles-history/fiddles-history.component';
 import { PastebinComponent } from '../pastebin/pastebin.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 
 interface PreviousLayout{
@@ -30,9 +32,11 @@ interface CodePartStretchState{
 }
 
 @Component({
+  standalone: true,
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  styleUrls: ['./main.component.css'],
+  imports:[HtmlPartComponent, CssPartComponent, JsPartComponent, IframePartComponent, CommonModule, FormsModule, LoaderComponent, PastebinComponent, ModalComponent, RessourcesComponent, FiddlesHistoryComponent]
 })
 export class MainComponent implements AfterViewInit {
 

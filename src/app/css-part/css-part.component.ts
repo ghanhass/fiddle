@@ -2,12 +2,15 @@ import { Component, OnInit, Input, SimpleChanges, OnChanges, Output, EventEmitte
 import { MainService } from "../main.service";
 import { CodeEditor } from '@acrodata/code-editor';
 import { languages } from '@codemirror/language-data';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
+  standalone:true,
   selector: 'app-css-part',
   templateUrl: './css-part.component.html',
-  styleUrls: ['./css-part.component.css']
+  styleUrls: ['./css-part.component.css'],
+  imports: [CodeEditor, FormsModule]
 })
 export class CssPartComponent implements OnInit {
   code: string = "";

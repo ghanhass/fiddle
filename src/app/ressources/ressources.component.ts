@@ -6,6 +6,8 @@ import { CdnjsLibrariesSearchResult } from '../cdnjs-libraries-search-result';
 import { CdnjsLibraryData } from '../cdnjs-library-data';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 interface SelectedRessourceAsset{
   ressourceName: string;
@@ -17,9 +19,11 @@ interface SelectedRessourceAsset{
 }
 
 @Component({
+  standalone: true,
   selector: 'app-ressources',
   templateUrl: './ressources.component.html',
-  styleUrls: ['./ressources.component.css']
+  styleUrls: ['./ressources.component.css'],
+  imports: [FormsModule, CommonModule, LoaderComponent]
 })
 export class RessourcesComponent implements OnInit {
 

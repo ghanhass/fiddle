@@ -1,9 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit,EventEmitter, Output } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
+  standalone: true,
   selector: 'app-modal',
   templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.css']
+  styleUrls: ['./modal.component.css'],
+  imports: [FormsModule, CommonModule]
 })
 export class ModalComponent implements OnInit {
 

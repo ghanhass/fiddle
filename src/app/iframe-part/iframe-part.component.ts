@@ -5,12 +5,15 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../fiddle-data';
 import { CssPartComponent } from '../css-part/css-part.component';
+import { SafePipe } from '../safe.pipe';
 
 
 @Component({
+  standalone:true,
   selector: 'app-iframe-part',
   templateUrl: './iframe-part.component.html',
-  styleUrls: ['./iframe-part.component.css']
+  styleUrls: ['./iframe-part.component.css'],
+  imports: [SafePipe]
 })
 export class IframePartComponent implements OnInit {
 
