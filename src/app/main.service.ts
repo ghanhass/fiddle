@@ -234,7 +234,7 @@ export class MainService {
     event: KeyboardEvent,
     codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent
   ) {
-    console.log('onEditorKeyDown event = ', event);
+    /*console.log('onEditorKeyDown event = ', event);
 
     let isCtrlPressed = event.code == 'ControlLeft';
 
@@ -243,7 +243,7 @@ export class MainService {
       codePartComponent.codeMirrorEditor.setReadonly(true);
     }
 
-    console.log('this.mainService.ctrlEnterMode = ', this.ctrlEnterMode);
+    console.log('this.mainService.ctrlEnterMode = ', this.ctrlEnterMode);*/
   }
 
   onEditorKeyUp(
