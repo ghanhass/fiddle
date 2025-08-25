@@ -250,6 +250,7 @@ export class MainService {
     event: KeyboardEvent,
     codePartComponent: HtmlPartComponent | CssPartComponent | JsPartComponent
   ) {
+    /*
     let isCtrlReleased = event.code == 'ControlLeft';
 
     if (this.ctrlEnterMode && isCtrlReleased) {
@@ -258,6 +259,7 @@ export class MainService {
     }
 
     console.log('this.mainService.ctrlEnterMode = ', this.ctrlEnterMode);
+    */
   }
 
   /**
