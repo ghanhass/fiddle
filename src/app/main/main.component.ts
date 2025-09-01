@@ -114,7 +114,6 @@ onAppModeClick() {
   IsAfterViewInitReached: boolean = false;
 
   codePartsSizesFix;
-  canCallReAdaptCodePartsSizes: boolean = true;
 
   emptyArea_1_Size:number = 0;
   emptyArea_2_Size:number = 0;
@@ -236,9 +235,8 @@ onAppModeClick() {
               this.cssPart.code = fiddleData.css;
               this.jsPart.code = fiddleData.js;
               this.pastebinPart.text = fiddleData.pastebintext;
-
               this.fiddleTitle = fiddleData.title;
-              //
+              ////
               this.mainService.jsCode = fiddleData.js;
               this.mainService.htmlCode = fiddleData.html;
               this.mainService.cssCode = fiddleData.css;
@@ -446,34 +444,34 @@ onAppModeClick() {
               case 1:
                 this.finalCodePartSize = 350;
 
-                this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
-                this.finalCssCodePartSize = this.mainContainerHeight/3 + 5
-                this.finalJsCodePartSize = this.mainContainerHeight/3;
+                this.finalHtmlCodePartSize = (this.mainContainerHeight - 10)/3 ;
+                this.finalCssCodePartSize = (this.mainContainerHeight - 10)/3;
+                this.finalJsCodePartSize = (this.mainContainerHeight - 10)/3;
               //console.log("self.mainContainerHeight = ", self.mainContainerHeight);
               
               break;
               case 2:
                 this.finalCodePartSize = 350;
 
-                this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
-                this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
-                this.finalJsCodePartSize = this.mainContainerWidth/3;
+                this.finalHtmlCodePartSize = (this.mainContainerWidth - 10)/3;
+                this.finalCssCodePartSize = (this.mainContainerWidth - 10)/3;
+                this.finalJsCodePartSize = (this.mainContainerWidth - 10)/3; 
               
               break;
               case 3:
                 this.finalCodePartSize = 350;
 
-                this.finalHtmlCodePartSize = this.mainContainerHeight/3 + 5;
-                this.finalCssCodePartSize = this.mainContainerHeight/3 + 5;
-                this.finalJsCodePartSize = this.mainContainerHeight/3;
+                this.finalHtmlCodePartSize = (this.mainContainerHeight - 10)/3;
+                this.finalCssCodePartSize = (this.mainContainerHeight - 10)/3;
+                this.finalJsCodePartSize = (this.mainContainerHeight - 10)/3;
               
               break;
               case 4:
                 this.finalCodePartSize = 350;
 
-                this.finalHtmlCodePartSize = this.mainContainerWidth/3 + 5;
-                this.finalCssCodePartSize = this.mainContainerWidth/3 + 5;
-                this.finalJsCodePartSize = this.mainContainerWidth/3;
+                this.finalHtmlCodePartSize = (this.mainContainerWidth - 10)/3;
+                this.finalCssCodePartSize = (this.mainContainerWidth - 10)/3;
+                this.finalJsCodePartSize = (this.mainContainerWidth - 10)/3;
               
               break;
             }
@@ -505,7 +503,7 @@ onAppModeClick() {
     let currentMainContainerSize;
     let currentMainContainerSize2;
 
-    let codePartsMinLimit;
+    let codePartsMinLimit = 350;
     
     if(savedLayout == 1 || savedLayout == 3){
       currentMainContainerSize = mainContainerEl.offsetHeight;
@@ -513,7 +511,6 @@ onAppModeClick() {
 
       currentMainContainerSize2 = mainContainerEl.offsetWidth;
       savedMainContainerSize2 = savedMainContainerWidth;
-      codePartsMinLimit = 350;
     }
     else if(savedLayout == 2 || savedLayout == 4){
       currentMainContainerSize = mainContainerEl.offsetWidth;
@@ -521,8 +518,6 @@ onAppModeClick() {
 
       currentMainContainerSize2 = mainContainerEl.offsetHeight;
       savedMainContainerSize2 = savedMainContainerHeight;
-
-      codePartsMinLimit = 350;
     }
 
     //console.log("savedMainContainerSize = ", savedMainContainerSize);
@@ -546,7 +541,7 @@ onAppModeClick() {
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
     let sizes: Array<any> = [savedHtmlCodePartSize, savedCssCodePartSize, savedJsCodePartSize];
     //console.log("param.data = ", param.data);
-    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize - 10, "inner", savedMainContainerSize);
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize, "inner");
 
     /****************************************/
     /*START readapt saved sizes to new window size*/
@@ -568,7 +563,7 @@ onAppModeClick() {
       let coef = currentMainContainerSize2 / savedMainContainerSize2;
       sizes[ind] = sizes[ind] * coef;
     }
-    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2 - 5, "outer", savedMainContainerSize2);
+    this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2, "outer");
     this.finalCodePartSize = Math.floor(sizes[ind]);
     /*END readapt saved sizes to new window size*/
   }
@@ -951,7 +946,7 @@ onAppModeClick() {
           this.codePartStretchState.index = -1;
           sizes = [this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
           //console.log("sizes before = ", sizes);
-          this.reAdaptCodePartsSizes(sizes, mainContainerSize - 10, "inner");
+          this.reAdaptCodePartsSizes(sizes, mainContainerSize, "inner");
           //console.log("sizes after = ", sizes);
 
           this.finalHtmlCodePartSize = sizes[0];
@@ -1048,14 +1043,14 @@ onAppModeClick() {
       (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
 
       this.isGutter1_dragging = false;
-      //console.log("isCustomGutter1_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("isGutter1_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
     else if(this.isGutter2_dragging){
       (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
       
       this.isGutter2_dragging = false;
-      //console.log("isCustomGutter2_dragging == FALSE mouseup.type event = " + event.type);
+      //console.log("isGutter2_dragging == FALSE mouseup.type event = " + event.type);
       //console.log("--------------------------");
     }
 
@@ -1103,7 +1098,7 @@ onAppModeClick() {
     
     //(new windowHeight or new windowWidth) and mainContainerEl is truthy ?
     if(mainContainerEl && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
-      //console.log("/!\ window resize event: ", event);
+      console.log("/!\ window resize event: ", event);
 
       this.windowWidth = newWindowWidth;
       this.windowHeight = newWindowHeight;
@@ -1180,7 +1175,7 @@ onAppModeClick() {
         outerSplitterSizes = ['*', this.finalCodePartSize]; 
       }
 
-      this.reAdaptCodePartsSizes(outerSplitterSizes, newMainContainerWidthOrHeight - 5, "outer");
+      this.reAdaptCodePartsSizes(outerSplitterSizes, newMainContainerWidthOrHeight, "outer");
 
       this.setMainServiceCodepartSizes();
 
@@ -1218,20 +1213,22 @@ onAppModeClick() {
   }
 
   /**
-   * Corrects the width/height of each code part area when total size of code parts is not equal to newMainContainerWidthOrHeight.
-   * @param sizes code parts OR outer area sizes array
+   * Corrects the width/height of each code part area after fiddle retrieval in relation to new mainContainer sizes.
+   * @param sizes code part sizes OR the codeparts container size
    * @param newMainContainerWidthOrHeight offsetWidth or offsetHeight of .main-container-fiddle
    */
-  reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number, type: string, oldMainContainerWidthOrHeight ? : number){
-    if(type == "inner"){
+  reAdaptCodePartsSizes(sizes: Array<number>, newMainContainerWidthOrHeight: number, type: string){
+    let minLimit;
+    if(type == "inner"){//code parts sizes (html, css, javascript)
       let total = sizes[0] + sizes[1] + sizes[2];
       let coef;
+      minLimit = 25;
       
-      coef = newMainContainerWidthOrHeight / total;
+      coef = (newMainContainerWidthOrHeight - 10) / total;
       
-      sizes[0] = sizes[0]*coef;
-      sizes[1] = sizes[1]*coef;
-      sizes[2] = sizes[2]*coef;
+      sizes[0] = sizes[0]*coef > minLimit ? sizes[0]*coef : minLimit;
+      sizes[1] = sizes[1]*coef > minLimit ? sizes[1]*coef : minLimit;
+      sizes[2] = sizes[2]*coef > minLimit ? sizes[2]*coef : minLimit;
       
       //console.log("sizes inner = ", sizes);
       this.finalHtmlCodePartSize = Math.floor(sizes[0]);
@@ -1239,6 +1236,7 @@ onAppModeClick() {
       this.finalJsCodePartSize = Math.floor(sizes[2]);
     }
     else if(type == "outer"){
+      minLimit = 350;
       let ind;
 
       if(this.layout == 1 || this.layout == 2){
@@ -1248,18 +1246,9 @@ onAppModeClick() {
         ind = 1;
       }
 
-      let minLimit;
-
-      if(this.layout == 1 || this.layout == 3){
-        minLimit = 350;
-      }
-      else if(this.layout == 2 || this.layout == 4){
-        minLimit = 350;
-      }
-
       let total = sizes[ind];
       
-      if(total > newMainContainerWidthOrHeight){
+      if(total > newMainContainerWidthOrHeight - 5){
         sizes[ind] = newMainContainerWidthOrHeight;
       }
       else if(total < minLimit){
@@ -1656,9 +1645,8 @@ onAppModeClick() {
                 }
                 this.finalJsCodePartSize = newJsSize;
               }
-              this.finalCssCodePartSize = newCssSize;
-
               this.finalHtmlCodePartSize = htmlPartSize;
+              this.finalCssCodePartSize = newCssSize;
               
             }
             else if(this.layout == 2 || this.layout == 4){
@@ -1715,11 +1703,17 @@ onAppModeClick() {
             if(this.layout == 1 || this.layout == 3){      
 
               let jsPartSize;
+              let cssPartSize;
+              
               if(eventClientXOrY > (codePartsArea.getBoundingClientRect().bottom - 25)){//drag is below codepPartsArea bottom point ?
                 jsPartSize = 25 ;
               }
               else if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 50 + 5){//drag is above codePartsArea top point ?
                 jsPartSize = codePartsArea.getBoundingClientRect().height - 50 - 5;
+
+               /*if(eventClientXOrY < codePartsArea.getBoundingClientRect().top + 50 + 5){//drag is above codePartsArea top point ?
+                cssPartSize = codePartsArea.getBoundingClientRect().height - 50 - 5;
+               }*/
               }
               else{
                 jsPartSize = codePartsArea.getBoundingClientRect().bottom - eventClientXOrY;
@@ -1731,7 +1725,8 @@ onAppModeClick() {
                 jsPartSize = 25;
               }
 
-              let newCssSize = this.finalCssCodePartSize - sizeDiff;
+              //let newCssSize = this.finalCssCodePartSize - sizeDiff;
+              let newCssSize = codePartsArea.getBoundingClientRect().height - (this.finalHtmlCodePartSize + jsPartSize);
               if(newCssSize < 25){
                 newCssSize = 25;
 
