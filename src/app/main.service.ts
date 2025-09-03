@@ -759,6 +759,10 @@ export class MainService {
       background-color: ${theme.data.colors['editor.background']}
     }
 
+    .code-component{
+      background-color: ${theme.data.colors['editor.background']}
+    }
+
     @keyframes blink{
       0%{
         box-shadow: none;

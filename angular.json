@@ -29,7 +29,10 @@
             "assets": [
               "src/favicon.ico",
               "src/assets",
-              { "glob": "**/*", "input": "src/assets/fiddle-db", "ignore": ["**/fiddle-db/*"], "output": "/assets" },
+              { "glob": "**/*", 
+                "input": "src/assets/fiddle-db", 
+                "ignore": ["**/fiddle-db/*"], 
+                "output": "/assets" },
               { 
                 "glob": "worker-html.js",
                 "input": "node_modules/ace-builds/src-min/",
@@ -85,6 +88,9 @@
           "configurations": {
             "production": {
               "buildTarget": "fiddle:build:production"
+            },
+            "development":{
+              "buildTarget": "fiddle:build:development"
             }
           }
         },
