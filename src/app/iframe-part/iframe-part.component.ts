@@ -1,10 +1,8 @@
-import { Component, ElementRef, OnInit,ViewChild, Output ,EventEmitter} from '@angular/core';
-import { environment } from "../../environments/environment";
+import { Component, ElementRef, OnInit,ViewChild, Output ,EventEmitter, inject} from '@angular/core';
 import { MainService } from '../main.service';
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../fiddle-data';
-import { CssPartComponent } from '../css-part/css-part.component';
 import { SafePipe } from '../safe.pipe';
 
 
@@ -21,24 +19,23 @@ export class IframePartComponent implements OnInit {
   //htmlCode: string = "";
   //cssCode: string = "";
   fiddleTitle: string = "";
-  @ViewChild("form")form: ElementRef;
-  @ViewChild("copyInput")copyInput: ElementRef;
-  @ViewChild("iframe")iframeElement: ElementRef;
+  @ViewChild("form")form: ElementRef = new ElementRef(undefined);
+  @ViewChild("copyInput")copyInput: ElementRef = new ElementRef(undefined);
+  @ViewChild("iframe")iframeElement: ElementRef = new ElementRef(undefined);
   @Output()showloader: EventEmitter<any> = new EventEmitter();
   @Output()hideloader: EventEmitter<any> = new EventEmitter();
   @Output()isConsoleOnUpdate: EventEmitter<boolean> = new EventEmitter();
   @Output()iframeload: EventEmitter<any> = new EventEmitter();
-  cssPartComponent: CssPartComponent;
+  private mainService = inject(MainService);
 
   private iframeOrigin = this.mainService.envVars.fiddleIframeOrigin;
   
-  url: string = this.mainService.envVars.url;
+  url: string = this.mainService.envVars.url || "";
   isIframeLoadComplete = true;
   isFiddleLoadComplete = true;
   isAfterViewInitReached = false;
 
-  constructor(private mainService: MainService,
-    private router:Router,
+  constructor(private router:Router,
     private toastrService:ToastrService) {
       let self = this;
       window.addEventListener("message", function(event){
@@ -47,8 +44,8 @@ export class IframePartComponent implements OnInit {
           self.isIframeLoadComplete = true;
           if(self.isFiddleLoadComplete && self.isIframeLoadComplete){
             self.hideloader.emit();
-            self.changeConsoleTheme();
-            self.switchConsoleMobileMode();
+            //self.changeConsoleTheme();
+            //self.switchConsoleMobileMode();
 
           }
         }
@@ -80,7 +77,7 @@ export class IframePartComponent implements OnInit {
           html:fiddleCode,
           currentTheme: this.mainService.selectedTheme.data
         }
-        iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.mainService.envVars.fiddleIframeOrigin); 
+        iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.mainService.envVars.fiddleIframeOrigin!); 
       }
     }
     else{
@@ -88,7 +85,7 @@ export class IframePartComponent implements OnInit {
     }
   }
 
-  saveFiddle(appMode){
+  saveFiddle(appMode: string){
     this.isFiddleLoadComplete = false;
 
     //console.log("saving Code");
@@ -179,8 +176,8 @@ export class IframePartComponent implements OnInit {
     });
   }
 
-  getIframeSrc(){
-    return this.mainService.envVars.url ;
+  getIframeSrc(): string{
+    return this.mainService.envVars.url!;
   }
 
   ngOnInit(): void {
@@ -205,7 +202,7 @@ export class IframePartComponent implements OnInit {
         type:"console-show",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin!); 
     }
   }
 
@@ -217,7 +214,7 @@ export class IframePartComponent implements OnInit {
         type:"console-mobile-update",
         isFiddleMobileMode: isResponsiveModeOn
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin!); 
     }
   }
 
@@ -228,7 +225,7 @@ export class IframePartComponent implements OnInit {
         type:"change-console-theme",
         currentTheme: this.mainService.selectedTheme.data
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin!); 
     }
   }
 
@@ -238,7 +235,7 @@ export class IframePartComponent implements OnInit {
       let obj = {
         type:"console-hide",
       }
-      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin); 
+      iframeElement.contentWindow.postMessage(JSON.stringify(obj),this.iframeOrigin!); 
     }
   }
 

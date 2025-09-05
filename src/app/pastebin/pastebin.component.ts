@@ -30,7 +30,7 @@ export class PastebinComponent {
 
   }
 
-  onCodeChanged(value) {
+  onCodeChanged(value: string) {
     //////console.log('CODE', value);
     this.mainService.pastebinText = value;
     this.mainService.setCheckBeforeUnloadListener();

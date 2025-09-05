@@ -31,7 +31,7 @@ export class CssPartComponent implements OnInit {
     this.code = this.mainService.cssCode;
   }
 
-  onCodeChanged(value) {
+  onCodeChanged(value: string) {
     ////console.log('CODE', value);
     let self = this;
     console.log('HTML onCodeChanged CODE', value);
@@ -39,11 +39,11 @@ export class CssPartComponent implements OnInit {
     this.mainService.setCheckBeforeUnloadListener();
   }
 
-  onEditorKeyDown(event) {
+  onEditorKeyDown(event: any) {
     this.mainService.onEditorKeyDown(event, this);
   }
 
-  onEditorKeyUp(event) {
+  onEditorKeyUp(event: any) {
     this.mainService.onEditorKeyUp(event, this);
   }
 

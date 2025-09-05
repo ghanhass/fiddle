@@ -28,7 +28,7 @@ export class RessourcesService {
     },3600000 * 6);
   }
 
-  searForString(srcStr, searchStr){
+  searForString(srcStr: string, searchStr: string){
     if(srcStr.toUpperCase() == searchStr.toUpperCase()){
       return true;
     }
@@ -59,18 +59,18 @@ export class RessourcesService {
         let res2 = res;
 
         res2.results = res2.results.filter((libraryData)=>{
-          return this.searForString(libraryData.name, searchString);
+          return this.searForString(libraryData.name!, searchString);
         });
 
         res2.results.sort((a, b)=>{
-          if(a.name.length > b.name.length){
+          if(a.name!.length > b.name!.length){
             return 1;
           }
-          else if(a.name.length < b.name.length){
+          else if(a.name!.length < b.name!.length){
             return -1;
           }
           else{
-            if(a.name.toUpperCase() > b.name.toUpperCase()){
+            if(a.name!.toUpperCase() > b.name!.toUpperCase()){
               return 1;
             }
             else{
@@ -84,7 +84,7 @@ export class RessourcesService {
 
         res2.results.forEach((libraryData)=>{
           let ind = this.cachedRessourcesData.results.findIndex((cachedLibraryData)=>{
-            return cachedLibraryData.name.toUpperCase() == libraryData.name.toUpperCase();
+            return cachedLibraryData.name?.toUpperCase() == libraryData.name?.toUpperCase();
           });
 
           if(ind === -1){//retrieved library/ressource is NOT present in the cached search result ? cache it
@@ -126,11 +126,11 @@ export class RessourcesService {
     }
   }
 
-  getRessourceMetaData(ressourceName):Observable<CdnjsLibraryMetaData>{
+  getRessourceMetaData(ressourceName: string):Observable<CdnjsLibraryMetaData>{
     let newRessourceMetaData : Observable<CdnjsLibraryMetaData> = this.http.get<CdnjsLibraryMetaData>("https://api.cdnjs.com/libraries/"+ressourceName+"?fields=assets,description,latest,name,versions").pipe(tap((res)=>{
       
       let ind = this.cachedCdnjsMetaData.findIndex((cachedLibraryMetaData)=>{
-        return cachedLibraryMetaData.name.toUpperCase() == res.name.toUpperCase();
+        return cachedLibraryMetaData.name?.toUpperCase() == res.name?.toUpperCase();
       });
 
       if(ind === -1){//retrieved library/ressource metaData is NOT present in the cached libraries metaDatas ?
@@ -160,7 +160,7 @@ export class RessourcesService {
     */
   }
 
-  getRessourceAssets(ressourceName, ressourceVersion){
+  getRessourceAssets(ressourceName: string, ressourceVersion: string){
     let libraryAssets = this.http.get<CdnjsLibraryAssets>("https://api.cdnjs.com/libraries/"+ressourceName+"/"+ressourceVersion);
 
     return libraryAssets;

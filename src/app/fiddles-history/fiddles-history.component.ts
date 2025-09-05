@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
-import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { Router, RouterModule } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 import { FiddleData } from '../fiddle-data';
 import { GistFiddle } from '../gist-fiddle';
@@ -13,14 +12,14 @@ import { CommonModule } from '@angular/common';
   selector: 'app-fiddles-history',
   templateUrl: './fiddles-history.component.html',
   styleUrls: ['./fiddles-history.component.css'],
-  imports: [LoaderComponent, FormsModule, CommonModule]
+  imports: [LoaderComponent, FormsModule, CommonModule, RouterModule]
 })
 export class FiddlesHistoryComponent implements OnInit {
   searchText: string = "";
   fiddlesList: any[] = [];
   pageNumber: number = 1;
   canChangePage: boolean = true;
-  @ViewChild("historyLoader")historyLoader: LoaderComponent;
+  @ViewChild("historyLoader")historyLoader: LoaderComponent = new LoaderComponent();
 
   constructor(private mainService: MainService, private router: Router){
   }
@@ -40,7 +39,7 @@ export class FiddlesHistoryComponent implements OnInit {
     })
   }
 
-  goToFiddle(fiddle){
+  goToFiddle(fiddle: any){
     if(this.canChangePage){
       let id = fiddle.id;
       if(id){

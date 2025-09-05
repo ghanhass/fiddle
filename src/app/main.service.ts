@@ -19,9 +19,7 @@ import { CodePositionData } from './code-position-data';
 import { CssPartComponent } from './css-part/css-part.component';
 import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
-import { Ace, Range } from 'ace-builds';
 import { PastebinComponent } from './pastebin/pastebin.component';
-import * as AceAjax from 'brace';
 
 let headers = new HttpHeaders();
 headers = headers.set(
@@ -42,8 +40,8 @@ export class MainService {
   jsCode: string;
   cssCode: string;
   htmlCode: string;
-  isConsoleOn: boolean;
-  pastebinText: string;
+  isConsoleOn: boolean = false;
+  pastebinText: string = "";
 
   appMode: string = 'fiddle';
 
@@ -56,20 +54,20 @@ export class MainService {
 
   layout: number = 1;
 
-  cssCodePartSize: number;
-  htmlCodePartSize: number;
-  jsCodePartSize: number;
-  mainContainerHeight: number;
-  mainContainerWidth: number;
-  codePartsSize: number;
-  iframeResizeValue: number;
+  cssCodePartSize: number = 0;
+  htmlCodePartSize: number = 0;
+  jsCodePartSize: number = 0;
+  mainContainerHeight: number = 0;
+  mainContainerWidth: number = 0;
+  codePartsSize: number = 0;
+  iframeResizeValue: number = 0;
   fiddleThemeId: string = '';
-  fiddleCreatedAt: number;
+  fiddleCreatedAt: number = 0;
 
   fiddleTitle: string = '';
   redirectAfterSaveMode: boolean = false;
 
-  codeSavingDate: Date = undefined;
+  codeSavingDate: Date = new Date();
 
   showHtml: boolean = true;
   showCss: boolean = false;
@@ -153,17 +151,17 @@ export class MainService {
 
   private appConfig: any;
 
-  newFiddleIdSubject: Subject<number>;
+  newFiddleIdSubject: Subject<number> = new Subject();
 
-  public beforeUnloadListener: any = (event: BeforeUnloadEvent) => {
+  public beforeUnloadListener: any = (event: BeforeUnloadEvent): any => {
     event.preventDefault();
     //console.log("beforeUnload event is set");
     if (this.isCodeChanged()) {
       return (event.returnValue = 'Are you sure you want to exit?');
     }
   };
-  ctrlEnterMode: boolean;
-  envVars: {production: boolean, url: string; appName: string; homeUrl: string; fiddleIframeOrigin: string; };
+  ctrlEnterMode: boolean = false;
+  envVars: {production?: boolean, url?: string; appName?: string; homeUrl?: string; fiddleIframeOrigin?: string; } = {};
 
   constructor(private http: HttpClient) {
     this.initEnv();
@@ -298,7 +296,7 @@ export class MainService {
     if (savedThemeId) {
       this.selectedTheme = this.themesList.find((el) => {
         return el.id == savedThemeId;
-      });
+      })!;
     }
     //console.log("selectedTheme = ", selectedTheme);
 
@@ -759,7 +757,7 @@ export class MainService {
       background-color: ${theme.data.colors['editor.background']}
     }
 
-    .code-component{
+    .code-component-container{
       background-color: ${theme.data.colors['editor.background']}
     }
 
@@ -907,7 +905,7 @@ export class MainService {
   getFiddlesList(page?: number): Observable<any> {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
-    let str;
+    let str = "";
     if (this.envVars.production) {
       str = page ? '&page=' + page : '';
       let promise = new Promise((resolve, reject) => {
@@ -938,7 +936,7 @@ export class MainService {
     }
   }
 
-  getFiddle(fiddleId): Observable<any> {
+  getFiddle(fiddleId: number): Observable<any> {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
 
@@ -1035,18 +1033,23 @@ export class MainService {
         new Promise((resolve, reject) => {
           this.http
             .get<Array<FiddleData>>(
-              'http://localhost:3000/gists?_sort=id&_order=desc&_limit=1'
+              'http://localhost:3000/gists?_sort=id'
             )
             .subscribe(
               (res) => {
                 let newId;
+
+                console.log("res = ", res);
+
                 if (res.length) {
-                  let lastId = res[0].id;
+                  let lastId = +res[res.length - 1].id!;
                   newId = lastId + 1;
                 } else {
                   newId = 1;
                 }
                 fiddleData.id = newId;
+
+                console.log("fiddleData = ", fiddleData);
                 this.http
                   .post('http://localhost:3000/gists', fiddleData)
                   .subscribe((res2) => {

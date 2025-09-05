@@ -1,312 +1,751 @@
 <header id="main-header">
-    <div class="logo-title-container">
-      <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
-        <img [ngStyle]="{display: isFiddleThemeDark() ? 'none' : 'block'}" [src]="'assets/logo.png'">
-        <img [ngStyle]="{display: !isFiddleThemeDark() ? 'none' : 'block'}" [src]="'assets/logo_dark.png'">
-      </a>
-      <div class="fiddle-title">
-        <input type="text" [(ngModel)]="fiddleTitle" class="form-control fiddle-input" (ngModelChange)="onFiddeTitleChange($event)" placeholder="Title" />
-        <div class="fiddle-size" *ngIf="appMode == 'fiddle'">
-          <input type="number" [min]="0" class="width form-control" [(ngModel)]="iframeWidth" [disabled]="isFiddleWidthInputDisabled" (change)="onFiddleWidthChange($event.target.value)" />
-          <span class="x">x</span>
-          <input type="number" [min]="0" class="height form-control" [(ngModel)]="iframeHeight" [disabled]="isFiddleHeightInputDisabled" (change)="onFiddeHeightChange($event.target.value)" />
-        </div>
-        <button class="fullscreen-iframe-btn btn" (click)="toggleIframeFullscreen()" [title]="'Turn on fullscreen view'" *ngIf="appMode == 'fiddle'">
-          <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
-        </button>
-  
-        <button class="stretch-v-iframe-btn btn" (click)="stretchVertically()" [title]="'Stretch view vertically'" *ngIf="appMode == 'fiddle'">
-          <span><i class="fa fa-arrows-v" aria-hidden="true"></i></span>
-        </button>
-  
-        <button class="stretch-h-iframe-btn btn" (click)="stretchHorizontally()" [title]="'Stretch view horizontally'" *ngIf="appMode == 'fiddle'">
-          <span><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
-        </button>
+  <div class="logo-title-container">
+    <a class="fiddle-logo" title="My Fiddle" [href]="getHomeUrl()">
+      <img
+        [ngStyle]="{ display: isFiddleThemeDark() ? 'none' : 'block' }"
+        [src]="'assets/logo.png'"
+      />
+      <img
+        [ngStyle]="{ display: !isFiddleThemeDark() ? 'none' : 'block' }"
+        [src]="'assets/logo_dark.png'"
+      />
+    </a>
+    <div class="fiddle-title">
+      <input
+        type="text"
+        [(ngModel)]="fiddleTitle"
+        class="form-control fiddle-input"
+        (ngModelChange)="onFiddeTitleChange($event)"
+        placeholder="Title"
+      />
+
+      @if (appMode == 'fiddle') {
+      <div class="fiddle-size">
+        <input
+          type="number"
+          [min]="0"
+          class="width form-control"
+          (ngModelChange)="onFiddleWidthChange()"
+          [(ngModel)]="iframeWidth"
+          [disabled]="isFiddleWidthInputDisabled"
+        />
+        <span class="x">x</span>
+        <input
+          type="number"
+          [min]="0"
+          class="height form-control"
+          (ngModelChange)="onFiddeHeightChange()"
+          [(ngModel)]="iframeHeight"
+          [disabled]="isFiddleHeightInputDisabled"
+        />
       </div>
+      <button
+        class="fullscreen-iframe-btn btn"
+        (click)="toggleIframeFullscreen()"
+        [title]="'Turn on fullscreen view'"
+      >
+        <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
+      </button>
+
+      <button
+        class="stretch-v-iframe-btn btn"
+        (click)="stretchVertically()"
+        [title]="'Stretch view vertically'"
+      >
+        <span><i class="fa fa-arrows-v" aria-hidden="true"></i></span>
+      </button>
+
+      <button
+        class="stretch-h-iframe-btn btn"
+        (click)="stretchHorizontally()"
+        [title]="'Stretch view horizontally'"
+      >
+        <span><i class="fa fa-arrows-h" aria-hidden="true"></i></span>
+      </button>
+      }
     </div>
-  
-    <app-loader #loader class="app-loader"></app-loader>
-    <div class="header-btns-container">
-  
-     <!--<button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
+  </div>
+
+  <app-loader #loader class="app-loader"></app-loader>
+  <div class="header-btns-container">
+    <!--<button class="console-btn btn" [ngClass]="{'console-on': isConsoleOn}" (click)="consoleBtnClick()">
         <span>Console</span>
       </button>-->
-  
-      <!--<button *ngIf="appMode == 'fiddle'" class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
+
+    <!--<button *ngIf="appMode == 'fiddle'" class="prettify-mobile-code btn" (click)="prettifyMobileCode()">
         <span><i class="fa fa-indent" aria-hidden="true"></i></span>
       </button>-->
-      
-      <div class="themes-btn-container">
-        <button class="themes-btn btn" (click)="changeTheme()" [title]="isFiddleThemeDark() ? 'Daylight theme' : 'Night theme' ">
-          <i *ngIf="isFiddleThemeDark()" class="fa fa-sun-o" aria-hidden="true"></i>
-          <i *ngIf="!isFiddleThemeDark()" class="fa fa-moon-o" aria-hidden="true"></i>
-        </button>
-      </div>
-      
-      <button class="history-btn btn" [title]="'History'" (click)="showHistoryModal()">
-        <i [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/'+( isFiddleThemeDark() ? 'history-dark.png' : 'history.png' )+')' }"></i>
-      </button>
 
-      <div class="paypal-btn-container">
-        <div id="donate-button-container">
-          <div id="donate-button" class="btn" [ngStyle]="{ 'background-image': 'url('+getHomeUrl()+'/assets/paypal-icon.png)'}"></div>
-        </div>       
-      </div>
-
-      <button class="ressources-code-btn btn" *ngIf="appMode == 'fiddle'" (click)="ressouresBtnClick()">
-        <span>Resources</span>
+    <div class="themes-btn-container">
+      <button
+        class="themes-btn btn"
+        (click)="changeTheme()"
+        [title]="isFiddleThemeDark() ? 'Daylight theme' : 'Night theme'"
+      >
+        <i
+          *ngIf="isFiddleThemeDark()"
+          class="fa fa-sun-o"
+          aria-hidden="true"
+        ></i>
+        <i
+          *ngIf="!isFiddleThemeDark()"
+          class="fa fa-moon-o"
+          aria-hidden="true"
+        ></i>
       </button>
-      <div class="layouts-list-container" *ngIf="appMode == 'fiddle'" (click)="toggleLayoutsList()" [ngClass]="{'shown': isLayoutsListShown, 'hidden': !isLayoutsListShown}">
-        <button class="layouts-btn btn"><span>Layouts</span> <i class="fa fa-sort-desc" aria-hidden="true"></i><i class="fa fa-sort-asc" aria-hidden="true"></i>
-        </button>
-        <div class="layouts-list" #layoutsList>
-          <div class="layout-1 layout" #layout1 (click)="changeLayout(1)" [ngClass]="{'active':(layout === 1)}">
-            <div>
-              <div>
-              </div>
-              <div>
-              </div>
-              <div>
-              </div>
-            </div>
-            <div>
-            </div>
+    </div>
+
+    <button
+      class="history-btn btn"
+      [title]="'History'"
+      (click)="showHistoryModal()"
+    >
+      <i
+        [ngStyle]="{
+          'background-image':
+            'url(' +
+            getHomeUrl() +
+            '/assets/' +
+            (isFiddleThemeDark() ? 'history-dark.png' : 'history.png') +
+            ')'
+        }"
+      ></i>
+    </button>
+
+    <div class="paypal-btn-container">
+      <div id="donate-button-container">
+        <div
+          id="donate-button"
+          class="btn"
+          [ngStyle]="{
+            'background-image':
+              'url(' + getHomeUrl() + '/assets/paypal-icon.png)'
+          }"
+        ></div>
+      </div>
+    </div>
+
+    @if (appMode == 'fiddle') {
+      <button
+      class="ressources-code-btn btn"
+      (click)="ressouresBtnClick()"
+    >
+      <span>Resources</span>
+    </button>
+    <div
+      class="layouts-list-container"
+      [ngClass]="{ shown: isLayoutsListShown, hidden: !isLayoutsListShown }"
+    >
+      <button class="layouts-btn btn" (click)="toggleLayoutsList()">
+        <span>Layouts</span> <i class="fa fa-sort-desc" aria-hidden="true"></i
+        ><i class="fa fa-sort-asc" aria-hidden="true"></i>
+      </button>
+      <div class="layouts-list" #layoutsList>
+        <div
+          class="layout-1 layout"
+          #layout1
+          (click)="changeLayout(1)"
+          [ngClass]="{ active: layout === 1 }"
+        >
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
-          <!---->
-          <div class="layout-2 layout" #layout2 (click)="changeLayout(2)" [ngClass]="{'active':(layout === 2)}">
-            <div>
-              <div>
-              </div>
-              <div>
-              </div>
-              <div>
-              </div>
-            </div>
-            <div>
-            </div>
+          <div></div>
+        </div>
+        <!---->
+        <div
+          class="layout-2 layout"
+          #layout2
+          (click)="changeLayout(2)"
+          [ngClass]="{ active: layout === 2 }"
+        >
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
-          <!---->
-          <div class="layout-3 layout" #layout3 (click)="changeLayout(3)" [ngClass]="{'active':(layout === 3)}">
-            <div>
-              <div>
-              </div>
-              <div>
-              </div>
-              <div>
-              </div>
-            </div>
-            <div>
-            </div>
+          <div></div>
+        </div>
+        <!---->
+        <div
+          class="layout-3 layout"
+          #layout3
+          (click)="changeLayout(3)"
+          [ngClass]="{ active: layout === 3 }"
+        >
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
-          <!---->
-          <div class="layout-4 layout" #layout4 (click)="changeLayout(4)" [ngClass]="{'active':(layout === 4)}">
-            <div>
-              <div>
-              </div>
-              <div>
-              </div>
-              <div>
-              </div>
-            </div>
-            <div>
-            </div>
+          <div></div>
+        </div>
+        <!---->
+        <div
+          class="layout-4 layout"
+          #layout4
+          (click)="changeLayout(4)"
+          [ngClass]="{ active: layout === 4 }"
+        >
+          <div>
+            <div></div>
+            <div></div>
+            <div></div>
           </div>
+          <div></div>
         </div>
       </div>
-      <button class="share-code-btn btn" (click)="runCode('save')">
-        <span>Share</span>
-      </button>
-      <button class="share-code-btn btn" (click)="runCode()" *ngIf="appMode == 'fiddle'">
-        <span>Run</span>
-      </button>
+    </div>
+    }
+    
+    <button class="share-code-btn btn" (click)="runCode('save')">
+      <span>Share</span>
+    </button>
 
-      <button style="width:44px;" class="app-mode-btn btn" (click)="onAppModeClick()">
-        <span>{{appMode == 'pastebin' ? 'Fiddle' : appMode == 'fiddle' ? 'Paste' : ''}}</span>
-      </button>
-    </div>
-  </header>
-  <div class="main-container main-container-pastebin" [ngClass]="{'off':appMode == 'fiddle'}">
-    <div class="pastebin-component-container">
-      <app-pastebin (savecodemsg)="runCode('save')" #pastebinPart class="code-component"></app-pastebin>
-    </div>
+    @if (appMode == 'fiddle') {
+      <button
+      class="share-code-btn btn"
+      (click)="runCode()"
+    >
+      <span>Run</span>
+    </button>
+    }
+
+    <button
+      style="width: 44px"
+      class="app-mode-btn btn"
+      (click)="onAppModeClick()"
+    >
+      <span>{{
+        appMode == "pastebin" ? "Fiddle" : appMode == "fiddle" ? "Paste" : ""
+      }}</span>
+    </button>
   </div>
-  
-  <div class="main-container main-container-fiddle" [ngClass]="'layout-type-'+layout" #mainContainer [ngClass]="{'full-screen-iframe':isIframeFullScreen, 'off':appMode == 'pastebin'}">
-    <div id="code-parts-title-mobile">
-      <a #htmlMobileToggle (click)="toggleCodePart('html')" [ngClass]="{'active':showHtml}">HTML</a>
-      <a #cssMobileToggle (click)="toggleCodePart('css')" [ngClass]="{'active':showCss}">CSS</a>
-      <a #jsMobileToggle (click)="toggleCodePart('js')" [ngClass]="{'active':showJs}">JS</a>
-      <a #resultMobileToggle (click)="toggleCodePart('result')" [ngClass]="{'active':showResult}">Result</a>
-    </div>
-  
-    <div [attr.data-layout]="layout" class="codeparts-iframe-container" [ngClass]="{'no-result-mobile': !showResult, 'no-code-mobile': !showHtml && !showCss && !showJs, 'is-dark-mode':isFiddleThemeDark()}">
+</header>
+<div
+  class="main-container main-container-pastebin"
+  [ngClass]="{ off: appMode == 'fiddle' }"
+>
+  <div class="pastebin-component-container">
+    <app-pastebin
+      (savecodemsg)="runCode('save')"
+      #pastebinPart
+      class="code-component"
+    ></app-pastebin>
+  </div>
+</div>
 
-      <div [ngStyle]="{'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize')}" #codePartsArea class="codeparts-container" [ngClass]="{'hide-mobile': !showHtml && !showCss && !showJs}">
-
-            <div [ngStyle]="{'flex-basis': getLayoutInfos('htmlAsSplitAreaSize')}" class="code-component-container code-component-container-html" [ngClass]="{'hide-mobile': !showHtml, 'fullscreen': isHtmlFullScreen, 'vertical-title-mode':getVerticalModeState('html')}">
-              <div class="code-part-title">
-                <span>HTML</span>
-                <div class="code-part-title-btns-container">
-  
-                  <!--<a class="code-part-title-btn" (click)="prettifyCode('html')" [title]="'Prettify HTML code'">
-                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>-->
-  
-                  <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}">
-                    <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
-                  </a>
-  
-                  <a class="html-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(1, $event)" [title]="'Stretch HTML to half'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"><span>/2</span></i>
-                    <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('html')" class="fa fa-arrows-h" aria-hidden="true"><span>/2</span></i>
-                    <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('html')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
-                                                  <span></span>
-                    <span>2</span>
-                    </span>
-                  </a>
-  
-                  <a class="html-stretch-btn code-part-title-btn" (click)="stretchCodePart('html',1)" [title]="'Stretch HTML'" [ngStyle]="{'display': (isHtmlFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('html')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
-                    <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
-                  </a>
-  
-                  <a class="html-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('html')" [ngClass]="{'on':isHtmlFullScreen}" [title]="'Full screen HTML'">
-                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                  </a>
-                </div>
-              </div>
-              <app-html-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #htmlPart class="code-component"></app-html-part>
-            </div>
-            <div #htmlCssGutter class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('html-css')" (mousedown)="onGutterCustomMousedown($event,1)" (touchstart)="onGutterCustomMousedown($event,1)"></div>
-            
-            <div [ngStyle]="{'flex-basis': getLayoutInfos('cssAsSplitAreaSize')}" class="code-component-container code-component-container-css" [ngClass]="{'hide-mobile': !showCss, 'fullscreen': isCssFullScreen, 'vertical-title-mode':getVerticalModeState('css')}">
-              <div class="code-part-title">
-                <span>CSS</span>
-                <div class="code-part-title-btns-container">
-  
-                  <!--<a class="code-part-title-btn" (click)="prettifyCode('css')" [title]="'Prettify CSS code'">
-                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>-->
-  
-                  <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}">
-                    <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
-                  </a>
-  
-                  <a class="css-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(2, $event)" [title]="'Stretch CSS to half'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"><span>/2</span></i>
-                    <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('css')" class="fa fa-arrows-h" aria-hidden="true"><span>/2</span></i>
-                    <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('css')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true">
-                                                  <span></span>
-                    <span>2</span>
-                    </span>
-                  </a>
-  
-                  <a class="css-stretch-btn code-part-title-btn" (click)="stretchCodePart('css',2)" [title]="'Stretch CSS'" [ngStyle]="{'display': (isCssFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('css')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
-                    <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
-                  </a>
-  
-                  <a class="css-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('css')" [ngClass]="{'on':isCssFullScreen}" [title]="'Full screen CSS'">
-                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                  </a>
-                </div>
-              </div>
-              <app-css-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #cssPart class="code-component"></app-css-part>
-            </div>
-            <div class="code-part-gutter gutter" [ngStyle]="getCodePartGutterStyle('css-js')" (mousedown)="onGutterCustomMousedown($event,2)" (touchstart)="onGutterCustomMousedown($event,2)"></div>
-            
-            <div [ngStyle]="{'flex-basis': getLayoutInfos('jsAsSplitAreaSize')}" class="code-component-container code-component-container-js" [ngClass]="{'hide-mobile': !showJs, 'fullscreen': isJsFullScreen, 'vertical-title-mode':getVerticalModeState('js')}">
-              <div class="code-part-title">
-                <span>JAVASCRIPT</span>
-                <div class="code-part-title-btns-container">
-  
-                  <!--<a class="code-part-title-btn" (click)="prettifyCode('js')" [title]="'Prettify JavaScript code'">
-                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
-                  </a>-->
-  
-                  <a class="code-part-title-btn" (click)="resetCodePartsSize()" [title]="'Reset sizes'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}">
-                    <span><i class="fa fa-bars" [ngClass]="{'vertical': (layout == 2 || layout == 4)}" aria-hidden="true"></i></span>
-                  </a>
-  
-                  <a class="js-half-stretch-btn code-part-title-btn" (click)="halfStretchCodePart(3, $event)" [title]="'Stretch JS to half'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"><span>/2</span></i>
-                    <i *ngIf="(layout == 2 || layout == 4) && !getVerticalModeState('js')" class="fa fa-arrows-h" aria-hidden="true"><span>/2</span></i>
-                    <span *ngIf="(layout == 2 || layout == 4) && getVerticalModeState('js')" class="fa fa-arrows-h fa-arrows-h-vertical" aria-hidden="true"><span></span>
-                    <span>2</span>
-                    </span>
-                  </a>
-  
-                  <a class="js-stretch-btn code-part-title-btn" (click)="stretchCodePart('js', 3)" [title]="'Stretch JAVASCRIPT'" [ngStyle]="{'display': (isJsFullScreen ? 'none' : '')}" [ngClass]="{'vertical-title-mode':getVerticalModeState('js')}">
-                    <i *ngIf="layout == 1 || layout == 3" class="fa fa-arrows-v" aria-hidden="true"></i>
-                    <i *ngIf="layout == 2 || layout == 4" class="fa fa-arrows-h" aria-hidden="true"></i>
-                  </a>
-  
-                  <a class="js-fullscreen-btn code-part-title-btn" (click)="toggleFullScreenMode('js')" [ngClass]="{'on':isJsFullScreen}" [title]="'Full screen JS'">
-                    <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                  </a>
-                </div>
-              </div>
-              <app-js-part (runcodemsg)="runCode()" (savecodemsg)="runCode('save')" #jsPart class="code-component"></app-js-part>
-            </div>
-      </div>
-
-      <div class="main-container-gutter gutter" [ngStyle]="getCodePartGutterStyle('main-container')" (mousedown)="onGutterCustomMousedown($event, 3)" (touchstart)="onGutterCustomMousedown($event,3)"></div>
-      
-      <div style="position:relative;" class="as-split-area-iframe" [ngClass]="{'hide-mobile': !showResult, 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}">
-        <div #emptyArea1 class="empty-area empty-area-1" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(1)}">
-        </div>
-        <div #customGutter1 class="as-split-gutter-custom gutter" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':(layout == 2) || (layout == 4)}" (mousedown)="onGutterCustomMousedown($event,4)" (touchstart)="onGutterCustomMousedown($event,4)">
-          <div class="as-split-gutter-icon-custom"></div>
-        </div>
-        <div class="iframe-overlay" [ngStyle]="{'display' : showIframeOverlay ? '' : 'none' }">
-          <div class="fiddle-size fiddle-size-hack">
-            <span class="width">{{iframeWidth}}</span>
-            <span class="x">x</span>
-            <span class="height">{{iframeHeight}}</span>
-          </div>
-        </div>
-        <div class="fullscreen-iframe-header" [ngStyle]="getIframeOrHeaderStyleObject('header')">
-          <button class="fullscreen-iframe-btn btn fullscreen-iframe-btn-secondary" (click)="toggleIframeFullscreen()" [title]="'Turn off fullscreen view'">
-            <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
-          </button>
-        </div>
-        <div class="iframe-area" [ngStyle]="getIframeOrHeaderStyleObject('iframe')">
-          <div class="iframe-overlay-for-drop" [ngStyle]="{'display': (isCustomGutter1_dragging || isCustomGutter2_dragging) ? 'block' : (isIframeFullScreen ? 'none':'')}"></div>
-          <app-iframe-part #iframePart [ngClass]="{'hide-mobile': !showResult, 'layout-type-1': (layout == 1),       'layout-type-2': (layout == 2), 'layout-type-3': (layout == 3), 'layout-type-4': (layout == 4)}" (hideloader)="onIframePartHideLoader()" (showloader)="onIframePartShowLoader()" (isConsoleOnUpdate)="isConsoleOnUpdate($event)"></app-iframe-part>
-        </div>
-        <div class="as-split-gutter-custom gutter" [ngClass]="{'is-dark-mode':isFiddleThemeDark(), 'is-vertical':(layout == 1) || (layout == 3), 'is-horizontal':((layout == 2) || (layout == 4))}" (mousedown)="onGutterCustomMousedown($event,5)" (touchstart)="onGutterCustomMousedown($event,5)" #customGutter2>
-          <div class="as-split-gutter-icon-custom"></div>
-        </div>
-        <div #emptyArea2 class="empty-area empty-area-2" [ngClass]="{'is-dark-mode':isFiddleThemeDark()}" [ngStyle]="{'flex':'0 0 '+getEmptyAreaSize(2)}">
-        </div>
-      </div>
-
-    </div>
-  
+<div
+  class="main-container main-container-fiddle"
+  [ngClass]="'layout-type-' + layout"
+  #mainContainer
+  [ngClass]="{
+    'full-screen-iframe': isIframeFullScreen,
+    off: appMode == 'pastebin'
+  }"
+>
+  <div id="code-parts-title-mobile">
+    <a
+      #htmlMobileToggle
+      (click)="toggleCodePart('html')"
+      [ngClass]="{ active: showHtml }"
+      >HTML</a
+    >
+    <a
+      #cssMobileToggle
+      (click)="toggleCodePart('css')"
+      [ngClass]="{ active: showCss }"
+      >CSS</a
+    >
+    <a
+      #jsMobileToggle
+      (click)="toggleCodePart('js')"
+      [ngClass]="{ active: showJs }"
+      >JS</a
+    >
+    <a
+      #resultMobileToggle
+      (click)="toggleCodePart('result')"
+      [ngClass]="{ active: showResult }"
+      >Result</a
+    >
   </div>
 
+  <div
+    [attr.data-layout]="layout"
+    class="codeparts-iframe-container"
+    [ngClass]="{
+      'no-result-mobile': !showResult,
+      'no-code-mobile': !showHtml && !showCss && !showJs,
+      'is-dark-mode': isFiddleThemeDark()
+    }"
+  >
+    <div
+      [ngStyle]="{ 'flex-basis': getLayoutInfos('codePartsAsSplitAreaSize') }"
+      #codePartsArea
+      class="codeparts-container"
+      [ngClass]="{ 'hide-mobile': !showHtml && !showCss && !showJs }"
+    >
+      <div
+        [ngStyle]="{ 'flex-basis': getLayoutInfos('htmlAsSplitAreaSize') }"
+        class="code-component-container code-component-container-html"
+        [ngClass]="{
+          'hide-mobile': !showHtml,
+          fullscreen: isHtmlFullScreen,
+          'vertical-title-mode': getVerticalModeState('html')
+        }"
+      >
+        <div class="code-part-title">
+          <span>HTML</span>
+          <div class="code-part-title-btns-container">
+            <!--<a class="code-part-title-btn" (click)="prettifyCode('html')" [title]="'Prettify HTML code'">
+                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
+                  </a>-->
 
-  <app-modal #modal>
-    <div class="modal-header">
-      <button class="modal-validate-btn btn" (click)="validateRessources()"><i class="fa fa-check" aria-hidden="true"></i></button>
-      <h3>Fiddle resources</h3>
-      <button class="modal-close-btn" (click)="hideModal()"><span>X</span></button>
-    </div>
-    <div class="modal-body">
-      <app-ressources #ressources (hidemodal)="hideModal()" (validate)="onRessourcesValidate($event)"></app-ressources>
-    </div>
-    <div class="modal-footer" style="padding:0px;">
-    </div>
-  </app-modal>
+            <a
+              class="code-part-title-btn"
+              (click)="resetCodePartsSize()"
+              [title]="'Reset sizes'"
+              [ngStyle]="{ display: isHtmlFullScreen ? 'none' : '' }"
+            >
+              <span
+                ><i
+                  class="fa fa-bars"
+                  [ngClass]="{ vertical: layout == 2 || layout == 4 }"
+                  aria-hidden="true"
+                ></i
+              ></span>
+            </a>
 
-  <app-modal #modalHistory>
-    <div class="modal-header">
-      <h3>Fiddles history</h3>
-      <button class="modal-close-btn" (click)="hideHistoryModal()"><span>X</span></button>
+            <a
+              class="html-half-stretch-btn code-part-title-btn"
+              (click)="halfStretchCodePart(1, $event)"
+              [title]="'Stretch HTML to half'"
+              [ngStyle]="{ display: isHtmlFullScreen ? 'none' : '' }"
+              [ngClass]="{
+                'vertical-title-mode': getVerticalModeState('html')
+              }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <i
+                *ngIf="
+                  (layout == 2 || layout == 4) && !getVerticalModeState('html')
+                "
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <span
+                *ngIf="
+                  (layout == 2 || layout == 4) && getVerticalModeState('html')
+                "
+                class="fa fa-arrows-h fa-arrows-h-vertical"
+                aria-hidden="true"
+              >
+                <span></span>
+                <span>2</span>
+              </span>
+            </a>
+
+            <a
+              class="html-stretch-btn code-part-title-btn"
+              (click)="stretchCodePart('html', 1)"
+              [title]="'Stretch HTML'"
+              [ngStyle]="{ display: isHtmlFullScreen ? 'none' : '' }"
+              [ngClass]="{
+                'vertical-title-mode': getVerticalModeState('html')
+              }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+              ></i>
+              <i
+                *ngIf="layout == 2 || layout == 4"
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+              ></i>
+            </a>
+
+            <a
+              class="html-fullscreen-btn code-part-title-btn"
+              (click)="toggleFullScreenMode('html')"
+              [ngClass]="{ on: isHtmlFullScreen }"
+              [title]="'Full screen HTML'"
+            >
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <app-html-part
+          (runcodemsg)="runCode()"
+          (savecodemsg)="runCode('save')"
+          #htmlPart
+          class="code-component"
+        ></app-html-part>
+      </div>
+      <div
+        #htmlCssGutter
+        class="code-part-gutter gutter"
+        [ngStyle]="getCodePartGutterStyle('html-css')"
+        (mousedown)="onGutterCustomMousedown($event, 1)"
+        (touchstart)="onGutterCustomMousedown($event, 1)"
+      ></div>
+
+      <div
+        [ngStyle]="{ 'flex-basis': getLayoutInfos('cssAsSplitAreaSize') }"
+        class="code-component-container code-component-container-css"
+        [ngClass]="{
+          'hide-mobile': !showCss,
+          fullscreen: isCssFullScreen,
+          'vertical-title-mode': getVerticalModeState('css')
+        }"
+      >
+        <div class="code-part-title">
+          <span>CSS</span>
+          <div class="code-part-title-btns-container">
+            <!--<a class="code-part-title-btn" (click)="prettifyCode('css')" [title]="'Prettify CSS code'">
+                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
+                  </a>-->
+
+            <a
+              class="code-part-title-btn"
+              (click)="resetCodePartsSize()"
+              [title]="'Reset sizes'"
+              [ngStyle]="{ display: isCssFullScreen ? 'none' : '' }"
+            >
+              <span
+                ><i
+                  class="fa fa-bars"
+                  [ngClass]="{ vertical: layout == 2 || layout == 4 }"
+                  aria-hidden="true"
+                ></i
+              ></span>
+            </a>
+
+            <a
+              class="css-half-stretch-btn code-part-title-btn"
+              (click)="halfStretchCodePart(2, $event)"
+              [title]="'Stretch CSS to half'"
+              [ngStyle]="{ display: isCssFullScreen ? 'none' : '' }"
+              [ngClass]="{ 'vertical-title-mode': getVerticalModeState('css') }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <i
+                *ngIf="
+                  (layout == 2 || layout == 4) && !getVerticalModeState('css')
+                "
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <span
+                *ngIf="
+                  (layout == 2 || layout == 4) && getVerticalModeState('css')
+                "
+                class="fa fa-arrows-h fa-arrows-h-vertical"
+                aria-hidden="true"
+              >
+                <span></span>
+                <span>2</span>
+              </span>
+            </a>
+
+            <a
+              class="css-stretch-btn code-part-title-btn"
+              (click)="stretchCodePart('css', 2)"
+              [title]="'Stretch CSS'"
+              [ngStyle]="{ display: isCssFullScreen ? 'none' : '' }"
+              [ngClass]="{ 'vertical-title-mode': getVerticalModeState('css') }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+              ></i>
+              <i
+                *ngIf="layout == 2 || layout == 4"
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+              ></i>
+            </a>
+
+            <a
+              class="css-fullscreen-btn code-part-title-btn"
+              (click)="toggleFullScreenMode('css')"
+              [ngClass]="{ on: isCssFullScreen }"
+              [title]="'Full screen CSS'"
+            >
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <app-css-part
+          (runcodemsg)="runCode()"
+          (savecodemsg)="runCode('save')"
+          #cssPart
+          class="code-component"
+        ></app-css-part>
+      </div>
+      <div
+        class="code-part-gutter gutter"
+        [ngStyle]="getCodePartGutterStyle('css-js')"
+        (mousedown)="onGutterCustomMousedown($event, 2)"
+        (touchstart)="onGutterCustomMousedown($event, 2)"
+      ></div>
+
+      <div
+        [ngStyle]="{ 'flex-basis': getLayoutInfos('jsAsSplitAreaSize') }"
+        class="code-component-container code-component-container-js"
+        [ngClass]="{
+          'hide-mobile': !showJs,
+          fullscreen: isJsFullScreen,
+          'vertical-title-mode': getVerticalModeState('js')
+        }"
+      >
+        <div class="code-part-title">
+          <span>JAVASCRIPT</span>
+          <div class="code-part-title-btns-container">
+            <!--<a class="code-part-title-btn" (click)="prettifyCode('js')" [title]="'Prettify JavaScript code'">
+                    <span><i class="fa fa-indent" aria-hidden="true"></i></span>
+                  </a>-->
+
+            <a
+              class="code-part-title-btn"
+              (click)="resetCodePartsSize()"
+              [title]="'Reset sizes'"
+              [ngStyle]="{ display: isJsFullScreen ? 'none' : '' }"
+            >
+              <span
+                ><i
+                  class="fa fa-bars"
+                  [ngClass]="{ vertical: layout == 2 || layout == 4 }"
+                  aria-hidden="true"
+                ></i
+              ></span>
+            </a>
+
+            <a
+              class="js-half-stretch-btn code-part-title-btn"
+              (click)="halfStretchCodePart(3, $event)"
+              [title]="'Stretch JS to half'"
+              [ngStyle]="{ display: isJsFullScreen ? 'none' : '' }"
+              [ngClass]="{ 'vertical-title-mode': getVerticalModeState('js') }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <i
+                *ngIf="
+                  (layout == 2 || layout == 4) && !getVerticalModeState('js')
+                "
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+                ><span>/2</span></i
+              >
+              <span
+                *ngIf="
+                  (layout == 2 || layout == 4) && getVerticalModeState('js')
+                "
+                class="fa fa-arrows-h fa-arrows-h-vertical"
+                aria-hidden="true"
+                ><span></span>
+                <span>2</span>
+              </span>
+            </a>
+
+            <a
+              class="js-stretch-btn code-part-title-btn"
+              (click)="stretchCodePart('js', 3)"
+              [title]="'Stretch JAVASCRIPT'"
+              [ngStyle]="{ display: isJsFullScreen ? 'none' : '' }"
+              [ngClass]="{ 'vertical-title-mode': getVerticalModeState('js') }"
+            >
+              <i
+                *ngIf="layout == 1 || layout == 3"
+                class="fa fa-arrows-v"
+                aria-hidden="true"
+              ></i>
+              <i
+                *ngIf="layout == 2 || layout == 4"
+                class="fa fa-arrows-h"
+                aria-hidden="true"
+              ></i>
+            </a>
+
+            <a
+              class="js-fullscreen-btn code-part-title-btn"
+              (click)="toggleFullScreenMode('js')"
+              [ngClass]="{ on: isJsFullScreen }"
+              [title]="'Full screen JS'"
+            >
+              <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </a>
+          </div>
+        </div>
+        <app-js-part
+          (runcodemsg)="runCode()"
+          (savecodemsg)="runCode('save')"
+          #jsPart
+          class="code-component"
+        ></app-js-part>
+      </div>
     </div>
-    <div class="modal-body">
-      <app-fiddles-history #appFiddlesHistory></app-fiddles-history>
+
+    <div
+      class="main-container-gutter gutter"
+      [ngStyle]="getCodePartGutterStyle('main-container')"
+      (mousedown)="onGutterCustomMousedown($event, 3)"
+      (touchstart)="onGutterCustomMousedown($event, 3)"
+    ></div>
+
+    <div
+      style="position: relative"
+      class="as-split-area-iframe"
+      [ngClass]="{
+        'hide-mobile': !showResult,
+        'is-vertical': layout == 1 || layout == 3,
+        'is-horizontal': layout == 2 || layout == 4
+      }"
+    >
+      <div
+        #emptyArea1
+        class="empty-area empty-area-1"
+        [ngClass]="{ 'is-dark-mode': isFiddleThemeDark() }"
+        [ngStyle]="{ flex: '0 0 ' + getEmptyAreaSize(1) }"
+      ></div>
+      <div
+        #customGutter1
+        class="as-split-gutter-custom gutter"
+        [ngClass]="{
+          'is-dark-mode': isFiddleThemeDark(),
+          'is-vertical': layout == 1 || layout == 3,
+          'is-horizontal': layout == 2 || layout == 4
+        }"
+        (mousedown)="onGutterCustomMousedown($event, 4)"
+        (touchstart)="onGutterCustomMousedown($event, 4)"
+      >
+        <div class="as-split-gutter-icon-custom"></div>
+      </div>
+      <div
+        class="iframe-overlay"
+        [ngStyle]="{ display: showIframeOverlay ? '' : 'none' }"
+      >
+        <div class="fiddle-size fiddle-size-hack">
+          <span class="width">{{ iframeWidth }}</span>
+          <span class="x">x</span>
+          <span class="height">{{ iframeHeight }}</span>
+        </div>
+      </div>
+      <div
+        class="fullscreen-iframe-header"
+        [ngStyle]="getIframeOrHeaderStyleObject('header')"
+      >
+        <button
+          class="fullscreen-iframe-btn btn fullscreen-iframe-btn-secondary"
+          (click)="toggleIframeFullscreen()"
+          [title]="'Turn off fullscreen view'"
+        >
+          <span><i class="fa fa-arrows-alt" aria-hidden="true"></i></span>
+        </button>
+      </div>
+      <div
+        class="iframe-area"
+        [ngStyle]="getIframeOrHeaderStyleObject('iframe')"
+      >
+        <div
+          class="iframe-overlay-for-drop"
+          [ngStyle]="{
+            display:
+              isCustomGutter1_dragging || isCustomGutter2_dragging
+                ? 'block'
+                : isIframeFullScreen
+                ? 'none'
+                : ''
+          }"
+        ></div>
+        <app-iframe-part
+          #iframePart
+          [ngClass]="{
+            'hide-mobile': !showResult,
+            'layout-type-1': layout == 1,
+            'layout-type-2': layout == 2,
+            'layout-type-3': layout == 3,
+            'layout-type-4': layout == 4
+          }"
+          (hideloader)="onIframePartHideLoader()"
+          (showloader)="onIframePartShowLoader()"
+          (isConsoleOnUpdate)="isConsoleOnUpdate($event)"
+        ></app-iframe-part>
+      </div>
+      <div
+        class="as-split-gutter-custom gutter"
+        [ngClass]="{
+          'is-dark-mode': isFiddleThemeDark(),
+          'is-vertical': layout == 1 || layout == 3,
+          'is-horizontal': layout == 2 || layout == 4
+        }"
+        (mousedown)="onGutterCustomMousedown($event, 5)"
+        (touchstart)="onGutterCustomMousedown($event, 5)"
+        #customGutter2
+      >
+        <div class="as-split-gutter-icon-custom"></div>
+      </div>
+      <div
+        #emptyArea2
+        class="empty-area empty-area-2"
+        [ngClass]="{ 'is-dark-mode': isFiddleThemeDark() }"
+        [ngStyle]="{ flex: '0 0 ' + getEmptyAreaSize(2) }"
+      ></div>
     </div>
-    <div class="modal-footer" style="padding:0px;">
-    </div>
-  </app-modal>
+  </div>
+</div>
+
+<app-modal #modal>
+  <div class="modal-header">
+    <button class="modal-validate-btn btn" (click)="validateRessources()">
+      <i class="fa fa-check" aria-hidden="true"></i>
+    </button>
+    <h3>Fiddle resources</h3>
+    <button class="modal-close-btn" (click)="hideModal()">
+      <span>X</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-ressources
+      #ressources
+      (hidemodal)="hideModal()"
+      (validate)="onRessourcesValidate($event)"
+    ></app-ressources>
+  </div>
+  <div class="modal-footer" style="padding: 0px"></div>
+</app-modal>
+
+<app-modal #modalHistory>
+  <div class="modal-header">
+    <h3>Fiddles history</h3>
+    <button class="modal-close-btn" (click)="hideHistoryModal()">
+      <span>X</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <app-fiddles-history #appFiddlesHistory></app-fiddles-history>
+  </div>
+  <div class="modal-footer" style="padding: 0px"></div>
+</app-modal>

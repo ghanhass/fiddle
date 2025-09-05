@@ -6,6 +6,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  ElementRef,
 } from '@angular/core';
 import { MainService } from '../main.service';
 import { CodeEditor } from '@acrodata/code-editor';
@@ -29,7 +30,7 @@ export class HtmlPartComponent implements OnInit {
   @Output() runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output() savecodemsg: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild('codeMirrorEditor') codeMirrorEditor: CodeEditor;
+  @ViewChild('codeMirrorEditor') codeMirrorEditor: CodeEditor = new CodeEditor(new ElementRef(document.createElement("div")));
 
   constructor(private mainService: MainService) {}
 
@@ -37,18 +38,18 @@ export class HtmlPartComponent implements OnInit {
     this.code = this.mainService.htmlCode;
   }
 
-  onCodeChanged(value) {
+  onCodeChanged(value: string) {
     let self = this;
     //console.log('HTML onCodeChanged CODE', value);
     this.mainService.htmlCode = value;
     this.mainService.setCheckBeforeUnloadListener();
   }
 
-  onEditorKeyDown(event) {
+  onEditorKeyDown(event: any) {
     this.mainService.onEditorKeyDown(event, this);
   }
 
-  onEditorKeyUp(event) {
+  onEditorKeyUp(event: any) {
     this.mainService.onEditorKeyUp(event, this);
   }
 }

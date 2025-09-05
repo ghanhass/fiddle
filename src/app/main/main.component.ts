@@ -1,13 +1,12 @@
-import { Component, ElementRef, HostListener, ViewChild, AfterViewInit,OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, AfterViewInit,OnInit, inject } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ModalComponent } from '../modal/modal.component';
 import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
-import { FiddleTheme } from "src/app/fiddle-theme";
 import { FiddleData } from '../fiddle-data';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
@@ -16,6 +15,8 @@ import { FiddlesHistoryComponent } from '../fiddles-history/fiddles-history.comp
 import { PastebinComponent } from '../pastebin/pastebin.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RessourcesService } from '../ressources.service';
+import { FiddleTheme } from '../fiddle-theme';
 
 
 interface PreviousLayout{
@@ -36,7 +37,7 @@ interface CodePartStretchState{
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
-  imports:[HtmlPartComponent, CssPartComponent, JsPartComponent, IframePartComponent, CommonModule, FormsModule, LoaderComponent, PastebinComponent, ModalComponent, RessourcesComponent, FiddlesHistoryComponent]
+  imports:[CommonModule, HtmlPartComponent, CssPartComponent, JsPartComponent, IframePartComponent, FormsModule, LoaderComponent, PastebinComponent, ModalComponent, RessourcesComponent, FiddlesHistoryComponent]
 })
 export class MainComponent implements AfterViewInit {
 
@@ -58,7 +59,16 @@ onAppModeClick() {
 
   windowHeight: number = window.innerHeight;
   windowWidth: number = window.innerWidth;
-  previousLayout: PreviousLayout;
+
+
+  previousLayout: PreviousLayout|undefined = {
+    layout: 1,
+    htmlSize: 0,
+    cssSize: 0,
+    jsSize: 0,
+    mainContainerSize: 0
+  };
+
   codePartStretchState: CodePartStretchState = {
     state: false,
     index: -1
@@ -66,34 +76,32 @@ onAppModeClick() {
 
   appMode: string;
 
+  private mainService = inject(MainService);
+  private toastrService = inject(ToastrService);
+  private router = inject(Router);
+  private ressourcesService = inject(RessourcesService);
+
+  @ViewChild("mainContainer") mainContainer:ElementRef = new ElementRef(undefined);
+
+  @ViewChild("codePartsArea") codePartsArea:ElementRef = new ElementRef(undefined);
+
+  @ViewChild("htmlPart") htmlPart:HtmlPartComponent = new HtmlPartComponent(this.mainService);
+  @ViewChild("cssPart") cssPart:CssPartComponent = new CssPartComponent(this.mainService);
+  @ViewChild("jsPart") jsPart:JsPartComponent = new JsPartComponent(this.mainService);
+  @ViewChild("pastebinPart") pastebinPart:PastebinComponent = new PastebinComponent(this.mainService);
 
 
+  @ViewChild("iframePart") iframePart:IframePartComponent = new IframePartComponent(this.router, this.toastrService);
+  @ViewChild("layout1") layout1: ElementRef = new ElementRef(undefined);
+  @ViewChild("layout2") layout2: ElementRef = new ElementRef(undefined);
+  @ViewChild("layout3") layout3: ElementRef = new ElementRef(undefined);
+  @ViewChild("layoutsList") layoutsList: ElementRef = new ElementRef(undefined);
 
-
-  @ViewChild("mainContainer") mainContainer:ElementRef;
-
-  @ViewChild("codePartsArea") codePartsArea:ElementRef;
-
-  @ViewChild("htmlPart") htmlPart:HtmlPartComponent;
-  @ViewChild("cssPart") cssPart:CssPartComponent;
-  @ViewChild("jsPart") jsPart:JsPartComponent;
-  @ViewChild("pastebinPart") pastebinPart:PastebinComponent;
-
-
-  @ViewChild("iframePart") iframePart:IframePartComponent;
-  @ViewChild("layout1") layout1: ElementRef;
-  @ViewChild("layout2") layout2: ElementRef;
-  @ViewChild("layout3") layout3: ElementRef;
-  @ViewChild("layoutsList") layoutsList: ElementRef;
-
-  @ViewChild("modal") modal: ModalComponent;
-  @ViewChild("modalHistory") modalHistory: ModalComponent;
+  @ViewChild("modal") modal: ModalComponent = new ModalComponent();
+  @ViewChild("modalHistory") modalHistory: ModalComponent = new ModalComponent();
   
-  @ViewChild("ressources") ressourcesComponent: RessourcesComponent;
-  @ViewChild("loader")loader:LoaderComponent;
-
-  cssCodePartTitle: HTMLElement;
-  jsCodePartTitle: HTMLElement;
+  @ViewChild("ressources") ressourcesComponent: RessourcesComponent = new RessourcesComponent(this.ressourcesService);
+  @ViewChild("loader")loader:LoaderComponent = new LoaderComponent();
 
   isLayoutsListShown: boolean = false;
 
@@ -109,11 +117,9 @@ onAppModeClick() {
   mainContainerWidth: number = 0;
   mainContainerHeight: number = 0;
 
-  iframeWidth: number;
-  iframeHeight: number;
+  iframeWidth: number = 0;
+  iframeHeight: number = 0;
   IsAfterViewInitReached: boolean = false;
-
-  codePartsSizesFix;
 
   emptyArea_1_Size:number = 0;
   emptyArea_2_Size:number = 0;
@@ -132,25 +138,23 @@ onAppModeClick() {
   mouseDownXorY: number = 0;
 
 
-  @ViewChild("customGutter1")customGutter1:ElementRef;
-  @ViewChild("customGutter2")customGutter2:ElementRef;
+  @ViewChild("customGutter1")customGutter1:ElementRef = new ElementRef(undefined);
+  @ViewChild("customGutter2")customGutter2:ElementRef = new ElementRef(undefined);;
 
-  @ViewChild("htmlCssGutter")htmlCssGutter:ElementRef;
+  @ViewChild("htmlCssGutter")htmlCssGutter:ElementRef = new ElementRef(undefined);;
 
-  @ViewChild("emptyArea1")emptyArea1:ElementRef;
-  @ViewChild("emptyArea2")emptyArea2:ElementRef;
+  @ViewChild("emptyArea1")emptyArea1:ElementRef = new ElementRef(undefined);;
+  @ViewChild("emptyArea2")emptyArea2:ElementRef = new ElementRef(undefined);;
 
   isFiddleWidthInputDisabled:boolean = false;
   isFiddleHeightInputDisabled: boolean = false;
 
 
-  codeParthHalfStretchFirstIndex: number = 0;
+  codeParthHalfStretchFirstIndex: number|undefined = 0;
   isConsoleOn: boolean = false;
-  @ViewChild("appFiddlesHistory") appFiddlesHistory: FiddlesHistoryComponent;
+  @ViewChild("appFiddlesHistory") appFiddlesHistory: FiddlesHistoryComponent = new FiddlesHistoryComponent(this.mainService,this.router);
 
-  constructor(private mainService: MainService,
-    private activatedRoute: ActivatedRoute,
-    private toastrService: ToastrService,
+  constructor(private activatedRoute: ActivatedRoute,
     private ref: ElementRef) { 
       this.appMode = this.mainService.appMode;
   }
@@ -178,8 +182,8 @@ onAppModeClick() {
     this.mainContainerHeight = mainContainerEl.offsetHeight;
      
     this.activatedRoute.paramMap.subscribe((params)=>{
-      let currentFiddleId = +params.get("id");
-      if(this.modalHistory.isShown){
+      let currentFiddleId = +params.get("id")!;
+      if(this.modalHistory.isShown()){
         this.hideHistoryModal();
       }
       //data retrieval
@@ -227,22 +231,22 @@ onAppModeClick() {
           console.log("//retrieve data from backend");
           this.loader.showLoader();
           this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
-            //console.log("getFiddle res = ", res);
+            console.log("getFiddle res = ", res);
             if(res.status == "ok"){
               let fiddleData: FiddleData = res.fiddleData;
               //console.log("getFiddle obj = ", obj);
-              this.htmlPart.code = fiddleData.html;
-              this.cssPart.code = fiddleData.css;
-              this.jsPart.code = fiddleData.js;
-              this.pastebinPart.text = fiddleData.pastebintext;
-              this.fiddleTitle = fiddleData.title;
+              this.htmlPart.code = fiddleData.html!;
+              this.cssPart.code = fiddleData.css!;
+              this.jsPart.code = fiddleData.js!;
+              this.pastebinPart.text = fiddleData.pastebintext!;
+              this.fiddleTitle = fiddleData.title!;
               ////
-              this.mainService.jsCode = fiddleData.js;
-              this.mainService.htmlCode = fiddleData.html;
-              this.mainService.cssCode = fiddleData.css;
-              this.mainService.fiddleTitle = fiddleData.title;
-              this.mainService.iframeResizeValue = fiddleData.iframe_resize_value;
-              this.mainService.isMobileMode = fiddleData.is_mobile_mode;
+              this.mainService.jsCode = fiddleData.js!;
+              this.mainService.htmlCode = fiddleData.html!;
+              this.mainService.cssCode = fiddleData.css!;
+              this.mainService.fiddleTitle = fiddleData.title!;
+              this.mainService.iframeResizeValue = fiddleData.iframe_resize_value!;
+              this.mainService.isMobileMode = fiddleData.is_mobile_mode!;
               
               this.appMode = fiddleData.appmode || 'fiddle';
 
@@ -251,7 +255,7 @@ onAppModeClick() {
                 this.changeLayout(1);
 
                 //START mobile layout retrieval
-                let mobileLayoutArr = fiddleData.mobile_layout.split(':');
+                let mobileLayoutArr = fiddleData.mobile_layout?.split(':')!;
                 let mobileCodePart = mobileLayoutArr[0];
                 let mobileResult = mobileLayoutArr[1];
                 switch (true){
@@ -294,7 +298,7 @@ onAppModeClick() {
                 //END mobile layout retrieval
               }
               else{
-                this.changeLayout(fiddleData.layout, fiddleData);
+                this.changeLayout(fiddleData.layout!, fiddleData);
               }
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
@@ -359,7 +363,7 @@ onAppModeClick() {
     return isThemeDark;
   }
 
-  prettifyCode(type): void{
+  prettifyCode(type: any): void{
     
   }
 
@@ -372,7 +376,7 @@ onAppModeClick() {
     }
   }
 
-  getIframeOrHeaderStyleObject(param ){
+  getIframeOrHeaderStyleObject(param: string ){
     let iframeHeaderStyleObject = {
       'display': param == 'header' ? (this.isIframeFullScreen ? '':'none') : '',
       'background-color': this.mainService.selectedTheme.data.colors["editor.background"],
@@ -486,22 +490,22 @@ onAppModeClick() {
   getAndAdaptSavedCodePartsSizes(param: FiddleData){
     let savedLayout = param.layout; 
     
-    let savedCssCodePartSize = param.css_part_size; 
-    let savedJsCodePartSize = param.js_part_size; 
-    let savedHtmlCodePartSize = param.html_part_size; 
+    let savedCssCodePartSize = param.css_part_size!; 
+    let savedJsCodePartSize = param.js_part_size!; 
+    let savedHtmlCodePartSize = param.html_part_size!; 
     
-    let savedMainContainerWidth = param.main_container_width; 
-    let savedMainContainerHeight = param.main_container_height; 
-    let savedIframeResizeValue = param.iframe_resize_value;
+    let savedMainContainerWidth = param.main_container_width!; 
+    let savedMainContainerHeight = param.main_container_height!; 
+    let savedIframeResizeValue = param.iframe_resize_value!;
     
-    let savedMainContainerSize;
-    let savedMainContainerSize2; 
+    let savedMainContainerSize = 0;
+    let savedMainContainerSize2 = 0; 
 
     let savedCodePartsSize = param.code_parts_size;
 
     let mainContainerEl:HTMLElement = this.mainContainer.nativeElement;
-    let currentMainContainerSize;
-    let currentMainContainerSize2;
+    let currentMainContainerSize = 0;
+    let currentMainContainerSize2 = 0;
 
     let codePartsMinLimit = 350;
     
@@ -544,36 +548,28 @@ onAppModeClick() {
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize, "inner");
 
     /****************************************/
-    /*START readapt saved sizes to new window size*/
-    let ind;
-    if(savedLayout == 1 || savedLayout == 2){
-      sizes = [savedCodePartsSize, "*"];
-      ind = 0;
-    }
-    else if(savedLayout== 3 || savedLayout == 4){
-      sizes = ['*', savedCodePartsSize]; 
-      ind = 1;
-    }
+    /*START readapt saved outer sizes to new window size*/
+    sizes = [savedCodePartsSize];
 
     if(savedMainContainerSize > currentMainContainerSize2){//main container size is shrinked ?
       let coef = savedMainContainerSize2 / currentMainContainerSize2;
-      sizes[ind] = (sizes[ind] / coef) > codePartsMinLimit ? (sizes[ind] / coef) : codePartsMinLimit;
+      sizes[0] = (sizes[0] / coef) > codePartsMinLimit ? (sizes[0] / coef) : codePartsMinLimit;
     }
     else if(savedMainContainerSize2 < currentMainContainerSize2){//main container size got bigger ?
       let coef = currentMainContainerSize2 / savedMainContainerSize2;
-      sizes[ind] = sizes[ind] * coef;
+      sizes[0] = sizes[0] * coef;
     }
     this.reAdaptCodePartsSizes(sizes, currentMainContainerSize2, "outer");
-    this.finalCodePartSize = Math.floor(sizes[ind]);
+    this.finalCodePartSize = Math.floor(sizes[0]);
     /*END readapt saved sizes to new window size*/
   }
 
-  getLayoutInfos(name){
+  getLayoutInfos(name: string): string|number{
     let arr = ["htmlAsSplitAreaSize", "cssAsSplitAreaSize", "jsAsSplitAreaSize", "codePartsAsSplitAreaSize", "iframeAsSplitAreaSize"]
     if(arr.includes(name)){
       switch (true){
         case name == arr[0]:
-        return this.finalHtmlCodePartSize+"px";;
+        return this.finalHtmlCodePartSize+"px";
 
         case name == arr[1]:
         return this.finalCssCodePartSize+"px";
@@ -585,7 +581,10 @@ onAppModeClick() {
         return this.finalCodePartSize+"px";
 
         case name == arr[4]:
-        return "*"
+        return "*";
+
+        default:
+        return "0px";
       } 
     }
     else{
@@ -633,6 +632,9 @@ onAppModeClick() {
         
           case "iframeResizer":
           return "vertical";
+
+          default:
+          return "";
         }
         break;
       
@@ -679,6 +681,9 @@ onAppModeClick() {
         
           case "iframeResizer":
           return "horizontal";
+
+          default:
+          return "";
         }
         break;
       
@@ -725,6 +730,9 @@ onAppModeClick() {
         
           case "iframeResizer":
           return "vertical";
+
+          default:
+          return "";
         }
         break;
       
@@ -771,22 +779,20 @@ onAppModeClick() {
         
           case "iframeResizer":
           return "horizontal";
+
+          default:
+          return "";
         }
         break;
+
+        default:
+        return "0px";
       }
     }
   }
 
   toggleLayoutsList(){
-      let layout1Element: HTMLElement = this.layout1.nativeElement;
-      if(layout1Element){
-        let layout1Height = layout1Element.offsetHeight;
-        let layoutsListElement: HTMLElement = this.layoutsList.nativeElement;
-        if(layoutsListElement){
-          this.isLayoutsListShown = !this.isLayoutsListShown;
-        }
-        //console.log("layout1Element.offsetHeight = ", layout1Element.offsetHeight)
-      }
+    this.isLayoutsListShown = !this.isLayoutsListShown;
   }
 
   changeTheme(){
@@ -877,7 +883,7 @@ onAppModeClick() {
   }
 
   halfStretchCodePart(newIndex: number, event:MouseEvent){
-    let currentCodePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title");
+    let currentCodePartTitle:HTMLElement = (event.target as HTMLElement).closest(".code-part-title")!;
 
     document.querySelectorAll(".code-part-title [class*='half-stretch-btn']").forEach((el)=>{
       el.classList.add("clinging");
@@ -919,7 +925,7 @@ onAppModeClick() {
       this.codePartStretchState.state = false;
       this.codePartStretchState.index = -1;
 
-      let firstMarkedCodePart: HTMLElement = (this.codePartsArea.nativeElement as HTMLElement).querySelector(".half-stretch-mark");
+      let firstMarkedCodePart: HTMLElement = (this.codePartsArea.nativeElement as HTMLElement).querySelector(".half-stretch-mark")!;
       firstMarkedCodePart.classList.remove("half-stretch-mark");
       firstMarkedCodePart.classList.add("marking-half-stretched-code-part");
       currentCodePartTitle.classList.add("marking-half-stretched-code-part");
@@ -935,7 +941,7 @@ onAppModeClick() {
     }
   }
 
-  stretchCodePart(codePartType, index?){
+  stretchCodePart(codePartType: string, index:number){
     if(this.IsAfterViewInitReached){
       let mainContainerEl = this.mainContainer.nativeElement as HTMLElement;
       let mainContainerSize = this.layout == 1 || this.layout == 3 ? mainContainerEl.offsetHeight : mainContainerEl.offsetWidth;
@@ -944,7 +950,7 @@ onAppModeClick() {
       if(this.codePartStretchState.state && index == this.codePartStretchState.index){//codepart already stretched ? resume last codepart size
           this.codePartStretchState.state = false;
           this.codePartStretchState.index = -1;
-          sizes = [this.previousLayout.htmlSize, this.previousLayout.cssSize, this.previousLayout.jsSize];
+          sizes = [this.previousLayout?.htmlSize, this.previousLayout?.cssSize, this.previousLayout?.jsSize];
           //console.log("sizes before = ", sizes);
           this.reAdaptCodePartsSizes(sizes, mainContainerSize, "inner");
           //console.log("sizes after = ", sizes);
@@ -1018,7 +1024,7 @@ onAppModeClick() {
   }
   
   @HostListener("document:mouseup", ["$event"])
-  onDocumentMouseup(event: MouseEvent ){
+  onDocumentMouseup(event: MouseEvent | TouchEvent){
     if(this.isMainContainerGutter_dragging){
       (this.ref.nativeElement as HTMLElement).classList.remove("no-selection");
       
@@ -1062,19 +1068,18 @@ onAppModeClick() {
 
   @HostListener("document:click", ["$event"])
   onDocumentClick(event: MouseEvent){
-    let evTarget = event.target as HTMLElement;
+    /*let evTarget = event.target as HTMLElement;
     if (evTarget.parentElement){
-
-      let bool = !this.getDOMClosest(evTarget, ".layouts-list-container");
+      let bool = evTarget.closest(".layouts-list-container");
 
       if(bool){
         this.isLayoutsListShown = false;
       }
-    }
+    }*/
   }
 
   @HostListener("document:touchend", ["$event"])
-  onDocumentTouchend(event: MouseEvent){
+  onDocumentTouchend(event: MouseEvent|TouchEvent){
     this.onDocumentMouseup(event);
   }
 
@@ -1089,7 +1094,7 @@ onAppModeClick() {
   }
 
   @HostListener("window:resize", ["$event"])
-  onWindowResize(event?){
+  onWindowResize(event?: Event){
     let self = this;
     let mainContainerEl: HTMLElement = this.mainContainer.nativeElement;
     let newWindowWidth = window.innerWidth;
@@ -1098,7 +1103,7 @@ onAppModeClick() {
     
     //(new windowHeight or new windowWidth) and mainContainerEl is truthy ?
     if(mainContainerEl && (newWindowHeight !== this.windowHeight || newWindowWidth !== this.windowWidth)){
-      console.log("/!\ window resize event: ", event);
+      console.log("/!\ window resize event: ");
 
       this.windowWidth = newWindowWidth;
       this.windowHeight = newWindowHeight;
@@ -1146,8 +1151,8 @@ onAppModeClick() {
       this.mainContainerHeight = newMainContainerHeight;
       this.mainContainerWidth = newMainContainerWidth;
 
-      let newCodePartSize;
-      let outerSplitterSizes;
+      let newCodePartSize = 0;
+      let outerSplitterSizes: Array<any> = [];
 
       if(this.layout == 1 || this.layout == 3){
         if(this.finalCodePartSize > this.mainContainerWidth - 5 ){
@@ -1237,30 +1242,21 @@ onAppModeClick() {
     }
     else if(type == "outer"){
       minLimit = 350;
-      let ind;
-
-      if(this.layout == 1 || this.layout == 2){
-        ind = 0;
-      }
-      else if(this.layout == 3 || this.layout == 4){
-        ind = 1;
-      }
-
-      let total = sizes[ind];
+      let total = sizes[0];
       
       if(total > newMainContainerWidthOrHeight - 5){
-        sizes[ind] = newMainContainerWidthOrHeight;
+        sizes[0] = newMainContainerWidthOrHeight;
       }
       else if(total < minLimit){
-        sizes[ind] = minLimit;
+        sizes[0] = minLimit;
       }
       
       //console.log("sizes outer = ", sizes);
-      this.finalCodePartSize = sizes[ind] as number;
+      this.finalCodePartSize = sizes[0] as number;
     }
   }
 
-  runCode(param?){
+  runCode(param?: string){
     this.loader.showLoader();
     if(param == "save"){//save ?
       if(window.innerWidth <= 767 || window.innerHeight <= 580 || this.mainService.iframeResizeValue === undefined){//mobile mode ? stretch iframeResizeValue
@@ -1361,7 +1357,7 @@ onAppModeClick() {
       }
 
       if (!this.showResult){
-        if(document.querySelector("app-iframe-part").classList.contains("hide-mobile")){
+        if(document.querySelector("app-iframe-part")?.classList.contains("hide-mobile")){
           //window.dispatchEvent(new Event("resize", {bubbles: true, cancelable:false }));
           //clearInterval(editorLayoutFixInterval);
         }
@@ -1387,6 +1383,8 @@ onAppModeClick() {
     else if(areaNum == 2){
       return this.emptyArea_2_Size + "px"
     }
+
+    return "";
   }
 
   getIframeAreaSize(): string{
@@ -1410,8 +1408,10 @@ onAppModeClick() {
    * @param event MouseEvent (mousedown) or TouchEvent (touchstart)
    * @param customGutterNum gutter mumber: 1 || 2 || 3 || 4 || 5
    */
-  onGutterCustomMousedown(event: MouseEvent, customGutterNum){
+  onGutterCustomMousedown(event: MouseEvent|TouchEvent, customGutterNum: number){
     console.log('onGutterCustomMousedown ev = ', event);
+    let clientX = event.type == "touchstart" ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    let clientY = event.type == "touchstart" ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
     if(customGutterNum == 3){//Main container gutter ?
       this.isMainContainerGutter_dragging = true;
 
@@ -1434,12 +1434,12 @@ onAppModeClick() {
     }
     else if(customGutterNum == 1){//html-css gutter
       this.isGutter1_dragging = true;
-      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? event.clientY : event.clientX;
+      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? clientY : clientX;
     }
 
     else if(customGutterNum == 2){//css-js gutter
       this.isGutter2_dragging = true;
-      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? event.clientY : event.clientX;
+      this.mouseDownXorY = this.layout == 1 || this.layout == 3 ? clientY : clientX;
     }
 
     this.isFiddleHeightInputDisabled = true;
@@ -1451,30 +1451,24 @@ onAppModeClick() {
     /**
      * get the event clientX or clientY according to the gutter type
      */
+    let clientX = event.type == "touchstart" ? (event as TouchEvent).touches[0].clientX : (event as MouseEvent).clientX;
+    let clientY = event.type == "touchstart" ? (event as TouchEvent).touches[0].clientY : (event as MouseEvent).clientY;
+
     let generateCoordinate = (gutterNumber: number)=>{
-      let eventClientXOrY;
+      let eventClientXOrY = 0;
       let htmlCssGutter = 1;
       let cssJsGutter = 2;
       let codePartsGutter = 3;
       let customGutter1 = 4;
       let customGutter2 = 5;
       console.log("move event.type = ", event.type);
-      if(event.type == "touchmove"){
         if(this.layout == 1 || this.layout == 3){
-          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.touches[0].clientY : event.touches[0].clientX;
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? clientY : clientX;
         }
         else if(this.layout == 2 || this.layout == 4){
-          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.touches[0].clientX : event.touches[0].clientY;
+          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? clientX : clientY;
         }
-      }
-      else{
-        if(this.layout == 1 || this.layout == 3){
-          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.clientY : event.clientX;
-        }
-        else if(this.layout == 2 || this.layout == 4){
-          eventClientXOrY = [htmlCssGutter, cssJsGutter, customGutter1, customGutter2].includes(gutterNumber) ? event.clientX : event.clientY;
-        }
-      }
+      
       return eventClientXOrY;
     }
 
@@ -1783,8 +1777,8 @@ onAppModeClick() {
       } 
   }
 
-  onFiddleWidthChange(data){
-    let newFiddleWidth = parseInt(data);
+  onFiddleWidthChange(){
+    let newFiddleWidth = this.iframeWidth;
 
     switch(this.layout){
       case 1:
@@ -1852,8 +1846,8 @@ onAppModeClick() {
     this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
   }
 
-  onFiddeHeightChange(data){
-    let newFiddleHeight = parseInt(data);
+  onFiddeHeightChange(){
+    let newFiddleHeight = this.iframeHeight;
 
     switch(this.layout){
       case 1:
@@ -2001,12 +1995,10 @@ onAppModeClick() {
         }
       }
     }
-    else{
       return false;
-    }
   }
 
-  onFiddeTitleChange(data){
+  onFiddeTitleChange(data: string){
     this.mainService.fiddleTitle = data;
     //console.log("@onFiddeTitleChange this.mainService.fiddleTitle = ", this.mainService.fiddleTitle);
   }
@@ -2023,18 +2015,6 @@ onAppModeClick() {
     return this.mainService.envVars.homeUrl;
   }
 
-
-  isMatch(el, match){//cross plateform Element.matches() workaround
-    return (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector).call(el, match);
-  }
-  //
-  
-  getDOMClosest(elem, selector){//DOM closest ancestor speified by a CSS selector
-    for ( ; elem && elem !== document; elem = elem.parentNode ) {
-      if ( this.isMatch(elem, selector) ) return elem;
-    }
-    return null;
-  }
 
   prettifyMobileCode(){
     if(this.showHtml){

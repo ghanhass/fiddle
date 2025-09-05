@@ -1,10 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit, Input} from '@angular/core';
 
 @Component({
   standalone: true,
   selector: 'app-loader',
   templateUrl: './loader.component.html',
-  styleUrls: ['./loader.component.css']
+  styleUrls: ['./loader.component.css'],
+  imports: [CommonModule]
 })
 export class LoaderComponent implements OnInit {
 
@@ -14,10 +16,10 @@ export class LoaderComponent implements OnInit {
 
   @Input() subGlobal: boolean = false;
 
-  @Input() width: string;
-  @Input() height: string;
+  @Input() width: string = "";
+  @Input() height: string = "";
 
-  @Input() thickness: number;
+  @Input() thickness: number = 1;
 
   showLoader(){
     this.show = true;
