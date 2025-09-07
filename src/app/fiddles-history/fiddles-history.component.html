@@ -1,31 +1,63 @@
-<div class="history-container">
-    <div class="search-table">
-        <input type="text" [(ngModel)]="searchText" [placeholder]="'Filter'">
-    </div>
-    <div class="table-container">
-      <app-loader #historyLoader [width]="'100px'" [height]="'100px'"></app-loader>
-      <table [ngStyle]="{'pointer-events': canChangePage ? 'all' : 'none','opacity': canChangePage ? 1 : 0.3}">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Go to fiddle</th>
-            <th>Type</th>
-          </tr>
-        </thead>
-  
-        <tbody>
-          <tr *ngFor="let fiddle of generateFiddlesList()">
-            <td>{{fiddle.title}}</td>
-            <td>{{fiddle.created_at | date}}</td>
-            <td><a class="fiddle-link" [ngClass]="{'disabled': !canChangePage}" [routerLink]="['/'+fiddle.id]">Go</a></td>
-            <td>{{getFiddleType(fiddle)}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="pagination" [ngStyle]="{'pointer-events': canChangePage ? 'all' : 'none','opacity': canChangePage ? 1 : 0.3}">
-        <a (click)="prevPage()" [ngStyle]="{'cursor': canChangePage ? 'pointer' : 'not-allowed'}">&#x2770;</a>
-        <a (click)="nextPage()" [ngStyle]="{'cursor': canChangePage ? 'pointer' : 'not-allowed'}">&#x2771;</a>
-    </div>
+<div class="history-container" [ngClass]="{'loading': isLoading}">
+  <div class="search-table">
+    <input type="text" [(ngModel)]="searchText" [placeholder]="'Filter'" />
   </div>
+  <div class="table-container">
+    <app-loader
+      #historyLoader
+      [width]="'100px'"
+      [height]="'100px'"
+    ></app-loader>
+    <table
+      [ngStyle]="{
+        'pointer-events': canChangePage ? 'all' : 'none',
+        opacity: canChangePage ? 1 : 0.3
+      }"
+    >
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Go to fiddle</th>
+          <th>Type</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (fiddle of fiddlesList$|async; track $index) {
+        <tr>
+          <td>{{ fiddle.title }}</td>
+          <td>{{ fiddle.created_at | date }}</td>
+          <td>
+            <a
+              class="fiddle-link"
+              [ngClass]="{ disabled: !canChangePage }"
+              [routerLink]="['/' + fiddle.id]"
+              >Go</a
+            >
+          </td>
+          <td>{{ getFiddleType(fiddle) }}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <div
+    class="pagination"
+    [ngStyle]="{
+      'pointer-events': canChangePage ? 'all' : 'none',
+      opacity: canChangePage ? 1 : 0.3
+    }"
+  >
+    <a
+      (click)="prevPage()"
+      [ngStyle]="{ cursor: canChangePage ? 'pointer' : 'not-allowed' }"
+      >&#x2770;</a
+    >
+    <a
+      (click)="nextPage()"
+      [ngStyle]="{ cursor: canChangePage ? 'pointer' : 'not-allowed' }"
+      >&#x2771;</a
+    >
+  </div>
+</div>

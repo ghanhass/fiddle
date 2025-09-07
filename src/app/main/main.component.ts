@@ -1758,7 +1758,7 @@ onAppModeClick() {
                 let newCssSize = this.finalCssCodePartSize - sizeDiff;
                 if(newCssSize < 25){
                   newCssSize = 25;
-  
+   
                   ///
                   let newHtmlSize = this.finalHtmlCodePartSize - sizeDiff;
                   if(newHtmlSize < 25){
@@ -1772,7 +1772,7 @@ onAppModeClick() {
             
         }
 
-        this.calculateIframeSize(mainContainer);
+        //this.calculateIframeSize(mainContainer);
         this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
       } 
   }
@@ -1922,7 +1922,7 @@ onAppModeClick() {
 
   showHistoryModal(){
     this.modalHistory.show();
-    this.appFiddlesHistory.getFiddlesList();
+    //this.appFiddlesHistory.getFiddlesList();
   }
 
 
