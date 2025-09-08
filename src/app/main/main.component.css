@@ -1,7 +1,7 @@
 .main-container {
   display: flex;
-  width: calc(100vw - 4px);
-  height: calc(100vh - 38px);
+  height: calc(100vh - 34px);
+  width: 100%;
   box-shadow: 0 0 0 1px #bbb;
   position: relative;
 }
@@ -229,6 +229,7 @@ app-iframe-part {
 #code-parts-title-mobile {
   display: none;
   height: 35px;
+  border-bottom: 1px solid #b5b5b5;
 }
 
 #code-parts-title-mobile a {
@@ -1091,19 +1092,12 @@ as-split-area.code-component-container > app-html-part{
 .codeparts-iframe-container {
   display: flex;
   flex-grow: 1;
-  height: 100%;
 }
 
 .as-split-area-iframe.is-vertical {
   flex-grow: 1;
 }
 /****/
-
-.codeparts-iframe-container {
-  display: flex;
-  flex-grow: 1;
-  height: 100%;
-}
 
 .as-split-area-iframe.is-vertical {
   flex-grow: 1;
@@ -1264,10 +1258,6 @@ as-split-area.code-component-container > app-html-part{
 
   .code-part-title {
     display: none;
-  }
-
-  .code-component {
-    border-top: 1px solid #b5b5b5;
   }
 
   .codeparts-iframe-container {
@@ -1434,6 +1424,11 @@ button.history-btn.btn i {
 
   .main-container-gutter.gutter {
     pointer-events: none;
+  }
+
+  .codeparts-iframe-container.no-result-mobile .main-container-gutter,
+  .codeparts-iframe-container.no-code-mobile .main-container-gutter {
+    display: none;
   }
 }
 
