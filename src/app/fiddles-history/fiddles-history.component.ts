@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
 import { Router, RouterModule } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
-import { FiddleData } from '../fiddle-data';
-import { GistFiddle } from '../gist-fiddle';
+import { FiddleData } from '../models/fiddle-data';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { map, Observable, Subject } from 'rxjs';
@@ -74,7 +73,7 @@ export class FiddlesHistoryComponent implements OnInit {
 
   generateFilteredFiddlesList(res: Array<any>): Array<any> {
     let totalElements = res.filter((el) => {
-      let arr = new Date(el.created_at).toDateString().split(' ');
+      let arr = new Date(el.createdAt).toDateString().split(' ');
       arr.splice(0, 1);
       arr[1] += ',';
       let str = arr.join(' ');
@@ -111,7 +110,7 @@ export class FiddlesHistoryComponent implements OnInit {
           ? fiddle.file_name.split('_')[0]
           : 'fiddle';
     } else {
-      str = fiddle.appmode || 'fiddle';
+      str = fiddle.appMode || 'fiddle';
     }
     return str;
   }

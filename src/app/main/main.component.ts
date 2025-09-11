@@ -7,7 +7,7 @@ import { RessourcesComponent } from '../ressources/ressources.component';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { LoaderComponent } from '../loader/loader.component';
 import { environment } from "../../environments/environment";
-import { FiddleData } from '../fiddle-data';
+import { FiddleData } from '../models/fiddle-data';
 import { HtmlPartComponent } from '../html-part/html-part.component';
 import { CssPartComponent } from '../css-part/css-part.component';
 import { JsPartComponent } from '../js-part/js-part.component';
@@ -16,7 +16,7 @@ import { PastebinComponent } from '../pastebin/pastebin.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RessourcesService } from '../ressources.service';
-import { FiddleTheme } from '../fiddle-theme';
+import { FiddleTheme } from '../models/fiddle-theme';
 
 
 interface PreviousLayout{
@@ -205,16 +205,16 @@ onAppModeClick() {
           this.showResult = this.mainService.showResult;
 
           let obj: FiddleData = {
-            css_part_size: this.mainService.cssCodePartSize,
-            js_part_size: this.mainService.jsCodePartSize,
-            html_part_size: this.mainService.htmlCodePartSize,
-            main_container_width: this.mainService.mainContainerWidth,
-            main_container_height: this.mainService.mainContainerHeight,
-            code_parts_size: this.mainService.codePartsSize,
+            cssPartSize: this.mainService.cssCodePartSize,
+            jsPartSize: this.mainService.jsCodePartSize,
+            htmlPartSize: this.mainService.htmlCodePartSize,
+            mainContainerWidth: this.mainService.mainContainerWidth,
+            maonContainerHeight: this.mainService.mainContainerHeight,
+            codePartSize: this.mainService.codePartsSize,
             layout: this.mainService.layout,
-            iframe_resize_value: this.mainService.iframeResizeValue,
-            is_mobile_mode: this.mainService.isMobileMode,
-            created_at: this.mainService.fiddleCreatedAt
+            iframeResizeValue: this.mainService.iframeResizeValue,
+            isMobileMode: this.mainService.isMobileMode,
+            createdAt: this.mainService.fiddleCreatedAt
           }
           this.changeLayout(this.mainService.layout, obj);
           
@@ -245,17 +245,17 @@ onAppModeClick() {
               this.mainService.htmlCode = fiddleData.html!;
               this.mainService.cssCode = fiddleData.css!;
               this.mainService.fiddleTitle = fiddleData.title!;
-              this.mainService.iframeResizeValue = fiddleData.iframe_resize_value!;
-              this.mainService.isMobileMode = fiddleData.is_mobile_mode!;
+              this.mainService.iframeResizeValue = fiddleData.iframeResizeValue!;
+              this.mainService.isMobileMode = fiddleData.isMobileMode!;
               
-              this.appMode = fiddleData.appmode || 'fiddle';
+              this.appMode = fiddleData.appMode || 'fiddle';
 
 
               if(this.mainService.isMobileMode){
                 this.changeLayout(1);
 
                 //START mobile layout retrieval
-                let mobileLayoutArr = fiddleData.mobile_layout?.split(':')!;
+                let mobileLayoutArr = fiddleData.mobileLayout?.split(':')!;
                 let mobileCodePart = mobileLayoutArr[0];
                 let mobileResult = mobileLayoutArr[1];
                 switch (true){
@@ -490,18 +490,18 @@ onAppModeClick() {
   getAndAdaptSavedCodePartsSizes(param: FiddleData){
     let savedLayout = param.layout; 
     
-    let savedCssCodePartSize = param.css_part_size!; 
-    let savedJsCodePartSize = param.js_part_size!; 
-    let savedHtmlCodePartSize = param.html_part_size!; 
+    let savedCssCodePartSize = param.cssPartSize!; 
+    let savedJsCodePartSize = param.jsPartSize!; 
+    let savedHtmlCodePartSize = param.htmlPartSize!; 
     
-    let savedMainContainerWidth = param.main_container_width!; 
-    let savedMainContainerHeight = param.main_container_height!; 
-    let savedIframeResizeValue = param.iframe_resize_value!;
+    let savedMainContainerWidth = param.mainContainerWidth!; 
+    let savedMainContainerHeight = param.maonContainerHeight!; 
+    let savedIframeResizeValue = param.iframeResizeValue!;
     
     let savedMainContainerSize = 0;
     let savedMainContainerSize2 = 0; 
 
-    let savedCodePartsSize = param.code_parts_size;
+    let savedCodePartsSize = param.codePartSize;
 
     let mainContainerEl:HTMLElement = this.mainContainer.nativeElement;
     let currentMainContainerSize = 0;

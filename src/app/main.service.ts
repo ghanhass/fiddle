@@ -11,11 +11,9 @@ import {
   zip,
 } from 'rxjs';
 import { environment } from '../environments/environment';
-import { FiddleTheme } from './fiddle-theme';
-import { FiddleThemeDetails } from './fiddle-theme-details';
-import { FiddleData } from './fiddle-data';
+import { FiddleTheme } from './models/fiddle-theme';
+import { FiddleData } from './models/fiddle-data';
 import { catchError, map, mergeMap, tap, timestamp } from 'rxjs/operators';
-import { CodePositionData } from './code-position-data';
 import { CssPartComponent } from './css-part/css-part.component';
 import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
@@ -41,7 +39,7 @@ export class MainService {
   cssCode: string;
   htmlCode: string;
   isConsoleOn: boolean = false;
-  pastebinText: string = "";
+  pastebinText: string = '';
 
   appMode: string = 'fiddle';
 
@@ -161,7 +159,13 @@ export class MainService {
     }
   };
   ctrlEnterMode: boolean = false;
-  envVars: {production?: boolean, url?: string; appName?: string; homeUrl?: string; fiddleIframeOrigin?: string; } = {};
+  envVars: {
+    production?: boolean;
+    url?: string;
+    appName?: string;
+    homeUrl?: string;
+    fiddleIframeOrigin?: string;
+  } = {};
 
   constructor(private http: HttpClient) {
     this.initEnv();
@@ -200,27 +204,33 @@ export class MainService {
 
   initConfig(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.http.get('assets/app-config.json').subscribe(
-        (res: any) => {
+      this.http.get('assets/app-config.json').subscribe({
+        next: (res: any) => {
           this.appConfig = res;
           //console.log("startup this.appConfig = ", this.appConfig);
           resolve(res);
         },
-        (error: any) => {
+        error: (error: any) => {
           reject(error);
-        }
-      );
+        },
+      });
     });
   }
 
   initEnv(): void {
-    let isProd = location.origin == "https://ghanhass.github.io";
+    let isProd = location.origin == 'https://ghanhass.github.io';
     this.envVars = {
       production: isProd,
-      url: isProd ? 'https://hassoon-github.github.io/myfiddlepreview' : 'http://localhost/myfiddlepreview',
-      appName: isProd ? 'myfiddle' : "",
-      homeUrl: isProd ? 'https://ghanhass.github.io/myfiddle/' : "http://localhost:4200",
-      fiddleIframeOrigin: isProd ? 'https://hassoon-github.github.io' : "http://localhost",
+      url: isProd
+        ? 'https://hassoon-github.github.io/myfiddlepreview'
+        : 'http://localhost/myfiddlepreview',
+      appName: isProd ? 'myfiddle' : '',
+      homeUrl: isProd
+        ? 'https://ghanhass.github.io/myfiddle/'
+        : 'http://localhost:4200',
+      fiddleIframeOrigin: isProd
+        ? 'https://hassoon-github.github.io'
+        : 'http://localhost',
     };
   }
 
@@ -901,11 +911,10 @@ export class MainService {
     return html;
   }
 
-
   getFiddlesList(page?: number): Observable<any> {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
-    let str = "";
+    let str = '';
     if (this.envVars.production) {
       str = page ? '&page=' + page : '';
       let promise = new Promise((resolve, reject) => {
@@ -999,7 +1008,7 @@ export class MainService {
     if (this.envVars.production) {
       let timeStamp = new Date().getTime();
       let body = {
-        file_name: fiddleData.appmode + '_' + timeStamp,
+        file_name: fiddleData.appMode + '_' + timeStamp,
         title: fiddleData.title ? fiddleData.title : 'Noname',
         visibility: 'public',
         content: JSON.stringify(fiddleData),
@@ -1032,14 +1041,12 @@ export class MainService {
       return from(
         new Promise((resolve, reject) => {
           this.http
-            .get<Array<FiddleData>>(
-              'http://localhost:3000/gists?_sort=id'
-            )
+            .get<Array<FiddleData>>('http://localhost:3000/gists?_sort=id')
             .subscribe(
               (res) => {
                 let newId;
 
-                console.log("res = ", res);
+                console.log('res = ', res);
 
                 if (res.length) {
                   let lastId = +res[res.length - 1].id!;
@@ -1049,7 +1056,7 @@ export class MainService {
                 }
                 fiddleData.id = newId;
 
-                console.log("fiddleData = ", fiddleData);
+                console.log('fiddleData = ', fiddleData);
                 this.http
                   .post('http://localhost:3000/gists', fiddleData)
                   .subscribe((res2) => {

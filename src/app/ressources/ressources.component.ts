@@ -1,9 +1,9 @@
 import { Component, OnInit, HostListener, EventEmitter,Output, ViewChild } from '@angular/core';
 import { RessourcesService } from '../ressources.service';
 import { LoaderComponent } from '../loader/loader.component';
-import { CdnjsLibraryMetaData } from '../cdnjs-meta-data';
-import { CdnjsLibrariesSearchResult } from '../cdnjs-libraries-search-result';
-import { CdnjsLibraryData } from '../cdnjs-library-data';
+import { CdnjsLibraryMetaData } from '../models/cdnjs-meta-data';
+import { CdnjsLibrariesSearchResult } from '../models/cdnjs-libraries-search-result';
+import { CdnjsLibraryData } from '../models/cdnjs-library-data';
 import { Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { FormsModule } from '@angular/forms';

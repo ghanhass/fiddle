@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { CachedCdnjsMetaData } from './cached-cdnjs-meta-data';
+import { CachedCdnjsMetaData } from './models/cached-cdnjs-meta-data';
 import { filter, map, take, tap } from 'rxjs/operators';
-import { CdnjsLibraryMetaData } from './cdnjs-meta-data';
-import { CdnjsLibrariesSearchResult } from './cdnjs-libraries-search-result';
-import { CdnjsLibraryAssets } from './cdnjs-library-assets';
+import { CdnjsLibraryMetaData } from './models/cdnjs-meta-data';
+import { CdnjsLibrariesSearchResult } from './models/cdnjs-libraries-search-result';
+import { CdnjsLibraryAssets } from './models/cdnjs-library-assets';
 
 @Injectable({
   providedIn: 'root'

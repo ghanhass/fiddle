@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit,ViewChild, Output ,EventEmitter, inject} 
 import { MainService } from '../main.service';
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { FiddleData } from '../fiddle-data';
+import { FiddleData } from '../models/fiddle-data';
 import { SafePipe } from '../safe.pipe';
 
 
@@ -113,22 +113,22 @@ export class IframePartComponent implements OnInit {
       css:this.mainService.cssCode,
       pastebintext: this.mainService.pastebinText,
       
-      js_part_size: this.mainService.jsCodePartSize,
-      css_part_size: this.mainService.cssCodePartSize,
-      html_part_size: this.mainService.htmlCodePartSize,
+      jsPartSize: this.mainService.jsCodePartSize,
+      cssPartSize: this.mainService.cssCodePartSize,
+      htmlPartSize: this.mainService.htmlCodePartSize,
 
-      code_parts_size: this.mainService.codePartsSize,
+      codePartSize: this.mainService.codePartsSize,
 
-      main_container_width: this.mainService.mainContainerWidth,
-      main_container_height: this.mainService.mainContainerHeight,
+      mainContainerWidth: this.mainService.mainContainerWidth,
+      maonContainerHeight: this.mainService.mainContainerHeight,
 
       title:this.mainService.fiddleTitle,
       layout:this.mainService.layout,
-      mobile_layout: mobileCodePart+":"+mobileResult,
-      iframe_resize_value: this.mainService.iframeResizeValue,
-      is_mobile_mode: this.mainService.isMobileMode,
-      created_at: new Date().getTime(),
-      appmode: appMode
+      mobileLayout: mobileCodePart+":"+mobileResult,
+      iframeResizeValue: this.mainService.iframeResizeValue,
+      isMobileMode: this.mainService.isMobileMode,
+      createdAt: new Date().getTime(),
+      appMode: appMode
     }
     //console.log("this.mainService.showHtml = ", this.mainService.showHtml);
     //console.log("this.mainService.showCss = ", this.mainService.showCss);

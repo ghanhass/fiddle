@@ -27,7 +27,7 @@
         @for (fiddle of fiddlesList$|async; track $index) {
         <tr>
           <td>{{ fiddle.title }}</td>
-          <td>{{ fiddle.created_at | date }}</td>
+          <td>{{ fiddle.createdAt | date }}</td>
           <td>
             <a
               class="fiddle-link"
