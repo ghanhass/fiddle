@@ -2,7 +2,7 @@ import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom } from "@angula
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { RouterModule, Routes } from "@angular/router";
 import { MainComponent } from "./main/main.component";
-import { provideHttpClient } from "@angular/common/http";
+import { HttpClientXsrfModule, provideHttpClient, withXsrfConfiguration } from "@angular/common/http";
 import { provideToastr } from "ngx-toastr";
 
 const routes: Routes = [
@@ -20,7 +20,13 @@ export const appConfig: ApplicationConfig = {
         importProvidersFrom(
             RouterModule.forRoot(routes,  {bindToComponentInputs: true})
         ),
-        provideHttpClient(),
+        provideHttpClient(
+          withXsrfConfiguration(
+          {
+            cookieName: "XSRF-TOKEN",
+            headerName: "X-XSRF-TOKEN"
+          }
+        )),
         provideToastr()
     ],
     

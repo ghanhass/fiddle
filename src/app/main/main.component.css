@@ -997,12 +997,6 @@ as-split-area > app-js-part {
   transition: width 0.3s;
 }
 
-/*as-split-area.code-component-container > app-css-part,
-as-split-area.code-component-container > app-js-part,
-as-split-area.code-component-container > app-html-part{
-    
-}*/
-
 @media screen and (min-width: 890px) and (min-height: 581px) {
   :host ::ng-deep app-iframe-part.layout-type-1 {
     align-items: flex-end;

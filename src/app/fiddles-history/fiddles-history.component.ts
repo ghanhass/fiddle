@@ -6,6 +6,7 @@ import { FiddleData } from '../models/fiddle-data';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { map, Observable, Subject } from 'rxjs';
+import { ApiResponseDto } from '../models/response-dto';
 
 @Component({
   standalone: true,
@@ -18,7 +19,7 @@ export class FiddlesHistoryComponent implements OnInit {
   isLoading: boolean = false;
   searchText: string = '';
   fiddlesListSize: number = 0;
-  fiddlesList$: Subject<Array<any>> = new Subject();
+  fiddlesList$: Subject<Array<FiddleData>> = new Subject();
   pageNumber: number = 1;
   canChangePage: boolean = true;
   @ViewChild('historyLoader') historyLoader: LoaderComponent =
@@ -53,9 +54,9 @@ export class FiddlesHistoryComponent implements OnInit {
     this.historyLoader.showLoader();
     this.isLoading = true;
     this.mainService.getFiddlesList(this.pageNumber).subscribe({
-      next: (res) => {
+      next: (res: any) => {
         console.log('getFiddlesList res = ', res);
-        this.fiddlesList$.next(this.generateFilteredFiddlesList(this.mainService.envVars.production? res : res.data));
+        this.fiddlesList$.next(this.generateFilteredFiddlesList(this.mainService.envVars.production? res : res.result));
 
         this.historyLoader.hideLoader();
         this.isLoading = false;

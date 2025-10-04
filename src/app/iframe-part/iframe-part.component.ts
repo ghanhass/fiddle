@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { FiddleData } from '../models/fiddle-data';
 import { SafePipe } from '../safe.pipe';
+import { ApiResponseDto } from '../models/response-dto';
 
 
 @Component({
@@ -137,7 +138,8 @@ export class IframePartComponent implements OnInit {
 
     this.showloader.emit();
 
-    this.mainService.saveFiddle(fiddleData).subscribe((fiddleId)=>{
+    this.mainService.saveFiddle(fiddleData).subscribe({
+      next: (res: ApiResponseDto)=>{
       //console.log("saveFiddle fiddleId = ", fiddleId);
 
       //this.runFiddle();
@@ -147,6 +149,7 @@ export class IframePartComponent implements OnInit {
         this.hideloader.emit();
       }
       let appName = this.mainService.envVars.appName;
+      let fiddleId = res.result?.id!;
       if(fiddleId > 0){
         if(this.copyInput.nativeElement){
           let input = this.copyInput.nativeElement
@@ -173,6 +176,10 @@ export class IframePartComponent implements OnInit {
         this.toastrService.error("Error saving the fiddle!");
       }
 
+    },
+    error: (err)=>{
+      console.log("error = ", err);
+    }
     });
   }
 

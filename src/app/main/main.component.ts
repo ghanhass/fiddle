@@ -17,6 +17,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RessourcesService } from '../ressources.service';
 import { FiddleTheme } from '../models/fiddle-theme';
+import { ApiResponse } from '../models/api-response';
+import { ApiResponseDto } from '../models/response-dto';
 
 
 interface PreviousLayout{
@@ -230,10 +232,10 @@ onAppModeClick() {
         else{//retrieve data from backend ?
           console.log("//retrieve data from backend");
           this.loader.showLoader();
-          this.mainService.getFiddle(currentFiddleId).subscribe((res)=>{
+          this.mainService.getFiddle(currentFiddleId).subscribe((res: ApiResponseDto)=>{
             console.log("getFiddle res = ", res);
-            if(res.status == "ok"){
-              let fiddleData: FiddleData = res.fiddleData;
+            if(res.message == "success"){
+              let fiddleData: FiddleData = res.result!;
               //console.log("getFiddle obj = ", obj);
               this.htmlPart.code = fiddleData.html!;
               this.cssPart.code = fiddleData.css!;
@@ -303,7 +305,7 @@ onAppModeClick() {
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
             }
-            else if(res.status == "not found"){
+            else if(res.message == "error"){
               this.toastrService.warning("Fiddle not found.");
               this.changeLayout(1);
               this.loader.hideLoader();
@@ -1605,7 +1607,7 @@ onAppModeClick() {
           //console.log("mousemove evTarget = ", evTarget);
           console.log("eventClientXOrY = ", eventClientXOrY);
 
-            if(this.layout == 1 || this.layout == 3){      
+            if(this.layout == 1 || this.layout == 3){
             
               let htmlPartSize;
 
@@ -1772,7 +1774,7 @@ onAppModeClick() {
             
         }
 
-        //this.calculateIframeSize(mainContainer);
+        this.calculateIframeSize(mainContainer);
         this.mainService.iframeResizeValue = parseInt(this.getIframeAreaSize());
       } 
   }

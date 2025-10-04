@@ -71,7 +71,8 @@
               "buildTarget": "Fiddle:build:production"
             },
             "development": {
-              "buildTarget": "Fiddle:build:development"
+              "buildTarget": "Fiddle:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"

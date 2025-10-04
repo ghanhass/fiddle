@@ -18,6 +18,8 @@ import { CssPartComponent } from './css-part/css-part.component';
 import { HtmlPartComponent } from './html-part/html-part.component';
 import { JsPartComponent } from './js-part/js-part.component';
 import { PastebinComponent } from './pastebin/pastebin.component';
+import { ApiResponse } from './models/api-response';
+import { ApiResponseDto } from './models/response-dto';
 
 let headers = new HttpHeaders();
 headers = headers.set(
@@ -916,7 +918,7 @@ export class MainService {
     let self = this;
     let str = '';
     if (this.envVars.production) {
-      str = page ? '&page=' + page : '';
+      //str = page ? '&page=' + page : '';
       let promise = new Promise((resolve, reject) => {
         let gitlabRawSnippetUrl =
           `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets?per_page=30` +
@@ -938,10 +940,8 @@ export class MainService {
       });
       return from(promise);
     } else {
-      str = page ? '&_page=' + page : '';
-      return this.http.get<Array<FiddleData>>(
-        'http://localhost:3000/gists?per_page=30' + str
-      );
+      //str = page ? '&page=' + page : '';
+      return this.http.get<ApiResponseDto>('http://localhost:4200/api/fiddle' + str);
     }
   }
 
@@ -983,22 +983,7 @@ export class MainService {
       });
       return from(promise);
     } else {
-      return this.http
-        .get<Array<FiddleData>>('http://localhost:3000/gists?id=' + fiddleId)
-        .pipe(
-          map((value: Array<FiddleData>) => {
-            if (value.length) {
-              return {
-                status: 'ok',
-                fiddleData: value[0],
-              };
-            } else {
-              return {
-                status: 'not found',
-              };
-            }
-          })
-        );
+      return this.http.get<ApiResponse>('http://localhost:4200/api/fiddle/' + fiddleId)
     }
   }
 
@@ -1038,37 +1023,8 @@ export class MainService {
       });
       return from(promise);
     } else {
-      return from(
-        new Promise((resolve, reject) => {
-          this.http
-            .get<Array<FiddleData>>('http://localhost:3000/gists?_sort=id')
-            .subscribe(
-              (res) => {
-                let newId;
-
-                console.log('res = ', res);
-
-                if (res.length) {
-                  let lastId = +res[res.length - 1].id!;
-                  newId = lastId + 1;
-                } else {
-                  newId = 1;
-                }
-                fiddleData.id = newId;
-
-                console.log('fiddleData = ', fiddleData);
-                this.http
-                  .post('http://localhost:3000/gists', fiddleData)
-                  .subscribe((res2) => {
-                    resolve(newId);
-                  });
-              },
-              (error) => {
-                reject(-1);
-              }
-            );
-        })
-      );
+      console.log('fiddleData = ', fiddleData);
+      return this.http.post<ApiResponse>('http://localhost:4200/api/fiddle', fiddleData)
     }
   }
   /*deleteAllGists(){
