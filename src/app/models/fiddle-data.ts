@@ -18,5 +18,6 @@ export interface FiddleData {
     iframeResizeValue?:number,
     isMobileMode?: boolean,
     createdAt?: number;
-    appMode?: string
+    appMode?: string;
+    items?: number;
 }
