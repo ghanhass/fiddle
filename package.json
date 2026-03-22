@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "mock:server": "json-server --watch src/assets/fiddle-db/fiddle-db.json"
+    "mock:server": "json-server --watch src/assets/fiddle-db/fiddle-db.json",
+    "preinstall": "npx npm-force-resolutions"
   },
   "private": true,
   "packageManager": "npm@9.2.0",
@@ -26,6 +27,7 @@
     "js-beautify": "^1.15.4",
     "json-server": "^1.0.0-beta.12",
     "ngx-toastr": "^20.0.5",
+    "npm-force-resolutions": "^0.0.10",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0"
   },
@@ -37,5 +39,8 @@
     "prettier": "^3.8.1",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"
+  },
+  "resolutions": {
+    "undici": "7.24.0"
   }
 }

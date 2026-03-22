@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
 import { MainService } from '../main.service';
-import { languages } from '@codemirror/language-data';
 import { FormsModule } from '@angular/forms';
 import { CodeEditor } from '@acrodata/code-editor';
 //import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
@@ -14,7 +13,6 @@ import { CodeEditor } from '@acrodata/code-editor';
 })
 export class PastebinComponent {
   text: string = "";
-  languages = languages;
 
   @Output()savecodemsg: EventEmitter<string> = new EventEmitter();
   @ViewChild("codeMirrorEditor") codeMirrorEditor: any;
