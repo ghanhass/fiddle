@@ -30,7 +30,7 @@ export class HtmlPartComponent implements OnInit {
   @Output() runcodemsg: EventEmitter<string> = new EventEmitter();
   @Output() savecodemsg: EventEmitter<string> = new EventEmitter();
 
-  @ViewChild('codeMirrorEditor') codeMirrorEditor: CodeEditor = new CodeEditor(new ElementRef(document.createElement("div")));
+  @ViewChild('codeMirrorEditor') codeMirrorEditor: CodeEditor = new CodeEditor();
 
   constructor(private mainService: MainService) {}
 

@@ -12,6 +12,8 @@
   "private": true,
   "packageManager": "npm@9.2.0",
   "dependencies": {
+    "@acrodata/code-editor": "^0.6.0",
+    "@angular/animations": "^21.2.1",
     "@angular/common": "^21.2.0",
     "@angular/compiler": "^21.2.0",
     "@angular/core": "^21.2.0",
