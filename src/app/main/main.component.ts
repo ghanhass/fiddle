@@ -235,85 +235,94 @@ export class MainComponent implements AfterViewInit {
         else {//retrieve data from backend ?
           console.log("//retrieve data from backend");
           this.loader.showLoader();
-          this.mainService.getFiddle(currentFiddleId).subscribe((res: FiddleData) => {
-            console.log("getFiddle res = ", res);
-            if (res.id) {
-              let fiddleData: FiddleData = res!;
-              //console.log("getFiddle obj = ", obj);
-              this.htmlPart.code = fiddleData.html!;
-              this.cssPart.code = fiddleData.css!;
-              this.jsPart.code = fiddleData.js!;
-              this.pastebinPart.text = fiddleData.pastebintext!;
-              this.fiddleTitle = fiddleData.title!;
-              ////
-              this.mainService.jsCode = fiddleData.js!;
-              this.mainService.htmlCode = fiddleData.html!;
-              this.mainService.cssCode = fiddleData.css!;
-              this.mainService.fiddleTitle = fiddleData.title!;
-              this.mainService.iframeResizeValue = fiddleData.iframeResizeValue!;
-              this.mainService.isMobileMode = fiddleData.isMobileMode!;
+          this.mainService.getFiddle(currentFiddleId).subscribe({
+            next: (res: ApiResponseDto) => {
+              {
+                console.log("getFiddle res = ", res);
+                if (res.message == "ok") {
+                  let fiddleData: FiddleData = res.result! as FiddleData;
+                  //console.log("getFiddle obj = ", obj);
+                  this.htmlPart.code = fiddleData.html!;
+                  this.cssPart.code = fiddleData.css!;
+                  this.jsPart.code = fiddleData.js!;
+                  this.pastebinPart.text = fiddleData.pastebintext!;
+                  this.fiddleTitle = fiddleData.title!;
+                  ////
+                  this.mainService.jsCode = fiddleData.js!;
+                  this.mainService.htmlCode = fiddleData.html!;
+                  this.mainService.cssCode = fiddleData.css!;
+                  this.mainService.fiddleTitle = fiddleData.title!;
+                  this.mainService.iframeResizeValue = fiddleData.iframeResizeValue!;
+                  this.mainService.isMobileMode = fiddleData.isMobileMode!;
 
-              this.appMode = fiddleData.appMode || 'fiddle';
+                  this.appMode = fiddleData.appMode || 'fiddle';
 
 
-              if (this.mainService.isMobileMode) {
-                this.changeLayout(1);
+                  if (this.mainService.isMobileMode) {
+                    this.changeLayout(1);
 
-                //START mobile layout retrieval
-                let mobileLayoutArr = fiddleData.mobileLayout?.split(':')!;
-                let mobileCodePart = mobileLayoutArr[0];
-                let mobileResult = mobileLayoutArr[1];
-                switch (true) {
-                  case mobileCodePart == '0':
-                    this.showHtml = false;
-                    this.showCss = false;
-                    this.showJs = false;
-                    break;
+                    //START mobile layout retrieval
+                    let mobileLayoutArr = fiddleData.mobileLayout?.split(':')!;
+                    let mobileCodePart = mobileLayoutArr[0];
+                    let mobileResult = mobileLayoutArr[1];
+                    switch (true) {
+                      case mobileCodePart == '0':
+                        this.showHtml = false;
+                        this.showCss = false;
+                        this.showJs = false;
+                        break;
 
-                  case mobileCodePart == '1':
-                    this.showHtml = true;
-                    this.showCss = false;
-                    this.showJs = false;
-                    break;
+                      case mobileCodePart == '1':
+                        this.showHtml = true;
+                        this.showCss = false;
+                        this.showJs = false;
+                        break;
 
-                  case mobileCodePart == '2':
-                    this.showHtml = false;
-                    this.showCss = true;
-                    this.showJs = false;
-                    break;
+                      case mobileCodePart == '2':
+                        this.showHtml = false;
+                        this.showCss = true;
+                        this.showJs = false;
+                        break;
 
-                  case mobileCodePart == '3':
-                    this.showHtml = false;
-                    this.showCss = false;
-                    this.showJs = true;
-                    break;
+                      case mobileCodePart == '3':
+                        this.showHtml = false;
+                        this.showCss = false;
+                        this.showJs = true;
+                        break;
+                    }
+
+                    if (mobileResult == "0") {
+                      this.showResult = false;
+                    }
+                    else if (mobileResult == "1") {
+                      this.showResult = true;
+                    }
+
+                    this.mainService.showHtml = this.showHtml;
+                    this.mainService.showCss = this.showCss;
+                    this.mainService.showJs = this.showJs;
+                    this.mainService.showResult = this.showResult;
+                    //END mobile layout retrieval
+                  }
+                  else {
+                    this.changeLayout(fiddleData.layout!, fiddleData);
+                  }
+                  this.mainService.scheduledRunFiddle = true;
+                  this.runCode();
                 }
-
-                if (mobileResult == "0") {
-                  this.showResult = false;
+                else if (res.message == "error") {
+                  this.toastrService.warning("Fiddle not found.");
+                  this.changeLayout(1);
+                  this.loader.hideLoader();
                 }
-                else if (mobileResult == "1") {
-                  this.showResult = true;
-                }
-
-                this.mainService.showHtml = this.showHtml;
-                this.mainService.showCss = this.showCss;
-                this.mainService.showJs = this.showJs;
-                this.mainService.showResult = this.showResult;
-                //END mobile layout retrieval
               }
-              else {
-                this.changeLayout(fiddleData.layout!, fiddleData);
-              }
-              this.mainService.scheduledRunFiddle = true;
-              this.runCode();
-            }
-            else{
+            },
+            error: (err: any)=>{
               this.toastrService.warning("Fiddle not found.");
               this.changeLayout(1);
               this.loader.hideLoader();
             }
-          });
+          })
           this.mainService.isFirstTimeFiddle = false;
         }
       }
@@ -1952,9 +1961,7 @@ export class MainComponent implements AfterViewInit {
 
   showHistoryModal() {
     this.modalHistory.show();
-    //this.appFiddlesHistory.getFiddlesList();
   }
-
 
 
   getCodePartGutterStyle(type: string) {

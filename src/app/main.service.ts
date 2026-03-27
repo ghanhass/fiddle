@@ -928,7 +928,10 @@ export class MainService {
           .subscribe({
             //get seeked fiddle content from gitlab
             next: (res2: FiddleData) => {
-              let result = res2;
+              let result = {
+                result: res2,
+                message: "ok"
+              };
               resolve(result);
             },
             error: (error2) => {
@@ -949,7 +952,7 @@ export class MainService {
     //console.log("getFiddle fiddleId = ",fiddleId);
     let self = this;
 
-    if (this.envVars.production) {
+    if (this.envVars.production) {//gitlab snippet
       let promise = new Promise((resolve, reject) => {
         let gitlabRawSnippetUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${fiddleId}/raw`;
         this.http
@@ -964,12 +967,12 @@ export class MainService {
                 res2.hasOwnProperty('html')
               ) {
                 result = {
-                  status: 'ok',
-                  fiddleData: res2,
+                  message: 'ok',
+                  result: res2,
                 };
               } else {
                 result = {
-                  status: 'not found',
+                  message: 'not found',
                 };
               }
               resolve(result);
