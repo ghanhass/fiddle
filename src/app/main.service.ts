@@ -25,7 +25,7 @@ let headers = new HttpHeaders();
 headers = headers.set(
   'PRIVATE-TOKEN',
   window.atob(
-    "Z2xwYXQtNEJXYVR4VFl5UlB0VW1BbjhuRExQRzg2TVFwMU9tdHlObTk2Q3cuMDEuMTIxaG9hdjJl" 
+    "Z2xwYXQtNEJXYVR4VFl5UlB0VW1BbjhuRExQRzg2TVFwMU9tdHlObTk2Q3cuMDEuMTIxaG9hdjJl"
   )
 );
 headers = headers.set('Content-Type', 'application/json');
@@ -405,33 +405,28 @@ export class MainService {
     .layout {
         background-color: ${theme.data.colors['editor.background']} !important;
         border-color: ${theme.data.colors['editor.foreground']} !important;
-        box-shadow: 0 0 0px 1px ${
-          theme.data.colors['editor.background']
-        } !important;
+        box-shadow: 0 0 0px 1px ${theme.data.colors['editor.background']
+      } !important;
     }
     
     .layout.active {
-        background-color: ${
-          theme.data.colors['editor.selectionBackground']
-        } !important;
+        background-color: ${theme.data.colors['editor.selectionBackground']
+      } !important;
         border-color: ${theme.data.colors['editor.foreground']} !important;
-        box-shadow: 0 0 6px 2px ${
-          theme.data.colors['editor.foreground']
-        } !important;
+        box-shadow: 0 0 6px 2px ${theme.data.colors['editor.foreground']
+      } !important;
     }
     
     .layouts-list {
         background-color: ${theme.data.colors['editor.background']} !important;
-        box-shadow: 0px 0px 4px 2px ${
-          theme.data.colors['editor.foreground']
-        } !important;
+        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']
+      } !important;
     }
     
     ul.donations-menu.shown,
     .themes-menu.shown{
-        box-shadow: 0px 0px 4px 2px ${
-          theme.data.colors['editor.foreground']
-        } !important;
+        box-shadow: 0px 0px 4px 2px ${theme.data.colors['editor.foreground']
+      } !important;
         background-color: ${theme.data.colors['editor.background']} !important;
     }
     
@@ -443,9 +438,9 @@ export class MainService {
     .paypal-btn-container ul.donations-menu > li:hover,
     .themes-menu.shown > li:not(.selected):hover {
         background-color: ${this.enhanceThemesMenuColoration(
-          theme,
-          'background-color'
-        )};
+        theme,
+        'background-color'
+      )};
         color: ${theme.data.colors['editor.foreground']};
     }
     
@@ -508,16 +503,14 @@ export class MainService {
     }
     
     .paypal-btn-container ul.donations-menu > li:hover {
-        background-color: ${
-          theme.data.colors['editor.lineHighlightBackground']
-        };
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']
+      };
         font-weight: 600;
     }
     
     .themes-menu.shown > li:not(.selected):hover {
-        /*background-color: ${
-          theme.data.colors['editor.lineHighlightBackground']
-        };*/
+        /*background-color: ${theme.data.colors['editor.lineHighlightBackground']
+      };*/
     }
     
     .themes-menu li.selected {
@@ -635,9 +628,8 @@ export class MainService {
     }
 
     .modal-close-btn:hover{
-        background-color: ${
-          theme.data.colors['editor.lineHighlightBackground']
-        };
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']
+      };
     }
 
     app-modal .modal-header .modal-validate-btn{
@@ -647,9 +639,8 @@ export class MainService {
     }
 
     app-modal .modal-header .modal-validate-btn:hover{
-        background-color: ${
-          theme.data.colors['editor.lineHighlightBackground']
-        };
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']
+      };
     }
 
     app-modal .modal-header .modal-validate-btn:active{
@@ -678,9 +669,8 @@ export class MainService {
     
     .layouts-list-container:hover{
         color: ${theme.data.colors['editor.foreground']};
-        background-color: ${
-          theme.data.colors['editor.lineHighlightBackground']
-        };
+        background-color: ${theme.data.colors['editor.lineHighlightBackground']
+      };
     }
     
     body{
@@ -689,8 +679,7 @@ export class MainService {
     }
 
     .code-part-title.half-stretch-mark{
-      box-shadow: 0 0 10000px 10000px ${
-        theme.data.colors['editor.selectionBackground']
+      box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']
       };
       z-index: 1;
       background: ${theme.data.colors['editor.selectionBackground']};
@@ -737,8 +726,7 @@ export class MainService {
     }
 
     .history-container table thead{
-      box-shadow: 0px 0px 3px 1px ${
-        theme.data.colors['editor.cursorBlinkShadow']
+      box-shadow: 0px 0px 3px 1px ${theme.data.colors['editor.cursorBlinkShadow']
       };
       background-color: ${theme.data.colors['editor.background']};
     }
@@ -779,9 +767,8 @@ export class MainService {
       }
   
       50%{
-        box-shadow: inset 0px 0px 6px 3px ${
-          theme.data.colors['editor.cursorBlinkShadow']
-        };
+        box-shadow: inset 0px 0px 6px 3px ${theme.data.colors['editor.cursorBlinkShadow']
+      };
       }
   
       100%{
@@ -803,9 +790,8 @@ export class MainService {
         
         0%{
             background:${theme.data.colors['editor.selectionBackground']};
-            box-shadow: 0 0 10000px 10000px ${
-              theme.data.colors['editor.selectionBackground']
-            };
+            box-shadow: 0 0 10000px 10000px ${theme.data.colors['editor.selectionBackground']
+      };
             opacity:0.5;
         }
       
@@ -1002,29 +988,29 @@ export class MainService {
         content: JSON.stringify(fiddleData),
         file_path: timeStamp,
       };
-      let newSnippetRawUrl;
       let newFiddleId;
-
-      let promise = new Promise((resolve, reject) => {
-        this.http
-          .post<any>(
-            'https://gitlab.com/api/v4/projects/52190204/snippets',
-            body,
-            { headers: headers }
-          )
-          .subscribe({
-            next: (res1) => {
-              //console.log("res1 = ", res1);
-              newSnippetRawUrl = `https://gitlab.com/api/v4/projects/${gitlabProjectId}/snippets/${res1.id}/raw`;
-              newFiddleId = res1.id;
-              resolve(newFiddleId);
-            },
-            error: (err1) => {
-              reject(err1);
-            },
-          });
-      });
-      return from(promise);
+      let obs = this.http.post<any>(
+        'https://gitlab.com/api/v4/projects/52190204/snippets',
+        body,
+        { headers: headers }
+      )
+        .pipe(map((res1) => {
+          //console.log("res1 = ", res1);
+          newFiddleId = res1.id;
+          let res2;
+          if (res1.id && res1.id > 0) {
+            res2 = {
+              result: res1,
+              message: "ok"
+            }
+          } else {
+            res2 = {
+              result: undefined,
+              message: "error"
+            }
+          }
+          return res2;
+        }))
     } else {
       console.log('fiddleData = ', fiddleData);
       return this.http.post<ApiResponse>('http://localhost:4200/api/fiddle', fiddleData)
