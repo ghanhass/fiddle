@@ -882,12 +882,6 @@ i.fa.fa-sort-asc {
   width: 100%;
 }
 
-:host ::ng-deep .codeparts-iframe-container[class] > .as-split-gutter[class],
-:host ::ng-deep .codeparts-iframe-container[class] > .as-split-gutter[class],
-.as-split-gutter-custom {
-  border-radius: 10px;
-}
-
 :host
   ::ng-deep
   .codeparts-iframe-container:not(.is-dark-mode)[class]

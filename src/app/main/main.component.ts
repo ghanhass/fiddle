@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, ViewChild, AfterViewInit, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, ViewChild, AfterViewInit, OnInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MainService } from "../main.service";
 import { IframePartComponent } from "../iframe-part/iframe-part.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -40,7 +40,8 @@ interface CodePartStretchState {
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css'],
-  imports: [CommonModule, HtmlPartComponent, CssPartComponent, JsPartComponent, IframePartComponent, FormsModule, LoaderComponent, PastebinComponent, ModalComponent, RessourcesComponent, FiddlesHistoryComponent]
+  imports: [CommonModule, HtmlPartComponent, CssPartComponent, JsPartComponent, IframePartComponent, FormsModule, LoaderComponent, PastebinComponent, ModalComponent, RessourcesComponent, FiddlesHistoryComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainComponent implements AfterViewInit {
 
@@ -154,7 +155,7 @@ export class MainComponent implements AfterViewInit {
   @ViewChild("appFiddlesHistory") appFiddlesHistory: FiddlesHistoryComponent = new FiddlesHistoryComponent(this.mainService, this.router);
 
   constructor(private activatedRoute: ActivatedRoute,
-    private ref: ElementRef) {
+    private ref: ElementRef, private cdr: ChangeDetectorRef) {
     this.appMode = this.mainService.appMode;
   }
 
@@ -191,7 +192,7 @@ export class MainComponent implements AfterViewInit {
         this.hideHistoryModal();
       }
       //data retrieval
-      if (currentFiddleId && !isNaN(currentFiddleId)) {
+      if (currentFiddleId && !isNaN(currentFiddleId)) {//fiddleId provided in the route ?
         if (this.mainService.redirectAfterSaveMode) {//re-retrieve data after recent save ?
           console.log("//re-retrieve data after recent save");
           //console.log("re-retrieve data after recent save ", this.mainService.htmlCode);
@@ -234,10 +235,10 @@ export class MainComponent implements AfterViewInit {
         else {//retrieve data from backend ?
           console.log("//retrieve data from backend");
           this.loader.showLoader();
-          this.mainService.getFiddle(currentFiddleId).subscribe((res: ApiResponseDto) => {
+          this.mainService.getFiddle(currentFiddleId).subscribe((res: FiddleData) => {
             console.log("getFiddle res = ", res);
-            if (res.message == "success") {
-              let fiddleData: FiddleData = res.result!;
+            if (res.id) {
+              let fiddleData: FiddleData = res!;
               //console.log("getFiddle obj = ", obj);
               this.htmlPart.code = fiddleData.html!;
               this.cssPart.code = fiddleData.css!;
@@ -307,7 +308,7 @@ export class MainComponent implements AfterViewInit {
               this.mainService.scheduledRunFiddle = true;
               this.runCode();
             }
-            else if (res.message == "error") {
+            else{
               this.toastrService.warning("Fiddle not found.");
               this.changeLayout(1);
               this.loader.hideLoader();
@@ -316,7 +317,7 @@ export class MainComponent implements AfterViewInit {
           this.mainService.isFirstTimeFiddle = false;
         }
       }
-      else {
+      else {//new empty fiddle
         this.changeLayout(1);
       }
 
@@ -370,21 +371,21 @@ export class MainComponent implements AfterViewInit {
   prettifyCode(type: any): void {
     let prettifiedCode = "";
 
-    switch(true){
+    switch (true) {
       case (type == "html"):
         prettifiedCode = window.html_beautify(this.htmlPart.code);
         this.htmlPart.code = prettifiedCode;
-      break;
+        break;
 
       case (type == "css"):
         prettifiedCode = window.css_beautify(this.cssPart.code);
         this.cssPart.code = prettifiedCode;
-      break;
+        break;
 
       case (type == "js"):
         prettifiedCode = window.js_beautify(this.jsPart.code);
         this.jsPart.code = prettifiedCode;
-      break;
+        break;
     }
   }
 
@@ -414,19 +415,21 @@ export class MainComponent implements AfterViewInit {
 
   calculateIframeSize(mainContainerEl?: HTMLElement, sizes?: any) {
     let self = this;
-    let refElement = mainContainerEl || self.mainContainer.nativeElement || document.documentElement;
-    if (sizes !== undefined) {
-      self.iframeHeight = sizes.height;
-      self.iframeWidth = sizes.width;
-    }
-    else {
-      self.iframeHeight = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetHeight;
-      self.iframeWidth = (refElement.querySelector(".as-split-area-iframe iframe") as HTMLElement).offsetWidth;
-    }
+
+    setTimeout(() => {
+      let refElement: HTMLElement = mainContainerEl || self.mainContainer.nativeElement || document.documentElement;
+      if (sizes !== undefined) {
+        self.iframeHeight = sizes.height;
+        self.iframeWidth = sizes.width;
+      }
+      else {
+        self.iframeWidth = (refElement.querySelector(".iframe-area") as HTMLElement).offsetWidth;
+        self.iframeHeight = (refElement.querySelector(".iframe-area") as HTMLElement).offsetHeight;
+      }
+    }, 1);
 
     //console.log("self.iframeWidth = ", self.iframeWidth);
     //console.log("self.iframeHeight = ", self.iframeHeight);
-
   }
 
   setMainServiceCodepartSizes() {
