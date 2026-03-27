@@ -139,7 +139,7 @@ export class IframePartComponent implements OnInit {
     this.showloader.emit();
 
     this.mainService.saveFiddle(fiddleData).subscribe({
-      next: (res: ApiResponseDto)=>{
+      next: (res: FiddleData)=>{
       //console.log("saveFiddle fiddleId = ", fiddleId);
 
       //this.runFiddle();
@@ -149,7 +149,7 @@ export class IframePartComponent implements OnInit {
         this.hideloader.emit();
       }
       let appName = this.mainService.envVars.appName;
-      let fiddleId = res.result?.id!;
+      let fiddleId = res.id!;
       if(fiddleId > 0){
         if(this.copyInput.nativeElement){
           let input = this.copyInput.nativeElement
